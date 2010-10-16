@@ -1,0 +1,129 @@
+# maven
+run tests from maven. Maven doesn't find any tests.
+
+# Recipe
+Add category to recipe to indicate complexity
+
+# Recipe
+Add time estimate to recipe
+
+# database
+Enter list of recipes to a cookbook
+
+# Menu
+Select a menu from the cookbook given a set of constraits.
+
+# Cookbook
+Add multiple languages so recipes can be translated.
+
+# CookBook
+replace addrecipesfromcookbook method with merge method that checks for duplicates
+
+# Recipe
+class Steps {
+	val list:Buffer[Step] = new ListBuffer
+should list be private? 
+
+# CookBookTest
+def findRecipesByName(name:String):Seq[Recipe] returns a Seq, but tests use methods like
+first and length which are defined in ListBuffer and Buffer. So runtime it works but why
+can this be compiled?
+
+# CookBookDSL.scala
+introduce 'en' keyword in list of ingredients 
+
+# CookBookDSL.scala
+exception msg should not be null
+
+# CookBookDSL.scala
+clean up keyword recognition (always in rule?). Why is '"seizoen" ~ listOfSeasons' 
+not part of listOfSeason?
+
+# Recipe.scala
+check for possible use of .++(). why doesn't 	def add(step:Step) = steps.++(step) work?
+
+# Recipe.scala
+check for possible use of traits. --> Doesn't work yet, check again later...
+
+# Recipe.scala
+write unit test
+
+# CookBookTest.scala
+What does a testcase look like? 
+"A Taco Recipe ingredient list" -- {
+		"should match " + expectedResult - {
+doesn't really say mutch, but at least it's complete
+
+# runTest.sh
+Won't run if argument contains .scala. Use AWK or something to get rid of suffix.
+ 
+# CookBookSuite.scala
+add parseRecipe method to CookBookDSL that accepts a filename or a File
+
+# CookBookSuite.scala
+Inject logger somehow? 
+
+DONE
+
+# build
+<done>use Ant or Maven for building
+
+# RecipeReader.scala
+Read file in one statement, replace
+		for (line <- Source.fromFile(args(0)).getLines)
+			dsl.append(line)
+<done>Util.readFile used
+
+# CookBookDSL.scala
+<done>clean up method naming
+
+# CookBookTest.scala
+<done>Unable to load a Suite class
+
+# CookBookSuite.scala
+Conditional logging
+<done>Using explicit Log4j calls and idiom
+
+# CookBookSuite.scala
+read file?, duplicate of #RecipeReader: Read file...
+<done>Util.readFile used
+
+# develop
+<done>try debugging in Eclipse? difficult, doesn't really work. Idea is ok (but not free...)
+
+# CookBookTest.scala
+should reading of recipe be contained in testcase or externalized?
+<done> testcase is self contained because test recipes are defined as strings in the code
+
+# packages
+how do packages work in Scala? source is in shop directory but that doesn't really matter
+<done>package name is independent of directory structure. This works OK in low-tech tools
+like jedit or commandline scripts. IDEs get totally lost if you place source files
+in a directory that doesn't match package structure.
+
+# CookBookSuite.scala
+PropertyConfigurator.configure("test/test-classes/log4j.properties");
+why is target root dir for seaching property files?
+<done>load property file from classpath
+
+# CookBookTest
+<done>Tests check the number of recipes returned. Should check the correct recipe is returned because
+a summer recipe search might return a winter recipe
+
+
+# CookBook
+<done>As a cook I want to have a cookbook that collects a set of recipes so that I can search for recipes given a season indicator
+CookBook can add recipes and find them by name or season.
+
+# ShoppingListkDSL.scala
+rename to RecipeDSL because that's what it is. Or maybe CookBookDSL because a 
+cookbook is a list of Recipe instances. The DSL should include a list of recipes instead of
+the preparser that splits on 'RECIPE'.
+
+# CookBook
+<done>variable recipes is accessible should be private
+
+# CookBookTest
+<done>Absolute path used to read recipes file should be relative to classfile? 
+
+
