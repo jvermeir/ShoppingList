@@ -1,1 +1,5 @@
 see README
+
+Short term stuff:
+- fix build, find out why tests are not run
+- read data from file
