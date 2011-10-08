@@ -21,11 +21,4 @@
 		<nature>ch.epfl.lamp.sdt.core.scalanature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>target2</name>
-			<type>2</type>
-			<location>/opt/work/ontwikkeling/shop/target</location>
-		</link>
-	</linkedResources>
 </projectDescription>
