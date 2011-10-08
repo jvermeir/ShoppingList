@@ -1,0 +1,15 @@
+Shopping list is a vehicle to teach myself Scala.
+It also serves a real purpose because it is supposed to generate shopping lists optimized for the super market I visit each week. 
+There have been several incarnations of this program: a Oracle Forms version (lost in the mists of time, this is probably a good thing), a Drools version (worked, but was too ambitious because it tried to magically generate a menu as well as a shopping list)
+and a couple of Scala versions that tried to support natural language to specify recipes.
+None of these previous versions were actually used. While I learned a lot and had a good time doing so, the shopping list problem remained unsolved. Still, I spent lots of time on Saturdays running through 
+my favourite super market knowing full well I'd forget stuff. My kids are now old enough to nag their father about this, so action was necessary.
+Ambition can be a dangerous thing if taken in large quantities, so I aimed for an easier goal (and now try to sell this as an advantage since easier goals that deliver working software are OK in true agile spirit).
+
+The road map now looks like this:
+- Generate a shopping list based on simple recipes specified as name:value lines in a text string stored in the main function and a menu specified likewise. The domain terms will be in Dutch.
+- Configure the recipes and menu in text files
+- Enter the recipes and menu using a GUI
+- Generate a menu based on constraints like the season, the amount of time the cook has on a particular day and other fuzzy logic (some of the old ambition shining through here)
+
+Still, the goal to learn always have a strong influence. This will lead to solutions that might be over engineered or rewritten several times just to get it right. 
