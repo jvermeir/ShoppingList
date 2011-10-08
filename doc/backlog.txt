@@ -2,4 +2,5 @@ see README
 
 Short term stuff:
 - fix build, find out why tests are not run
+- find a better way to categorize stuff like pasta, rice, ... 
 - read data from file

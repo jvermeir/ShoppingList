@@ -72,7 +72,7 @@ Donderdag:Spaghetti met zalmpakketje
 Vrijdag:varkenshaas met verse pasta
 """
     val menu = Menu(menuText, CookBook(recepten))
-    val boodschappenlijst = menu.printBoodschappenlijst
+    val boodschappenlijst = menu.printShoppinglist
     println(boodschappenlijst)
   }
 

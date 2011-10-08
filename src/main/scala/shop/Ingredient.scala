@@ -1,14 +1,14 @@
 package shop
 
-case class Ingredient(categorie: String, naam: String) extends Ordered[Ingredient] {
+case class Ingredient(category: String, name: String) extends Ordered[Ingredient] {
 
   def compare(that: Ingredient) = {
-    categorie match {
-      case that.categorie => naam.compare(that.naam)
-      case _ => categorie.compare(that.categorie)
+    category match {
+      case that.category => name.compare(that.name)
+      case _ => category.compare(that.category)
     }
   }
-  override def toString:String = categorie+":"+naam
+  override def toString:String = category+":"+name
 }
 
 object Ingredient {

@@ -1,6 +1,6 @@
 package shop
 
-case class Recipe(naam: String, ingredienten: List[Ingredient]) {
+case class Recipe(name: String, ingredients: List[Ingredient]) {
 
 }
 
@@ -10,21 +10,21 @@ object Recipe {
     apply(receptAsLinesOfText)
   }
   
-  def apply(receptAsListOfLines: List[String]): Recipe = {
-    val naam = receptAsListOfLines(0).split(":")(1)
-    val ingredients = for (ingredient <- receptAsListOfLines) yield (Ingredient(ingredient))
-    new Recipe(naam, ingredients.filter(isValidIngredientLine(_)).sort(_ < _))
+  def apply(recipeAsListOfLines: List[String]): Recipe = {
+    val name = recipeAsListOfLines(0).split(":")(1)
+    val ingredients = for (ingredient <- recipeAsListOfLines) yield (Ingredient(ingredient))
+    new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sort(_ < _))
   }
 
   def isValidIngredientLine(ingredient: Ingredient): Boolean = {
-    thisIsNotADummy(ingredient) && thisIsNotANaam(ingredient)
+    thisIsNotADummy(ingredient) && thisIsNotAName(ingredient)
   }
 
-  def thisIsNotANaam(ingredient: Ingredient): Boolean = {
-    ingredient.categorie.length > 0 && !ingredient.categorie.equals("naam")
+  def thisIsNotAName(ingredient: Ingredient): Boolean = {
+    ingredient.category.length > 0 && !ingredient.category.equals("naam")
   }
 
   def thisIsNotADummy(ingredient: Ingredient): Boolean = {
-    ingredient.naam.length > 0 && !ingredient.naam.equals("dummy")
+    ingredient.name.length > 0 && !ingredient.name.equals("dummy")
   }
 }

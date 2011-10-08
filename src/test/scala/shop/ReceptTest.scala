@@ -18,7 +18,7 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
       val witlofIngredientsAsText = """naam:Witlof met kip
       				vlees:kipfilet plakjes
       				saus:gezeefde tomaten
-      				vulling:rijst
+      				basis:rijst
       				diepvries:
       				groente:witlof
       				zuivel:geraspte kaas"""
@@ -29,7 +29,7 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
         Ingredient("groente", "witlof"),
         Ingredient("saus", "gezeefde tomaten"),
         Ingredient("vlees", "kipfilet plakjes"),
-        Ingredient("vulling", "rijst"),
+        Ingredient("basis", "rijst"),
         Ingredient("zuivel", "geraspte kaas"))
       val expectedWitlofRecipe = new Recipe("Witlof met kip", listOfExpectedIngredients)
       expectedWitlofRecipe must be === witlofRecipe
@@ -41,8 +41,8 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
       val kookboek = CookBook(kookboekAsText)
       then("the kookboek containts a recipe for Witlof and one for Nasi")
       2 must be === kookboek.size
-      "Witlof met kip" must be === kookboek.findRecipe("Witlof met kip").naam
-      "Nasi" must be === kookboek.findRecipe("Nasi").naam
+      "Witlof met kip" must be === kookboek.findRecipe("Witlof met kip").name
+      "Nasi" must be === kookboek.findRecipe("Nasi").name
     }
   }
 
@@ -66,11 +66,11 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
         Ingredient("saus", "sate saus"),
         Ingredient("vlees", "kipfilet"),
         Ingredient("vlees", "kipfilet plakjes"),
-        Ingredient("vulling", "augurken"),
-        Ingredient("vulling", "kroepoek"),
-        Ingredient("vulling", "rijst"),
-        Ingredient("vulling", "rijst"),
-        Ingredient("vulling", "zilveruitjes"),
+        Ingredient("basis", "augurken"),
+        Ingredient("basis", "kroepoek"),
+        Ingredient("basis", "rijst"),
+        Ingredient("basis", "rijst"),
+        Ingredient("basis", "zilveruitjes"),
         Ingredient("zuivel", "ei"),
         Ingredient("zuivel", "geraspte kaas"),
         Ingredient("zuivel", "vloeibare bakboter"))
@@ -84,7 +84,7 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(kookboekAsText))
-      val boodschappenlijst = menu.printBoodschappenlijst
+      val boodschappenlijst = menu.printShoppinglist
       then("a shopping list is produced")
       val expectedShoppingList = """groente:nasi pakket
 groente:witlof
@@ -92,16 +92,16 @@ saus:gezeefde tomaten
 saus:sate saus
 vlees:kipfilet
 vlees:kipfilet plakjes
-vulling:augurken
-vulling:kroepoek
-vulling:rijst
-vulling:rijst
-vulling:zilveruitjes
+basis:augurken
+basis:kroepoek
+basis:rijst
+basis:rijst
+basis:zilveruitjes
 zuivel:ei
 zuivel:geraspte kaas
 zuivel:vloeibare bakboter
 """
-      expectedShoppingList must be === menu.printBoodschappenlijst
+      expectedShoppingList must be === menu.printShoppinglist
     }
   }
 
@@ -134,7 +134,7 @@ zuivel:vloeibare bakboter
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(kookboekAsText))
       then("a shopping list is produced")
-      val boodschappenlijst = menu.printBoodschappenlijstForUseWhileShopping
+      val boodschappenlijst = menu.printShoppinglistForUseWhileShopping
       val expectedShoppingList = """
 <<TODO: eerst menu, dan boodschappen per categorie, gesorteerd op categorienummer>
 groente:nasi pakket
@@ -143,11 +143,11 @@ saus:gezeefde tomaten
 saus:sate saus
 vlees:kipfilet
 vlees:kipfilet plakjes
-vulling:augurken
-vulling:kroepoek
-vulling:rijst
-vulling:rijst
-vulling:zilveruitjes
+basis:augurken
+basis:kroepoek
+basis:rijst
+basis:rijst
+basis:zilveruitjes
 zuivel:ei
 zuivel:geraspte kaas
 zuivel:vloeibare bakboter
@@ -159,7 +159,7 @@ zuivel:vloeibare bakboter
   val kookboekAsText = """naam:Witlof met kip
 		  vlees:kipfilet plakjes
 		  saus:gezeefde tomaten
-		  vulling:rijst
+		  basis:rijst
 		  diepvries:
 		  groente:witlof
 		  zuivel:geraspte kaas
@@ -170,10 +170,10 @@ zuivel:vloeibare bakboter
 		  groente:nasi pakket
 		  vlees:kipfilet
 		  saus:sate saus
-		  vulling:rijst
-		  vulling:kroepoek
-		  vulling:augurken
-		  vulling:zilveruitjes
+		  basis:rijst
+		  basis:kroepoek
+		  basis:augurken
+		  basis:zilveruitjes
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
 		  
