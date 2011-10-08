@@ -1,6 +1,9 @@
 package shop
 
 import scala.annotation.tailrec
+import org.apache.commons.io.FileUtils
+import java.io.File
+import scala.collection.JavaConversions._
 
 class CookBook(recipes: Map [String, Recipe]) {
   def findRecipe(name: String): Recipe = recipes(name)
@@ -36,5 +39,10 @@ object CookBook {
       }
     }
     new CookBook(recursiveAdd(listOfRecipes, Map[String, Recipe]()))
+  }
+  
+  def readFromFile(fileName:String):CookBook = {
+    val cookBookAsText = FileUtils.readFileToString(new File(fileName))
+    apply(cookBookAsText)
   }
 }

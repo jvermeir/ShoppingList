@@ -2,5 +2,7 @@ see README
 
 Short term stuff:
 - fix build, find out why tests are not run
-- find a better way to categorize stuff like pasta, rice, ... 
-- read data from file
+- find a better way to categorize stuff like pasta, rice, ... Categorize using AH shop in Ede 
+X- read data from file
+- add date to menu and vegetable ingredients in shopping list
+- clean up var constructs in Menu class
