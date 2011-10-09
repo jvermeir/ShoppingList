@@ -95,6 +95,7 @@
 				<configuration>
 					<includes>
 						<include>**/*Spec.class</include>
+						<include>**/*Test.class</include>
 					</includes>
 				</configuration>
 			</plugin>

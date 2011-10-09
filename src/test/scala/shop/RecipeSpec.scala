@@ -7,8 +7,8 @@ import org.scalatest.matchers.MustMatchers
 import org.junit.runner.RunWith
 
 @RunWith(classOf[JUnitRunner])
-class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
-  feature("Boodschappen can parse a list of groceries per recipe from a text file") {
+class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
+  feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want to list recipes as text in a file")
     info("So that I can use 'm to create a week-menu")
@@ -46,7 +46,7 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
     }
   }
 
-  feature("Boodschappen can parse a list of groceries per recipe from a text file") {
+  feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want to specify a menu for a week as a list of day:recipe pairs")
     info("So that I can create a shopping list")
@@ -84,7 +84,6 @@ class RecipeTest extends FeatureSpec with GivenWhenThen with MustMatchers {
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
-      val boodschappenlijst = menu.printShoppinglist
       then("a shopping list is produced")
       val expectedShoppingList = """basis:augurken
 basis:kroepoek
@@ -103,54 +102,52 @@ zuivel:vloeibare bakboter
 """
       expectedShoppingList must be === menu.printShoppinglist
     }
-  }
 
-  scenario("A menu can be read from a file") {
-    given("a menu in a file and a cookbook")
-    when("the file is read")
-    val cookBook = CookBook.apply(cookBookAsText)
-    then("a menu with Witlof met kip and Nasi is created")
-    val menu = Menu.readFromFile("data/test/menuForReadFromFileScenario.txt", cookBook)
-    2 must be === menu.recipes.size
-    println (menu)
-    menu.recipes(0).name must be === "Witlof met kip"
-    menu.recipes(1).name must be === "Nasi"
-  }
+    scenario("A menu can be read from a file") {
+      given("a menu in a file and a cookbook")
+      when("the file is read")
+      val cookBook = CookBook.apply(cookBookAsText)
+      then("a menu with Witlof met kip and Nasi is created")
+      val menu = Menu.readFromFile("data/test/menuForReadFromFileScenario.txt", cookBook)
+      2 must be === menu.recipes.size
+      menu.recipes(0).name must be === "Witlof met kip"
+      menu.recipes(1).name must be === "Nasi"
+    }
 
-  scenario("A Kookboek can be read from a file") {
-    given("a kookboek in a text file")
-    when("the file is read")
-    val cookBook = CookBook.readFromFile("data/test/cookBookForReadFromFileScenario.txt")
-    then("a cook book with a Nasi and a Witlof recipe is created")
-    then("the kookboek containts a recipe for Witlof and one for Nasi")
-    2 must be === cookBook.size
-    "Witlof met kip" must be === cookBook.findRecipe("Witlof met kip").name
-    "Nasi" must be === cookBook.findRecipe("Nasi").name
-  }
+    scenario("A Kookboek can be read from a file") {
+      given("a kookboek in a text file")
+      when("the file is read")
+      val cookBook = CookBook.readFromFile("data/test/cookBookForReadFromFileScenario.txt")
+      then("a cook book with a Nasi and a Witlof recipe is created")
+      then("the kookboek containts a recipe for Witlof and one for Nasi")
+      2 must be === cookBook.size
+      "Witlof met kip" must be === cookBook.findRecipe("Witlof met kip").name
+      "Nasi" must be === cookBook.findRecipe("Nasi").name
+    }
 
-  scenario("A exception is thrown when an unknown recipe is added to a menu") {
-    given("a Menu and a Kookboek")
-    val menuAsString = """Zondag:Witlof met kip
+    scenario("A exception is thrown when an unknown recipe is added to a menu") {
+      given("a Menu and a Kookboek")
+      val menuAsString = """Zondag:Witlof met kip
       	Maandag:Nasi
         Dinsdag:Non existent recipe
       """
-    when("the shoppinglist is created")
-    then("but a exception is thrown")
-    intercept[NoSuchElementException] {
-      val menu = Menu(menuAsString, CookBook(cookBookAsText))
-      menu.printShoppinglist
+      when("the shoppinglist is created")
+      then("but a exception is thrown")
+      intercept[NoSuchElementException] {
+        val menu = Menu(menuAsString, CookBook(cookBookAsText))
+        menu.printShoppinglist
+      }
     }
-  }
 
-  scenario("A menu and list of groceries are printed for use while shopping") {
-    given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
-    val menuAsString = """Zondag:Witlof met kip
+    scenario("A menu and list of groceries are printed for use while shopping") {
+      given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
+      val menuAsString = """Zondag:Witlof met kip
       	Maandag:Nasi
       """
-    when("a menu is generated")
-    val menu = Menu(menuAsString, CookBook(cookBookAsText))
-    then("and a shopping list is printed")
-    val expectedShoppingList = """Zondag:Witlof met kip
+      when("a menu is generated")
+      val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      then("and a shopping list is printed")
+      val expectedShoppingList = """Zondag:Witlof met kip
 Maandag:Nasi
 
 basis:augurken
@@ -168,9 +165,9 @@ zuivel:ei
    geraspte kaas
    vloeibare bakboter
 """
-    expectedShoppingList must be === menu.printShoppinglistForUseWhileShopping
+      expectedShoppingList must be === menu.printShoppinglistForUseWhileShopping
+    }
   }
-
   val cookBookAsText = """naam:Witlof met kip
 		  vlees:kipfilet plakjes
 		  saus:gezeefde tomaten
