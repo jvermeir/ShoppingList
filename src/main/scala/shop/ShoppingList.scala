@@ -1,4 +1,6 @@
 package shop
+
+import scala.annotation.tailrec
 import org.joda.time.DateTime
 
 /**
@@ -9,44 +11,44 @@ class ShoppingList(menu: Menu) {
 
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
   def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
-    def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
+    @tailrec def recursiveAdd(ingredients: List[Ingredient], result: List[ShoppingListItem]): List[ShoppingListItem] = {
       ingredients match {
-        case Nil => List()
-        case head :: tail => new ShoppingListItem(head, date) :: recursiveAdd(tail)
+        case Nil => result
+        case head :: tail => recursiveAdd(tail, new ShoppingListItem(head, date) :: result)
       }
     }
-    recursiveAdd(recipe.ingredients)
+    recursiveAdd(recipe.ingredients, List())
   }
 
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = {
-    def recursiveAdd(theDate: DateTime, recipes: List[Recipe]): List[List[ShoppingListItem]] = {
+    @tailrec def recursiveAdd(theDate: DateTime, recipes: List[Recipe], result: List[List[ShoppingListItem]]): List[List[ShoppingListItem]] = {
       recipes match {
-        case Nil => List()
-        case head :: tail => getShoppingListItemsWithDateAdded(head, theDate) :: recursiveAdd(theDate.plusDays(1), tail)
+        case Nil => result
+        case head :: tail => recursiveAdd(theDate.plusDays(1), tail, getShoppingListItemsWithDateAdded(head, theDate) :: result)
       }
     }
-    recursiveAdd(menu.dateOfSaturday, menu.recipes).flatten.sort(_ < _)
+    recursiveAdd(menu.dateOfSaturday, menu.recipes, List()).flatten.sort(_ < _)
   }
 
   def printShoppinglistForUseWhileShopping: String =
     menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
 
   def printShoppinglistButSkipDuplicateCategoryLables: String = {
-    def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: String): String = {
+    @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: String, shoppingListAsString: String): String = {
       shopingListItems match {
-        case Nil => ""
+        case Nil => shoppingListAsString
         case head :: tail =>
           {
             val label = if (currentCategory.equals(head.category)) "   " else head.category + ":"
-            label + head + "\n" + recursiveAdd(tail, head.category)
+            recursiveAdd(tail, head.category, shoppingListAsString + "\n" + label + head)
           }
       }
     }
-    recursiveAdd(shoppingListItemsSortedByCategory, "")
+    recursiveAdd(shoppingListItemsSortedByCategory, "", "")
   }
 
   def printShoppinglist: String = {
-    def recursivePrint(shoppingListItems: List[ShoppingListItem], printedShoppingListItems: String): String = {
+    @tailrec def recursivePrint(shoppingListItems: List[ShoppingListItem], printedShoppingListItems: String): String = {
       shoppingListItems match {
         case Nil => printedShoppingListItems.substring(1)
         case head :: tail => recursivePrint(tail, printedShoppingListItems + "\n" + head)

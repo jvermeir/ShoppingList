@@ -13,15 +13,15 @@ class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, va
   val recipes:List[Recipe] = for (recipe <- listOfRecipes) yield cookbook.findRecipeByName(recipe._2)
   
   def printMenu: String = {
-    def recursivePrintMenu(listOfRecipes:List[(String,String)]):String = {
+    @tailrec def recursivePrintMenu(listOfRecipes:List[(String,String)], menuAsString:String):String = {
       listOfRecipes match {
-        case Nil => ""
+        case Nil => menuAsString
         case head :: tail => { val recipe:(String, String) = head
-          recipe._1 + ":" + recipe._2 + "\n" + recursivePrintMenu(tail)
+          recursivePrintMenu(tail, menuAsString + "\n" + recipe._1 + ":" + recipe._2)
         }
       }
     }
-    recursivePrintMenu(listOfRecipes)
+    recursivePrintMenu(listOfRecipes, "").substring(1)
   }
 }
 

@@ -172,8 +172,7 @@ vlees:kipfilet
    kipfilet plakjes
 zuivel:ei
    geraspte kaas
-   vloeibare bakboter
-"""
+   vloeibare bakboter"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
   }
