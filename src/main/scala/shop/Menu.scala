@@ -6,8 +6,11 @@ import java.io.File
 import org.joda.time.DateTime
 import org.joda.time.format._
 
+/**
+ * A menu is a collection of recipes for a week starting on a Saturday.
+ */
 class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
-  val recipes = for (recipe <- listOfRecipes) yield cookbook.findRecipe(recipe._2)
+  val recipes = for (recipe <- listOfRecipes) yield cookbook.findRecipeByName(recipe._2)
   
   def printMenu: String = {
     var menu: String = ""
@@ -19,6 +22,14 @@ class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, va
 }
 
 object Menu {
+  /*
+   * Create a menu from a list of strings representing day:recipe pairs and a cookbook.
+   * The first line of input is the date for Saturday. This line should look like this:
+   * 	"Zaterdag valt op:08102011"
+   * where the text up to the : doesn't matter. The date format used is ddMMyyyy as in JodaTime format
+   * The next lines are assumed to be Day:Recipe pairs where Day is the name of a Day (language is unimportant because it is not interpreted)
+   * and recipe refers to a recipe name as specified in a Cookbook.
+   */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = List.fromArray(menuAsString.split("\n"))
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)

@@ -1,12 +1,18 @@
 package shop
 import org.joda.time.DateTime
 
+/**
+ * ShoppingList creates a list of groceries sorted by category for a given Menu.
+ */
 class ShoppingList(menu: Menu) {
   var theDate = menu.dateOfSaturday.minusDays(1)
   val shoppingListItems =
     for { recipe <- menu.recipes } yield { theDate = theDate.plusDays(1); getShoppingListItemsWithDateAdded(recipe, theDate) }
-  val sortedListOfIngredients = shoppingListItems.flatten.sort(_ < _)
+  val shoppingListItemsSortedByCategory = shoppingListItems.flatten.sort(_ < _)
 
+  /*
+   * Construct the list of ShoppingListItems by combining a Recipe and a date.
+   */
   def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
     def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
       ingredients match {
@@ -16,33 +22,15 @@ class ShoppingList(menu: Menu) {
     }
     recursiveAdd(recipe.ingredients)
   }
-
-  def getShoppingListItemsWithDateAdded(recipe: Recipe, dateOfSaturday: DateTime, dayNumber: Int): List[ShoppingListItem] = {
-    val date: DateTime = dateOfSaturday.plusDays(dayNumber)
-    def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
-      ingredients match {
-        case Nil => List()
-        case head :: tail => new ShoppingListItem(head, date) :: new ShoppingListItem(head, date) :: recursiveAdd(tail)
-      }
-    }
-    recursiveAdd(recipe.ingredients)
-  }
-
+  
   def printShoppinglistForUseWhileShopping: String =
     menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
-
-  def printShoppinglist: String = {
-    var list: String = ""
-    for (ingredient <- sortedListOfIngredients)
-      list = list + ingredient + "\n"
-    list
-  }
 
   def printShoppinglistButSkipDuplicateCategoryLables: String = {
     var list: String = ""
     var currentCategory: String = ""
     var label = ""
-    for (ingredient <- sortedListOfIngredients) {
+    for (ingredient <- shoppingListItemsSortedByCategory) {
       label = if (currentCategory.equals(ingredient.category)) "   " else ingredient.category + ":"
       currentCategory = ingredient.category
       list = list + label + ingredient + "\n"
@@ -50,9 +38,19 @@ class ShoppingList(menu: Menu) {
     list
   }
 
+  def printShoppinglist: String = {
+
+    var list: String = ""
+    for (ingredient <- shoppingListItemsSortedByCategory)
+      list = list + ingredient + "\n"
+    list
+  }
 }
 object ShoppingList {
 
+  /*
+   * See if it works.
+   */
   def main(args: Array[String]): Unit = {
     val recepten = """naam:Lasagne met gehakt
 vlees:gehakt

@@ -42,8 +42,8 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       val kookboek = CookBook(cookBookAsText)
       then("the kookboek containts a recipe for Witlof and one for Nasi")
       2 must be === kookboek.size
-      "Witlof met kip" must be === kookboek.findRecipe("Witlof met kip").name
-      "Nasi" must be === kookboek.findRecipe("Nasi").name
+      "Witlof met kip" must be === kookboek.findRecipeByName("Witlof met kip").name
+      "Nasi" must be === kookboek.findRecipeByName("Nasi").name
     }
   }
 
@@ -77,9 +77,8 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
         ShoppingListItem(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
         ShoppingListItem(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
         ShoppingListItem(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)))
-      val sorted = shoppingList.sortedListOfIngredients
-      val expectedSorted = expectedListOfIngredients.sort(_ < _)
-      expectedListOfIngredients must be === shoppingList.sortedListOfIngredients
+      val expectedIngredientsSortedByCategory = expectedListOfIngredients.sort(_ < _)
+      expectedListOfIngredients must be === shoppingList.shoppingListItemsSortedByCategory
     }
 
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of groceries") {
@@ -128,8 +127,8 @@ vloeibare bakboter
       then("a cook book with a Nasi and a Witlof recipe is created")
       then("the kookboek containts a recipe for Witlof and one for Nasi")
       2 must be === cookBook.size
-      "Witlof met kip" must be === cookBook.findRecipe("Witlof met kip").name
-      "Nasi" must be === cookBook.findRecipe("Nasi").name
+      "Witlof met kip" must be === cookBook.findRecipeByName("Witlof met kip").name
+      "Nasi" must be === cookBook.findRecipeByName("Nasi").name
     }
 
     scenario("A exception is thrown when an unknown recipe is added to a menu") {
