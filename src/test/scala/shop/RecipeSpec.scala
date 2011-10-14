@@ -5,6 +5,7 @@ import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.MustMatchers
 import org.junit.runner.RunWith
+import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
 class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
@@ -53,52 +54,56 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
 
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of ingredients") {
       given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
-      val menuAsString = """Zondag:Witlof met kip
-      	Maandag:Nasi
+      val menuAsString = """Zaterdag valt op:08102011
+      	Zaterdag:Witlof met kip
+      	Zondag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
       then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
       val expectedListOfIngredients = List(
-        Ingredient("basis", "augurken"),
-        Ingredient("basis", "kroepoek"),
-        Ingredient("basis", "rijst"),
-        Ingredient("basis", "rijst"),
-        Ingredient("basis", "zilveruitjes"),
-        Ingredient("groente", "nasi pakket"),
-        Ingredient("groente", "witlof"),
-        Ingredient("saus", "gezeefde tomaten"),
-        Ingredient("saus", "sate saus"),
-        Ingredient("vlees", "kipfilet"),
-        Ingredient("vlees", "kipfilet plakjes"),
-        Ingredient("zuivel", "ei"),
-        Ingredient("zuivel", "geraspte kaas"),
-        Ingredient("zuivel", "vloeibare bakboter"))
+        IngredientForMenu(Ingredient("basis", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("basis", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("basis", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+        IngredientForMenu(Ingredient("basis", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("basis", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+        IngredientForMenu(Ingredient("saus", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+        IngredientForMenu(Ingredient("saus", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011,10,8,0,0)),
+        IngredientForMenu(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
+        IngredientForMenu(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+        IngredientForMenu(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)))
+      val sorted = menu.sortedListOfIngredients
+      val expectedSorted = expectedListOfIngredients.sort(_ < _)
       expectedListOfIngredients must be === menu.sortedListOfIngredients
     }
 
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of groceries") {
       given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
-      val menuAsString = """Zondag:Witlof met kip
-      	Maandag:Nasi
+      val menuAsString = """Zaterdag valt op:08102011
+      	Zaterdag:Witlof met kip
+      	Zondag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
       then("a shopping list is produced")
-      val expectedShoppingList = """basis:augurken
-basis:kroepoek
-basis:rijst
-basis:rijst
-basis:zilveruitjes
-groente:nasi pakket
-groente:witlof
-saus:gezeefde tomaten
-saus:sate saus
-vlees:kipfilet
-vlees:kipfilet plakjes
-zuivel:ei
-zuivel:geraspte kaas
-zuivel:vloeibare bakboter
+      val expectedShoppingList = """augurken
+kroepoek
+rijst
+rijst
+zilveruitjes
+nasi pakket(09-10)
+witlof(08-10)
+gezeefde tomaten
+sate saus
+kipfilet
+kipfilet plakjes
+ei
+geraspte kaas
+vloeibare bakboter
 """
       expectedShoppingList must be === menu.printShoppinglist
     }
@@ -127,8 +132,9 @@ zuivel:vloeibare bakboter
 
     scenario("A exception is thrown when an unknown recipe is added to a menu") {
       given("a Menu and a Kookboek")
-      val menuAsString = """Zondag:Witlof met kip
-      	Maandag:Nasi
+      val menuAsString = """Zaterdag valt op:08102011
+      	Zaterdag:Witlof met kip
+      	Zondag:Nasi
         Dinsdag:Non existent recipe
       """
       when("the shoppinglist is created")
@@ -140,23 +146,24 @@ zuivel:vloeibare bakboter
     }
 
     scenario("A menu and list of groceries are printed for use while shopping") {
-      given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
-      val menuAsString = """Zondag:Witlof met kip
-      	Maandag:Nasi
+      given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
+      val menuAsString = """Zaterdag valt op:08102011
+      	Zaterdag:Witlof met kip
+      	Zondag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
       then("and a shopping list is printed")
-      val expectedShoppingList = """Zondag:Witlof met kip
-Maandag:Nasi
+      val expectedShoppingList = """Zaterdag:Witlof met kip
+Zondag:Nasi
 
 basis:augurken
    kroepoek
    rijst
    rijst
    zilveruitjes
-groente:nasi pakket
-   witlof
+groente:nasi pakket(09-10)
+   witlof(08-10)
 saus:gezeefde tomaten
    sate saus
 vlees:kipfilet

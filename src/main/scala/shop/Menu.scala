@@ -8,8 +8,7 @@ import org.joda.time.format._
 
 class Menu(listOfRecipes: List[(String, String)], cookbook: CookBook, dateOfSaturday: DateTime) {
   val recipes = for (recipe <- listOfRecipes) yield cookbook.findRecipe(recipe._2)
-  var dayNumber:Int = 0
-  var theDate = dateOfSaturday
+  var theDate = dateOfSaturday.minusDays(1)
   val ingredients = 
     for {recipe <- recipes} 
     yield {theDate = theDate.plusDays(1); getIngredientsWithDateAdded(recipe, theDate)}
@@ -61,7 +60,7 @@ class Menu(listOfRecipes: List[(String, String)], cookbook: CookBook, dateOfSatu
     for (ingredient <- sortedListOfIngredients) {
       label = if (currentCategory.equals(ingredient.category)) "   " else ingredient.category + ":"
       currentCategory = ingredient.category
-      list = list + label + ingredient.name + "\n"
+      list = list + label + ingredient + "\n"
     }
     list
   }
