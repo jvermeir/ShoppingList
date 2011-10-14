@@ -6,13 +6,8 @@ import java.io.File
 import org.joda.time.DateTime
 import org.joda.time.format._
 
-class Menu(listOfRecipes: List[(String, String)], cookbook: CookBook, dateOfSaturday: DateTime) {
+class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
   val recipes = for (recipe <- listOfRecipes) yield cookbook.findRecipe(recipe._2)
-  var theDate = dateOfSaturday.minusDays(1)
-  val ingredients = 
-    for {recipe <- recipes} 
-    yield {theDate = theDate.plusDays(1); getIngredientsWithDateAdded(recipe, theDate)}
-  val sortedListOfIngredients = ingredients.flatten.sort(_ < _)
   
   def printMenu: String = {
     var menu: String = ""
@@ -21,50 +16,6 @@ class Menu(listOfRecipes: List[(String, String)], cookbook: CookBook, dateOfSatu
     }
     menu
   }
-
-  def getIngredientsWithDateAdded(recipe: Recipe, date:DateTime): List[IngredientForMenu] = {
-    def recursiveAdd(ingredients: List[Ingredient]): List[IngredientForMenu] = {
-      ingredients match {
-        case Nil => List()
-        case head :: tail => new IngredientForMenu(head, date) :: recursiveAdd(tail)
-      }
-    }
-    recursiveAdd(recipe.ingredients)
-  }
-
-  def getIngredientsWithDateAdded(recipe: Recipe, dateOfSaturday: DateTime, dayNumber: Int): List[IngredientForMenu] = {
-    val date:DateTime = dateOfSaturday.plusDays(dayNumber)
-    def recursiveAdd(ingredients: List[Ingredient]): List[IngredientForMenu] = {
-      ingredients match {
-        case Nil => List()
-        case head :: tail => new IngredientForMenu(head, date) :: recursiveAdd(tail)
-      }
-    }
-    recursiveAdd(recipe.ingredients)
-  }
-
-  def printShoppinglistForUseWhileShopping: String =
-    printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
-
-  def printShoppinglist: String = {
-    var list: String = ""
-    for (ingredient <- sortedListOfIngredients)
-      list = list + ingredient + "\n"
-    list
-  }
-
-  def printShoppinglistButSkipDuplicateCategoryLables: String = {
-    var list: String = ""
-    var currentCategory: String = ""
-    var label = ""
-    for (ingredient <- sortedListOfIngredients) {
-      label = if (currentCategory.equals(ingredient.category)) "   " else ingredient.category + ":"
-      currentCategory = ingredient.category
-      list = list + label + ingredient + "\n"
-    }
-    list
-  }
-
 }
 
 object Menu {
@@ -97,4 +48,3 @@ object Menu {
     fmt parseDateTime saturday
   }
 }
-

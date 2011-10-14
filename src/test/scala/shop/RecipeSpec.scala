@@ -60,25 +60,26 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      val shoppingList = new ShoppingList(menu)
       then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
       val expectedListOfIngredients = List(
-        IngredientForMenu(Ingredient("basis", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("basis", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("basis", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
-        IngredientForMenu(Ingredient("basis", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("basis", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
-        IngredientForMenu(Ingredient("saus", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
-        IngredientForMenu(Ingredient("saus", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011,10,8,0,0)),
-        IngredientForMenu(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
-        IngredientForMenu(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
-        IngredientForMenu(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)))
-      val sorted = menu.sortedListOfIngredients
+        ShoppingListItem(Ingredient("basis", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("basis", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("basis", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(Ingredient("basis", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("basis", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(Ingredient("saus", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(Ingredient("saus", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)))
+      val sorted = shoppingList.sortedListOfIngredients
       val expectedSorted = expectedListOfIngredients.sort(_ < _)
-      expectedListOfIngredients must be === menu.sortedListOfIngredients
+      expectedListOfIngredients must be === shoppingList.sortedListOfIngredients
     }
 
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of groceries") {
@@ -89,6 +90,7 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      val shoppingList = new ShoppingList(menu)
       then("a shopping list is produced")
       val expectedShoppingList = """augurken
 kroepoek
@@ -105,7 +107,7 @@ ei
 geraspte kaas
 vloeibare bakboter
 """
-      expectedShoppingList must be === menu.printShoppinglist
+      expectedShoppingList must be === shoppingList.printShoppinglist
     }
 
     scenario("A menu can be read from a file") {
@@ -141,7 +143,8 @@ vloeibare bakboter
       then("but a exception is thrown")
       intercept[NoSuchElementException] {
         val menu = Menu(menuAsString, CookBook(cookBookAsText))
-        menu.printShoppinglist
+        val shoppingList = new ShoppingList(menu)
+        shoppingList.printShoppinglist
       }
     }
 
@@ -153,6 +156,7 @@ vloeibare bakboter
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      val shoppingList = new ShoppingList(menu)
       then("and a shopping list is printed")
       val expectedShoppingList = """Zaterdag:Witlof met kip
 Zondag:Nasi
@@ -172,7 +176,7 @@ zuivel:ei
    geraspte kaas
    vloeibare bakboter
 """
-      expectedShoppingList must be === menu.printShoppinglistForUseWhileShopping
+      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
   }
   val cookBookAsText = """naam:Witlof met kip

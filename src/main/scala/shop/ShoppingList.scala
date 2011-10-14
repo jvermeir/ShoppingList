@@ -1,5 +1,56 @@
 package shop
+import org.joda.time.DateTime
 
+class ShoppingList(menu: Menu) {
+  var theDate = menu.dateOfSaturday.minusDays(1)
+  val shoppingListItems =
+    for { recipe <- menu.recipes } yield { theDate = theDate.plusDays(1); getShoppingListItemsWithDateAdded(recipe, theDate) }
+  val sortedListOfIngredients = shoppingListItems.flatten.sort(_ < _)
+
+  def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
+    def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
+      ingredients match {
+        case Nil => List()
+        case head :: tail => new ShoppingListItem(head, date) :: recursiveAdd(tail)
+      }
+    }
+    recursiveAdd(recipe.ingredients)
+  }
+
+  def getShoppingListItemsWithDateAdded(recipe: Recipe, dateOfSaturday: DateTime, dayNumber: Int): List[ShoppingListItem] = {
+    val date: DateTime = dateOfSaturday.plusDays(dayNumber)
+    def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
+      ingredients match {
+        case Nil => List()
+        case head :: tail => new ShoppingListItem(head, date) :: new ShoppingListItem(head, date) :: recursiveAdd(tail)
+      }
+    }
+    recursiveAdd(recipe.ingredients)
+  }
+
+  def printShoppinglistForUseWhileShopping: String =
+    menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
+
+  def printShoppinglist: String = {
+    var list: String = ""
+    for (ingredient <- sortedListOfIngredients)
+      list = list + ingredient + "\n"
+    list
+  }
+
+  def printShoppinglistButSkipDuplicateCategoryLables: String = {
+    var list: String = ""
+    var currentCategory: String = ""
+    var label = ""
+    for (ingredient <- sortedListOfIngredients) {
+      label = if (currentCategory.equals(ingredient.category)) "   " else ingredient.category + ":"
+      currentCategory = ingredient.category
+      list = list + label + ingredient + "\n"
+    }
+    list
+  }
+
+}
 object ShoppingList {
 
   def main(args: Array[String]): Unit = {
@@ -72,8 +123,9 @@ Donderdag:Spaghetti met zalmpakketje
 Vrijdag:varkenshaas met verse pasta
 """
     val menu = Menu(menuText, CookBook(recepten))
-    val boodschappenlijst = menu.printShoppinglist
-    println(boodschappenlijst)
+    val shoppingList = new ShoppingList(menu)
+    val theList = shoppingList.printShoppinglist
+    println(theList)
   }
 
 }
