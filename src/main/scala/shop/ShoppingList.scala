@@ -5,14 +5,9 @@ import org.joda.time.DateTime
  * ShoppingList creates a list of groceries sorted by category for a given Menu.
  */
 class ShoppingList(menu: Menu) {
-  var theDate = menu.dateOfSaturday.minusDays(1)
-  val shoppingListItems =
-    for { recipe <- menu.recipes } yield { theDate = theDate.plusDays(1); getShoppingListItemsWithDateAdded(recipe, theDate) }
-  val shoppingListItemsSortedByCategory = shoppingListItems.flatten.sort(_ < _)
+  val shoppingListItemsSortedByCategory = getShoppingListItemsSortedByCategory
 
-  /*
-   * Construct the list of ShoppingListItems by combining a Recipe and a date.
-   */
+  /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
   def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
     def recursiveAdd(ingredients: List[Ingredient]): List[ShoppingListItem] = {
       ingredients match {
@@ -22,30 +17,45 @@ class ShoppingList(menu: Menu) {
     }
     recursiveAdd(recipe.ingredients)
   }
-  
+
+  def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = {
+    def recursiveAdd(theDate: DateTime, recipes: List[Recipe]): List[List[ShoppingListItem]] = {
+      recipes match {
+        case Nil => List()
+        case head :: tail => getShoppingListItemsWithDateAdded(head, theDate) :: recursiveAdd(theDate.plusDays(1), tail)
+      }
+    }
+    recursiveAdd(menu.dateOfSaturday, menu.recipes).flatten.sort(_ < _)
+  }
+
   def printShoppinglistForUseWhileShopping: String =
     menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
 
   def printShoppinglistButSkipDuplicateCategoryLables: String = {
-    var list: String = ""
-    var currentCategory: String = ""
-    var label = ""
-    for (ingredient <- shoppingListItemsSortedByCategory) {
-      label = if (currentCategory.equals(ingredient.category)) "   " else ingredient.category + ":"
-      currentCategory = ingredient.category
-      list = list + label + ingredient + "\n"
+    def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: String): String = {
+      shopingListItems match {
+        case Nil => ""
+        case head :: tail =>
+          {
+            val label = if (currentCategory.equals(head.category)) "   " else head.category + ":"
+            label + head + "\n" + recursiveAdd(tail, head.category)
+          }
+      }
     }
-    list
+    recursiveAdd(shoppingListItemsSortedByCategory, "")
   }
 
   def printShoppinglist: String = {
-
-    var list: String = ""
-    for (ingredient <- shoppingListItemsSortedByCategory)
-      list = list + ingredient + "\n"
-    list
+    def recursivePrint(shoppingListItems: List[ShoppingListItem], printedShoppingListItems: String): String = {
+      shoppingListItems match {
+        case Nil => printedShoppingListItems.substring(1)
+        case head :: tail => recursivePrint(tail, printedShoppingListItems + "\n" + head)
+      }
+    }
+    recursivePrint(shoppingListItemsSortedByCategory, "")
   }
 }
+
 object ShoppingList {
 
   /*

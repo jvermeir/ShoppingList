@@ -104,8 +104,7 @@ kipfilet
 kipfilet plakjes
 ei
 geraspte kaas
-vloeibare bakboter
-"""
+vloeibare bakboter"""
       expectedShoppingList must be === shoppingList.printShoppinglist
     }
 
