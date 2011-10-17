@@ -2,8 +2,8 @@ see README
 
 Short term stuff:
 X fix build, find out why tests are not run
-- find a better way to categorize stuff like pasta, rice, ... Categorize using AH shop in Ede 
-X- read data from file
+X find a better way to categorize stuff like pasta, rice, ... Categorize using AH shop in Ede 
+X read data from file
 X add date to menu and vegetable ingredients in shopping list
 X clean up var constructs in ShoppingListItem class
 - fix TODOs
@@ -11,23 +11,6 @@ X clean up var constructs in ShoppingListItem class
 - Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
 - Extend menu with list of extra's that are not related to a particular day
 - Allow more than one dish per day
-
-
-category:
-dranken:1
-schoonmaak:2
-zuivel:3
-brood:4
-groente:5
-koffie:6
-snoep:7
-pasta:8
-indonesisch:9
-olie:10
-meel:11
-soep:12
-chips:13
-diepvries:14
-zeep:15
-
+- Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
+- improve pom by getting rid of warnings.  
 
