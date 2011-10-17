@@ -72,7 +72,11 @@ object ShoppingList {
    * See if it works.
    */
   def main(args: Array[String]): Unit = {
-    val menu = Menu.readFromFile("data/15102011.txt", CookBook.readFromFile("data/cookbook.txt"))
+    if (args.length < 2) {
+      println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu>")
+      System.exit(-1)
+    }
+    val menu = Menu.readFromFile(args(1), CookBook.readFromFile(args(0)))
     val shoppingList = new ShoppingList(menu)
     val theList = shoppingList.printShoppinglistForUseWhileShopping
     println(theList)

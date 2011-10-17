@@ -7,8 +7,8 @@ my favourite super market knowing full well I'd forget stuff. My kids are now ol
 Ambition can be a dangerous thing if taken in large quantities, so I aimed for an easier goal (and now try to sell this as an advantage since easier goals that deliver working software are OK in true agile spirit).
 
 The road map now looks like this:
-- Generate a shopping list based on simple recipes specified as name:value lines in a text string stored in the main function and a menu specified likewise. The domain terms will be in Dutch.
-- Configure the recipes and menu in text files
+- Generate a shopping list based on simple recipes specified as name:value lines in a text string stored in the main function and a menu specified likewise. The domain terms will be in Dutch. (DONE)
+- Configure the recipes and menu in text files (DONE)
 - Enter the recipes and menu using a GUI
 - Generate a menu based on constraints like the season, the amount of time the cook has on a particular day and other fuzzy logic (some of the old ambition shining through here)
 

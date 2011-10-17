@@ -8,9 +8,12 @@ X add date to menu and vegetable ingredients in shopping list
 X clean up var constructs in ShoppingListItem class
 - fix TODOs
 - Allow '-' as a recipe to indicate no menu is needed on that day
+- Allow arbitrary list of days
 - Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
 - Extend menu with list of extra's that are not related to a particular day
 - Allow more than one dish per day
 - Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
 - improve pom by getting rid of warnings.  
-
+- wrap cryptic one-liners in a method
+- build an executable 
+- android interface for use in a store

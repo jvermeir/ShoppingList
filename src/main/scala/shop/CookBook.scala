@@ -19,7 +19,7 @@ object CookBook {
    * Create a cookbook from a list of strings. 
    * Each recipe is a list of consecutive <category>:<ingredient> lines where a category
    * represents an area in a shop. Both category and ingredient may contain blanks.
-   * Recipes are seperated by one or more blank lines. 
+   * Recipes are separated by one or more blank lines. 
    */
   def apply(cookBookAsText: String): CookBook = {
     val cookBookAsLinesOfText = List.fromArray(cookBookAsText.split("\n"))
