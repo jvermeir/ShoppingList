@@ -25,7 +25,8 @@ object Recipe {
   /* Create a recipe from a list of strings. See comment for apply(String). */
   def apply(recipeAsListOfLines: List[String]): Recipe = {
     val name = recipeAsListOfLines(0).split(":")(1)
-    val ingredients = for (ingredient <- recipeAsListOfLines) yield (Ingredient(ingredient))
+    val ingredientLines = recipeAsListOfLines.drop(1)
+    val ingredients = for (ingredient <- ingredientLines) yield (Ingredient(ingredient))
     new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sort(_ < _))
   }
 
@@ -33,8 +34,9 @@ object Recipe {
     ingredientIsNotEmpty(ingredient) && thisIsNotAName(ingredient)
   }
 
+  // TODO: check if this test is still required. A ingredient with an empty category won't parse anyway...
   def thisIsNotAName(ingredient: Ingredient): Boolean = {
-    ingredient.category.length > 0 && !ingredient.category.equals("naam")
+    ingredient.category.name.length() > 0 && !ingredient.category.equals("naam")
   }
 
   def ingredientIsNotEmpty(ingredient: Ingredient): Boolean = {

@@ -18,8 +18,8 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       given("A list of ingredients as strings for the witlof recipe")
       val witlofIngredientsAsText = """naam:Witlof met kip
       				vlees:kipfilet plakjes
-      				saus:gezeefde tomaten
-      				basis:rijst
+      				pasta:gezeefde tomaten
+      				rijst:rijst
       				diepvries:
       				groente:witlof
       				zuivel:geraspte kaas"""
@@ -27,11 +27,11 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       val witlofRecipe = Recipe(witlofIngredientsAsText)
       then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
       val listOfExpectedIngredients = List(
-        Ingredient("basis", "rijst"),
-        Ingredient("groente", "witlof"),
-        Ingredient("saus", "gezeefde tomaten"),
-        Ingredient("vlees", "kipfilet plakjes"),
-        Ingredient("zuivel", "geraspte kaas"))
+        new Ingredient("zuivel", "geraspte kaas"),
+        new Ingredient("vlees", "kipfilet plakjes"),
+        new Ingredient("groente", "witlof"),
+        new Ingredient("pasta", "gezeefde tomaten"),
+        new Ingredient("rijst", "rijst"))
       val expectedWitlofRecipe = new Recipe("Witlof met kip", listOfExpectedIngredients)
       expectedWitlofRecipe must be === witlofRecipe
     }
@@ -39,11 +39,11 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     scenario("A recipe for witlof and a recipe for Nasi result in a kookboek with two recipes and their groceries") {
       given("A list of ingredients as strings for the witlof recipe followed by a list of strings for the Nasi recipe")
       when("a new kookboek is created from the text version")
-      val kookboek = CookBook(cookBookAsText)
+      val cookbook = CookBook(cookBookAsText)
       then("the kookboek containts a recipe for Witlof and one for Nasi")
-      2 must be === kookboek.size
-      "Witlof met kip" must be === kookboek.findRecipeByName("Witlof met kip").name
-      "Nasi" must be === kookboek.findRecipeByName("Nasi").name
+      2 must be === cookbook.size
+      "Witlof met kip" must be === cookbook.findRecipeByName("Witlof met kip").name
+      "Nasi" must be === cookbook.findRecipeByName("Nasi").name
     }
   }
 
@@ -63,20 +63,20 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       val shoppingList = new ShoppingList(menu)
       then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
       val expectedListOfIngredients = List(
-        ShoppingListItem(Ingredient("basis", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("basis", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("basis", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
-        ShoppingListItem(Ingredient("basis", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("basis", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
-        ShoppingListItem(Ingredient("saus", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
-        ShoppingListItem(Ingredient("saus", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
-        ShoppingListItem(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
-        ShoppingListItem(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
-        ShoppingListItem(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)))
+        ShoppingListItem(new Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(new Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(new Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(new Ingredient("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(new Ingredient("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+        ShoppingListItem(new Ingredient("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+        ShoppingListItem(new Ingredient("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
       val expectedIngredientsSortedByCategory = expectedListOfIngredients.sort(_ < _)
       expectedListOfIngredients must be === shoppingList.shoppingListItemsSortedByCategory
     }
@@ -91,20 +91,20 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
       val shoppingList = new ShoppingList(menu)
       then("a shopping list is produced")
-      val expectedShoppingList = """augurken
+      val expectedShoppingList = """ei
+geraspte kaas
+vloeibare bakboter
+kipfilet
+kipfilet plakjes
+nasi pakket(09-10)
+witlof(08-10)
+sate saus
+gezeefde tomaten
 kroepoek
 rijst
 rijst
-zilveruitjes
-nasi pakket(09-10)
-witlof(08-10)
-gezeefde tomaten
-sate saus
-kipfilet
-kipfilet plakjes
-ei
-geraspte kaas
-vloeibare bakboter"""
+augurken
+zilveruitjes"""
       expectedShoppingList must be === shoppingList.printShoppinglist
     }
 
@@ -159,27 +159,28 @@ vloeibare bakboter"""
       val expectedShoppingList = """Zaterdag:Witlof met kip
 Zondag:Nasi
 
-basis:augurken
-   kroepoek
-   rijst
-   rijst
-   zilveruitjes
-groente:nasi pakket(09-10)
-   witlof(08-10)
-saus:gezeefde tomaten
-   sate saus
-vlees:kipfilet
-   kipfilet plakjes
 zuivel:ei
-   geraspte kaas
-   vloeibare bakboter"""
+      geraspte kaas
+      vloeibare bakboter
+vlees:kipfilet
+      kipfilet plakjes
+groente:nasi pakket(09-10)
+      witlof(08-10)
+sauzen:sate saus
+pasta:gezeefde tomaten
+rijst:kroepoek
+      rijst
+      rijst
+olie:augurken
+      zilveruitjes"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
   }
+
   val cookBookAsText = """naam:Witlof met kip
 		  vlees:kipfilet plakjes
-		  saus:gezeefde tomaten
-		  basis:rijst
+		  pasta:gezeefde tomaten
+		  rijst:rijst
 		  diepvries:
 		  groente:witlof
 		  zuivel:geraspte kaas
@@ -189,11 +190,11 @@ zuivel:ei
 		  naam:Nasi
 		  groente:nasi pakket
 		  vlees:kipfilet
-		  saus:sate saus
-		  basis:rijst
-		  basis:kroepoek
-		  basis:augurken
-		  basis:zilveruitjes
+		  sauzen:sate saus
+		  rijst:rijst
+		  rijst:kroepoek
+		  olie:augurken
+		  olie:zilveruitjes
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
 		  

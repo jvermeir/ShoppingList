@@ -38,7 +38,7 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
   }
 
   override def toString: String = {
-    if (category == "groente") name + "(" + printDate(date) + ")"
+    if (category.name == "groente") name + "(" + printDate(date) + ")"
     else name
   }
 

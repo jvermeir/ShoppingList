@@ -7,3 +7,27 @@ X- read data from file
 X add date to menu and vegetable ingredients in shopping list
 X clean up var constructs in ShoppingListItem class
 - fix TODOs
+- Allow '-' as a recipe to indicate no menu is needed on that day
+- Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
+- Extend menu with list of extra's that are not related to a particular day
+- Allow more than one dish per day
+
+
+category:
+dranken:1
+schoonmaak:2
+zuivel:3
+brood:4
+groente:5
+koffie:6
+snoep:7
+pasta:8
+indonesisch:9
+olie:10
+meel:11
+soep:12
+chips:13
+diepvries:14
+zeep:15
+
+

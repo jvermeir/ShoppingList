@@ -5,12 +5,14 @@ import Assert._
 
 class IngredientTest {
 
-  @Test 
+  @Test
   def testSortOrderIsOK() {
-    val sla = Ingredient("groente", "sla")
-    val gezeefdeTomaten = Ingredient("saus","gezeefde tomaten")
+    val sla = new Ingredient("groente", "sla")
+    val gezeefdeTomaten = new Ingredient("pasta", "gezeefde tomaten")
     assertTrue(sla < gezeefdeTomaten)
-    assertFalse(gezeefdeTomaten<sla)
+    assertFalse(gezeefdeTomaten < sla)
+    val spinazie = new Ingredient("groente", "spinazie")
+    assertTrue(sla < spinazie)
   }
 
 }

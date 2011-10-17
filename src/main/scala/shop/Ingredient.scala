@@ -3,8 +3,11 @@ package shop
 /**
  * Ingredient represents stuff to eat
  */
-case class Ingredient(category: String, name: String) extends Ordered[Ingredient] {
+case class Ingredient(category: Category, name: String) extends Ordered[Ingredient] {
 
+  def this(categoryName: String, name: String) = {
+    this(Category.getByName(categoryName), name)
+  }
   /*
    * Sort ingredients by category, name
    */
@@ -14,7 +17,7 @@ case class Ingredient(category: String, name: String) extends Ordered[Ingredient
       case _ => category.compare(that.category)
     }
   }
-  override def toString: String = category + ":" + name
+  override def toString: String = category.name + ":" + name
 }
 
 object Ingredient {
@@ -25,7 +28,7 @@ object Ingredient {
     val ingredient = ingredientLine.split(":")
     ingredient.length match {
       case 2 => new Ingredient(ingredient(0).trim(), ingredient(1).trim())
-      case _ => null //new Ingredient("dummy", "dummy")
+      case _ => null
     }
   }
 }

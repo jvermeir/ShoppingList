@@ -34,17 +34,25 @@ class ShoppingList(menu: Menu) {
     menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables
 
   def printShoppinglistButSkipDuplicateCategoryLables: String = {
-    @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: String, shoppingListAsString: String): String = {
+    @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: Category, shoppingListAsString: String): String = {
       shopingListItems match {
         case Nil => shoppingListAsString
         case head :: tail =>
           {
-            val label = if (currentCategory.equals(head.category)) "   " else head.category + ":"
+            val label = printLabelIfNecessary(currentCategory, head.category)
             recursiveAdd(tail, head.category, shoppingListAsString + "\n" + label + head)
           }
       }
     }
-    recursiveAdd(shoppingListItemsSortedByCategory, "", "")
+    recursiveAdd(shoppingListItemsSortedByCategory, null, "")
+  }
+
+  def printLabelIfNecessary(currentCategory: Category, newCategory: Category): String = {
+    if (currentCategory == null) newCategory.name + ":"
+    else {
+      if (currentCategory.equals(newCategory)) "      "
+      else newCategory.name + ":"
+    }
   }
 
   def printShoppinglist: String = {
@@ -123,6 +131,53 @@ vlees:varkenshaas
 verse pasta:pasta
 groente:champignons
 saus:roomsaus
+
+naam:niks
+saus:-
+
+naam:Pizza
+pasta:tapenade
+pasta:olijven
+groente:champignons
+beleg:ham
+beleg:salami
+meel:anjovis
+groente:paprika (2)
+groente:aardappels (1/2 kg)
+pasta:tomatenpuree
+zuivel:geraspte kaas
+meel:gist
+meel:meel
+
+naam:Vegetarische groenteschotel
+groente:champignons
+groente:wortel
+groente:parika(2)
+groente:courgette
+pasta:passata(750 cl)
+zuivel:geraspte kaas
+chips:ongezouten notenmix
+pasta:tagliatelle
+
+naam:Omelet
+groente:prei
+groente:wortel
+zuivel:ei(6)
+beleg:ham
+beleg:salami
+zuivel:geraspte kaas
+
+naam:Spinazietaart
+diepvries:spinazie
+zuivel:mozarella
+zuivel:kwark
+zuivel:ei (4)
+meel:meel
+pasta:gedroogde tomaten
+
+naam:Tapas
+saus:-
+
 """
     val menuText = """Zaterdag:Lasagne met gehakt
 Zondag:Wafels met soep en pastasalade
@@ -132,9 +187,18 @@ Woensdag:Preitaart
 Donderdag:Spaghetti met zalmpakketje
 Vrijdag:varkenshaas met verse pasta
 """
-    val menu = Menu(menuText, CookBook(recepten))
+    val menuText2 = """Zaterdag valt op:15102011
+Zaterdag:Omelet
+Zondag:niks
+Maandag:Spinazietaart
+Dinsdag:Tapas
+Woensdag:Pizza
+Donderdag:Vegetarische groenteschotel
+Vrijdag:niks
+"""
+    val menu = Menu(menuText2, CookBook(recepten))
     val shoppingList = new ShoppingList(menu)
-    val theList = shoppingList.printShoppinglist
+    val theList = shoppingList.printShoppinglistForUseWhileShopping
     println(theList)
   }
 
