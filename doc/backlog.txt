@@ -8,7 +8,7 @@ X add date to menu and vegetable ingredients in shopping list
 X clean up var constructs in ShoppingListItem class
 - fix TODOs
 - Allow '-' as a recipe to indicate no menu is needed on that day
-- Allow arbitrary list of days
+X Allow arbitrary list of days
 - Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
 - Extend menu with list of extra's that are not related to a particular day
 - Allow more than one dish per day

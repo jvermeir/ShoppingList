@@ -175,6 +175,36 @@ olie:augurken
       zilveruitjes"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
+
+    scenario("A menu may contain more than one recipe per day") {
+      given("a menu with dish and dish2 on Saturday and a cookbook with these recipes")
+      val menuAsString = """Zaterdag valt op:08102011
+      	zaterdag:Witlof met kip
+      	zaterdag:Nasi
+      """
+      val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      when("a shoppinglist is generated")
+      val shoppingList = new ShoppingList(menu)
+      then("the list contains ingredients for both recipes")
+      val expectedShoppingList = """zaterdag:Witlof met kip
+zaterdag:Nasi
+
+zuivel:ei
+      geraspte kaas
+      vloeibare bakboter
+vlees:kipfilet
+      kipfilet plakjes
+groente:nasi pakket(08-10)
+      witlof(08-10)
+sauzen:sate saus
+pasta:gezeefde tomaten
+rijst:kroepoek
+      rijst
+      rijst
+olie:augurken
+      zilveruitjes"""
+      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+    }
   }
 
   val cookBookAsText = """naam:Witlof met kip
