@@ -10,7 +10,7 @@ import org.joda.time.format._
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
 class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
-  val recipes:List[Recipe] = for (recipe <- listOfRecipes) yield cookbook.findRecipeByName(recipe._2)
+  val recipes:List[(String, Recipe)] = for (recipe <- listOfRecipes) yield (recipe._1, cookbook.findRecipeByName(recipe._2))
   
   def printMenu: String = {
     @tailrec def recursivePrintMenu(listOfRecipes:List[(String,String)], menuAsString:String):String = {

@@ -52,11 +52,11 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     info("I want to specify a menu for a week as a list of day:recipe pairs")
     info("So that I can create a shopping list")
 
-    scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of ingredients") {
-      given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
+    scenario("A menu with witlof on Saturday and Nasi on Sunday results in a list of ingredients") {
+      given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
-      	Zaterdag:Witlof met kip
-      	Zondag:Nasi
+      	zaterdag:Witlof met kip
+      	zondag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
@@ -84,8 +84,8 @@ class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of groceries") {
       given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
-      	Zaterdag:Witlof met kip
-      	Zondag:Nasi
+      	zondag:Witlof met kip
+      	maandag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
@@ -96,8 +96,8 @@ geraspte kaas
 vloeibare bakboter
 kipfilet
 kipfilet plakjes
-nasi pakket(09-10)
-witlof(08-10)
+nasi pakket(10-10)
+witlof(09-10)
 sate saus
 gezeefde tomaten
 kroepoek
@@ -115,12 +115,12 @@ zilveruitjes"""
       then("a menu with Witlof met kip and Nasi is created")
       val menu = Menu.readFromFile("data/test/menuForReadFromFileScenario.txt", cookBook)
       2 must be === menu.recipes.size
-      menu.recipes(0).name must be === "Witlof met kip"
-      menu.recipes(1).name must be === "Nasi"
+      menu.recipes(0)._2.name must be === "Witlof met kip"
+      menu.recipes(1)._2.name must be === "Nasi"
     }
 
-    scenario("A Kookboek can be read from a file") {
-      given("a kookboek in a text file")
+    scenario("A Cookbook can be read from a file") {
+      given("a cookbook in a text file")
       when("the file is read")
       val cookBook = CookBook.readFromFile("data/test/cookBookForReadFromFileScenario.txt")
       then("a cook book with a Nasi and a Witlof recipe is created")
@@ -133,9 +133,9 @@ zilveruitjes"""
     scenario("A exception is thrown when an unknown recipe is added to a menu") {
       given("a Menu and a Kookboek")
       val menuAsString = """Zaterdag valt op:08102011
-      	Zaterdag:Witlof met kip
-      	Zondag:Nasi
-        Dinsdag:Non existent recipe
+      	zaterdag:Witlof met kip
+      	zondag:Nasi
+        dinsdag:Non existent recipe
       """
       when("the shoppinglist is created")
       then("but a exception is thrown")
@@ -149,15 +149,15 @@ zilveruitjes"""
     scenario("A menu and list of groceries are printed for use while shopping") {
       given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
-      	Zaterdag:Witlof met kip
-      	Zondag:Nasi
+      	zaterdag:Witlof met kip
+      	zondag:Nasi
       """
       when("a menu is generated")
       val menu = Menu(menuAsString, CookBook(cookBookAsText))
       val shoppingList = new ShoppingList(menu)
       then("and a shopping list is printed")
-      val expectedShoppingList = """Zaterdag:Witlof met kip
-Zondag:Nasi
+      val expectedShoppingList = """zaterdag:Witlof met kip
+zondag:Nasi
 
 zuivel:ei
       geraspte kaas

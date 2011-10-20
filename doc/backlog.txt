@@ -14,6 +14,13 @@ X clean up var constructs in ShoppingListItem class
 - Allow more than one dish per day
 - Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
 - improve pom by getting rid of warnings.  
+([WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-surefire-plugin is missing. @ line 102, column 12
+[WARNING] 'build.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 70, column 12
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 85, column 12
+[WARNING] 'reporting.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 116, column 12
+)
 - wrap cryptic one-liners in a method
 - build an executable 
 - android interface for use in a store
+
+

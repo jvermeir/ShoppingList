@@ -2,11 +2,14 @@ package shop
 
 import scala.annotation.tailrec
 import org.joda.time.DateTime
+import org.joda.time.format._
+import java.util.Locale
 
 /**
  * ShoppingList creates a list of groceries sorted by category for a given Menu.
  */
 class ShoppingList(menu: Menu) {
+  val nameOfDayToDateMap = getNameOfDayToDateMap
   val shoppingListItemsSortedByCategory = getShoppingListItemsSortedByCategory
 
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
@@ -21,13 +24,18 @@ class ShoppingList(menu: Menu) {
   }
 
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = {
-    @tailrec def recursiveAdd(theDate: DateTime, recipes: List[Recipe], result: List[List[ShoppingListItem]]): List[List[ShoppingListItem]] = {
+    @tailrec def recursiveAdd(recipes: List[(String, Recipe)], result: List[List[ShoppingListItem]]): List[List[ShoppingListItem]] = {
       recipes match {
         case Nil => result
-        case head :: tail => recursiveAdd(theDate.plusDays(1), tail, getShoppingListItemsWithDateAdded(head, theDate) :: result)
+        case head :: tail => recursiveAdd(tail, getShoppingListItemsWithDateAdded(head._2, findDate(head._1)) :: result)
       }
     }
-    recursiveAdd(menu.dateOfSaturday, menu.recipes, List()).flatten.sort(_ < _)
+    recursiveAdd(menu.recipes, List()).flatten.sort(_ < _)
+  }
+
+  def findDate(nameOfDay: String): DateTime = {
+    val result =nameOfDayToDateMap(nameOfDay)
+    result
   }
 
   def printShoppinglistForUseWhileShopping: String =
@@ -63,6 +71,15 @@ class ShoppingList(menu: Menu) {
       }
     }
     recursivePrint(shoppingListItemsSortedByCategory, "")
+  }
+
+  def getNameOfDayToDateMap: Map[String, DateTime] = {
+    val fmt = (DateTimeFormat forPattern "EEEE").withLocale(new Locale("nl"))
+    val saturday = menu.dateOfSaturday
+    val result = for (i <- 0 until 7) yield {
+      Tuple2(fmt.print(saturday.plusDays(i)), saturday.plusDays(i))
+    }
+    result.toMap[String, DateTime]
   }
 }
 
