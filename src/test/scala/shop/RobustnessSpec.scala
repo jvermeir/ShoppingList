@@ -60,6 +60,22 @@ groente:witlof
 groente:witlof(09-10)"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
+
+    scenario("A cookbook may contain recipes with no more than a title") {
+      given("a cookbook with a dish without ingredients")
+      val menuAsString = """Zaterdag valt op:08102011
+      	zaterdag:dish1
+      """
+      val cookBook = """naam:dish1
+"""
+      val menu = Menu(menuAsString, CookBook(cookBook))
+      when("a shoppinglist is generated")
+      val shoppingList = new ShoppingList(menu)
+      then("the list is empty")
+      val expectedShoppingList = """zaterdag:dish1
+"""
+      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+    }
   }
 
   val cookBookAsText = """naam:Witlof met kip

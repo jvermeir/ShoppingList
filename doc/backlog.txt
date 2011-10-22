@@ -15,15 +15,19 @@ X Allow arbitrary list of days
 - Extend menu with list of extra's that are not related to a particular day
 X Allow more than one dish per day
 - Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
+- wrap cryptic one-liners in a method
+- add amounts if ingredient appears in more than one recipe
+
+deployment and build stuff:
 - improve pom by getting rid of warnings.  
 		([WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-surefire-plugin is missing. @ line 102, column 12
 		[WARNING] 'build.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 70, column 12
 		[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 85, column 12
 		[WARNING] 'reporting.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 116, column 12
 		)
-- wrap cryptic one-liners in a method
-- add amounts if ingredient appears in more than one recipe
-- build an executable 
-- android interface for use in a store
+- build a version that can be run with 'java -jar'
 
+Longer term stuff:
+- android interface for use in a store
+- host on server
 
