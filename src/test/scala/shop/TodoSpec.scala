@@ -34,7 +34,5 @@ witlof(08-10)"""
       // expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
       pending
     }
-
   }
-
 }

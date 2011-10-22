@@ -7,7 +7,7 @@ X read data from file
 X add date to menu and vegetable ingredients in shopping list
 X clean up var constructs in ShoppingListItem class
 - fix TODOs
-- Allow '-' as a recipe to indicate no menu is needed on that day
+X Allow '-' as a recipe to indicate no menu is needed on that day
 X Allow arbitrary list of days
 - Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
 	(arrayindexoutofbounds if menu line contains only a day but no recipe

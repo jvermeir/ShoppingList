@@ -41,6 +41,25 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       val expectedCookbook = new CookBook(Map[String, Recipe]("dish1" -> new Recipe("dish1", List())))
       expectedCookbook must be === cookbook
     }
+
+    scenario("A menu may contain - in stead of a recipe to indicate no dish is needed on a particular day") {
+      given("a menu with - in stead of a recipe")
+      val menuAsString = """Zaterdag valt op:08102011
+      	zaterdag:-
+        zondag:dish1
+      """
+      val cookBook = """naam:dish1
+groente:witlof
+"""
+      val menu = Menu(menuAsString, CookBook(cookBook))
+      when("a shoppinglist is generated...")
+      val shoppingList = new ShoppingList(menu)
+      then("... that contains only witlof")
+      val expectedShoppingList = """zondag:dish1
+
+groente:witlof(09-10)"""
+      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+    }
   }
 
   val cookBookAsText = """naam:Witlof met kip
