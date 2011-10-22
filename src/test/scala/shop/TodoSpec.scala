@@ -31,9 +31,10 @@ zondag:dish2
 
 groente:salad(08-10)
 witlof(08-10)"""
-     // expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+      // expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
       pending
     }
+
   }
 
 }

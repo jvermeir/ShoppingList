@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
-class RecipeSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
+class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
   feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want to list recipes as text in a file")
@@ -128,22 +128,6 @@ zilveruitjes"""
       2 must be === cookBook.size
       "Witlof met kip" must be === cookBook.findRecipeByName("Witlof met kip").name
       "Nasi" must be === cookBook.findRecipeByName("Nasi").name
-    }
-
-    scenario("A exception is thrown when an unknown recipe is added to a menu") {
-      given("a Menu and a Kookboek")
-      val menuAsString = """Zaterdag valt op:08102011
-      	zaterdag:Witlof met kip
-      	zondag:Nasi
-        dinsdag:Non existent recipe
-      """
-      when("the shoppinglist is created")
-      then("but a exception is thrown")
-      intercept[NoSuchElementException] {
-        val menu = Menu(menuAsString, CookBook(cookBookAsText))
-        val shoppingList = new ShoppingList(menu)
-        shoppingList.printShoppinglist
-      }
     }
 
     scenario("A menu and list of groceries are printed for use while shopping") {
