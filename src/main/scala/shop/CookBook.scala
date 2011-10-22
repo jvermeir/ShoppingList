@@ -8,10 +8,16 @@ import scala.collection.JavaConversions._
 /**
  * Cookbook represents a list of recipes
  */
-class CookBook(recipes: Map [String, Recipe]) {
+case class CookBook(recipes: Map [String, Recipe]) {
   def findRecipeByName(name: String): Recipe = recipes(name)
-
   def size: Int = recipes.size
+
+  def equals(that:CookBook):Boolean = {
+    val equalSize = recipes.size == that.recipes.size
+    val equalRecipes = recipes.equals(that.recipes)
+    equalSize && equalRecipes
+  }
+
 }
 
 object CookBook {
@@ -26,7 +32,7 @@ object CookBook {
     @tailrec def recursiveParse(cookBookAsLinesOfText: List[String], resultList: List[Recipe], recipe: List[String]): List[Recipe] = {
       cookBookAsLinesOfText match {
         case Nil => resultList
-        case head :: Nil => Recipe(recipe.reverse) :: resultList
+        case head :: Nil => Recipe((head :: recipe).reverse) :: resultList
         case head :: tail =>
           {
             if (head.trim.length == 0) {
