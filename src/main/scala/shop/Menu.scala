@@ -56,7 +56,7 @@ object Menu {
   }
 
   def createMenuLineFromTextLine(textLine: String): Tuple2[String, String] = {
-    (textLine.split(":")(0).trim, textLine.split(":")(1).trim)
+    (textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
   }
 
   def readFromFile(fileName: String, cookBook: CookBook): Menu = {

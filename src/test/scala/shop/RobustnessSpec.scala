@@ -76,6 +76,30 @@ groente:witlof(09-10)"""
 """
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
+
+    scenario("A day in a menu may be specified in arbitrary case") {
+      given("a menu with days in mixed case")
+      val menuAsString = """Zaterdag valt op:08102011
+      	zaterdag:dish1
+      	Zondag:dish1
+        mAAndag:dish1
+      """
+      val cookBook = """naam:dish1
+groente:witlof
+"""
+      val menu = Menu(menuAsString, CookBook(cookBook))
+      when("a shoppinglist is generated")
+      val shoppingList = new ShoppingList(menu)
+      then("the list contains lots of witlof")
+      val expectedShoppingList = """zaterdag:dish1
+zondag:dish1
+maandag:dish1
+
+groente:witlof(08-10)
+      witlof(09-10)
+      witlof(10-10)"""
+      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+    }
   }
 
   val cookBookAsText = """naam:Witlof met kip

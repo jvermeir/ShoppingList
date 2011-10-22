@@ -9,14 +9,16 @@ X clean up var constructs in ShoppingListItem class
 - fix TODOs
 X Allow '-' as a recipe to indicate no menu is needed on that day
 X Allow arbitrary list of days
-- Avoid crash if recipe contains no more than a title, in general improve non-happy flow when parsing
+- Improve non-happy flow when parsing
 	(arrayindexoutofbounds if menu line contains only a day but no recipe
-	, case insensitive name-of-day)
+	, case insensitive name-of-day
+X	, recipe contains no more than a title)
 - Extend menu with list of extra's that are not related to a particular day
 X Allow more than one dish per day
 - Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
 - wrap cryptic one-liners in a method
 - add amounts if ingredient appears in more than one recipe
+- internationalization
 
 deployment and build stuff:
 - improve pom by getting rid of warnings.  
@@ -30,4 +32,4 @@ deployment and build stuff:
 Longer term stuff:
 - android interface for use in a store
 - host on server
-
+- find quality metric tool for Scala code
