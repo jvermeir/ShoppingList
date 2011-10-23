@@ -10,7 +10,7 @@ X clean up var constructs in ShoppingListItem class
 X Allow '-' as a recipe to indicate no menu is needed on that day
 X Allow arbitrary list of days
 - Improve non-happy flow when parsing
-	(arrayindexoutofbounds if menu line contains only a day but no recipe
+X	(arrayindexoutofbounds if menu line contains only a day but no recipe
 X	, case insensitive name-of-day
 X	, recipe contains no more than a title)
 - Extend menu with list of extra's that are not related to a particular day
@@ -22,13 +22,13 @@ X Allow more than one dish per day
 - internationalization
 
 deployment and build stuff:
-- improve pom by getting rid of warnings.  
+X improve pom by getting rid of warnings.  
 X		([WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-surefire-plugin is missing. @ line 102, column 12
 X		[WARNING] 'build.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 70, column 12
 X		[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-eclipse-plugin is missing. @ line 85, column 12
 X		[WARNING] 'reporting.plugins.plugin.version' for org.scala-tools:maven-scala-plugin is missing. @ line 116, column 12
 X		)
-	deprecated warnings
+X	deprecated warnings
 X build a version that can be run with 'java -jar'
 
 Longer term stuff:

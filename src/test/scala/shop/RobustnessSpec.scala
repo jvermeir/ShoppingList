@@ -100,6 +100,25 @@ groente:witlof(08-10)
       witlof(10-10)"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
+
+    scenario("The app should not crash if a menu line contains no more than the name of the day") {
+      given("a menu with one line that contains only the name of the day")
+      val menuAsString = """Zaterdag valt op:08102011
+      	zaterdag
+        zondag:dish1
+      """
+      val cookBook = """naam:dish1
+groente:witlof
+"""
+      val menu = Menu(menuAsString, CookBook(cookBook))
+      when("a shoppinglist is generated")
+      val shoppingList = new ShoppingList(menu)
+      then("the list contains witlof, the data for Saturday are ignored")
+      val expectedShoppingList = """zondag:dish1
+
+groente:witlof(09-10)"""
+        expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+    }
   }
 
   val cookBookAsText = """naam:Witlof met kip

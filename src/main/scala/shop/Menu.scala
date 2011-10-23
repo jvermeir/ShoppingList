@@ -45,10 +45,10 @@ object Menu {
         case head :: tail =>
           if (head.trim.length > 0) {
             val menuLine = head.trim
-            if (menuLine.endsWith(":-"))
-            	recursiveAdd(menuAsListOfStrings.drop(1), menu)
-              else
-            	  recursiveAdd(menuAsListOfStrings.drop(1), createMenuLineFromTextLine(head) :: menu)
+            if (menuLine.endsWith(":-") || menuLine.indexOf(":") < 0)
+              recursiveAdd(menuAsListOfStrings.drop(1), menu)
+            else
+              recursiveAdd(menuAsListOfStrings.drop(1), createMenuLineFromTextLine(head) :: menu)
           } else recursiveAdd(menuAsListOfStrings.drop(1), menu)
       }
     }
