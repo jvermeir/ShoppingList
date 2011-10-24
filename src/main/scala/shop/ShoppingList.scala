@@ -4,14 +4,18 @@ import scala.annotation.tailrec
 import org.joda.time.DateTime
 import org.joda.time.format._
 import java.util.Locale
+import org.apache.commons.io.FileUtils
+import java.io.File
 
 /**
  * ShoppingList creates a list of groceries sorted by category for a given Menu.
  */
-class ShoppingList(menu: Menu) {
+class ShoppingList(menu: Menu, extras:List[Ingredient]) {
   val nameOfDayToDateMap = getNameOfDayToDateMap
   val shoppingListItemsSortedByCategory = getShoppingListItemsSortedByCategory
 
+  def this(menu:Menu) = this(menu, List())
+  
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
   def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
     @tailrec def recursiveAdd(ingredients: List[Ingredient], result: List[ShoppingListItem]): List[ShoppingListItem] = {
@@ -30,11 +34,27 @@ class ShoppingList(menu: Menu) {
         case head :: tail => recursiveAdd(tail, getShoppingListItemsWithDateAdded(head._2, findDate(head._1)) :: result)
       }
     }
-    recursiveAdd(menu.recipes, List()).flatten.sort(_ < _)
+    val itemsFromMenuRecipes = recursiveAdd(menu.recipes, List()).flatten
+    val allItems:List[ShoppingListItem] = itemsFromMenuRecipes ::: itemsFromExtras(extras)
+    allItems.sort(_ < _)
   }
 
+  def itemsFromExtras(extras:List[Ingredient]):List[ShoppingListItem] = {
+    @tailrec def recursiveAdd(ingredients:List[Ingredient], result:List[ShoppingListItem]):List[ShoppingListItem] = {
+      ingredients match {
+        case Nil => result
+        case head :: tail =>
+          { 
+            if (head != null) recursiveAdd(tail, new ShoppingListItem(head) :: result)
+            else recursiveAdd(tail, result)
+          }
+      }
+    }
+    recursiveAdd(extras, List())
+  }
+  
   def findDate(nameOfDay: String): DateTime = {
-    val result =nameOfDayToDateMap(nameOfDay)
+    val result = nameOfDayToDateMap(nameOfDay)
     result
   }
 
@@ -93,10 +113,23 @@ object ShoppingList {
       println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu>")
       System.exit(-1)
     }
-    val menu = Menu.readFromFile(args(1), CookBook.readFromFile(args(0)))
-    val shoppingList = new ShoppingList(menu)
+    val cookbook = CookBook.readFromFile(args(0))
+    val menuAndList = readAndSplit(args(1))
+    val menu = Menu(menuAndList._1, CookBook.readFromFile(args(0)))
+    val extras:List[Ingredient]=Ingredient.readFromText(menuAndList._2)
+    val shoppingList = new ShoppingList(menu, extras)
     val theList = shoppingList.printShoppinglistForUseWhileShopping
     println(theList)
   }
-
+  
+  def readAndSplit(fileName: String): (String, String) = {
+    split(FileUtils.readFileToString(new File(fileName)))
+  }
+  
+  def split(contents:String): (String, String) = {
+    if (contents.indexOf("extra") > 0) {
+      val parts = contents.split("extra")
+      (parts(0), parts(1))
+    } else (contents, "")
+  }
 }

@@ -32,8 +32,9 @@ object Menu {
    * The first line of input is the date for Saturday. This line should look like this:
    * 	"Zaterdag valt op:08102011"
    * where the text up to the : doesn't matter. The date format used is ddMMyyyy as in JodaTime format
-   * The next lines are assumed to be Day:Recipe pairs where Day is the name of a Day (in Dutch, starting with a lower case letter)
+   * The next lines are assumed to be Day:Recipe pairs where Day is the name of a Day (in Dutch)
    * and recipe refers to a recipe name as specified in a Cookbook.
+   * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cookbook.
    */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = List.fromArray(menuAsString.split("\n"))

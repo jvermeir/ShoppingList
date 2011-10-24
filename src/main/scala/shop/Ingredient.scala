@@ -1,5 +1,7 @@
 package shop
 
+import scala.annotation.tailrec
+
 /**
  * Ingredient represents stuff to eat
  */
@@ -30,5 +32,16 @@ object Ingredient {
       case 2 => new Ingredient(ingredient(0).trim(), ingredient(1).trim())
       case _ => null
     }
+  }
+  
+  def readFromText(ingredientsAsText:String):List[Ingredient] = {
+    val ingredients:List[String] = ingredientsAsText.split("\n").toList
+    @tailrec def recursiveAdd(ingredients:List[String], result:List[Ingredient]):List[Ingredient] = {
+	  ingredients match {
+	    case Nil => result
+	    case head::tail => recursiveAdd(tail, Ingredient(head) :: result)
+	  }
+    }
+    recursiveAdd(ingredients, List())
   }
 }
