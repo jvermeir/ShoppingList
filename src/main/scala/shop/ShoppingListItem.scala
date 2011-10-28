@@ -7,6 +7,7 @@ import org.joda.time.DateTime
 import org.joda.time.format._
 
 case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Ordered[ShoppingListItem] {
+  if (ingredient == null) throw new PanicException("Ingredient was null")
   def name = ingredient.name
   def category = ingredient.category
 
@@ -22,7 +23,9 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
   def compare(that: ShoppingListItem) = {
     ingredient match {
       case that.ingredient => date.compareTo(that.date)
-      case _ => this.ingredient.compare(that.ingredient)
+      case null => -1
+      case _ if (that != null)=> this.ingredient.compare(that.ingredient)
+      case _ => -1
     }
   }
 

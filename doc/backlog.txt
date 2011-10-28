@@ -13,7 +13,7 @@ X Allow arbitrary list of days
 X	(arrayindexoutofbounds if menu line contains only a day but no recipe
 X	, case insensitive name-of-day
 X	, recipe contains no more than a title)
-- Extend menu with list of extra's that are not related to a particular day
+X Extend menu with list of extra's that are not related to a particular day
 X Allow more than one dish per day
 - Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff?
 - wrap cryptic one-liners in a method

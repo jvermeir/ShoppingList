@@ -28,20 +28,20 @@ object CookBook {
    * Recipes are separated by one or more blank lines. 
    */
   def apply(cookBookAsText: String): CookBook = {
-    val cookBookAsLinesOfText = List.fromArray(cookBookAsText.split("\n"))
     @tailrec def recursiveParse(cookBookAsLinesOfText: List[String], resultList: List[Recipe], recipe: List[String]): List[Recipe] = {
       cookBookAsLinesOfText match {
         case Nil => resultList
         case head :: Nil => Recipe((head :: recipe).reverse) :: resultList
         case head :: tail =>
           {
-            if (head.trim.length == 0) {
+            if (isThisLineEmpty(head)) {
               val theRecipe: Recipe = Recipe(recipe.reverse)
               recursiveParse(cookBookAsLinesOfText.dropWhile(_.trim.length==0), theRecipe :: resultList, Nil)
             } else recursiveParse(cookBookAsLinesOfText.drop(1), resultList, head :: recipe)
           }
       }
     }
+    val cookBookAsLinesOfText = List.fromArray(cookBookAsText.split("\n"))
     val listOfRecipes = recursiveParse(cookBookAsLinesOfText, Nil, Nil)
     apply(listOfRecipes)
   }
@@ -65,5 +65,12 @@ object CookBook {
   def readFromFile(fileName:String):CookBook = {
     val cookBookAsText = FileUtils.readFileToString(new File(fileName))
     apply(cookBookAsText)
+  }
+  
+  def isThisLineEmpty(line:String):Boolean = {
+    line match {
+      case null => true
+      case _ => (line.trim.length == 0)
+    }
   }
 }

@@ -14,11 +14,14 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
    * Sort ingredients by category, name
    */
   def compare(that: Ingredient) = {
-    category match {
-      case that.category => name.compare(that.name)
-      case _ => category.compare(that.category)
-    }
+    if (that != null) {
+      category match {
+        case that.category => name.compare(that.name)
+        case _ => category.compare(that.category)
+      }
+    } else -1
   }
+  
   override def toString: String = category.name + ":" + name
 }
 
@@ -33,14 +36,14 @@ object Ingredient {
       case _ => null
     }
   }
-  
-  def readFromText(ingredientsAsText:String):List[Ingredient] = {
-    val ingredients:List[String] = ingredientsAsText.split("\n").toList
-    @tailrec def recursiveAdd(ingredients:List[String], result:List[Ingredient]):List[Ingredient] = {
-	  ingredients match {
-	    case Nil => result
-	    case head::tail => recursiveAdd(tail, Ingredient(head) :: result)
-	  }
+
+  def readFromText(ingredientsAsText: String): List[Ingredient] = {
+    val ingredients: List[String] = ingredientsAsText.split("\n").toList
+    @tailrec def recursiveAdd(ingredients: List[String], result: List[Ingredient]): List[Ingredient] = {
+      ingredients match {
+        case Nil => result
+        case head :: tail => recursiveAdd(tail, Ingredient(head) :: result)
+      }
     }
     recursiveAdd(ingredients, List())
   }

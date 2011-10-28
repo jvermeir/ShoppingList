@@ -17,45 +17,25 @@ class ShoppingList(menu: Menu, extras:List[Ingredient]) {
   def this(menu:Menu) = this(menu, List())
   
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
-  def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
-    @tailrec def recursiveAdd(ingredients: List[Ingredient], result: List[ShoppingListItem]): List[ShoppingListItem] = {
-      ingredients match {
-        case Nil => result
-        case head :: tail => recursiveAdd(tail, new ShoppingListItem(head, date) :: result)
-      }
-    }
-    recursiveAdd(recipe.ingredients, List())
+  def getShoppingListItemsWithDateAdded(recipe:Recipe, date:DateTime):List[ShoppingListItem] = {
+    for(ingredient <- recipe.ingredients) yield new ShoppingListItem(ingredient, date)
   }
 
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = {
-    @tailrec def recursiveAdd(recipes: List[(String, Recipe)], result: List[List[ShoppingListItem]]): List[List[ShoppingListItem]] = {
-      recipes match {
-        case Nil => result
-        case head :: tail => recursiveAdd(tail, getShoppingListItemsWithDateAdded(head._2, findDate(head._1)) :: result)
-      }
-    }
-    val itemsFromMenuRecipes = recursiveAdd(menu.recipes, List()).flatten
-    val allItems:List[ShoppingListItem] = itemsFromMenuRecipes ::: itemsFromExtras(extras)
-    allItems.sort(_ < _)
+    (itemsFromMenu::: itemsFromExtras).sort(_ < _)
   }
-
-  def itemsFromExtras(extras:List[Ingredient]):List[ShoppingListItem] = {
-    @tailrec def recursiveAdd(ingredients:List[Ingredient], result:List[ShoppingListItem]):List[ShoppingListItem] = {
-      ingredients match {
-        case Nil => result
-        case head :: tail =>
-          { 
-            if (head != null) recursiveAdd(tail, new ShoppingListItem(head) :: result)
-            else recursiveAdd(tail, result)
-          }
-      }
-    }
-    recursiveAdd(extras, List())
+  
+  def itemsFromMenu: List[ShoppingListItem] = {
+    val items = for(recipe <- menu.recipes) yield getShoppingListItemsWithDateAdded(recipe._2, findDate(recipe._1))
+    items.flatten
+  }
+  
+  def itemsFromExtras:List[ShoppingListItem] = {
+    for (ingredient <- extras; if (ingredient !=null)) yield new ShoppingListItem(ingredient)
   }
   
   def findDate(nameOfDay: String): DateTime = {
-    val result = nameOfDayToDateMap(nameOfDay)
-    result
+    nameOfDayToDateMap(nameOfDay)
   }
 
   def printShoppinglistForUseWhileShopping: String =
