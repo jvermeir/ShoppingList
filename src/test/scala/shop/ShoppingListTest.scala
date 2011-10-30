@@ -7,6 +7,7 @@ import org.joda.time.format._
 import java.util.Locale
 
 class ShoppingListTest {
+  Category.apply
 
   @Test
   def namesOfDaysAreMappedToCorrectDates() {

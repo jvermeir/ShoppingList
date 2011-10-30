@@ -4,7 +4,8 @@ import org.junit._
 import Assert._
 
 class IngredientTest {
-
+  Category.apply
+  
   @Test
   def testSortOrderIsOK() {
     val sla = new Ingredient("groente", "sla")

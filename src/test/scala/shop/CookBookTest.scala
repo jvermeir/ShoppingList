@@ -4,6 +4,7 @@ import org.junit._
 import Assert._
 
 class CookBookTest {
+  Category.apply
   val sla1 = new Ingredient("groente", "sla")
   val tomaten1 = new Ingredient("groente", "tomaten")
   val salad1 = new Recipe("salad", List(sla1, tomaten1))

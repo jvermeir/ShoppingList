@@ -5,6 +5,7 @@ import Assert._
 import org.joda.time.DateTime
 
 class ShoppingListItemTest {
+  Category.apply
 
   @Test
   def testSortOrderIsOKIfIngredientsBelongToDifferentCategory() {

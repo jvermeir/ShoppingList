@@ -9,6 +9,7 @@ import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
 class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
+  Category.apply
   feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want to list recipes as text in a file")
