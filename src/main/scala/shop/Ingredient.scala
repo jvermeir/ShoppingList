@@ -21,7 +21,7 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
       }
     } else -1
   }
-  
+
   override def toString: String = category.name + ":" + name
 }
 
@@ -38,13 +38,6 @@ object Ingredient {
   }
 
   def readFromText(ingredientsAsText: String): List[Ingredient] = {
-    val ingredients: List[String] = ingredientsAsText.split("\n").toList
-    @tailrec def recursiveAdd(ingredients: List[String], result: List[Ingredient]): List[Ingredient] = {
-      ingredients match {
-        case Nil => result
-        case head :: tail => recursiveAdd(tail, Ingredient(head) :: result)
-      }
-    }
-    recursiveAdd(ingredients, List())
+    ingredientsAsText.split("\n").toList map (Ingredient(_))
   }
 }

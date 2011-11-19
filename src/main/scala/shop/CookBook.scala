@@ -6,13 +6,13 @@ import java.io.File
 import scala.collection.JavaConversions._
 
 /**
- * Cookbook represents a list of recipes
+ * Cook book represents a list of recipes
  */
-case class CookBook(recipes: Map [String, Recipe]) {
+case class CookBook(recipes: Map[String, Recipe]) {
   def findRecipeByName(name: String): Recipe = recipes(name)
   def size: Int = recipes.size
 
-  def equals(that:CookBook):Boolean = {
+  def equals(that: CookBook): Boolean = {
     val equalSize = recipes.size == that.recipes.size
     val equalRecipes = recipes.equals(that.recipes)
     equalSize && equalRecipes
@@ -22,55 +22,38 @@ case class CookBook(recipes: Map [String, Recipe]) {
 
 object CookBook {
   /*
-   * Create a cookbook from a list of strings. 
+   * Create a cook book from a list of strings. 
    * Each recipe is a list of consecutive <category>:<ingredient> lines where a category
    * represents an area in a shop. Both category and ingredient may contain blanks.
    * Recipes are separated by one or more blank lines. 
    */
   def apply(cookBookAsText: String): CookBook = {
-    @tailrec def recursiveParse(cookBookAsLinesOfText: List[String], resultList: List[Recipe], recipe: List[String]): List[Recipe] = {
-      cookBookAsLinesOfText match {
-        case Nil => resultList
-        case head :: Nil => Recipe((head :: recipe).reverse) :: resultList
-        case head :: tail =>
-          {
-            if (isThisLineEmpty(head)) {
-              val theRecipe: Recipe = Recipe(recipe.reverse)
-              recursiveParse(cookBookAsLinesOfText.dropWhile(_.trim.length==0), theRecipe :: resultList, Nil)
-            } else recursiveParse(cookBookAsLinesOfText.drop(1), resultList, head :: recipe)
-          }
-      }
-    }
-    val cookBookAsLinesOfText = List.fromArray(cookBookAsText.split("\n"))
-    val listOfRecipes = recursiveParse(cookBookAsLinesOfText, Nil, Nil)
+    val cleanedUpText = cleanUpCookBookText(cookBookAsText)
+    val cookBookSplitIntoRecipes = List.fromArray(cleanedUpText.split("\n\n"))
+    val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.split("\n") toList) }
     apply(listOfRecipes)
   }
   
   /*
-   * Create a cookbook from a list of recipes
+   * Create a cook book from a list of recipes
    */
-  def apply(listOfRecipes:List[Recipe]):CookBook = {
-    @tailrec def recursiveAdd(recipeList:List[Recipe], recipes: Map[String, Recipe]): Map [String, Recipe] = {
-      recipeList match {
-        case Nil => recipes
-        case head :: tail => recursiveAdd(tail, recipes + (head.name -> head))
-      }
-    }
-    new CookBook(recursiveAdd(listOfRecipes, Map[String, Recipe]()))
+  def apply(listOfRecipes: List[Recipe]): CookBook = {
+    val recipes = listOfRecipes map { case (recipe) => (recipe.name -> recipe) }
+    new CookBook(recipes toMap)
   }
-  
+
   /*
-   * Create a cookbook from a text file. See apply(String) for info.
+   * Create a cook book from a text file. See apply(String) for info.
    */
-  def readFromFile(fileName:String):CookBook = {
+  def readFromFile(fileName: String): CookBook = {
     val cookBookAsText = FileUtils.readFileToString(new File(fileName))
     apply(cookBookAsText)
   }
-  
-  def isThisLineEmpty(line:String):Boolean = {
-    line match {
-      case null => true
-      case _ => (line.trim.length == 0)
-    }
-  }
+
+  def cleanUpCookBookText(cookBookAsString: String): String = 
+    cookBookAsString.replaceAll("\t", "")
+    .replaceAll(" +", " ")
+    .replaceAll("(?m)^[ ]*", "")
+    .replaceAll("(?m)[ ]*$", "")
+    .replaceAll("(?m)\n\n\n*","\n\n")
 }

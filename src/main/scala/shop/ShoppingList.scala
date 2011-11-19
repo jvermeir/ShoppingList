@@ -93,6 +93,7 @@ object ShoppingList {
       println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu>")
       System.exit(-1)
     }
+    Category.apply
     val cookbook = CookBook.readFromFile(args(0))
     val menuAndList = readAndSplit(args(1))
     val menu = Menu(menuAndList._1, CookBook.readFromFile(args(0)))

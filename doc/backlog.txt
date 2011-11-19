@@ -15,11 +15,16 @@ X	, case insensitive name-of-day
 X	, recipe contains no more than a title)
 X Extend menu with list of extra's that are not related to a particular day
 X Allow more than one dish per day
-- Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff? read categories from a file
+- Refactor Category so it can be injected in a test case. Do we need more dependency injection kind of stuff? 
+X read categories from a file
 - wrap cryptic one-liners in a method
 - simplify recursive methods. 
 - add amounts if ingredient appears in more than one recipe
 - internationalization
+- find out why chocolate isn't put on list in menu for 05112011
+- find coding style guidelines and implement (e.g. 'Do not instantiate case classes with new, use their companion object instead', 'use sorted for sorting
+lists of case classes, do not write a compare method').
+
 
 deployment and build stuff:
 X improve pom by getting rid of warnings.  

@@ -29,4 +29,47 @@ class CookBookTest {
     val x = cookbook1.equals(cookbook3)
     assertFalse(cookbook1.equals(cookbook3))
   }
+
+  @Test
+  def testSplit = {
+    val stringWithDoubleBackslashN = "part1\n\npart2"
+    val splitOnDoubleBackslahN = stringWithDoubleBackslashN.split("\n\n")
+    assertEquals(2, splitOnDoubleBackslahN.length)
+    val stringWithDoubleBackslashNAndSomeWhitespace = "part1     \n\t  \npart2"
+    val splitOnDoubleBackslahNAndSomeWhitespace = stringWithDoubleBackslashN.replaceAll("""^\s+""", "").split("\n\n")
+    assertEquals(2, splitOnDoubleBackslahNAndSomeWhitespace.length)
+  }
+
+  @Test
+  def testSplit2 = {
+    val stringWithDoubleBackslashNAndSomeWhitespace = "part1     \n\t  \n part2"
+    val cleanedUpString = CookBook.cleanUpCookBookText(stringWithDoubleBackslashNAndSomeWhitespace)
+    assertEquals(2, cleanedUpString.split("\n\n").length)
+  }
+
+  @Test
+  def parseTest {
+    val cookBookAsText = """naam:Witlof met kip
+		  vlees:kipfilet plakjes
+		  pasta:gezeefde tomaten
+		  rijst:rijst
+		  diepvries:
+		  groente:witlof
+		  zuivel:geraspte kaas
+		  
+		  naam:Nasi
+		  groente:nasi pakket
+		  vlees:kipfilet
+		  sauzen:sate saus
+		  rijst:rijst
+		  rijst:kroepoek
+		  olie:augurken
+		  olie:zilveruitjes
+		  zuivel:ei
+		  zuivel:vloeibare bakboter
+		  """
+    Category.apply
+    val c = CookBook(cookBookAsText)
+    assertEquals(2, c.recipes.size)
+  }
 }

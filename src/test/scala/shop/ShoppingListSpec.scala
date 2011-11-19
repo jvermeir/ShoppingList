@@ -226,8 +226,6 @@ zeep:vaatwasmiddel"""
 		  groente:witlof
 		  zuivel:geraspte kaas
 		  
-		  
-		  
 		  naam:Nasi
 		  groente:nasi pakket
 		  vlees:kipfilet
@@ -238,8 +236,5 @@ zeep:vaatwasmiddel"""
 		  olie:zilveruitjes
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
-		  
-		  
-		  
 		  """
 }

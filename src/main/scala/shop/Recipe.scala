@@ -34,7 +34,6 @@ object Recipe {
     ingredientIsNotEmpty(ingredient) && thisIsNotAName(ingredient)
   }
 
-  // TODO: check if this test is still required. A ingredient with an empty category won't parse anyway...
   def thisIsNotAName(ingredient: Ingredient): Boolean = {
     ingredient.category.name.length() > 0 && !ingredient.category.equals("naam")
   }
