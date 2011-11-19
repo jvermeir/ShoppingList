@@ -1,6 +1,5 @@
 package shop
 
-import scala.annotation.tailrec
 import org.apache.commons.io.FileUtils
 import java.io.File
 import scala.collection.JavaConversions._
@@ -30,7 +29,7 @@ object CookBook {
   def apply(cookBookAsText: String): CookBook = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = List.fromArray(cleanedUpText.split("\n\n"))
-    val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.split("\n") toList) }
+    val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.lines.toList) }
     apply(listOfRecipes)
   }
   

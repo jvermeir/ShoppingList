@@ -18,7 +18,7 @@ object Recipe {
    * where <category> refers to some label that makes sense to locate the ingredient in a shop and name is the name of the ingredient.
    */
   def apply(recipeAsText: String): Recipe = {
-    val receptAsLinesOfText: List[String] = List.fromArray(recipeAsText.split("\n"))
+    val receptAsLinesOfText: List[String] = recipeAsText.lines.toList
     apply(receptAsLinesOfText)
   }
   

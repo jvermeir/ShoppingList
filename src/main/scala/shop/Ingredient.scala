@@ -1,7 +1,5 @@
 package shop
 
-import scala.annotation.tailrec
-
 /**
  * Ingredient represents stuff to eat
  */
@@ -38,6 +36,6 @@ object Ingredient {
   }
 
   def readFromText(ingredientsAsText: String): List[Ingredient] = {
-    ingredientsAsText.split("\n").toList map (Ingredient(_))
+    ingredientsAsText.lines.toList map (Ingredient(_))
   }
 }

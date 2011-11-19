@@ -37,7 +37,7 @@ object Menu {
    * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cook book.
    */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
-    val menuAsListOfStrings = List.fromArray(menuAsString.split("\n"))
+    val menuAsListOfStrings = menuAsString.lines.toList
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
     val menu: List[(String, String)] = menuAsStringsWithoutHeaderLine map { createMenuLineFromTextLine(_) } filter { _ != null }
