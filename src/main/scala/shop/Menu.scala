@@ -28,38 +28,33 @@ class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, va
 
 object Menu {
   /*
-   * Create a menu from a list of strings representing day:recipe pairs and a cookbook.
+   * Create a menu from a list of strings representing day:recipe pairs and a cook book.
    * The first line of input is the date for Saturday. This line should look like this:
    * 	"Zaterdag valt op:08102011"
    * where the text up to the : doesn't matter. The date format used is ddMMyyyy as in JodaTime format
    * The next lines are assumed to be Day:Recipe pairs where Day is the name of a Day (in Dutch)
-   * and recipe refers to a recipe name as specified in a Cookbook.
-   * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cookbook.
+   * and recipe refers to a recipe name as specified in a Cook book.
+   * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cook book.
    */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = List.fromArray(menuAsString.split("\n"))
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
-
-    @tailrec def recursiveAdd(menuAsListOfStrings: List[String], menu: List[(String, String)]): List[(String, String)] = {
-      menuAsListOfStrings match {
-        case Nil => menu.reverse
-        case head :: tail =>
-          if (head.trim.length > 0) {
-            val menuLine = head.trim
-            if (menuLine.endsWith(":-") || menuLine.indexOf(":") < 0)
-              recursiveAdd(menuAsListOfStrings.drop(1), menu)
-            else
-              recursiveAdd(menuAsListOfStrings.drop(1), createMenuLineFromTextLine(head) :: menu)
-          } else recursiveAdd(menuAsListOfStrings.drop(1), menu)
-      }
-    }
-    new Menu(recursiveAdd(menuAsListOfStrings.drop(1), List[(String, String)]()), cookbook: CookBook, dateOfSaturday)
+    val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
+    val menu: List[(String, String)] = menuAsStringsWithoutHeaderLine map { createMenuLineFromTextLine(_) } filter { _ != null }
+    new Menu(menu, cookbook: CookBook, dateOfSaturday)
   }
 
   def createMenuLineFromTextLine(textLine: String): Tuple2[String, String] = {
-    (textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
+    if (isValidMenuLine(textLine))
+      (textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
+    else null
   }
 
+  def isValidMenuLine(textLine:String):Boolean = {
+    val text = textLine.trim()
+    text.length() > 0 && text.indexOf(":") > 0 && !text.endsWith(":-")
+  }
+  
   def readFromFile(fileName: String, cookBook: CookBook): Menu = {
     val menuAsText = FileUtils.readFileToString(new File(fileName))
     apply(menuAsText, cookBook)
