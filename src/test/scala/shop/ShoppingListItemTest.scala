@@ -3,9 +3,9 @@ package shop
 import org.junit._
 import Assert._
 import org.joda.time.DateTime
+// Category
 
 class ShoppingListItemTest {
-  Category.apply
 
   @Test
   def testSortOrderIsOKIfIngredientsBelongToDifferentCategory() {

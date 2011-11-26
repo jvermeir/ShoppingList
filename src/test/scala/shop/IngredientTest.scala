@@ -4,7 +4,6 @@ import org.junit._
 import Assert._
 
 class IngredientTest {
-  Category.apply
   
   @Test
   def testSortOrderIsOK() {
@@ -14,6 +13,12 @@ class IngredientTest {
     assertFalse(gezeefdeTomaten < sla)
     val spinazie = new Ingredient("groente", "spinazie")
     assertTrue(sla < spinazie)
+  }
+  
+  @Test
+  def testNullCategoryIsLessThanOtherCategories() {
+    val sla = new Ingredient("groente", "sla")
+    assertTrue(sla > null)
   }
 
 }

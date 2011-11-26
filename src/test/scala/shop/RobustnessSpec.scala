@@ -6,10 +6,10 @@ import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.MustMatchers
 import org.junit.runner.RunWith
 import org.joda.time.DateTime
+// Category
 
 @RunWith(classOf[JUnitRunner])
 class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
-  Category.apply
   feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want ShoppingList to be resilient to errors in cookbook or menu specifications")
@@ -45,7 +45,6 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
 
     scenario("A menu may contain - in stead of a recipe to indicate no dish is needed on a particular day") {
       given("a menu with - in stead of a recipe")
-      Category.apply
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:-
         zondag:dish1

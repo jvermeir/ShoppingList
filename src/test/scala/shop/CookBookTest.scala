@@ -2,9 +2,8 @@ package shop
 
 import org.junit._
 import Assert._
-
+// Category
 class CookBookTest {
-  Category.apply
   val sla1 = new Ingredient("groente", "sla")
   val tomaten1 = new Ingredient("groente", "tomaten")
   val salad1 = new Recipe("salad", List(sla1, tomaten1))
@@ -68,7 +67,6 @@ class CookBookTest {
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
 		  """
-    Category.apply
     val c = CookBook(cookBookAsText)
     assertEquals(2, c.recipes.size)
   }

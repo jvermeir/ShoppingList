@@ -7,10 +7,10 @@ class CategoryTest {
 
   @Test
   def testCategoriesCanBeLoadedFromText() {
-    Category.loadCategoriesFromAString("""zuivel:30
-brood:40""")
-    val zuivel = Category.getByName("zuivel")
-    val brood = Category.getByName("brood")
+    object CategoryStore extends InMemoryCategoryStore
+    val categoryRepository = CategoryStore.categoryRepository
+    val zuivel = categoryRepository.getByName("zuivel")
+    val brood = categoryRepository.getByName("brood")
     assertNotNull(zuivel)
     assertNotNull(brood)
     assertEquals(30, zuivel.sequence)

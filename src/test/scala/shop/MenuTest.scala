@@ -2,12 +2,12 @@ package shop
 
 import org.junit._
 import Assert._
+// Category
 
 class MenuTest {
 
   @Test
   def testMenuCanBeLoadedFromText() {
-    Category.apply
     val cookBook = CookBook("""naam:Witlof met kip
 		  vlees:kipfilet plakjes
 		  
