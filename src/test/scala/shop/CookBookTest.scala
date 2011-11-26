@@ -32,8 +32,8 @@ class CookBookTest {
   @Test
   def testSplit = {
     val stringWithDoubleBackslashN = "part1\n\npart2"
-    val splitOnDoubleBackslahN = stringWithDoubleBackslashN.split("\n\n")
-    assertEquals(2, splitOnDoubleBackslahN.length)
+    val splitOnDoubleBackslashN = stringWithDoubleBackslashN.split("\n\n")
+    assertEquals(2, splitOnDoubleBackslashN.length)
     val stringWithDoubleBackslashNAndSomeWhitespace = "part1     \n\t  \npart2"
     val splitOnDoubleBackslahNAndSomeWhitespace = stringWithDoubleBackslashN.replaceAll("""^\s+""", "").split("\n\n")
     assertEquals(2, splitOnDoubleBackslahNAndSomeWhitespace.length)
