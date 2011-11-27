@@ -1,7 +1,18 @@
 package shop
 
-trait InMemoryCategoryStore extends CategoryStore {
-  def categoryRepository = new CategoryStoreImpl
+trait CategoryTestingEnvironment extends InMemoryCategoryServiceComponent with InMemoryCategoryRepositoryComponent {
+  val categoryRepository = new InMemoryCategoryRepository
+  val categoryService = new CategoryService
+}
+
+trait InMemoryCategoryServiceComponent { this: InMemoryCategoryRepositoryComponent =>
+  val categoryService: CategoryService
+  class CategoryService {
+    def getByName(name: String): Category = categoryRepository.getByName(name)
+  }
+}
+
+trait InMemoryCategoryRepositoryComponent {
   val categories = Map[String, Category](
     "dranken" -> new Category("dranken", 10),
     "schoonmaak" -> new Category("schoonmaak", 20),
@@ -24,8 +35,10 @@ trait InMemoryCategoryStore extends CategoryStore {
     "chips" -> new Category("chips", 150),
     "diepvries" -> new Category("diepvries", 160),
     "zeep" -> new Category("zeep", 170))
-  class CategoryStoreImpl extends CategoryRepository {
+  val categoryRepository: InMemoryCategoryRepository
+  class InMemoryCategoryRepository {
     def getByName(name: String): Category = {
+      // TODO: remove nasty code duplication (from Category)
       val category = categories.get(name)
       category match {
         case Some(category) => category
@@ -34,4 +47,3 @@ trait InMemoryCategoryStore extends CategoryStore {
     }
   }
 }
-

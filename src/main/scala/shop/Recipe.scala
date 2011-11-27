@@ -34,6 +34,7 @@ object Recipe {
     ingredientIsNotEmpty(ingredient) && thisIsNotAName(ingredient)
   }
 
+  // TODO: funny, this...
   def thisIsNotAName(ingredient: Ingredient): Boolean = {
     ingredient.category.name.length() > 0 && !ingredient.category.equals("naam")
   }

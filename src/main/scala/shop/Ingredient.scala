@@ -6,7 +6,7 @@ package shop
 case class Ingredient(category: Category, name: String) extends Ordered[Ingredient] {
 
   def this(categoryName: String, name: String) = {
-    this(Ingredient.categoryStore.categoryRepository.getByName(categoryName), name)
+    this(CategoryComponentRegistry.categoryService.getByName(categoryName), name)
   }
   
   /*
@@ -39,12 +39,4 @@ object Ingredient {
   def readFromText(ingredientsAsText: String): List[Ingredient] = {
     ingredientsAsText.lines.toList map (Ingredient(_))
   }
-  
-  var categoryStore:CategoryStore = FileBasedCategoryStore
-  
-  def apply(ingredientLine: String, store:CategoryStore): Ingredient = {
-    categoryStore = store
-    apply(ingredientLine)
-  }
-
 }
