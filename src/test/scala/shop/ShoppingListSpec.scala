@@ -1,15 +1,23 @@
 package shop
 
+import org.joda.time.DateTime
+import org.junit.runner.RunWith
+import org.scalatest.matchers.MustMatchers
+import org.scalatest.FeatureSpec
+import org.scalatest.GivenWhenThen
+
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.MustMatchers
 import org.junit.runner.RunWith
 import org.joda.time.DateTime
-// Category
 
 @RunWith(classOf[JUnitRunner])
 class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
+
+  Ingredient.categoryClient = new CategoryClient(LargeCategoryTestConfig)
+
   feature("Shoppinglist can parse a list of groceries per recipe from a text file") {
     info("As a family member")
     info("I want to list recipes as text in a file")

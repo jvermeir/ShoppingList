@@ -3,9 +3,14 @@ package shop
 import org.junit._
 import Assert._
 import org.joda.time.DateTime
-// Category
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Suite
 
-class ShoppingListItemTest {
+class ShoppingListItemTest  extends Suite with BeforeAndAfterAll {
+
+  override def beforeAll {
+    Ingredient.categoryClient = new CategoryClient(SmallCategoryTestConfig)
+  }
 
   @Test
   def testSortOrderIsOKIfIngredientsBelongToDifferentCategory() {

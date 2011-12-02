@@ -2,12 +2,18 @@ package shop
 
 import org.junit._
 import Assert._
-// Category
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Suite
 
-class MenuTest {
+class MenuTest extends Suite with BeforeAndAfterAll {
+
+  override def beforeAll {
+    Ingredient.categoryClient = new CategoryClient(SmallCategoryTestConfig)
+  }
 
   @Test
   def testMenuCanBeLoadedFromText() {
+    var categoryClient = new CategoryClient(TestCategoryConfig)
     val cookBook = CookBook("""naam:Witlof met kip
 		  vlees:kipfilet plakjes
 		  

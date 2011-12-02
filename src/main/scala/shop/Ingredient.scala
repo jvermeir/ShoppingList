@@ -4,11 +4,10 @@ package shop
  * Ingredient represents stuff to eat
  */
 case class Ingredient(category: Category, name: String) extends Ordered[Ingredient] {
-
   def this(categoryName: String, name: String) = {
-    this(CategoryComponentRegistry.categoryService.getByName(categoryName), name)
+    this(Ingredient.categoryClient.getByName(categoryName), name)
   }
-  
+
   /*
    * Sort ingredients by category, name
    */
@@ -25,6 +24,7 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
 }
 
 object Ingredient {
+  var categoryClient = new CategoryClient(CategoryConfig)
   /*
    * Create an ingredient from a <category>:<name> pair.
    */

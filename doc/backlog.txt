@@ -26,6 +26,8 @@ X simplify recursive methods.
 lists of case classes, do not write a compare method').
 - change methods and vals to private wherever possible
 - replace sauzen with kruiden category where appropriate in recipes.
+- find out how Some and None works
+- Fix Scala build path warning in eclipse
 
 deployment and build stuff:
 X improve pom by getting rid of warnings.  

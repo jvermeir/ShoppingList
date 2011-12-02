@@ -5,9 +5,15 @@ import Assert._
 import org.joda.time.DateTime
 import org.joda.time.format._
 import java.util.Locale
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.Suite
 // Category
 
-class ShoppingListTest {
+class ShoppingListTest extends Suite with BeforeAndAfterAll {
+
+  override def beforeAll {
+    Ingredient.categoryClient = new CategoryClient(LargeCategoryTestConfig)
+  }
 
   @Test
   def namesOfDaysAreMappedToCorrectDates() {
