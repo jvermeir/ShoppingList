@@ -51,7 +51,7 @@ class FileBasedCategoryRepository extends CategoryRepository {
 
 /**
  * A CategoryClient is given a CategoryRepository. It knows how to access service methods
- * of a repository, getByName in this case. It Client delegates to Repository. 
+ * of a repository, getByName in this case. Client delegates to Repository. 
  */
 class CategoryClient(env: { val categoryRepository: CategoryRepository }) {
   def getByName(name: String): Category = env.categoryRepository.getByName(name)
