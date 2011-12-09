@@ -13,15 +13,11 @@ class MenuTest extends Suite with BeforeAndAfterAll {
 
   @Test
   def testMenuCanBeLoadedFromText() {
-    var categoryClient = new CategoryClient(TestCategoryConfig)
-    val cookBook = CookBook("""naam:Witlof met kip
-		  vlees:kipfilet plakjes
-		  
-		  naam:Nasi
-		  groente:nasi pakket""")
+    val categoryClient = new CategoryClient(TestCategoryConfig)
+    val cookbookClient = new CookBookClient(TestCookBookConfig)
     val menu = Menu.apply("""Zaterdag valt op:05112011
 zaterdag:Witlof met kip
-""", cookBook)
+""", cookbookClient)
     assertEquals(1, menu.listOfRecipes.length)
   }
 

@@ -93,9 +93,9 @@ object ShoppingList {
       println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu>")
       System.exit(-1)
     }
-    val cookbook = CookBook.readFromFile(args(0))
+    val cookbookClient = new CookBookClient(CookBookConfig)
     val menuAndList = readAndSplit(args(1))
-    val menu = Menu(menuAndList._1, CookBook.readFromFile(args(0)))
+    val menu = Menu(menuAndList._1, cookbookClient)
     val extras:List[Ingredient]=Ingredient.readFromText(menuAndList._2)
     val shoppingList = new ShoppingList(menu, extras)
     val theList = shoppingList.printShoppinglistForUseWhileShopping

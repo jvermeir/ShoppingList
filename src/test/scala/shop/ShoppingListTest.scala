@@ -17,13 +17,11 @@ class ShoppingListTest extends Suite with BeforeAndAfterAll {
 
   @Test
   def namesOfDaysAreMappedToCorrectDates() {
-    val cookBook = CookBook("""naam:Witlof met kip
-      				zuivel:geraspte kaas""")
     val menuAsString = """Zaterdag valt op:08102011
       	zondag:Witlof met kip
       	maandag:Witlof met kip
       """
-    val menu = Menu(menuAsString: String, cookBook: CookBook)
+    val menu = Menu(menuAsString: String, new CookBookClient(TestCookBookConfig))
     val list = new ShoppingList(menu)
     assertEquals(list.nameOfDayToDateMap("zondag"), new DateTime(2011, 10, 9, 0, 0))
   }

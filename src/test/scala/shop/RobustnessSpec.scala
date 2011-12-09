@@ -25,8 +25,9 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       """
       when("the shoppinglist is created")
       then("but a exception is thrown")
-      intercept[NoSuchElementException] {
-        val menu = Menu(menuAsString, CookBook(cookBookAsText))
+      intercept[PanicException] {
+        val extractedLocalValue = new CookBookClient(TestCookBookConfig)
+        val menu = Menu(menuAsString, extractedLocalValue)
         val shoppingList = new ShoppingList(menu)
         shoppingList.printShoppinglist
       }
@@ -35,12 +36,12 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     scenario("Avoid crash if recipe contains no more than a title") {
       given("a recipe may consist of only a title")
       val cookBookAsText = """naam:dish1
-
+ 
 """
       when("a cookbook is read with a single recipe that is no more than a title")
-      val cookbook = CookBook(cookBookAsText)
+      val cookbook = CookBook.loadFromText(cookBookAsText)
       then("the recipe is parsed without errors")
-      val expectedCookbook = new CookBook(Map[String, Recipe]("dish1" -> new Recipe("dish1", List())))
+      val expectedCookbook = Map[String, Recipe]("dish1" -> new Recipe("dish1", List()))
       expectedCookbook must be === cookbook
     }
 
@@ -50,10 +51,7 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
       	zaterdag:-
         zondag:dish1
       """
-      val cookBook = """naam:dish1
-groente:witlof
-"""
-      val menu = Menu(menuAsString, CookBook(cookBook))
+      val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
       when("a shoppinglist is generated...")
       val shoppingList = new ShoppingList(menu)
       then("... that contains only witlof")
@@ -65,18 +63,16 @@ groente:witlof(09-10)"""
 
     scenario("A cookbook may contain recipes with no more than a title") {
       given("a cookbook with a dish without ingredients")
-      val menuAsString = """Zaterdag valt op:08102011
-      	zaterdag:dish1
-      """
-      val cookBook = """naam:dish1
-"""
-      val menu = Menu(menuAsString, CookBook(cookBook))
-      when("a shoppinglist is generated")
-      val shoppingList = new ShoppingList(menu)
-      then("the list is empty")
-      val expectedShoppingList = """zaterdag:dish1
-"""
-      expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
+      val cookBookAsString = """naam:dish1
+        """
+      when("the cook book is parsed")
+      val cookBook = CookBook.loadFromText(cookBookAsString)
+      then("it contains one recipe with an empty list of ingredients")
+      //TODO: Refactor
+      val dish1 = cookBook.get("dish1")
+      val z = dish1.toList.head
+      "dish1" must be === z.name
+      List() must be === z.ingredients
     }
 
     scenario("A day in a menu may be specified in arbitrary case") {
@@ -89,7 +85,7 @@ groente:witlof(09-10)"""
       val cookBook = """naam:dish1
 groente:witlof
 """
-      val menu = Menu(menuAsString, CookBook(cookBook))
+      val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
       when("a shoppinglist is generated")
       val shoppingList = new ShoppingList(menu)
       then("the list contains lots of witlof")
@@ -112,7 +108,7 @@ groente:witlof(08-10)
       val cookBook = """naam:dish1
 groente:witlof
 """
-      val menu = Menu(menuAsString, CookBook(cookBook))
+      val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
       when("a shoppinglist is generated")
       val shoppingList = new ShoppingList(menu)
       then("the list contains witlof, the data for Saturday are ignored")
@@ -122,24 +118,4 @@ groente:witlof(09-10)"""
       expectedShoppingList must be === shoppingList.printShoppinglistForUseWhileShopping
     }
   }
-
-  val cookBookAsText = """naam:Witlof met kip
-		  vlees:kipfilet plakjes
-		  pasta:gezeefde tomaten
-		  rijst:rijst
-		  diepvries:
-		  groente:witlof
-		  zuivel:geraspte kaas
-		  
-		  naam:Nasi
-		  groente:nasi pakket
-		  vlees:kipfilet
-		  sauzen:sate saus
-		  rijst:rijst
-		  rijst:kroepoek
-		  olie:augurken
-		  olie:zilveruitjes
-		  zuivel:ei
-		  zuivel:vloeibare bakboter
-		  """
 }
