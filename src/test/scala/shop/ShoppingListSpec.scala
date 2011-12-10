@@ -143,7 +143,7 @@ zilveruitjes"""
       when("the file is read")
       val cookBook = CookBook.readFromFile("data/test/cookBookForReadFromFileScenario.txt")
       then("a cook book with a Nasi and a Witlof recipe is created")
-      then("the kookboek containts a recipe for Witlof and one for Nasi")
+      then("the cook book containts a recipe for Witlof and one for Nasi")
       2 must be === cookBook.size
       "Witlof met kip" must be === cookbookClient.getRecipeByName("Witlof met kip").name
       "Nasi" must be === cookbookClient.getRecipeByName("Nasi").name

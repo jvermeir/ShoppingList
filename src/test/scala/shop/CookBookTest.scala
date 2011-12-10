@@ -50,7 +50,7 @@ class CookBookTest {
   @Test
   def testReloadCookBookFromFile ={
     val cookbookClient = new CookBookClient(CookBookConfig)
-    CookBookConfig.reload("data/test/cookBookForReadFromFileScenario.txt")
+    CookBookConfig.reload("data/test/secondCookBookForReadFromFileScenario.txt")
     val recipe1=cookbookClient.getRecipeByName("Recipe1")
     assertEquals(recipe1.ingredients, List(Ingredient("vlees:kipfilet plakjes")))
   }
