@@ -1,20 +1,2 @@
-naam:Witlof met kip
+naam:Recipe1
 		  vlees:kipfilet plakjes
-		  pasta:gezeefde tomaten
-		  rijst:rijst
-		  diepvries:
-		  groente:witlof
-		  zuivel:geraspte kaas
-		  
-		  
-		  
-		  naam:Nasi
-		  groente:nasi pakket
-		  vlees:kipfilet
-		  sauzen:sate saus
-		  rijst:rijst
-		  rijst:kroepoek
-		  olie:augurken
-		  olie:zilveruitjes
-		  zuivel:ei
-		  zuivel:vloeibare bakboter

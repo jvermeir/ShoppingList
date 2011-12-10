@@ -20,7 +20,7 @@ case class CookBook(recipes: Map[String, Recipe]) {
  * A CookBookRepository contains basic functions to search for Recipes in a CookBook.
  */
 trait CookBookRepository {
-  val recipes: Map[String, Recipe]
+  var recipes: Map[String, Recipe]
   def getRecipeByName(name: String): Recipe = {
     val recipe = recipes.get(name)
     recipe match {
@@ -31,7 +31,10 @@ trait CookBookRepository {
 }
 
 class FileBasedCookBookRepository extends CookBookRepository {
-  val recipes = CookBook.readFromFile("data/cookbook.txt")
+  var recipes = CookBook.readFromFile("data/cookbook.txt")
+  def readFromFile(fileName: String) = {
+    recipes = CookBook.readFromFile(fileName)
+  }
 }
 
 object CookBook {
@@ -74,4 +77,5 @@ class CookBookClient(env: { val cookBookRepository: CookBookRepository }) {
  */
 object CookBookConfig {
   lazy val cookBookRepository = new FileBasedCookBookRepository
+  def reload(fileName: String) = { cookBookRepository.readFromFile(fileName) }
 }

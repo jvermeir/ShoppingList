@@ -16,7 +16,7 @@ class TestCookBookRepository extends CookBookRepository {
     new Ingredient("zuivel", "ei"),
     new Ingredient("zuivel", "vloeibare bakboter")))
   val simpleRecipe = new Recipe("dish1", List (new Ingredient("groente", "witlof")))
-  val recipes: Map[String, Recipe] = Map("Witlof met kip" -> witlofRecipe, "Nasi" -> nasiRecipe, "dish1" -> simpleRecipe)
+  var recipes: Map[String, Recipe] = Map("Witlof met kip" -> witlofRecipe, "Nasi" -> nasiRecipe, "dish1" -> simpleRecipe)
 }
 
 object TestCookBookConfig {
@@ -24,5 +24,5 @@ object TestCookBookConfig {
 }
 
 class StringBasedCookBook(val cookBookAsText: String) extends CookBookRepository {
-  val recipes = CookBook.loadFromText(cookBookAsText)
+  var recipes = CookBook.loadFromText(cookBookAsText)
 }

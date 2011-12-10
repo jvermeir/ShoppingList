@@ -46,4 +46,12 @@ class CookBookTest {
     val cleanedUpString = CookBook.cleanUpCookBookText(stringWithDoubleBackslashNAndSomeWhitespace)
     assertEquals(2, cleanedUpString.split("\n\n").length)
   }
+  
+  @Test
+  def testReloadCookBookFromFile ={
+    val cookbookClient = new CookBookClient(CookBookConfig)
+    CookBookConfig.reload("data/test/cookBookForReadFromFileScenario.txt")
+    val recipe1=cookbookClient.getRecipeByName("Recipe1")
+    assertEquals(recipe1.ingredients, List(Ingredient("vlees:kipfilet plakjes")))
+  }
 }
