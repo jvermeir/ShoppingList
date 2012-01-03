@@ -1,13 +1,10 @@
 package shop
-import org.apache.commons.io.FileUtils
-import java.io.File
-import shop._
 
 /**
  * Category represents an area of a shop and the order of the category in the optimal route
  * through the shop.
  */
-case class Category(val name: String, val sequence: Int) extends Ordered[Category] {
+case class Category(val name: String, val sequence: Long) extends Ordered[Category] {
   /* 
    * Categories are considered equal if their sequences are equal.
    */
@@ -18,7 +15,7 @@ case class Category(val name: String, val sequence: Int) extends Ordered[Categor
  * A CategoryRepository contains basic functions to search in a set of Category instances.
  */
 trait CategoryRepository {
-  val categories: Map[String, Category]
+  var categories: Map[String, Category]
   def getByName(name: String): Category = {
     val category = categories.get(name)
     category match {
@@ -26,43 +23,22 @@ trait CategoryRepository {
       case _ => throw new PanicException("Category named " + name + " not found")
     }
   }
+
+  //TODO: Make up your mind, this one or the getByName version?
+  def getByName2(name: String): Category = {
+    val category = categories.get(name)
+    category.map { category => category } getOrElse (throw new PanicException("Category named " + name + " not found"))
+  }
+  def add(category: Category)
 }
-
-/**
- * A FileBasedCategoryRepository loads its set of Categories from a file (fixed for the time being).
- * It uses CategoryRepository to access the list of Categories loaded from the file. 
- */
-class FileBasedCategoryRepository extends CategoryRepository {
-  val categories = loadCategoriesFromFile("data/categoryDatabase.csv")
-
-  def loadCategoriesFromFile(fileName: String): Map[String, Category] = {
-    val categoriesAsText = FileUtils.readFileToString(new File(fileName))
-    loadCategoriesFromAString(categoriesAsText)
-  }
-
-  private def loadCategoriesFromAString(categoriesAsText: String): Map[String, Category] = {
-    val categoriesFromFile = for (line <- categoriesAsText.split("\n")) yield {
-      val parts = line.split(":")
-      (parts(0) -> new Category(parts(0), new Integer(parts(1))))
-    }
-    categoriesFromFile.toList.toMap
-  }
-} 
-
 /**
  * A CategoryClient is given a CategoryRepository. It knows how to access service methods
- * of a repository, getByName in this case. Client delegates to Repository. 
+ * of a repository. Client delegates to Repository.
  */
 class CategoryClient(env: { val categoryRepository: CategoryRepository }) {
   def getByName(name: String): Category = env.categoryRepository.getByName(name)
-}
-
-/**
- * CategoryConfig is used to provide a default implementation of a CategoryRepository.
- * In this case the FileBasedCategoryRepository is used. 
- * For testing purposes a different config cat be used (see CategoryTest). 
- */
-object CategoryConfig {
-  lazy val categoryRepository = new FileBasedCategoryRepository
+  // TODO: return a copy because the list of categories may change if the repo is file based. 
+  def getCategories: Map[String, Category] = env.categoryRepository.categories
+  def add(category: Category) = env.categoryRepository.add(category)
 }
 

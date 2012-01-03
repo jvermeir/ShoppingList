@@ -24,7 +24,7 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
 }
 
 object Ingredient {
-  var categoryClient = new CategoryClient(CategoryConfig)
+  var categoryClient = new CategoryClient(FileBasedCategoryConfig)
   /*
    * Create an ingredient from a <category>:<name> pair.
    */

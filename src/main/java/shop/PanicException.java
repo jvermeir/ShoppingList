@@ -6,6 +6,5 @@ public class PanicException extends RuntimeException {
 		super(message);
 	}
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;	
 }

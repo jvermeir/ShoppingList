@@ -22,7 +22,6 @@ X simplify recursive methods.
 - add amounts if ingredient appears in more than one recipe
 - internationalization
 - find out why chocolate isn't put on list in menu for 05112011
-- find coding style guidelines and implement (e.g. 'Do not instantiate case classes with new, use their companion object instead', 'use sorted for sorting
 lists of case classes, do not write a compare method').
 - change methods and vals to private wherever possible
 - replace sauzen with kruiden category where appropriate in recipes.
@@ -30,6 +29,9 @@ lists of case classes, do not write a compare method').
 - find shorthand for case construct to unwrap objects that are wrapped in Some
 - Fix Scala build path warning in eclipse
 - Fix deprecation warnings
+- Create web interface with Play
+- Create web service for crud functions on Category, Ingredient, CookBook, Recipe. 
+- Create web service to generate menu 
 
 deployment and build stuff:
 X improve pom by getting rid of warnings.  
@@ -44,4 +46,4 @@ X build a version that can be run with 'java -jar'
 Longer term stuff:
 - android interface for use in a store
 - host on server
-- find quality metric tool for Scala code
+- find coding style guidelines and implement (e.g. 'Do not instantiate case classes with new, use their companion object instead', 'use sorted for sorting
