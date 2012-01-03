@@ -1,11 +1,12 @@
 package shop
 
+import scala.collection.mutable.Map
+
 class SmallCategoryTestRepository extends CategoryRepository {
-  var categories = Map[String, Category](
+  val categories = Map[String, Category](
     "test" -> new Category("test", 10),
     "groente" -> new Category("groente", 20),
     "pasta" -> new Category("pasta", 30))
-	def add(category:Category) = throw new shop.OperationNotSupportedException("SmallCategoryTestRepository does not support add operation")
 }
 
 object SmallCategoryTestConfig {
@@ -13,7 +14,7 @@ object SmallCategoryTestConfig {
 }
 
 class LargeCategoryTestRepository extends CategoryRepository {
-  var categories = Map[String, Category](
+  val categories = Map[String, Category](
     "dranken" -> new Category("dranken", 10),
     "schoonmaak" -> new Category("schoonmaak", 20),
     "zuivel" -> new Category("zuivel", 30),
@@ -34,8 +35,6 @@ class LargeCategoryTestRepository extends CategoryRepository {
     "chips" -> new Category("chips", 150),
     "diepvries" -> new Category("diepvries", 160),
     "zeep" -> new Category("zeep", 170))
-  def add(category: Category) = throw new shop.OperationNotSupportedException("LargeCategoryTestRepository does not support add operation")
-
 }
 
 object LargeCategoryTestConfig {

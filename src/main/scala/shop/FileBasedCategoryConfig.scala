@@ -2,12 +2,12 @@ package shop
 
 import org.apache.commons.io.FileUtils
 import java.io.File
+import scala.collection.mutable.Map
 /**
- * A FileBasedCategoryRepository loads its set of Categories from a file (fixed for the time being).
- * It uses CategoryRepository to access the list of Categories loaded from the file.
+ * A FileBasedCategoryRepository loads its set of Categories from a file.
  */
 class FileBasedCategoryRepository extends CategoryRepository {
-  var categories = loadCategoriesFromFile
+  val categories = loadCategoriesFromFile
   def loadCategoriesFromFile: Map[String, Category] = {
     val categoriesAsText = FileUtils.readFileToString(new File(FileBasedCategoryConfig.categoryDatabaseFileName))
     loadCategoriesFromAString(categoriesAsText)
@@ -18,25 +18,32 @@ class FileBasedCategoryRepository extends CategoryRepository {
       val parts = line.split(":")
       (parts(0) -> new Category(parts(0), parts(1).toLong))
     }
-    categoriesFromFile.toList.toMap
+    Map(categoriesFromFile.toList: _*)
   }
 
-  def reload = categories = loadCategoriesFromFile
+  override def reload(): Unit = {
+    categories.retain(((k, v) => false))
+    for (category <- loadCategoriesFromFile) { categories += category }
+  }
 
   def save = {
-    //TODO: implement 
+    val dataFile = new File(FileBasedCategoryConfig.categoryDatabaseFileName)
+    FileUtils.writeStringToFile(dataFile,"")
+    for (category <- categories) {
+      FileUtils.writeStringToFile(dataFile, category._2.printAsDatabaseString, true)
+    }
   }
-  
+
   def delete = {
     // TODO: implement
   }
-  
+
   def update = {
     // TODO: implement
   }
 
-  def add(category: Category) = {
-    categories + (category.name -> category)
+  override def add(category: Category) {
+    categories += (category.name -> category)
     save
   }
 }

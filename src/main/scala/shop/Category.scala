@@ -1,4 +1,5 @@
 package shop
+import scala.collection.mutable.Map
 
 /**
  * Category represents an area of a shop and the order of the category in the optimal route
@@ -9,13 +10,15 @@ case class Category(val name: String, val sequence: Long) extends Ordered[Catego
    * Categories are considered equal if their sequences are equal.
    */
   def compare(that: Category) = sequence.compare(that.sequence)
+  
+  def printAsDatabaseString:String = name + ":" + sequence + "\n"
 }
 
 /**
  * A CategoryRepository contains basic functions to search in a set of Category instances.
  */
 trait CategoryRepository {
-  var categories: Map[String, Category]
+  val categories: Map[String, Category]
   def getByName(name: String): Category = {
     val category = categories.get(name)
     category match {
@@ -29,7 +32,8 @@ trait CategoryRepository {
     val category = categories.get(name)
     category.map { category => category } getOrElse (throw new PanicException("Category named " + name + " not found"))
   }
-  def add(category: Category)
+    def add(category: Category):Unit = throw new shop.OperationNotSupportedException("add operation not supported")
+    def reload:Unit = throw new shop.OperationNotSupportedException("reload operation not supported")
 }
 /**
  * A CategoryClient is given a CategoryRepository. It knows how to access service methods
@@ -40,5 +44,6 @@ class CategoryClient(env: { val categoryRepository: CategoryRepository }) {
   // TODO: return a copy because the list of categories may change if the repo is file based. 
   def getCategories: Map[String, Category] = env.categoryRepository.categories
   def add(category: Category) = env.categoryRepository.add(category)
+  def reload = env.categoryRepository.reload
 }
 
