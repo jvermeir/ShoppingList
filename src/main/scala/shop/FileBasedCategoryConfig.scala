@@ -21,6 +21,7 @@ class FileBasedCategoryRepository extends CategoryRepository {
     Map(categoriesFromFile.toList: _*)
   }
 
+  // TODO: Is Map concurrent-proof?
   override def reload(): Unit = {
     categories.retain(((k, v) => false))
     for (category <- loadCategoriesFromFile) { categories += category }
@@ -28,18 +29,21 @@ class FileBasedCategoryRepository extends CategoryRepository {
 
   def save = {
     val dataFile = new File(FileBasedCategoryConfig.categoryDatabaseFileName)
-    FileUtils.writeStringToFile(dataFile,"")
+    FileUtils.writeStringToFile(dataFile, "")
     for (category <- categories) {
       FileUtils.writeStringToFile(dataFile, category._2.printAsDatabaseString, true)
     }
   }
 
-  def delete = {
-    // TODO: implement
+  override def delete(categoryToDelete: Category) = {
+    categories.remove(categoryToDelete.name)
+    save
   }
 
-  def update = {
-    // TODO: implement
+  override def update(categoryToUpdate: Category, newCategory: Category) = {
+    categories.remove(categoryToUpdate.name)
+    categories += (newCategory.name -> newCategory)
+    save
   }
 
   override def add(category: Category) {

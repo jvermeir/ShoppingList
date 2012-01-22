@@ -7,11 +7,11 @@ import scala.collection.mutable.Map
  */
 case class Category(val name: String, val sequence: Long) extends Ordered[Category] {
   /* 
-   * Categories are considered equal if their sequences are equal.
+   * Categories are considered equal if their names are equal.
    */
   def compare(that: Category) = sequence.compare(that.sequence)
-  
-  def printAsDatabaseString:String = name + ":" + sequence + "\n"
+
+  def printAsDatabaseString: String = name + ":" + sequence + "\n"
 }
 
 /**
@@ -19,21 +19,16 @@ case class Category(val name: String, val sequence: Long) extends Ordered[Catego
  */
 trait CategoryRepository {
   val categories: Map[String, Category]
-  def getByName(name: String): Category = {
-    val category = categories.get(name)
-    category match {
-      case Some(category) => category
-      case _ => throw new PanicException("Category named " + name + " not found")
-    }
-  }
 
-  //TODO: Make up your mind, this one or the getByName version?
-  def getByName2(name: String): Category = {
+  def getByName(name: String): Category = {
     val category = categories.get(name)
     category.map { category => category } getOrElse (throw new PanicException("Category named " + name + " not found"))
   }
-    def add(category: Category):Unit = throw new shop.OperationNotSupportedException("add operation not supported")
-    def reload:Unit = throw new shop.OperationNotSupportedException("reload operation not supported")
+  
+  def add(category: Category): Unit = throw new shop.OperationNotSupportedException("add operation not supported")
+  def update(oldCategory:Category, newCategory: Category): Unit = throw new shop.OperationNotSupportedException("update operation not supported")
+  def delete(category: Category): Unit = throw new shop.OperationNotSupportedException("delete operation not supported")
+  def reload: Unit = throw new shop.OperationNotSupportedException("reload operation not supported")
 }
 /**
  * A CategoryClient is given a CategoryRepository. It knows how to access service methods
@@ -41,9 +36,10 @@ trait CategoryRepository {
  */
 class CategoryClient(env: { val categoryRepository: CategoryRepository }) {
   def getByName(name: String): Category = env.categoryRepository.getByName(name)
-  // TODO: return a copy because the list of categories may change if the repo is file based. 
-  def getCategories: Map[String, Category] = env.categoryRepository.categories
+  def getCategories: Map[String, Category] = env.categoryRepository.categories.clone
   def add(category: Category) = env.categoryRepository.add(category)
+  def update(oldCategory:Category, newCategory: Category) = env.categoryRepository.update(oldCategory, newCategory)
+  def delete(category: Category) = env.categoryRepository.delete(category)
   def reload = env.categoryRepository.reload
 }
 

@@ -41,16 +41,47 @@ class CategoryTest {
   }
 
   @Test
+  def testCategoryMapReturnedByGetCategoriesIsACopy = {
+    val client = getClientLoadFromTestDataFile
+    val categoriesAfterLoad = client.getCategories
+    client.add(Category("OneMore", 123))
+    assertEquals(categoriesAfterLoad.size + 1, client.getCategories.size)
+  }
+
+  @Test
   def testANewCategoryIsPersistedInADataFile = {
     val client = getClientLoadFromTestDataFile
     client.add(Category("test", 1))
-    val clientAfterCategoryIsAdded =  new CategoryClient(FileBasedCategoryConfig)
+    val clientAfterCategoryIsAdded = new CategoryClient(FileBasedCategoryConfig)
     clientAfterCategoryIsAdded.reload
     assertEquals(3, clientAfterCategoryIsAdded.getCategories.size)
     val contentsOfFileAfterWrite = FileUtils.readLines(new File("./data/test/CategoryTestDataFile.txt"))
     assertEquals(3, contentsOfFileAfterWrite.size())
   }
-  
+
+  @Test
+  def testCategoryIsChangedInDataFileByUpdate = {
+    val client = getClientLoadFromTestDataFile
+    val categoryToUpdate = client.getByName("dranken")
+    val newName = "drankenAfterUpdate"
+    val newCategory = Category(newName, categoryToUpdate.sequence)
+    client.update(categoryToUpdate, newCategory)
+    val updatedCategory = client.getByName(newName)
+    assertNotNull(updatedCategory)
+  }
+
+  @Test(expected = classOf[PanicException])
+  def testOldCategoryIsRemovedFromDataFileByUpdate = {
+    val client = getClientLoadFromTestDataFile
+    val categoryToUpdate = client.getByName("dranken")
+    val newCategory = Category("newDranken", categoryToUpdate.sequence + 1)
+    client.update(categoryToUpdate, newCategory)
+    val renamedCategory = client.getByName("newDranken")
+    assertEquals(newCategory.sequence, renamedCategory.sequence)
+    assertEquals(newCategory.name, renamedCategory.name)
+    val categoryThatWasRemovedWillThrowException = client.getByName("dranken")
+  }
+
   @Test(expected = classOf[PanicException])
   def testCategoryNamedGroenteDoesNotExistInTestConfig = {
     val dummy = new CategoryClient(TestCategoryConfig).getByName("groente")
