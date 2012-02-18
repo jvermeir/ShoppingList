@@ -1,0 +1,628 @@
+naam:Lasagne met gehakt
+vlees:gehakt
+pasta:gezeefde tomaten
+pasta:lasagnebladen
+diepvries:spinazie
+zuivel:geraspte kaas
+groente:sla
+groente:tomaat
+
+naam:Wafels met soep en pastasalade
+meel:zelfrijzend bakmeel
+zuivel:ei (5)
+zuivel:melk
+meel:soep
+groente:sla
+groente:tomaat
+pasta:fusilli
+groente:aubergine
+groente:paprika
+groente:courgette
+pasta:pesto
+sauzen:basilicum
+
+naam:Nasi
+groente:nasi pakket
+vlees:kip
+groente:sate saus
+rijst:rijst
+rijst:kroepoek
+rijst:nasi kruiden
+olie:augurken
+olie:zilveruitjes
+zuivel:ei (5)
+zuivel:vloeibare bakboter
+
+naam:Roti
+pasta:roti pannenkoeken
+vlees:kip
+blik:sperziebonen
+groente:krieltjes
+
+naam:Preitaart
+groente:prei
+groente:selderij
+groente:wortel
+vlees:kleine braadworstjes
+vlees:kip
+diepvries:bladerdeeg
+
+naam:Spaghetti met zalmpakketje
+pasta:spaghetti
+pasta:pesto
+vis:zalm
+groente:prei
+groente:tomaat
+schoonmaak:aluminiumfolie
+
+naam:varkenshaas met verse pasta
+vlees:varkenshaas
+groente:verse pasta
+groente:champignons
+pasta:roomsaus
+
+naam:niks
+pasta:-
+
+naam:Pizza
+pasta:tapenade
+pasta:olijven
+groente:champignons
+beleg:ham
+beleg:salami
+meel:ansjovis
+groente:paprika (2)
+groente:aardappels (1/2 kg)
+pasta:tomatenpuree
+zuivel:geraspte kaas
+meel:gist
+meel:meel
+
+naam:Vegetarische groenteschotel
+groente:champignons
+groente:wortel
+groente:parika(2)
+groente:courgette
+pasta:passata(750 cl)
+zuivel:geraspte kaas
+chips:ongezouten notenmix
+pasta:tagliatelle
+
+naam:Omelet
+groente:prei
+groente:wortel
+zuivel:ei(6)
+beleg:ham
+beleg:salami
+zuivel:geraspte kaas
+
+naam:Spinazietaart
+diepvries:spinazie
+zuivel:mozarella
+zuivel:kwark
+zuivel:ei (4)
+meel:meel
+meel:paneermeel
+pasta:gedroogde tomaten
+pasta:rode pesto
+groente:sla
+groente:tomaat
+
+naam:Spinazie met bechamel saus en aardappelpuree
+olie:olijfolie
+groente:ui
+groente:knoflook
+groente:spinazie
+zuivel:margarine
+zuivel:melk
+sauzen:nootmuskaat
+zuivel:ei (2)
+zuivel:geraspte kaas
+groente:aardappels
+
+naam:Tagliatelle met noten
+pasta:olijven
+pasta:tagliatelle
+chips:cashew noten
+zuivel:feta
+
+naam:Groentenburgers
+groente:groentenburgers
+brood:ciabatta
+pasta:zwarte olijven
+groente:tomaten
+groente:rucola
+groente:aardappelschijfjes
+
+naam:Kip Jambalaya
+meel:Jambalaya mix
+vlees:kip
+groente:paprika
+groente:champignons
+groente:ui
+groente:tomaat
+olie:chorizo
+
+naam:Sardine schotel
+pasta:gepelde tomaten (2 blikken)
+groente:ui
+sauzen:tijm
+olie:olijfolie
+groente:knoflook
+blik:sardine (3)
+blik:olijven met ansjovis
+sauzen:peterselie
+groente:aardappels (middelgroot)
+
+naam:Marokkaanse fish and chips
+vis:witte vis
+groente:aardappels (1 kg)
+groente:tomaten (2)
+groente:halve komkommer
+groente:wortel
+pasta:kappertjes
+brood:pita broodjes
+sauzen:kurkuma
+sauzen:koriander
+sauzen:paprikapoeder
+sauzen:gemberpoeder
+sauzen:peterselie
+olie:wite wijn azijn
+olie:olijfolie
+zuivel:yoghurt (1/2 liter)
+
+naam:Shoarma
+vlees:shoarmavlees
+brood:pita broodjes
+groente:sla
+groente:tomaat
+diepvries:friet
+
+naam:Schnitzels
+vlees:schnitzels
+groente:champignons
+pasta:tomatensaus
+zuivel:geraspte kaas
+pasta:macaroni
+
+naam:Erwtensoep
+groente:soep pakket
+vlees:soep vlees
+soep:croutons
+soep:rookworst
+groente:aardappels
+groente:gedroogde erwten
+
+naam:Turkse pizza
+
+naam:Friet
+groente:sla
+
+naam:Friet met groentenburgers
+groente:groentenburgers
+sauzen:mayo
+diepvries:friet
+
+naam:Foe yong hai
+zuivel:ei (8)
+rijst:rijst
+pasta:tomatenpuree
+groente:prei (1)
+groente:paprika, rood (1)
+groente:champignons
+rijst:gembersiroop
+rijst:sojasaus
+groente:knoflook
+olie:kippenbouillon
+vis:garnalen
+
+naam:Spinazierisotto
+groente:ui
+rijst:risottorijst
+soep:groentebouillon
+pasta:gedroogde tomaten
+groente:spinazie
+zuivel:geraspte kaas
+
+naam:Paddenstoelentaart met spek
+diepvries:bladerdeeg
+groente:ui
+groente:knoflook
+groente:rozemarijn
+groente:paddestoelenmelange
+zuivel:ei (4)
+zuivel:ricotta
+zuivel:geitenkaas
+beleg:ontbijtspek
+
+naam:Hongaarse goulash
+vlees:soepvlees
+groente:ui
+olie:zonnebloemolie
+groente:tomaten (2)
+soep:bouillon
+groente:winterwortel (2)
+sauzen:goulash kruiden
+sauzen:majoraan
+sauzen:kummel
+sauzen:paprikapoeder (hot)
+groente:aardappels
+pasta:macaroni schelpjes
+brood:stokbrood
+
+naam:Kipgoulash
+zuivel:boter
+groente:ui
+sauzen:pikante paprikapoeder
+groente:rode paprika
+groente:tomaat
+vlees:kipfilet
+soep:kippenbouillon
+zuivel:creme fraiche
+
+naam:Tortellinisoep
+pasta:gezeefde tomaten
+pasta:tomatenblokjes
+pasta:tortellini
+vlees:gehakt
+groente:prei
+groente:ui
+zuivel:kaas
+brood:stokbrood
+zuivel:kruidenboter
+
+naam:Tortilla met kip
+vlees:kip
+pasta:tortilla
+sauzen:ketchup
+groente:paprika
+zuivel:geraspte kaas
+
+naam:Tortilla met gehakt en mais
+vlees:gehakt
+pasta:tortilla
+sauzen:ketchup
+groente:mais
+zuivel:geraspte kaas
+
+naam:Quiche
+zuivel:boter (125 gram)
+meel:meel 225 gram
+zuivel:ei (5)
+beleg:ontbijstspek (200 gram)
+beleg:ham
+olie:olie
+zuivel:melk (150 ml)
+zuivel:gruiere kaas (125 gram)
+sauzen:nootmuskaat
+groente:sla
+groente:tomaat
+pasta:olijven
+
+naam:Quiche met spinazie
+zuivel:boter (125 gram)
+meel:meel 225 gram
+zuivel:ei (5)
+olie:olie
+zuivel:melk (150 ml)
+zuivel:gruiere kaas (125 gram)
+sauzen:nootmuskaat
+groente:sla
+groente:tomaat
+pasta:olijven
+groente:spinazie
+vis:plak zalm
+beleg:ham
+
+naam:Groenteschijven
+brood:ciabatta
+pasta:zwarte olijven
+groente:tomaat
+groente:sla
+groente:groenteschijven
+
+naam:Rybnik
+zuivel:ei (5)
+brood:wit (half)
+soep:paddenstoelenbouillon tablet
+groente:zoete ui (1)
+groente:winterpeen
+groente:paddenstoelenmelange
+vis:witte vis
+
+naam:Spaghetti met vis
+pasta:spaghetti
+vis:koolvis
+pasta:pasta saus
+groente:roerbakmix
+
+naam:Linguine met tonijn
+pasta:linguine
+olie:tonijn
+pasta:pasta saus
+groente:groentepakket
+
+naam:Linguine met vis
+pasta:linguine
+vis:witte vis
+pasta:pasta saus
+groente:courgette
+groente:paprika
+groente:selderij
+
+naam:Soep
+soep:blik goulash, tomaten, ...
+groente:sla
+groente:tomaat
+pasta:olijven
+
+naam:Boerenomelet
+groente:aardappels
+groente:champignons
+groente:soepgroente
+zuivel:ei
+zuivel:oude kaas
+olie:augurken
+sauzen:mosterd
+
+naam:Couscous met kip
+meel:couscous
+vlees:kippenbouten
+groente:courgette
+pasta:marokkaanse kruiden
+
+naam:Vispannetje
+vis:garnalen
+groente:aardappels
+olie:zalm
+groente:paprika
+olie:ansjovis
+
+naam:Zalm in bladerdeeg
+vis:zalm
+diepvries:bladerdeeg
+sauzen:kerry
+groente:prei
+rijst:rijst
+
+naam:Zuurkoolstamppot
+groente:aardappels
+groente:zuurkool
+zuivel:geraspte kaas
+vlees:spek
+olie:ananas
+vlees:verse worst
+
+naam:Tapas
+pasta:-
+
+naam:Taart met ham en tuinerwten
+zuivel:ei (5)
+groente:ui
+diepvries:tuinerwten
+beleg:ham blokjes
+zuivel:kookroom
+zuivel:geraspte kaas
+
+naam:Taco's
+groente:kidneybonen
+pasta:tacosaus
+pasta:taco's
+zuivel:geraspte kaas
+vlees:gehakt
+
+naam:Ragout
+vlees:kleine kip
+groente:champignons
+meel:meel
+zuivel:boter
+diepvries:bladerdeeg
+groente:sla
+groente:tomaat
+pasta:olijven
+
+naam:Notenrisotto
+groente:paprika
+groente:courgette
+rijst:risotto
+chips:ongezouten notenmix
+
+naam:Cajun met vis
+vis:garnalen
+groente:ui
+sauzen:cajun
+sauzen:paprika poeder
+sauzen:basilicum
+zuivel:room
+sauzen:mosterdzaad
+vis:witte vis
+rijst:rijst
+
+naam:Stoofvlees met rode kool
+vlees:stoofvlees
+groente:rode kool
+sauzen:mosterd
+rijst:rijst
+sauzen:laurier
+sauzen:kruidnagels
+
+naam:Fritata
+groente:courgette
+groente:sla
+brood:Turks brood
+zuivel:ei (6)
+groente:tomaat
+pasta:olijven
+zuivel:geitenkaas
+
+naam:Tagliatelle met cashewnoten
+pasta:tagilatelle
+chips:cashewnoten
+zuivel:feta
+groente:paprika
+pasta:olijven
+
+naam:Boerenkool stamppot
+groente:boerenkool
+groente:aardappels
+vlees:verse worst
+olie:aurgurken
+olie:zilveruitjes
+olie:picalilly
+
+naam:Gourmet
+vlees:gourmetpakket
+groente:courgette
+groente:komkommer
+groente:paprika
+groente:champignons
+brood:afbakstokbrood
+sauzen:shashlik
+sauzen:ketchup
+sauzen:barbecue
+groente:tomaat
+groente:cherry tomaatjes
+groente:sla
+zuivel:mozarella
+zuivel:ei
+
+naam:Ansjovis-spaghetti
+sauzen:knoflook
+olie:ansjovis
+pasta:olijven
+pasta:kappertjes
+olie:olie
+pasta:spaghetti
+groente:bloemkool
+
+naam:Ovenkabeljauw met pesto
+olie:pijnboompitten
+sauzen:basilicum
+sauzen:knoflook
+vis:kabeljauw
+groente:cherry tomaatjes
+pasta:olijven
+pasta:tagliatelle
+
+naam:Garnalenrisotto
+groente:prei (2)
+olie:olijfolie
+rijst:risottorijst
+soep:visbouillon
+diepvries:tuinerwten
+zuivel:creme fraiche
+vis:garnalen
+
+naam:Quessadilas
+zuivel:geraspte kaas
+groente:ui
+sauzen:koriander
+groente:rode paprika
+vis:witte vis
+sauzen:guacamole
+
+naam:Canelloni
+olie:olijfolie
+zuivel:boter
+sauzen:knoflook
+sauzen:oregano
+sauzen:nootmuskaat
+groente:spinazie
+sauzen:basilicum
+pasta:2 blikken gepelde tomaten
+zuivel:ricotta
+zuivel:geraspte kaas
+pasta:canelloni pijpjes
+zuivel:mozarella
+zuivel:creme fraiche
+olie:anjovis
+
+naam:Brietaart
+diepvries:bladerdeeg
+olie:olijfolie
+groente:ui
+groente:courgette (2)
+pasta:gedroogde tomaat
+olie:pecannoten
+meel:paneermeel
+zuivel:brie
+zuivel:ei (5)
+zuivel:kookroom
+
+naam:Boeuf Bourguignon
+vlees:stoofvlees
+groente:wortels
+rijst:rijst
+olie:zilveruitjes
+groente:champignons
+soep:bouillon
+sauzen:kruidnagel
+
+naam:Witlof met ham
+groente:aardappels
+groente:witlof
+zuivel:kaas
+beleg:ham
+
+naam:Timballo
+groente:spinazi
+groente:vega
+pasta:rigata
+pasta:tomaat in blokjes (2)
+zuivel:ricotta
+
+naam:Zalmspies met wokrijst
+rijst:rijst
+vis:zalm
+olie:wokolie
+groente:groentepakket
+rijst:woksaus
+
+naam:Spaanse kikkererwtensoep
+soep:chorizo
+groente:ui
+groente:knoflook
+groente:bleekselderij
+groente:spinazie
+groente:tomaten
+groente:kikkererwten
+soep:kippenbouillon
+beleg:ham
+zuivel:ei (2)
+
+naam:Tajine
+vlees:runderlap
+groente:ui
+olie:olijfolie
+sauzen:koriander, peper, komijn, kaneel, gember, paprika
+groente:blik kikkererwten
+pasta:gehakte tomaten
+soep:groentebouillon
+meel:pruimen
+meel:amandelen
+rijst:couscous
+
+naam:Zuurvlees
+groente:ui
+vlees:runderlap
+olie:azijn
+sauzen:laurier
+koffie:bruine suiker
+groente:witlof
+groente:aardappels
+
+naam:Brocolli zalm taart
+diepvries:deeg voor hartige taart
+groente:brocolli
+zuivel:ei (4)
+zuivel:kookroom
+sauzen:kerriepoeder
+groente:bosui
+vis:zalmsnippers
+
+naam:Beef Chimmy churry
+olie:Chimmy Churry pak
+vlees:biefstukreepjes
+groente:peultjes
+groente:rode paprika
+rijst:rijst
