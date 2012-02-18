@@ -1,0 +1,19 @@
+@(categoryCreateForm: Form[shop.Category])
+
+@import helper._
+
+@main {
+    
+    <h1>Add a category</h1>
+    @form(routes.Application.saveCategory()) {
+        <fieldset>
+            @inputText(categoryCreateForm("name"), 'label -> "Category name")(twitterBootstrapInput)
+            @inputText(categoryCreateForm("sequence"), 'label -> "Sequence")(twitterBootstrapInput)
+        </fieldset>
+        
+        <div class="actions">
+            <input type="submit" value="Create this category" class="btn primary"> or 
+            <a href="@routes.Application.listCategories()" class="btn">Cancel</a> 
+        </div>
+    }
+}

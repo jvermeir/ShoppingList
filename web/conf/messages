@@ -1,0 +1,3 @@
+# Messages
+
+categories.list.title={0,choice,0#No categories|1#One category|1<{0,number,integer} categories} found
