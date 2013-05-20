@@ -35,7 +35,7 @@ class ShoppingListItemTest  extends Suite with BeforeAndAfterAll {
     val tomaten = ShoppingListItem(new Ingredient("groente", "aaatomaten"), time)
     val gezeefdeTomaten = ShoppingListItem(new Ingredient("pasta", "gezeefde tomaten"), time)
     val result = List(tomaten, sla, gezeefdeTomaten)
-    val testList = List(sla, tomaten, gezeefdeTomaten).sort(_ < _)
+    val testList = List(sla, tomaten, gezeefdeTomaten).sortWith(_ < _)
     assertEquals(result, testList)
   }
 

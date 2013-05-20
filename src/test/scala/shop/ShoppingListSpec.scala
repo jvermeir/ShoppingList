@@ -96,7 +96,7 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
         ShoppingListItem(new Ingredient("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
         ShoppingListItem(new Ingredient("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
         ShoppingListItem(new Ingredient("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
-      val expectedIngredientsSortedByCategory = expectedListOfIngredients.sort(_ < _)
+      val expectedIngredientsSortedByCategory = expectedListOfIngredients.sortWith(_ < _)
       expectedListOfIngredients must be === shoppingList.shoppingListItemsSortedByCategory
     }
 

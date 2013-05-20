@@ -22,7 +22,7 @@ class ShoppingList(menu: Menu, extras:List[Ingredient]) {
   }
  
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = {
-    (itemsFromMenu::: itemsFromExtras).sort(_ < _)
+    (itemsFromMenu::: itemsFromExtras).sortWith(_ < _)
   }
   
   def itemsFromMenu: List[ShoppingListItem] = {

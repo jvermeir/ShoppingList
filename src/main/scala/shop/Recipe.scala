@@ -27,7 +27,7 @@ object Recipe {
     val name = recipeAsListOfLines(0).split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
     val ingredients = for (ingredient <- ingredientLines) yield (Ingredient(ingredient))
-    new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sort(_ < _))
+    new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
   }
 
   def isValidIngredientLine(ingredient: Ingredient): Boolean = {

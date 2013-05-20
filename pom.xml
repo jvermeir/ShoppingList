@@ -10,7 +10,7 @@
 	<url>www.xebia.com</url>
 	<inceptionYear>2009</inceptionYear>
 	<properties>
-		<scala.version>2.9.0-1</scala.version>
+		<scala.version>2.10.0</scala.version>
 	</properties>
 
 	<repositories>
@@ -37,8 +37,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.9.0</artifactId>
-			<version>1.6.1</version>
+			<artifactId>scalatest_2.10</artifactId>
+			<version>1.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -56,13 +56,49 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.joda</groupId>
-			<artifactId>joda-convert</artifactId>
-			<version>1.1</version>
-		</dependency>
+        <dependency>
+            <groupId>org.joda</groupId>
+            <artifactId>joda-convert</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>redisclient</groupId>
+            <artifactId>redisclient</artifactId>
+            <version>2.10-2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor_2.10</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 
+    <!--
+   -DgroupId=scala-redis-client \
+    -DartifactId=scala-redis-client -Dversion=2.9.1-1.12.0
+-->
 	<build>
 		<pluginManagement>
 			<plugins>
