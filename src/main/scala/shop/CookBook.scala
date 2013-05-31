@@ -2,6 +2,8 @@ package shop
 import org.apache.commons.io.FileUtils
 import java.io.File
 import scala.collection.JavaConversions._
+import scala.language.postfixOps
+import scala.language.reflectiveCalls
 
 /**
  * Cook book represents a list of recipes
@@ -31,6 +33,7 @@ trait CookBookRepository {
 }
 
 class FileBasedCookBookRepository extends CookBookRepository {
+  //TODO: why is this cookbook initialize here? this means it may be init'd twice if we decide to load a different file
   var recipes = CookBook.readFromFile("data/cookbook.txt")
   def readFromFile(fileName: String) = {
     recipes = CookBook.readFromFile(fileName)
@@ -45,7 +48,7 @@ object CookBook {
 
   def loadFromText(cookBookAsText: String): Map[String, Recipe] = {
     val cleanedUpText = CookBook.cleanUpCookBookText(cookBookAsText)
-    val cookBookSplitIntoRecipes = List.fromArray(cleanedUpText.split("\n\n"))
+    val cookBookSplitIntoRecipes = (cleanedUpText.split("\n\n")).toList
     val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.lines.toList) }
     loadFromListOfRecipes(listOfRecipes)
   }
@@ -79,3 +82,4 @@ object CookBookConfig {
   lazy val cookBookRepository = new FileBasedCookBookRepository
   def reload(fileName: String) = { cookBookRepository.readFromFile(fileName) }
 }
+

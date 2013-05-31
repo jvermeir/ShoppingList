@@ -1,6 +1,6 @@
 package shop
 import scala.collection.mutable.Map
-
+import scala.language.reflectiveCalls
 /**
  * Category represents an area of a shop and the order of the category in the optimal route
  * through the shop.
