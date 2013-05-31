@@ -215,12 +215,12 @@ olie:augurken
       val cookBook = """naam:dish1
 groente:witlof
 """
-      when("a shoppinglist is generated")
+      When("a shoppinglist is generated")
       val menuAndList = ShoppingList.split(menuAsString)
       val menu = Menu(menuAndList._1, cookbookClient)
       val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
       val shoppingList = new ShoppingList(menu, extras)
-      then("the list contains witlof and the two extra's")
+      Then("the list contains witlof and the two extra's")
       val expectedShoppingList = """zaterdag:dish1
 
 groente:witlof(08-10)
