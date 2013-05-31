@@ -946,6 +946,12 @@ groente:ui
 pasta:olijven
 sauzen:peterselie
 
+naam:Asperges
+groente:krieltjes
+groente:asperges
+vlees:beenham
+sauzen:aspergesaus
+
 naam:Spaanse tortilla
 groente:aardappels
 soep:chorizo

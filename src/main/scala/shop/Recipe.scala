@@ -4,7 +4,12 @@ package shop
  * A recipe is the name and a list of ingredients of something to eat.
  */
 case class Recipe(name: String, ingredients: List[Ingredient]) {
-
+  override def toString:String = {
+    val result=new StringBuilder()
+    result.append("name:").append(name).append("\n")
+    result.append( ("" /: ingredients) (_ + _.toString()+"\n")).append("\n")
+    result.toString()
+  }
 }
 
 object Recipe {
@@ -42,4 +47,5 @@ object Recipe {
   def ingredientIsNotEmpty(ingredient: Ingredient): Boolean = {
     ingredient != null && ingredient.name.length > 0 
   }
+
 }

@@ -5,7 +5,6 @@ import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
 import org.scalatest.matchers.MustMatchers
 import org.junit.runner.RunWith
-import org.joda.time.DateTime
 
 @RunWith(classOf[JUnitRunner])
 class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
@@ -16,15 +15,15 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     info("I want ShoppingList to be resilient to errors in cookbook or menu specifications")
     info("So that I can find out easily what went wrong")
 
-    scenario("A exception is thrown when an unknown recipe is added to a menu") {
-      given("a Menu and a CookBook")
+    scenario("A exception is thrown When an unknown recipe is added to a menu") {
+      Given("a Menu and a CookBook")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:Witlof met kip
       	zondag:Nasi
         dinsdag:Non existent recipe
       """
-      when("the shoppinglist is created")
-      then("but a exception is thrown")
+      When("the shoppinglist is created")
+      Then("but a exception is thrown")
       intercept[PanicException] {
         val extractedLocalValue = new CookBookClient(TestCookBookConfig)
         val menu = Menu(menuAsString, extractedLocalValue)
@@ -34,27 +33,27 @@ class RobustnessSpec extends FeatureSpec with GivenWhenThen with MustMatchers {
     }
 
     scenario("Avoid crash if recipe contains no more than a title") {
-      given("a recipe may consist of only a title")
+      Given("a recipe may consist of only a title")
       val cookBookAsText = """naam:dish1
  
 """
-      when("a cookbook is read with a single recipe that is no more than a title")
+      When("a cookbook is read with a single recipe that is no more than a title")
       val cookbook = CookBook.loadFromText(cookBookAsText)
-      then("the recipe is parsed without errors")
+      Then("the recipe is parsed without errors")
       val expectedCookbook = Map[String, Recipe]("dish1" -> new Recipe("dish1", List()))
       expectedCookbook must be === cookbook
     }
 
     scenario("A menu may contain - in stead of a recipe to indicate no dish is needed on a particular day") {
-      given("a menu with - in stead of a recipe")
+      Given("a menu with - in stead of a recipe")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:-
         zondag:dish1
       """
       val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
-      when("a shoppinglist is generated...")
+      When("a shoppinglist is generated...")
       val shoppingList = new ShoppingList(menu)
-      then("... that contains only witlof")
+      Then("... that contains only witlof")
       val expectedShoppingList = """zondag:dish1
 
 groente:witlof(09-10)"""
@@ -62,12 +61,12 @@ groente:witlof(09-10)"""
     }
 
     scenario("A cookbook may contain recipes with no more than a title") {
-      given("a cookbook with a dish without ingredients")
+      Given("a cookbook with a dish without ingredients")
       val cookBookAsString = """naam:dish1
         """
-      when("the cook book is parsed")
+      When("the cook book is parsed")
       val cookBook = CookBook.loadFromText(cookBookAsString)
-      then("it contains one recipe with an empty list of ingredients")
+      Then("it contains one recipe with an empty list of ingredients")
       //TODO: Refactor
       val dish1 = cookBook.get("dish1")
       val z = dish1.toList.head
@@ -76,7 +75,7 @@ groente:witlof(09-10)"""
     }
 
     scenario("A day in a menu may be specified in arbitrary case") {
-      given("a menu with days in mixed case")
+      Given("a menu with days in mixed case")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:dish1
       	Zondag:dish1
@@ -86,9 +85,9 @@ groente:witlof(09-10)"""
 groente:witlof
 """
       val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
-      when("a shoppinglist is generated")
+      When("a shoppinglist is generated")
       val shoppingList = new ShoppingList(menu)
-      then("the list contains lots of witlof")
+      Then("the list contains lots of witlof")
       val expectedShoppingList = """zaterdag:dish1
 zondag:dish1
 maandag:dish1
@@ -100,7 +99,7 @@ groente:witlof(08-10)
     }
 
     scenario("The app should not crash if a menu line contains no more than the name of the day") {
-      given("a menu with one line that contains only the name of the day")
+      Given("a menu with one line that contains only the name of the day")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag
         zondag:dish1
@@ -109,9 +108,9 @@ groente:witlof(08-10)
 groente:witlof
 """
       val menu = Menu(menuAsString, new CookBookClient(TestCookBookConfig))
-      when("a shoppinglist is generated")
+      When("a shoppinglist is generated")
       val shoppingList = new ShoppingList(menu)
-      then("the list contains witlof, the data for Saturday are ignored")
+      Then("the list contains witlof, the data for Saturday are ignored")
       val expectedShoppingList = """zondag:dish1
 
 groente:witlof(09-10)"""

@@ -1,11 +1,5 @@
 package shop
 
-import org.joda.time.DateTime
-import org.junit.runner.RunWith
-import org.scalatest.matchers.MustMatchers
-import org.scalatest.FeatureSpec
-import org.scalatest.GivenWhenThen
-
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
@@ -26,7 +20,7 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
     info("So that I can use 'm to create a week-menu")
 
     scenario("A recipe for witlof results in a list of groceries sorted by category") {
-      given("A list of ingredients as strings for the witlof recipe")
+      Given("A list of ingredients as strings for the witlof recipe")
       val witlofIngredientsAsText = """naam:Witlof met kip
       				vlees:kipfilet plakjes
       				pasta:gezeefde tomaten
@@ -34,9 +28,9 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
       				diepvries:
       				groente:witlof
       				zuivel:geraspte kaas"""
-      when("parse is invoked")
+      When("parse is invoked")
       val witlofRecipe = Recipe(witlofIngredientsAsText)
-      then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
+      Then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
       val listOfExpectedIngredients = List(
         new Ingredient("zuivel", "geraspte kaas"),
         new Ingredient("vlees", "kipfilet plakjes"),
@@ -48,10 +42,10 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
     }
 
     scenario("A recipe for witlof and a recipe for Nasi result in a cookbook with two recipes and their groceries") {
-      given("A list of ingredients as strings for the witlof recipe followed by a list of strings for the Nasi recipe")
-      when("a new kookboek is created from the text version")
+      Given("A list of ingredients as strings for the witlof recipe followed by a list of strings for the Nasi recipe")
+      When("a new kookboek is created from the text version")
       val cookbook = CookBook.loadFromText(cookBookAsText)
-      then("the cookbook containts a recipe for Witlof and one for Nasi")
+      Then("the cookbook containts a recipe for Witlof and one for Nasi")
       2 must be === cookbook.size
       val witlofRecipe = cookbook.get("Witlof met kip")
       witlofRecipe match {
@@ -72,15 +66,15 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
     info("So that I can create a shopping list")
 
     scenario("A menu with witlof on Saturday and Nasi on Sunday results in a list of ingredients") {
-      given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
+      Given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:Witlof met kip
       	zondag:Nasi
       """
-      when("a menu is generated")
+      When("a menu is generated")
       val menu = Menu(menuAsString, cookbookClient)
       val shoppingList = new ShoppingList(menu)
-      then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
+      Then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
       val expectedListOfIngredients = List(
         ShoppingListItem(new Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
         ShoppingListItem(new Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
@@ -101,15 +95,15 @@ class ShoppingListSpec extends FeatureSpec with GivenWhenThen with MustMatchers 
     }
 
     scenario("A menu with witlof on Sunday and Nasi on Monday results in a list of groceries") {
-      given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
+      Given("a menu with witlof on Sunday and Nasi on Monday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
       	zondag:Witlof met kip
       	maandag:Nasi
       """
-      when("a menu is generated")
+      When("a menu is generated")
       val menu = Menu(menuAsString, cookbookClient)
       val shoppingList = new ShoppingList(menu)
-      then("a shopping list is produced")
+      Then("a shopping list is produced")
       val expectedShoppingList = """ei
 geraspte kaas
 vloeibare bakboter
@@ -128,10 +122,10 @@ zilveruitjes"""
     }
 
     scenario("A menu can be read from a file") {
-      given("a menu in a file and a cookbook")
-      when("the file is read")
+      Given("a menu in a file and a cookbook")
+      When("the file is read")
       val cookBook = cookbookClient
-      then("a menu with Witlof met kip and Nasi is created")
+      Then("a menu with Witlof met kip and Nasi is created")
       val menu = Menu.readFromFile("data/test/menuForReadFromFileScenario.txt", cookBook)
       2 must be === menu.recipes.size
       menu.recipes(0)._2.name must be === "Witlof met kip"
@@ -139,26 +133,26 @@ zilveruitjes"""
     }
 
     scenario("A Cookbook can be read from a file") {
-      given("a cookbook in a text file")
-      when("the file is read")
+      Given("a cookbook in a text file")
+      When("the file is read")
       val cookBook = CookBook.readFromFile("data/test/cookBookForReadFromFileScenario.txt")
-      then("a cook book with a Nasi and a Witlof recipe is created")
-      then("the cook book containts a recipe for Witlof and one for Nasi")
+      Then("a cook book with a Nasi and a Witlof recipe is created")
+      Then("the cook book containts a recipe for Witlof and one for Nasi")
       2 must be === cookBook.size
       "Witlof met kip" must be === cookbookClient.getRecipeByName("Witlof met kip").name
       "Nasi" must be === cookbookClient.getRecipeByName("Nasi").name
     }
 
     scenario("A menu and list of groceries are printed for use while shopping") {
-      given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
+      Given("a menu with witlof on Saturday and Nasi on Sunday and a kookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:Witlof met kip
       	zondag:Nasi
       """
-      when("a menu is generated")
+      When("a menu is generated")
       val menu = Menu(menuAsString, cookbookClient)
       val shoppingList = new ShoppingList(menu)
-      then("and a shopping list is printed")
+      Then("and a shopping list is printed")
       val expectedShoppingList = """zaterdag:Witlof met kip
 zondag:Nasi
 
@@ -180,15 +174,15 @@ olie:augurken
     }
 
     scenario("A menu may contain more than one recipe per day") {
-      given("a menu with dish and dish2 on Saturday and a cookbook with these recipes")
+      Given("a menu with dish and dish2 on Saturday and a cookbook with these recipes")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:Witlof met kip
       	zaterdag:Nasi
       """
       val menu = Menu(menuAsString, cookbookClient)
-      when("a shoppinglist is generated")
+      When("a shoppinglist is generated")
       val shoppingList = new ShoppingList(menu)
-      then("the list contains ingredients for both recipes")
+      Then("the list contains ingredients for both recipes")
       val expectedShoppingList = """zaterdag:Witlof met kip
 zaterdag:Nasi
 
@@ -210,7 +204,7 @@ olie:augurken
     }
 
     scenario("A list of extra's (not related to a recipe) may be added to a menu") {
-      given("a menu with one recipe and a list of extra's")
+      Given("a menu with one recipe and a list of extra's")
       val menuAsString = """Zaterdag valt op:08102011
       	zaterdag:dish1
 
