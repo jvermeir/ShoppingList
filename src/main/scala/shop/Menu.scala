@@ -1,15 +1,17 @@
 package shop
 
-import scala.annotation.tailrec
-import org.apache.commons.io.FileUtils
 import java.io.File
+
+import org.apache.commons.io.FileUtils
 import org.joda.time.DateTime
 import org.joda.time.format._
+
+import scala.annotation.tailrec
 
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
-class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBookClient, val dateOfSaturday: DateTime) {
+class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
   val recipes: List[(String, Recipe)] = for (recipe <- listOfRecipes) yield (recipe._1, cookbook.getRecipeByName(recipe._2))
 
   def printMenu: String = {
@@ -36,7 +38,7 @@ object Menu {
    * and recipe refers to a recipe name as specified in a Cook book.
    * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cook book.
    */
-  def apply(menuAsString: String, cookbook: CookBookClient): Menu = {
+  def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = menuAsString.lines.toList
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
@@ -55,7 +57,7 @@ object Menu {
     text.length() > 0 && text.indexOf(":") > 0 && !text.endsWith(":-")
   }
   
-  def readFromFile(fileName: String, cookBook: CookBookClient): Menu = {
+  def readFromFile(fileName: String, cookBook: CookBook): Menu = {
     val menuAsText = FileUtils.readFileToString(new File(fileName))
     apply(menuAsText, cookBook)
   }

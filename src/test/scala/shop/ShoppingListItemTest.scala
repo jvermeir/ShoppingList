@@ -1,42 +1,49 @@
 package shop
 
-import org.junit._
-import Assert._
 import org.joda.time.DateTime
-import org.scalatest.BeforeAndAfterAll
-import org.scalatest.Suite
+import org.junit.Assert._
+import org.junit._
+import org.scalatest.{Spec, BeforeAndAfterAll, Suite}
 
-class ShoppingListItemTest  extends Suite with BeforeAndAfterAll {
+class ShoppingListItemTest extends Spec with BeforeAndAfterAll {
 
-  override def beforeAll {
-    Ingredient.categoryClient = new CategoryClient(SmallCategoryTestConfig)
+  implicit object InMemoryCategoryConfig extends Config {
+    lazy val cookBookStore = new InMemoryCookbookStore
+    lazy val categoryStore = new InMemoryCategoryStore
   }
 
-  @Test
-  def testSortOrderIsOKIfIngredientsBelongToDifferentCategory() {
+  def `Sort Order Is OK If Ingredients Belong To Different Category` {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val sla = ShoppingListItem(new Ingredient("groente", "sla"), time)
-    val gezeefdeTomaten = ShoppingListItem(new Ingredient("pasta", "gezeefde tomaten"), time)
-    assertTrue(sla < gezeefdeTomaten)
+    val zeep = ShoppingListItem(new Ingredient("schoonmaak", "zeep"), time)
+    val bier = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
+    assertTrue(zeep > bier)
   }
 
-  @Test
-  def testSortOrderIsOKIfIngredientsBelongToSameCategory() {
+  def `Sort Order Is OK If Ingredients Belong To Same Category` {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val sla = ShoppingListItem(new Ingredient("groente", "sla"), time)
-    val gezeefdeTomaten = ShoppingListItem(new Ingredient("groente", "aaatomaten"), time)
-    assertTrue(sla > gezeefdeTomaten)
+    val duvel = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(new Ingredient("dranken", "Chouffe"), time)
+    assertTrue(duvel > chouffe)
   }
 
-  @Test
-  def testSortOrderIsOKForAList() {
+  def `Sort Order Is OK For A List` {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val sla = ShoppingListItem(new Ingredient("groente", "sla"), time)
-    val tomaten = ShoppingListItem(new Ingredient("groente", "aaatomaten"), time)
-    val gezeefdeTomaten = ShoppingListItem(new Ingredient("pasta", "gezeefde tomaten"), time)
-    val result = List(tomaten, sla, gezeefdeTomaten)
-    val testList = List(sla, tomaten, gezeefdeTomaten).sortWith(_ < _)
+    val duvel = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(new Ingredient("dranken", "Chouffe"), time)
+    val karmeliet = ShoppingListItem(new Ingredient("dranken", "Karmeliet"), time)
+    val result = List(chouffe, duvel, karmeliet)
+    val testList = List(duvel, karmeliet, chouffe).sortWith(_ < _)
     assertEquals(result, testList)
+  }
+
+  def `names Of Days Are Mapped To Correct Dates` {
+    val menuAsString = """Zaterdag valt op:08102011
+      	|zondag:R1
+      	|maandag:R2
+      |""".stripMargin
+    val menu = Menu(menuAsString: String, new CookBook)
+    val list = new ShoppingList(menu, List())
+    assertEquals(list.nameOfDayToDateMap("zondag"), new DateTime(2011, 10, 9, 0, 0))
   }
 
 }
