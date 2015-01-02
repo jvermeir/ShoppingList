@@ -1,2 +1,2 @@
-schoonmaak:20
-newDranken:11
+schoonmaak:12345
+dranken:10

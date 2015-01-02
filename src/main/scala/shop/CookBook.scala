@@ -1,61 +1,61 @@
 package shop
-import org.apache.commons.io.FileUtils
-import java.io.File
-import scala.collection.JavaConversions._
+
+import scala.collection.mutable.Map
 import scala.language.postfixOps
 import scala.language.reflectiveCalls
 
 /**
  * Cook book represents a list of recipes
  */
-case class CookBook(recipes: Map[String, Recipe]) {
-  def size: Int = recipes.size
+case class CookBook(implicit val config: Config) {
+  lazy val cookbookStore = config.cookBookStore
+  cookbookStore.reload
 
-  def equals(that: CookBook): Boolean = {
-    val equalSize = recipes.size == that.recipes.size
-    val equalRecipes = recipes.equals(that.recipes)
-    equalSize && equalRecipes
-  }
+  val recipes: Map[String, Recipe] = cookbookStore.recipes
+
+  def getRecipeByName(name: String): Recipe = cookbookStore.getRecipeByName(name)
+  def delete(recipeToDelete: Recipe) = cookbookStore.delete(recipeToDelete)
+  def update(recipe: Recipe, newRecipe: Recipe) = cookbookStore.update(recipe, newRecipe)
+  def add(recipe: Recipe) = cookbookStore.add(recipe)
 }
 
-/**
- * A CookBookRepository contains basic functions to search for Recipes in a CookBook.
- */
-trait CookBookRepository {
-  var recipes: Map[String, Recipe]
+trait CookBookStore {
+  lazy val recipes: Map[String, Recipe] = Map()
+
+  def save:Unit
+  def reload: Unit
+
   def getRecipeByName(name: String): Recipe = {
     val recipe = recipes.get(name)
-    recipe match {
-      case Some(recipe) => recipe
-      case _ => throw new PanicException("Recipe named " + name + " not found")
-    }
-  }
-}
-
-class FileBasedCookBookRepository extends CookBookRepository {
-  //TODO: why is this cookbook initialize here? this means it may be init'd twice if we decide to load a different file
-  var recipes = CookBook.readFromFile("data/cookbook.txt")
-  def readFromFile(fileName: String) = {
-    recipes = CookBook.readFromFile(fileName)
-  }
-}
-
-object CookBook {
-  def readFromFile(fileName: String): Map[String, Recipe] = {
-    val cookBookAsText = FileUtils.readFileToString(new File(fileName))
-    loadFromText(cookBookAsText)
+    recipe.map { recipe => recipe } getOrElse (throw new PanicException("Recipe named " + name + " not found"))
   }
 
-  def loadFromText(cookBookAsText: String): Map[String, Recipe] = {
-    val cleanedUpText = CookBook.cleanUpCookBookText(cookBookAsText)
+  def delete(recipeToDelete: Recipe) = {
+    recipes.remove(recipeToDelete.name)
+    save
+  }
+
+  def update(recipe: Recipe, newRecipe: Recipe) = {
+    recipes.remove(recipe.name)
+    recipes += (newRecipe.name -> newRecipe)
+    save
+  }
+
+  def add(recipe: Recipe) {
+    recipes += (recipe.name -> recipe)
+    save
+  }
+
+  def loadFromText(cookBookAsText: String)(implicit config:Config): Map[String, Recipe] = {
+    val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = (cleanedUpText.split("\n\n")).toList
     val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.lines.toList) }
     loadFromListOfRecipes(listOfRecipes)
   }
 
   def loadFromListOfRecipes(listOfRecipes: List[Recipe]): Map[String, Recipe] = {
-    val recipes = listOfRecipes map { case (recipe) => (recipe.name -> recipe) }
-    recipes toMap
+    recipes.retain(((k, v) => false))
+    recipes ++= listOfRecipes map { case (recipe) => (recipe.name -> recipe) }
   }
 
   def cleanUpCookBookText(cookBookAsString: String): String =
@@ -65,21 +65,3 @@ object CookBook {
       .replaceAll("(?m)[ ]*$", "")
       .replaceAll("(?m)\n\n\n*", "\n\n")
 }
-
-/**
- * A CookBookClient is given a CookBookRepository. It knows how to access service methods
- * of a repository, getByName in this case. Client delegates to Repository.
- */
-class CookBookClient(env: { val cookBookRepository: CookBookRepository }) {
-  def getRecipeByName(name: String): Recipe = env.cookBookRepository.getRecipeByName(name)
-}
-
-/**
- * CookBookConfig is used to provide a default implementation of a CookBookRepository.
- * In this case the FileBasedCookBookRepository is used.
- */
-object CookBookConfig {
-  lazy val cookBookRepository = new FileBasedCookBookRepository
-  def reload(fileName: String) = { cookBookRepository.readFromFile(fileName) }
-}
-

@@ -1,4 +1,4 @@
-naam:Witlof met kip
+naam:R1
 		  vlees:kipfilet plakjes
 		  pasta:gezeefde tomaten
 		  rijst:rijst
@@ -8,7 +8,7 @@ naam:Witlof met kip
 		  
 		  
 		  
-		  naam:Nasi
+		  naam:R2
 		  groente:nasi pakket
 		  vlees:kipfilet
 		  sauzen:sate saus

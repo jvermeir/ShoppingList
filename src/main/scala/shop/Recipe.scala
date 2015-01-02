@@ -3,13 +3,29 @@ package shop
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
-case class Recipe(name: String, ingredients: List[Ingredient]) {
+case class Recipe(name: String, ingredients: List[Ingredient])(implicit val config: Config) {
   override def toString:String = {
     val result=new StringBuilder()
     result.append("name:").append(name).append("\n")
     result.append( ("" /: ingredients) (_ + _.toString()+"\n")).append("\n")
     result.toString()
   }
+
+  override def equals(other: Any) = other match {
+    case that: Recipe => (that canEqual this) &&
+      this.name.equals(that.name) &&
+      this.ingredients.equals(that.ingredients)
+    case _ => false
+  }
+
+  def canEqual(other: Any) = other.isInstanceOf[Recipe]
+
+  override def hashCode: Int =
+    41 * (
+      41 * (
+        41 + name.hashCode
+        ) + ingredients.hashCode
+      )
 }
 
 object Recipe {
@@ -22,16 +38,17 @@ object Recipe {
    *    <category>:<name>
    * where <category> refers to some label that makes sense to locate the ingredient in a shop and name is the name of the ingredient.
    */
-  def apply(recipeAsText: String): Recipe = {
+  // TODO: do we need the implicit here?
+  def apply(recipeAsText: String)(implicit config: Config): Recipe = {
     val receptAsLinesOfText: List[String] = recipeAsText.lines.toList
     apply(receptAsLinesOfText)
   }
   
   /* Create a recipe from a list of strings. See comment for apply(String). */
-  def apply(recipeAsListOfLines: List[String]): Recipe = {
+  def apply(recipeAsListOfLines: List[String])(implicit config: Config): Recipe = {
     val name = recipeAsListOfLines(0).split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
-    val ingredients = for (ingredient <- ingredientLines) yield (Ingredient(ingredient))
+    val ingredients = for (ingredientLine <- ingredientLines) yield (Ingredient.readFromLine(ingredientLine))
     new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
   }
 

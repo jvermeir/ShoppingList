@@ -1,45 +1,88 @@
 package shop
+
 import scala.collection.mutable.Map
 import scala.language.reflectiveCalls
+
 /**
  * Category represents an area of a shop and the order of the category in the optimal route
  * through the shop.
  */
 case class Category(val name: String, val sequence: Long) extends Ordered[Category] {
-  /* 
-   * Categories are considered equal if their names are equal.
-   */
   def compare(that: Category) = sequence.compare(that.sequence)
 
   def printAsDatabaseString: String = name + ":" + sequence + "\n"
+
+  override def equals(other: Any) = other match {
+    case that: Category => (that canEqual this) &&
+      this.name.equals(that.name)
+    case _ => false
+  }
+
+  def canEqual(other: Any) = other.isInstanceOf[Category]
+
+  override def hashCode: Int =
+    41 * (
+      41 * (
+        41 + name.hashCode
+        ) + sequence.hashCode
+      )
+
 }
 
-/**
- * A CategoryRepository contains basic functions to search in a set of Category instances.
+/*
+ * Store technology agnostic representation of a set of categories.
  */
-trait CategoryRepository {
-  val categories: Map[String, Category]
+class Categories(implicit val config: Config) {
+  lazy val categoryStore: CategoryStore = config.categoryStore
+
+  def getByName(name: String): Category = categoryStore.getByName(name)
+
+  def add(category: Category): Unit = categoryStore.add(category)
+
+  def update(oldCategory: Category, newCategory: Category): Unit = categoryStore.update(oldCategory, newCategory)
+
+  def delete(category: Category): Unit = categoryStore.delete(category)
+
+  def reload: Unit = categoryStore.reload
+}
+
+/*
+ * Stuff all Category stores have in common.
+ */
+trait CategoryStore {
+  lazy val categoryMap: Map[String, Category] = Map()
+  reload
+
+  def save: Unit
+
+  def reload: Unit
 
   def getByName(name: String): Category = {
-    val category = categories.get(name)
-    category.map { category => category } getOrElse (throw new PanicException("Category named " + name + " not found"))
+    val category = categoryMap.get(name)
+    category.map { category => category} getOrElse (throw new PanicException("Category named " + name + " not found"))
   }
-  
-  def add(category: Category): Unit = throw new shop.OperationNotSupportedException("add operation not supported")
-  def update(oldCategory:Category, newCategory: Category): Unit = throw new shop.OperationNotSupportedException("update operation not supported")
-  def delete(category: Category): Unit = throw new shop.OperationNotSupportedException("delete operation not supported")
-  def reload: Unit = throw new shop.OperationNotSupportedException("reload operation not supported")
-}
-/**
- * A CategoryClient is given a CategoryRepository. It knows how to access service methods
- * of a repository. Client delegates to Repository.
- */
-class CategoryClient(env: { val categoryRepository: CategoryRepository }) {
-  def getByName(name: String): Category = env.categoryRepository.getByName(name)
-  def getCategories: Map[String, Category] = env.categoryRepository.categories.clone
-  def add(category: Category) = env.categoryRepository.add(category)
-  def update(oldCategory:Category, newCategory: Category) = env.categoryRepository.update(oldCategory, newCategory)
-  def delete(category: Category) = env.categoryRepository.delete(category)
-  def reload = env.categoryRepository.reload
-}
 
+  def delete(categoryToDelete: Category) = {
+    categoryMap.remove(categoryToDelete.name)
+    save
+  }
+
+  def update(categoryToUpdate: Category, newCategory: Category) = {
+    categoryMap.remove(categoryToUpdate.name)
+    categoryMap += (newCategory.name -> newCategory)
+    save
+  }
+
+  def add(category: Category) {
+    categoryMap += (category.name -> category)
+    save
+  }
+
+  def loadCategoriesFromAString(categoriesAsText: String): Map[String, Category] = {
+    val categoriesFromText = for (line <- categoriesAsText.split("\n")) yield {
+      val parts = line.split(":")
+      (parts(0) -> new Category(parts(0), parts(1).toLong))
+    }
+    Map(categoriesFromText.toList: _*)
+  }
+}
