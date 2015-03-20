@@ -14,32 +14,34 @@ import scala.annotation.tailrec
 class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
   val recipes: List[(String, Recipe)] = for (recipe <- listOfRecipes) yield (recipe._1, cookbook.getRecipeByName(recipe._2))
 
-  def printMenu: String = {
+  // TODO: refactor? looks clunky like this
+  // TODO: recursion? Tuple type in List?
+  def printMenu(nameOfDayToDateMap: Map[String, DateTime]): String = {
     @tailrec def recursivePrintMenu(listOfRecipes: List[(String, String)], menuAsString: String): String = {
       listOfRecipes match {
         case Nil => menuAsString
         case head :: tail => {
-          val recipe: (String, String) = head
-          recursivePrintMenu(tail, menuAsString + "\n" + recipe._1 + ":" + recipe._2)
+          val day = head._1
+          val dish = head._2
+          recursivePrintMenu(tail, menuAsString + "\n" + nameOfDayToDateMap(day).dayOfMonth.get + " " + day + ":" + dish)
         }
       }
     }
     recursivePrintMenu(listOfRecipes, "").substring(1)
   }
 
-    def printMenuForShoppingList:String = {
-//      category.map { category => category} getOrElse (throw new PanicException("Category named " + name + " not found"))
-      @tailrec def recursivePrintList(recipes: List[(String, Recipe)], recipesAsString: String): String = {
-        recipes match {
-          case Nil => recipesAsString
-          case head :: tail => {
-            val recipe: (String, Recipe) = head
-            recursivePrintList(tail, recipesAsString + recipe._1 + ":" + recipe._2)
-          }
+  def printMenuForShoppingList: String = {
+    @tailrec def recursivePrintList(recipes: List[(String, Recipe)], recipesAsString: String): String = {
+      recipes match {
+        case Nil => recipesAsString
+        case head :: tail => {
+          val recipe: (String, Recipe) = head
+          recursivePrintList(tail, recipesAsString + recipe._1 + ":" + recipe._2)
         }
       }
-      recursivePrintList(recipes, "")
     }
+    recursivePrintList(recipes, "")
+  }
 }
 
 object Menu {
@@ -56,7 +58,11 @@ object Menu {
     val menuAsListOfStrings = menuAsString.lines.toList
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
-    val menu: List[(String, String)] = menuAsStringsWithoutHeaderLine map { createMenuLineFromTextLine(_) } filter { _ != null }
+    val menu: List[(String, String)] = menuAsStringsWithoutHeaderLine map {
+      createMenuLineFromTextLine(_)
+    } filter {
+      _ != null
+    }
     new Menu(menu, cookbook, dateOfSaturday)
   }
 
@@ -66,11 +72,11 @@ object Menu {
     else null
   }
 
-  def isValidMenuLine(textLine:String):Boolean = {
+  def isValidMenuLine(textLine: String): Boolean = {
     val text = textLine.trim()
     text.length() > 0 && text.indexOf(":") > 0 && !text.endsWith(":-")
   }
-  
+
   def readFromFile(fileName: String, cookBook: CookBook): Menu = {
     val menuAsText = FileUtils.readFileToString(new File(fileName))
     apply(menuAsText, cookBook)

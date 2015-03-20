@@ -39,7 +39,7 @@ import scala.annotation.tailrec
     }
 
     def printShoppinglistForUseWhileShopping: String =
-      menu.printMenu + "\n" + printShoppinglistButSkipDuplicateCategoryLables + "\n\nrecepten:\n" + menu.printMenuForShoppingList
+      menu.printMenu(nameOfDayToDateMap) + "\n" + printShoppinglistButSkipDuplicateCategoryLables + "\n\nrecepten:\n" + menu.printMenuForShoppingList
 
     def printShoppinglistButSkipDuplicateCategoryLables: String = {
       @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: Category, shoppingListAsString: String): String = {

@@ -111,8 +111,8 @@ zilveruitjes"""
       val extras: List[Ingredient] = List()
       val shoppingList = new ShoppingList(menu, extras)
       Then("and a shopping list is printed")
-      val expectedShoppingList = """zaterdag:Witlof met kip
-zondag:Nasi
+      val expectedShoppingList = """8 zaterdag:Witlof met kip
+9 zondag:Nasi
 
 zuivel:ei
       geraspte kaas
@@ -165,8 +165,8 @@ olie:zilveruitjes
       val extras: List[Ingredient] = List()
       val shoppingList = new ShoppingList(menu, extras)
       Then("the list contains ingredients for both recipes")
-      val expectedShoppingList = """zaterdag:Witlof met kip
-zaterdag:Nasi
+      val expectedShoppingList = """8 zaterdag:Witlof met kip
+8 zaterdag:Nasi
 
 zuivel:ei
       geraspte kaas
@@ -222,7 +222,7 @@ olie:zilveruitjes
       val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
       val shoppingList = new ShoppingList(menu, extras)
       Then("the list contains witlof and the two extra's")
-      val expectedShoppingList = """zaterdag:dish1
+      val expectedShoppingList = """8 zaterdag:dish1
 
 groente:witlof(08-10)
 meel:meel
@@ -249,8 +249,8 @@ groente:witlof
       val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
       val shoppingList = new ShoppingList(menu, extras)
       Then("the list contains two recipes")
-      val expectedShoppingList = """zaterdag:dish1
-zondag:dish2
+      val expectedShoppingList = """8 zaterdag:dish1
+9 zondag:dish2
 
 groente:appels(09-10)
       witlof(08-10)
