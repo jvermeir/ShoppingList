@@ -127,7 +127,29 @@ rijst:kroepoek
       rijst
       rijst
 olie:augurken
-      zilveruitjes"""
+      zilveruitjes
+
+recepten:
+zaterdag:name:Witlof met kip
+zuivel:geraspte kaas
+vlees:kipfilet plakjes
+groente:witlof
+pasta:gezeefde tomaten
+rijst:rijst
+
+zondag:name:Nasi
+zuivel:ei
+zuivel:vloeibare bakboter
+vlees:kipfilet
+groente:nasi pakket
+sauzen:sate saus
+rijst:kroepoek
+rijst:rijst
+olie:augurken
+olie:zilveruitjes
+
+"""
+
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
     }
 
@@ -159,7 +181,28 @@ rijst:kroepoek
       rijst
       rijst
 olie:augurken
-      zilveruitjes"""
+      zilveruitjes
+
+recepten:
+zaterdag:name:Witlof met kip
+zuivel:geraspte kaas
+vlees:kipfilet plakjes
+groente:witlof
+pasta:gezeefde tomaten
+rijst:rijst
+
+zaterdag:name:Nasi
+zuivel:ei
+zuivel:vloeibare bakboter
+vlees:kipfilet
+groente:nasi pakket
+sauzen:sate saus
+rijst:kroepoek
+rijst:rijst
+olie:augurken
+olie:zilveruitjes
+
+"""
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
     }
 
@@ -183,9 +226,46 @@ olie:augurken
 
 groente:witlof(08-10)
 meel:meel
-zeep:vaatwasmiddel"""
+zeep:vaatwasmiddel
+
+recepten:
+zaterdag:name:dish1
+groente:witlof
+
+"""
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
     }
+
+    scenario("A list of recipes for the week is added to the shopping list") {
+      Given("a menu with two recipes")
+      val menuAsString =
+        """Zaterdag valt op:08102011
+           zaterdag:dish1
+           zondag:dish2
+        """
+      When("a shoppinglist is generated")
+      val menuAndList = ShoppingList.split(menuAsString)
+      val menu = Menu(menuAndList._1, cookbook)
+      val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
+      val shoppingList = new ShoppingList(menu, extras)
+      Then("the list contains two recipes")
+      val expectedShoppingList = """zaterdag:dish1
+zondag:dish2
+
+groente:appels(09-10)
+      witlof(08-10)
+
+recepten:
+zaterdag:name:dish1
+groente:witlof
+
+zondag:name:dish2
+groente:appels
+
+""".stripMargin
+      expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping.stripMargin
+    }
+
   }
 }
 
@@ -211,9 +291,12 @@ class CookbookStoreForShoppingListTest(implicit val config: Config) extends Cook
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
 
-    naam:dish1
-    groente:witlof
-      		  """.stripMargin)
+      naam:dish1
+      groente:witlof
+
+      naam:dish2
+      groente:appels
+      """.stripMargin)
   }
 
   override

@@ -2,6 +2,7 @@ package shop
 
 import org.junit.Assert._
 import org.scalatest._
+import spray.json._
 
 class IngredientTest extends Spec {
 
@@ -42,4 +43,25 @@ class IngredientTest extends Spec {
     assertTrue(Ingredient("dranken", "d1").equals(Ingredient("dranken", "d1")))
   }
 
+//  def `Ingredient can be printed as Json` = {
+//
+//    import IngredientJsonProtocol._
+//
+////    val personAsJson:JsValue = personAsString.parseJson
+////    val person:Person = personAsJson.convertTo[Person]
+//
+//    val d1 = IngredientForJsonStuff("dranken", "d1")
+//    val json:JsValue = d1.toJson
+//
+//    assertEquals("""{"categoryName":"dranken","name":"d1"}""", json.compactPrint)
+//  }
+//  case class IngredientForJsonStuff(categoryName: String, name: String) {
+//    val ingredient = new Ingredient(categoryName, name) (InMemoryCategoryConfig)
+//  }
+//
+//  object IngredientJsonProtocol extends DefaultJsonProtocol {
+//    implicit val ingredientFormat = jsonFormat2(IngredientForJsonStuff)
+//  }
 }
+
+

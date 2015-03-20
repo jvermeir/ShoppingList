@@ -26,6 +26,20 @@ class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, va
     }
     recursivePrintMenu(listOfRecipes, "").substring(1)
   }
+
+    def printMenuForShoppingList:String = {
+//      category.map { category => category} getOrElse (throw new PanicException("Category named " + name + " not found"))
+      @tailrec def recursivePrintList(recipes: List[(String, Recipe)], recipesAsString: String): String = {
+        recipes match {
+          case Nil => recipesAsString
+          case head :: tail => {
+            val recipe: (String, Recipe) = head
+            recursivePrintList(tail, recipesAsString + recipe._1 + ":" + recipe._2)
+          }
+        }
+      }
+      recursivePrintList(recipes, "")
+    }
 }
 
 object Menu {

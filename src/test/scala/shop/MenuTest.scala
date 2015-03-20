@@ -31,4 +31,5 @@ class MenuTest extends Spec {
     assertEquals(menu.recipes(0)._2.name, "R1")
     assertEquals(menu.recipes(1)._2.name, "R2")
   }
+
 }

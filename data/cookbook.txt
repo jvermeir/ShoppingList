@@ -421,7 +421,7 @@ groente:paddenstoelenmelange
 vis:witte vis
 
 naam:Spaghetti met vis
-pasta:spaghetti nr. 11 nr. 11
+pasta:spaghetti nr. 11 
 vis:koolvis
 pasta:pasta saus
 groente:courgette (2)
@@ -680,7 +680,7 @@ olie:ansjovis
 pasta:olijven
 pasta:kappertjes
 olie:olie
-pasta:spaghetti nr. 11 nr. 11
+pasta:spaghetti nr. 11 
 groente:bloemkool
 
 naam:Ovenkabeljauw met pesto
@@ -861,8 +861,7 @@ vis:witte vis
 naam:Vissticks met gebakken aardappels
 diepvries:gevulde vissticks
 groente:kleine aardappels
-groente:brocolli
-groente:blik mais
+groente:witlof
 
 naam:Vissticks met frites
 diepvries:gevulde vissticks
@@ -894,6 +893,7 @@ groente:sla
 groente:tomaat
 pasta:olijven
 pasta:pesto rosso
+pasta:gedroogde tomaten
 
 naam:Garnalen met tauge
 groente:tauge
@@ -929,7 +929,7 @@ pasta:tapenade
 pasta:gedroogde tomaten
 
 naam:Provencaalse zalm
-groente:tomaat
+groente:tomaat, kerstomaat
 rijst:rijst
 groente:prei (3)
 vis:zalm
@@ -1117,7 +1117,7 @@ chips:noten
 
 naam:Boboti
 soep:bobotipak
-groente:blik sperziebonen
+diepvries:blik sperziebonen
 rijst:rijst
 vlees:gehakt
 
@@ -1169,7 +1169,7 @@ rijst:tika masala
 rijst:rijst
 rijst:naans
 vlees:kip
-blik:boontjes
+diepvries:boontjes
 
 naam:Kip tandoori
 rijst:pot tika tandoori
