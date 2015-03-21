@@ -1,12 +1,14 @@
+import AssemblyKeys._
+
+assemblySettings
+
+version := "1.2"
+
+mainClass in assembly := Some("shop.ShoppingList")
+
 name := "shoppinglist"
 
-version := "1.1"
-
 scalaVersion  := "2.11.2"
-
-//resolvers ++= Seq ("Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
-//                   "Spray repo" at "http://repo.spray.io"
-//                   )
 
 scalacOptions ++= Seq ( "-deprecation", "-feature" )
 
