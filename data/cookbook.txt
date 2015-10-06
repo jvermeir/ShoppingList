@@ -56,6 +56,18 @@ olie:zilveruitjes
 zuivel:ei (5)
 zuivel:vloeibare bakboter
 
+naam:Vega Nasi
+groente:nasi pakket
+chips:noten
+sauzen:sate saus
+rijst:rijst
+rijst:kroepoek
+rijst:nasi kruiden
+olie:augurken
+olie:zilveruitjes
+zuivel:ei (5)
+zuivel:vloeibare bakboter
+
 naam:Bami
 groente:nasi pakket
 vlees:kip
@@ -212,6 +224,7 @@ vlees:shoarmavlees
 brood:pita broodjes
 groente:komkommer
 groente:tomaat
+groente:brocolli
 blik:mais
 diepvries:friet
 sauzen:knoflooksaus
@@ -908,6 +921,11 @@ vlees:kippenbouten
 groente:brocolli
 groente:aardappelschijfjes
 
+naam:Kippenbouten met aardappelpuree en witlof
+vlees:kippenbouten
+groente:witlof
+groente:kg aardappels
+
 naam:Calzone met geitenkaas
 beleg:75 gram rauwe ham in dunne reepjes
 zuivel:200 gram verse geitenkaas verkruimeld
@@ -953,12 +971,12 @@ naam:Curried kidney beans
 sauzen:laurier
 groente:kidney/kikker
 sauzen:kardemom
-groenteui
+groente:ui
 sauzen:gember
 sauzen:knoflook
 sauzen:chili pasta
 sauzen:chili poeder
-groentetomaten
+groente:tomaten
 rijst:garam masala
 sauzen:kurkuma
 sauzen:koriander
@@ -1178,11 +1196,19 @@ rijst:naans
 vlees:kip
 diepvries:boontjes
 
+naam:Tandoori met groente
+rijst:pot tika tandoori
+rijst:rijst
+rijst:naans
+groente:paprika
+groente:courgette
+
 naam:Spaghetti met gehakt
 pasta:spaghetti nr. 11 nr. 11
 pasta:pasta saus
 vlees:gehakt
 groente:champignons
+groente:groentepakket
 zuivel:geraspte kaas
 
 naam:Vis en papillotte
@@ -1425,13 +1451,24 @@ olie:olijfolie
 groente:preien
 groente:1 struik bleekselderij
 groente:2 rode uien
-sauzen:laurierblaadjes
+sauzen:laurierblaadjes, tijm
 pasta:2 blikken tomaatstukjes
 blik:1 blik cannellinibonen
+blik:kidneybonen
 soep:1 liter groentebouillon
 pasta:200 g gedroogde pasta
-groente:1 kleine groene kool
+groente:1 kleine groene kool of knolselder
 brood:1 ciabatta
+
+naam:Boeuf2
+groente:aardappels
+groente:ui
+groente:wortels
+groente:bleekselder
+vlees:stoofvlees
+blik:gepelde tomaten
+blik:kikkererwten
+kruiden:paprikapoeder (eetlepel), rozemarijn, komijn
 
 naam:Paella
 soep:Paella pak
@@ -1495,3 +1532,10 @@ groente:komijn, koriander, kurkuma, kaneel
 groente:wortels
 groente:kikkererwten (2 blikken)
 rijst:couscous
+
+naam:Teriyaki
+soep:Teriyaki pak
+groente:champignons
+groente:peultjes
+vlees:biefstukreepjes
+rijst:rijst
