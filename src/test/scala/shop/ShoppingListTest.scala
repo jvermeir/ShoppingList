@@ -114,19 +114,26 @@ zilveruitjes"""
       val expectedShoppingList = """8 zaterdag:Witlof met kip
 9 zondag:Nasi
 
-zuivel:ei
+zuivel:
+      ei
       geraspte kaas
       vloeibare bakboter
-vlees:kipfilet
+vlees:
+      kipfilet
       kipfilet plakjes
-groente:nasi pakket(09-10)
+groente:
+      nasi pakket(09-10)
       witlof(08-10)
-sauzen:sate saus
-pasta:gezeefde tomaten
-rijst:kroepoek
+sauzen:
+      sate saus
+pasta:
+      gezeefde tomaten
+rijst:
+      kroepoek
       rijst
       rijst
-olie:augurken
+olie:
+      augurken
       zilveruitjes
 
 recepten:
@@ -168,19 +175,26 @@ olie:zilveruitjes
       val expectedShoppingList = """8 zaterdag:Witlof met kip
 8 zaterdag:Nasi
 
-zuivel:ei
+zuivel:
+      ei
       geraspte kaas
       vloeibare bakboter
-vlees:kipfilet
+vlees:
+      kipfilet
       kipfilet plakjes
-groente:nasi pakket(08-10)
+groente:
+      nasi pakket(08-10)
       witlof(08-10)
-sauzen:sate saus
-pasta:gezeefde tomaten
-rijst:kroepoek
+sauzen:
+      sate saus
+pasta:
+      gezeefde tomaten
+rijst:
+      kroepoek
       rijst
       rijst
-olie:augurken
+olie:
+      augurken
       zilveruitjes
 
 recepten:
@@ -224,9 +238,12 @@ olie:zilveruitjes
       Then("the list contains witlof and the two extra's")
       val expectedShoppingList = """8 zaterdag:dish1
 
-groente:witlof(08-10)
-meel:meel
-zeep:vaatwasmiddel
+groente:
+      witlof(08-10)
+meel:
+      meel
+zeep:
+      vaatwasmiddel
 
 recepten:
 zaterdag:name:dish1
@@ -252,7 +269,8 @@ groente:witlof
       val expectedShoppingList = """8 zaterdag:dish1
 9 zondag:dish2
 
-groente:appels(09-10)
+groente:
+      appels(09-10)
       witlof(08-10)
 
 recepten:

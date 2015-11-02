@@ -1204,7 +1204,7 @@ groente:paprika
 groente:courgette
 
 naam:Spaghetti met gehakt
-pasta:spaghetti nr. 11 nr. 11
+pasta:spaghetti nr. 11
 pasta:pasta saus
 vlees:gehakt
 groente:champignons
@@ -1539,3 +1539,27 @@ groente:champignons
 groente:peultjes
 vlees:biefstukreepjes
 rijst:rijst
+
+naam:Kantonese kip
+vlees:kip
+soep:Kantonese kip pak
+groente:Oosterse roerbakgroente
+groente:komkommer
+
+naam:Terrine van ratatouille
+groente:ui
+groente:aubergine
+olie:olijfolie
+groente:2 courgettes
+groente:tomaat
+kruiden:basilicum, knoflook, provencaalse kruiden, peper
+zuivel:ei (4)
+
+naam:Crazy Curry
+groente:ui
+kruiden:knoflook, gember, peper, kerrie, sojasaus
+groente:verse spinazie
+blik:kikkererwten
+blik:gedroogde abrikozen
+groente:citroengras, zeewier
+vlees:vega wokstukjes

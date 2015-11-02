@@ -1,4 +1,4 @@
-	package shop
+package shop
 
 import java.io.File
 import java.util.Locale
@@ -56,10 +56,10 @@ import scala.annotation.tailrec
     }
 
     def printLabelIfNecessary(currentCategory: Category, newCategory: Category): String = {
-      if (currentCategory == null) newCategory.name + ":"
+      if (currentCategory == null) newCategory.name + ":\n      "
       else {
         if (currentCategory.equals(newCategory)) "      "
-        else newCategory.name + ":"
+        else newCategory.name + ":\n      "
       }
     }
 
