@@ -1,6 +1,7 @@
 package shop
 
 import java.io.File
+import java.util.Locale
 
 import org.apache.commons.io.FileUtils
 import org.joda.time.DateTime
@@ -12,6 +13,7 @@ import scala.annotation.tailrec
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
 class Menu(val menuItems: List[MenuItem], val cookbook: CookBook, val dateOfSaturday: DateTime) {
+
   val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, cookbook.getRecipeByName(menuItem.recipe))
 
   // TODO: recursion? Tuple type in List?
@@ -39,6 +41,10 @@ class Menu(val menuItems: List[MenuItem], val cookbook: CookBook, val dateOfSatu
     }
     recursivePrintList(recipes, "")
   }
+
+  def getNameOfDayToDateMap:Map[String, DateTime] = {
+    Menu.getNameOfDayToDateMap(dateOfSaturday)
+  }
 }
 
 object Menu {
@@ -56,16 +62,28 @@ object Menu {
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
     val menu: List[MenuItem] = menuAsStringsWithoutHeaderLine map {
-      createMenuLineFromTextLine(_)
+      createMenuLineFromTextLine(_, dateOfSaturday)
     } filter {
       _ != null
     }
     new Menu(menu, cookbook, dateOfSaturday)
   }
 
-  def createMenuLineFromTextLine(textLine: String): MenuItem = {
-    if (isValidMenuLine(textLine))
-      MenuItem(textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
+  def getNameOfDayToDateMap (dateOfSaturday:DateTime): Map[String, DateTime] = {
+    val fmt = (DateTimeFormat forPattern "EEEE").withLocale(new Locale("nl"))
+    val saturday = dateOfSaturday
+    val result = for (i <- 0 until 7) yield {
+      Tuple2(fmt.print(saturday.plusDays(i)), saturday.plusDays(i))
+    }
+    result.toMap[String, DateTime]
+  }
+
+  def createMenuLineFromTextLine(textLine: String, dateOfSaturday: DateTime): MenuItem = {
+    if (isValidMenuLine(textLine)) {
+      val day: String = textLine.split(":")(0).trim.toLowerCase()
+      val date = getNameOfDayToDateMap(dateOfSaturday)(day)
+      MenuItem(date, day, textLine.split(":")(1).trim)
+    }
     else null
   }
 
@@ -79,12 +97,12 @@ object Menu {
   }
 
   def readFromFile(file: File, cookBook: CookBook): Menu = {
-    val menuAsText = FileUtils.readFileToString(file)
+    val menuAsText = FileUtils.readFileToString(file, "UTF-8")
     apply(menuAsText, cookBook)
   }
 
   def parseDateForSaturday(saturday: String): DateTime = {
     val fmt = DateTimeFormat forPattern "ddMMyyyy"
-    fmt parseDateTime saturday
+    new DateTime(fmt.parseDateTime(saturday))
   }
 }

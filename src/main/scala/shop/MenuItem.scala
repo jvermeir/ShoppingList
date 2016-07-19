@@ -1,14 +1,12 @@
 package shop
 
-import java.util.Date
+import org.joda.time.DateTime
 
-case class MenuItem (date:Date, dayOfWeek:String, recipe:String) {
-
-}
-
-object MenuItem {
-  val dummyDate=new Date
-  def apply (dayOfWeek:String, recipe:String): MenuItem = {
-    return MenuItem(dummyDate, dayOfWeek, recipe)
-  }
-}
+case class MenuItem (date:DateTime, dayOfWeek:String, recipe:String)
+//
+//object MenuItem {
+//  val dummyDate=new DateTime()
+//  def apply (dayOfWeek:String, recipe:String): MenuItem = {
+//    return MenuItem(dummyDate, dayOfWeek, recipe)
+//  }
+//}

@@ -15,8 +15,8 @@ object RunShop {
 
   val DATAFILENAME = "./data/test/CategoryTestDataFile.txt"
     val categories2: Categories = new Categories
-    val contentsOfFileBeforeWrite = FileUtils.readLines(new File(DATAFILENAME))
+    val contentsOfFileBeforeWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
     categories2.add(Category("test", 1))
-    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME))
+    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
   }
 }

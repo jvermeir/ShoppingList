@@ -15,15 +15,15 @@ class FileBasedCookBookStore(fileName: String)(implicit val config:Config) exten
   }
 
   def readFromFile: Map[String, Recipe] = {
-    val cookBookAsText = FileUtils.readFileToString(new File(fileName))
+    val cookBookAsText = FileUtils.readFileToString(new File(fileName), "UTF-8")
     loadFromText(cookBookAsText)
   }
 
   override def save = {
     val dataFile = new File(fileName)
-    FileUtils.writeStringToFile(dataFile, "")
+    FileUtils.writeStringToFile(dataFile, "", "UTF-8")
     for (recipe <- recipes) {
-      FileUtils.writeStringToFile(dataFile, recipe.toString, true)
+      FileUtils.writeStringToFile(dataFile, recipe.toString, "UTF-8", true)
     }
   }
 }

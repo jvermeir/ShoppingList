@@ -2,7 +2,6 @@ package shop
 
 import org.junit.Assert._
 import org.scalatest._
-import spray.json._
 
 class IngredientTest extends Spec {
 

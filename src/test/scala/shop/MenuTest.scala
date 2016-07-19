@@ -1,5 +1,6 @@
 package shop
 
+import org.joda.time.format.DateTimeFormat
 import org.junit.Assert._
 import org.scalatest._
 
@@ -14,10 +15,11 @@ class MenuTest extends Spec {
   val cookBook = new CookBook
 
   def `test Menu Can Be Loaded From Text` {
-    val menu = Menu.apply( """Zaterdag valt op:05112011
-                             |zaterdag:R1
-                             |zondag:R2
-                             | """.stripMargin, cookBook)
+    val menu = Menu.apply(
+      """Zaterdag valt op:05112011
+        |zaterdag:R1
+        |zondag:R2
+        | """.stripMargin, cookBook)
     assertEquals(2, menu.menuItems.length)
     val recipeDay1 = menu.menuItems(0)
     assertEquals("R1", recipeDay1.recipe)
@@ -33,9 +35,10 @@ class MenuTest extends Spec {
   }
 
   def `Date for R1 is 01022014 and date for R2 is 02022014 ` {
+    val fmt = DateTimeFormat.forPattern("ddMMyyyy")
     val menu = Menu.readFromFile("data/test/menus/0101.txt", cookBook)
-    assertEquals(menu.recipes(0)._2.name, "R1")
-    assertEquals(menu.recipes(1)._2.name, "R2")
+    assertEquals("01022014", fmt.print(menu.menuItems(0).date))
+    assertEquals("02022014", fmt.print(menu.menuItems(1).date))
   }
 
 }

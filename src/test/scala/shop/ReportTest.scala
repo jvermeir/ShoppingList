@@ -1,5 +1,6 @@
 package shop
 
+import org.joda.time.DateTime
 import org.junit.Assert._
 import org.scalatest.Spec
 
@@ -22,6 +23,6 @@ class ReportTest extends Spec {
   def `Report contains a MenuItem R2 on 01022014` {
     val cookbook = new CookBook
     val report = Report("./data/test/menus", cookbook)
-    assertEquals(MenuItem("zaterdag", "R1"), report.recipesByName("R1").head)
+    assertEquals(MenuItem(new DateTime(2014, 2, 1, 0, 0), "zaterdag", "R1"), report.recipesByName("R1").head)
   }
 }

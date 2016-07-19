@@ -13,7 +13,7 @@ import scala.annotation.tailrec
    * ShoppingList creates a list of groceries sorted by category for a given Menu.
    */
   class ShoppingList(menu: Menu, extras:List[Ingredient]) (implicit val config:Config) {
-    val nameOfDayToDateMap = getNameOfDayToDateMap
+    val nameOfDayToDateMap = Menu.getNameOfDayToDateMap(menu.dateOfSaturday)
     val shoppingListItemsSortedByCategory = getShoppingListItemsSortedByCategory
 
     /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
@@ -57,10 +57,10 @@ import scala.annotation.tailrec
 
     def printLabelIfNecessary(currentCategory: Category, newCategory: Category): String = {
       if (currentCategory == null) newCategory.name + ":\n      "
-      else {
+      else
         if (currentCategory.equals(newCategory)) "      "
         else newCategory.name + ":\n      "
-      }
+
     }
 
     def printShoppinglist: String = {
@@ -73,14 +73,7 @@ import scala.annotation.tailrec
       recursivePrint(shoppingListItemsSortedByCategory, "")
     }
 
-    def getNameOfDayToDateMap: Map[String, DateTime] = {
-      val fmt = (DateTimeFormat forPattern "EEEE").withLocale(new Locale("nl"))
-      val saturday = menu.dateOfSaturday
-      val result = for (i <- 0 until 7) yield {
-        Tuple2(fmt.print(saturday.plusDays(i)), saturday.plusDays(i))
-      }
-      result.toMap[String, DateTime]
-    }
+//    val getNameOfDayToDateMap: Map[String, DateTime] = Menu.getNameOfDayToDateMap(menu.dateOfSaturday)
   }
 
   object ShoppingList {
@@ -111,7 +104,7 @@ import scala.annotation.tailrec
     }
 
     def readAndSplit(fileName: String): (String, String) = {
-      split(FileUtils.readFileToString(new File(fileName)))
+      split(FileUtils.readFileToString(new File(fileName), "UTF-8"))
     }
 
     def split(contents:String): (String, String) = {

@@ -11,7 +11,7 @@ class FileBasedCategoryStore(categoryDatabaseFileName:String) extends CategorySt
   reload
 
   def loadCategoriesFromFile: Map[String, Category] = {
-    val categoriesAsText = FileUtils.readFileToString(new File(categoryDatabaseFileName))
+    val categoriesAsText = FileUtils.readFileToString(new File(categoryDatabaseFileName), "UTF-8")
     loadCategoriesFromAString(categoriesAsText)
   }
 
@@ -24,9 +24,9 @@ class FileBasedCategoryStore(categoryDatabaseFileName:String) extends CategorySt
 
   override def save = {
     val dataFile = new File(categoryDatabaseFileName)
-    FileUtils.writeStringToFile(dataFile, "")
+    FileUtils.writeStringToFile(dataFile, "", "UTF-8")
     for (category <- categoryMap) {
-      FileUtils.writeStringToFile(dataFile, category._2.printAsDatabaseString, true)
+      FileUtils.writeStringToFile(dataFile, category._2.printAsDatabaseString, "UTF-8", true)
     }
   }
 

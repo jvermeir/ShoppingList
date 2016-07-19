@@ -32,10 +32,10 @@ class FileBasedCategoryTest extends Spec {
   def `A New Category Is Persisted In A DataFile` {
     reset
     val categories: Categories = new Categories
-    val contentsOfFileBeforeWrite = FileUtils.readLines(new File(DATAFILENAME))
+    val contentsOfFileBeforeWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
     assertEquals(2, contentsOfFileBeforeWrite.size())
     categories.add(Category("test", 1))
-    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME))
+    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
     assertEquals(3, contentsOfFileAfterWrite.size())
   }
 
@@ -43,7 +43,7 @@ class FileBasedCategoryTest extends Spec {
     reset
     val categories: Categories = new Categories
     categories.update(Category("schoonmaak", 20),Category("schoonmaak", 12345))
-    val contentsOfFileAfterWrite = FileUtils.readFileToString(new File(DATAFILENAME))
+    val contentsOfFileAfterWrite = FileUtils.readFileToString(new File(DATAFILENAME), "UTF-8")
     assertTrue(contentsOfFileAfterWrite.contains("12345"))
   }
 
@@ -51,10 +51,10 @@ class FileBasedCategoryTest extends Spec {
     reset
     val categories: Categories = new Categories
     val category = categories.getByName("schoonmaak")
-    val contentsOfFileBeforeWrite = FileUtils.readFileToString(new File(DATAFILENAME))
+    val contentsOfFileBeforeWrite = FileUtils.readFileToString(new File(DATAFILENAME), "UTF-8")
     assertTrue(contentsOfFileBeforeWrite.contains("schoonmaak"))
     categories.delete(category)
-    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME))
+    val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
     assertFalse(contentsOfFileAfterWrite.contains("schoonmaak"))
   }
 
