@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 assemblySettings
 
-version := "1.2"
+version := "1.3"
 
 mainClass in assembly := Some("shop.ShoppingList")
 
@@ -20,7 +20,6 @@ libraryDependencies ++= {
     "junit"     % "junit"      % "4.8.2"       % "test",
     "joda-time"      % "joda-time"       % "2.0"    ,
     "org.joda"         % "joda-convert"      % "1.1"     ,
-    "redisclient"        % "redisclient"         % "2.10-2.10",
     "commons-pool"   % "commons-pool"    % "1.6"     ,
     "commons-io"       % "commons-io"        % "2.4"      ,
     "org.slf4j"             % "slf4j-api"              % "1.7.2"      ,

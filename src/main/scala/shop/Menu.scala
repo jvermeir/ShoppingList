@@ -11,23 +11,20 @@ import scala.annotation.tailrec
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
-class Menu(val listOfRecipes: List[(String, String)], val cookbook: CookBook, val dateOfSaturday: DateTime) {
-  val recipes: List[(String, Recipe)] = for (recipe <- listOfRecipes) yield (recipe._1, cookbook.getRecipeByName(recipe._2))
+class Menu(val menuItems: List[MenuItem], val cookbook: CookBook, val dateOfSaturday: DateTime) {
+  val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, cookbook.getRecipeByName(menuItem.recipe))
 
-  // TODO: refactor? looks clunky like this
   // TODO: recursion? Tuple type in List?
   def printMenu(nameOfDayToDateMap: Map[String, DateTime]): String = {
-    @tailrec def recursivePrintMenu(listOfRecipes: List[(String, String)], menuAsString: String): String = {
+    @tailrec def recursivePrintMenu(listOfRecipes: List[MenuItem], menuAsString: String): String = {
       listOfRecipes match {
         case Nil => menuAsString
         case head :: tail => {
-          val day = head._1
-          val dish = head._2
-          recursivePrintMenu(tail, menuAsString + "\n" + nameOfDayToDateMap(day).dayOfMonth.get + " " + day + ":" + dish)
+          recursivePrintMenu(tail, menuAsString + "\n" + nameOfDayToDateMap(head.dayOfWeek).dayOfMonth.get + " " + head.dayOfWeek + ":" + head.recipe)
         }
       }
     }
-    recursivePrintMenu(listOfRecipes, "").substring(1)
+    recursivePrintMenu(menuItems, "").substring(1)
   }
 
   def printMenuForShoppingList: String = {
@@ -58,7 +55,7 @@ object Menu {
     val menuAsListOfStrings = menuAsString.lines.toList
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
-    val menu: List[(String, String)] = menuAsStringsWithoutHeaderLine map {
+    val menu: List[MenuItem] = menuAsStringsWithoutHeaderLine map {
       createMenuLineFromTextLine(_)
     } filter {
       _ != null
@@ -66,9 +63,9 @@ object Menu {
     new Menu(menu, cookbook, dateOfSaturday)
   }
 
-  def createMenuLineFromTextLine(textLine: String): Tuple2[String, String] = {
+  def createMenuLineFromTextLine(textLine: String): MenuItem = {
     if (isValidMenuLine(textLine))
-      (textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
+      MenuItem(textLine.split(":")(0).trim.toLowerCase(), textLine.split(":")(1).trim)
     else null
   }
 
@@ -78,7 +75,11 @@ object Menu {
   }
 
   def readFromFile(fileName: String, cookBook: CookBook): Menu = {
-    val menuAsText = FileUtils.readFileToString(new File(fileName))
+    readFromFile(new File(fileName), cookBook)
+  }
+
+  def readFromFile(file: File, cookBook: CookBook): Menu = {
+    val menuAsText = FileUtils.readFileToString(file)
     apply(menuAsText, cookBook)
   }
 
