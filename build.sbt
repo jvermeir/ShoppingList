@@ -8,14 +8,15 @@ mainClass in assembly := Some("shop.ShoppingList")
 
 name := "shoppinglist"
 
-scalaVersion  := "2.11.8"
+scalaVersion  := "2.12.1"
 
 scalacOptions ++= Seq ( "-deprecation", "-feature" )
 
 libraryDependencies ++= {
   Seq (
-"org.scalatest" % "scalatest_2.11" % "2.2.0" % "test",
-    "junit"     % "junit"      % "4.8.2"       % "test",
+    "org.scalactic" %% "scalactic" % "3.0.1",
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+  "junit"     % "junit"      % "4.12"       % "test",
     "joda-time"      % "joda-time"       % "2.9.4"    ,
     "org.joda"         % "joda-convert"      % "1.8"     ,
     "org.apache.commons" % "commons-pool2" % "2.4.2" ,

@@ -231,7 +231,7 @@ sauzen:knoflooksaus
 
 naam:Schnitzels
 vlees:schnitzels
-groente:champignons
+groente:champignons, vega schnitzel
 pasta:tomatensaus
 koeling:geraspte kaas
 koeling:mozarella
@@ -249,7 +249,7 @@ vlees:soep vlees
 soep:croutons
 soep:rookworst
 groente:aardappels
-groente:gedroogde erwten
+blik:gedroogde erwten
 
 naam:Turkse pizza
 
@@ -378,7 +378,7 @@ toetjes:creme fraiche
 groente:champignons
 groente:rode paprika
 
-naaam:meel:tortilla met pesto
+naaam:Tortilla met pesto
 meel:tortilla
 groente:courgette, paprika
 pasta:groene pesto
@@ -598,7 +598,7 @@ vlees:vega gehakt
 naam:Nachos
 blik:kidneybonen (3)
 meel:tacosaus
-pasta:nachos
+chips:nachos
 koeling:geraspte kaas
 vlees:gehakt
 
@@ -636,6 +636,7 @@ sauzen:mosterd
 rijst:rijst
 sauzen:laurier
 sauzen:kruidnagels
+groente:wortels
 
 naam:Fritata
 groente:courgette
@@ -729,14 +730,6 @@ diepvries:tuinerwten
 toetjes:creme fraiche
 vis:garnalen
 
-naam:Quessadilas
-koeling:geraspte kaas
-groente:ui
-sauzen:koriander
-groente:rode paprika
-vis:witte vis
-rijst:guacamole
-
 naam:Cannelloni
 pasta:olijfolie
 koeling:boter
@@ -748,7 +741,7 @@ sauzen:basilicum
 pasta:2 blikken gepelde tomaten
 koeling:ricotta
 koeling:geraspte kaas
-pasta:canelloni pijpjes
+pasta:cannelloni pijpjes
 koeling:mozarella
 toetjes:creme fraiche
 blik:anjovis
@@ -785,6 +778,7 @@ naam:Witlof met kip
 groente:witlof
 koeling:geraspte kaas
 beleg:kip
+rijst:rijst
 pasta:gezeefde tomaten
 
 naam:Timballo
@@ -803,7 +797,6 @@ groente:groentepakket
 rijst:woksaus
 
 naam:Spaanse kikkererwtensoep
-soep:chorizo
 groente:ui
 groente:knoflook
 groente:bleekselderij
@@ -815,7 +808,7 @@ beleg:ham
 meel:ei (2)
 
 naam:Tajine
-vlees:runderlap
+vlees:biefstukpuntjes
 groente:ui
 pasta:olijfolie
 sauzen:koriander, peper, komijn, kaneel, gember, paprika
@@ -978,12 +971,12 @@ chips:cashewnoten
 chips:pijnboompitten
 blik:anjovis
 
-naam:Quesadillas
-meel:tortillas
-groente:paprika
+naam:Quessadilas
 koeling:geraspte kaas
-rijst:burrito saus
-vis:wite vis
+groente:paprika
+vis:witte vis
+beleg:guacamole
+meel:tortilla's
 koeling:Mozarella
 
 naam:Curried kidney beans
@@ -1033,7 +1026,6 @@ groente:aardappels
 groente:paprika
 groente:sla
 groente:tomaat
-soep:chorizo
 groente:ui
 meel:ei
 
@@ -1218,19 +1210,19 @@ groente:brocolli
 diepvries:vissticks
 groente:aardappelschijfjes
 
-naam:Tika masala
-rijst:tika masala
-rijst:rijst
-rijst:naans
-vlees:kip
-diepvries:boontjes
-
 naam:Kip Massala
 rijst:pot tika massala
 rijst:rijst
 rijst:naans
 vlees:kip
 diepvries:boontjes
+
+naam:Kip Massala met witlof
+rijst:pot tika massala
+rijst:rijst
+rijst:naans
+groente:witlof
+vlees:kip
 
 naam:Massala met groente
 rijst:pot tika massala
@@ -1452,7 +1444,12 @@ groente:aardappelpartjes
 diepvries:vissticks
 groente:witlof
 
-naam:Spaghetti met zalm
+naam:Aardappelpartjes met vissticks en brocolli
+groente:aardappelpartjes
+diepvries:vissticks
+groente:brocolli
+
+naam:Spaghetti met zalmsnippers
 pasta:spaghetti nr. 11
 vis:Zalmsnippers
 toetjes:kookroom
@@ -1522,7 +1519,8 @@ koeling:ricotta
 naam:Diepvries Pizza
 diepvries:2 pizzas
 
-naam:Spaanse spinazie meel:tortilla
+naam:Spaanse spinazie 
+meel:tortilla
 groente:krieltjes
 groente:spinazie
 meel:eieren
@@ -1610,7 +1608,7 @@ groente:1 paprika
 blik:kleine tomatenpuree
 kruiden:paprikapoeder, chilipoeder
 meel:tortilla
-blik:guacamole
+beleg:guacamole
 
 naam:Knorr risotto
 pasta:risotto pak
@@ -1620,7 +1618,7 @@ groente:courgette
 
 naam:Moussaka
 groente:aubergine
-pasta:zeefde tomaten
+pasta:gezeefde tomaten
 vlees:gehakt
 koeling:geraspte kaas, feta
 groente:aardappels
@@ -1632,11 +1630,11 @@ blik:linzen
 soep:groentebouillon
 koeling:kaas
 
-naam:Zalmmeel:tortillas
+naam:Zalmtortillas
 vis:zalm
 groente:tomaten, ui, avocado
 kruiden:koriander
-rijst:guacamole
+beleg:guacamole
 rijst:wraps
 
 naam:Fusilli met zalm en brocolli
@@ -1677,8 +1675,18 @@ koeling:feta, geraspte kaas
 naam:Geroosterde groente met falafel
 groente:courgette, aubergine
 brood:pita broodjes
+meel:couscous
+blik:kikkererwten
 groente:falafel
 groente:gebakken aardappeljes
+groente:zoete aardappeljes
+groente:sla en tomaat
+
+naam:Geroosterde groente met falafel2
+groente:courgette, aubergine, champignons, kerstomaatjes
+meel:couscous
+groente:falafel
+vlees:gekruide worst
 groente:sla en tomaat
 
 naam:Vegetarische Couscous
@@ -1690,3 +1698,48 @@ groente:spruiten, ui, aardappels (puree)
 vlees:stuk vlees
 kruiden:kerriepoeder
 diepvries:boontjes
+
+naam:Marokkaanse couscous
+soep:Knorr marokkaanse couscous
+vlees:kipfilet
+groente:winterwortel, courgette, ui
+
+naam:Runderstoof
+vlees:stoofvlees
+groente:ui, wortel, pastinaak, pompoen, aardappels
+blik:tomatenpuree
+soep:runderbouillon
+kruiden:rozemarijn, salie, peper
+meel:meel
+
+naam:Andijviestamppot
+groente:aardappels
+groente:andijvie
+koeling:spektjes
+
+naam:Salade met Avocado
+groente:avocado
+pasta:couscous
+groente:courgette
+groente:sla
+groente:tomaatjes
+koeling:feta
+groente:komkommer
+koeling:spekjesƒ
+
+naam:Salade gekruide kip
+vlees:kip
+groente:sla
+groente:tomaatjes
+groente:rode ui
+koeling:feta
+ei:4 ei
+groente:komkommer
+
+naam:Mosselen
+vis:mosselen
+diepvries:krieltjes
+groente:soepgroente
+dranken:witte wijn
+soep:bouillon
+

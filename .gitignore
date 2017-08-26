@@ -1,0 +1,6 @@
+menus/
+.idea
+target/
+ShoppingList.iml
+.scala_dependencies
+*jar
