@@ -154,7 +154,6 @@ rijst:kroepoek
 rijst:rijst
 olie:augurken
 olie:zilveruitjes
-
 """
 
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
@@ -215,7 +214,6 @@ rijst:kroepoek
 rijst:rijst
 olie:augurken
 olie:zilveruitjes
-
 """
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
     }
@@ -248,7 +246,6 @@ zeep:
 recepten:
 zaterdag:name:dish1
 groente:witlof
-
 """
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
     }
@@ -279,7 +276,6 @@ groente:witlof
 
 zondag:name:dish2
 groente:appels
-
 """.stripMargin
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping.stripMargin
     }

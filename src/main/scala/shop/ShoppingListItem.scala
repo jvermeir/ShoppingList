@@ -29,13 +29,6 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
     }
   }
 
-  def equals(other: ShoppingListItem): Boolean = {
-    ingredient match {
-      case other.ingredient => date == other.date
-      case _ => other.equals(ingredient)
-    }
-  }
-
   def debugToString: String = {
     "[" + name + "," + category + "," + date + "]"
   }

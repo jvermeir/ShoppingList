@@ -48,9 +48,9 @@ trait CookBookStore {
 
   def loadFromText(cookBookAsText: String)(implicit config:Config): Map[String, Recipe] = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
-    val cookBookSplitIntoRecipes = (cleanedUpText.split("\n\n")).toList
-    val listOfRecipes = cookBookSplitIntoRecipes map { case (recipeAsString) => Recipe(recipeAsString.lines.toList) }
-    loadFromListOfRecipes(listOfRecipes)
+    val cookBookSplitIntoRecipes = cleanedUpText.split("\n\n")
+    val listOfRecipes = cookBookSplitIntoRecipes map { Recipe(_) }
+    loadFromListOfRecipes(listOfRecipes.toList)
   }
 
   def loadFromListOfRecipes(listOfRecipes: List[Recipe]): Map[String, Recipe] = {

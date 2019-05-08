@@ -7,8 +7,6 @@ import org.apache.commons.io.FileUtils
 import org.joda.time.DateTime
 import org.joda.time.format._
 
-import scala.annotation.tailrec
-
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
@@ -16,35 +14,18 @@ class Menu(val menuItems: List[MenuItem], val cookbook: CookBook, val dateOfSatu
 
   val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, cookbook.getRecipeByName(menuItem.recipe))
 
-  // TODO: recursion? Tuple type in List?
   def printMenu(nameOfDayToDateMap: Map[String, DateTime]): String = {
-    @tailrec def recursivePrintMenu(listOfRecipes: List[MenuItem], menuAsString: String): String = {
-      listOfRecipes match {
-        case Nil => menuAsString
-        case head :: tail => {
-          recursivePrintMenu(tail, menuAsString + "\n" + nameOfDayToDateMap(head.dayOfWeek).dayOfMonth.get + " " + head.dayOfWeek + ":" + head.recipe)
-        }
-      }
-    }
-    recursivePrintMenu(menuItems, "").substring(1)
+      menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).dayOfMonth.get + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
   }
 
-  def printMenuForShoppingList: String = {
-    @tailrec def recursivePrintList(recipes: List[(String, Recipe)], recipesAsString: String): String = {
-      recipes match {
-        case Nil => recipesAsString
-        case head :: tail => {
-          val recipe: (String, Recipe) = head
-          recursivePrintList(tail, recipesAsString + recipe._1 + ":" + recipe._2)
-        }
-      }
-    }
-    recursivePrintList(recipes, "")
+  def printMenuForShoppingList = {
+    recipes.map {case (name,recipe) => name + ":" + recipe.toString } mkString "\n"
   }
 
   def getNameOfDayToDateMap:Map[String, DateTime] = {
     Menu.getNameOfDayToDateMap(dateOfSaturday)
   }
+
 }
 
 object Menu {
@@ -58,7 +39,7 @@ object Menu {
    * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cook book.
    */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
-    val menuAsListOfStrings = menuAsString.lines.toList
+    val menuAsListOfStrings = menuAsString.split("\n").toList
     val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
     val menu: List[MenuItem] = menuAsStringsWithoutHeaderLine map {

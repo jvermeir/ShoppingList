@@ -39,7 +39,6 @@ groente:witlof
 
 zondag:name:dish2
 groente:appels
-
 """.stripMargin
 
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping.stripMargin

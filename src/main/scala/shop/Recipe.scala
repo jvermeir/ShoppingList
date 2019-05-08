@@ -7,25 +7,9 @@ case class Recipe(name: String, ingredients: List[Ingredient])(implicit val conf
   override def toString:String = {
     val result=new StringBuilder()
     result.append("name:").append(name).append("\n")
-    result.append( ("" /: ingredients) (_ + _.toString()+"\n")).append("\n")
+    result.append( ("" /: ingredients) (_ + _.toString()+"\n"))
     result.toString()
   }
-
-  override def equals(other: Any) = other match {
-    case that: Recipe => (that canEqual this) &&
-      this.name.equals(that.name) &&
-      this.ingredients.equals(that.ingredients)
-    case _ => false
-  }
-
-  def canEqual(other: Any) = other.isInstanceOf[Recipe]
-
-  override def hashCode: Int =
-    41 * (
-      41 * (
-        41 + name.hashCode
-        ) + ingredients.hashCode
-      )
 }
 
 object Recipe {
@@ -40,7 +24,7 @@ object Recipe {
    */
   // TODO: do we need the implicit here?
   def apply(recipeAsText: String)(implicit config: Config): Recipe = {
-    val receptAsLinesOfText: List[String] = recipeAsText.lines.toList
+    val receptAsLinesOfText = recipeAsText.split("\n").toList
     apply(receptAsLinesOfText)
   }
   

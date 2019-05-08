@@ -11,22 +11,6 @@ case class Category(val name: String, val sequence: Long) extends Ordered[Catego
   def compare(that: Category) = sequence.compare(that.sequence)
 
   def printAsDatabaseString: String = name + ":" + sequence + "\n"
-
-  override def equals(other: Any) = other match {
-    case that: Category => (that canEqual this) &&
-      this.name.equals(that.name)
-    case _ => false
-  }
-
-  def canEqual(other: Any) = other.isInstanceOf[Category]
-
-  override def hashCode: Int =
-    41 * (
-      41 * (
-        41 + name.hashCode
-        ) + sequence.hashCode
-      )
-
 }
 
 /*

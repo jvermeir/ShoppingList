@@ -20,22 +20,6 @@ case class Ingredient(categoryName: String, name: String)(implicit val config: C
   }
 
   override def toString: String = category.name + ":" + name
-
-  override def equals(other: Any) = other match {
-    case that: Ingredient => (that canEqual this) &&
-      this.category.equals(that.category) && this.name.equals(that.name)
-    case _ => false
-  }
-
-  def canEqual(other: Any) = other.isInstanceOf[Ingredient]
-
-  override def hashCode: Int =
-    41 * (
-      41 * (
-        41 + name.hashCode
-        ) + category.hashCode
-      )
-
 }
 
 object Ingredient {
@@ -51,6 +35,6 @@ object Ingredient {
   }
 
   def readFromText(ingredientsAsText: String)(implicit config:Config): List[Ingredient] = {
-    ingredientsAsText.lines.toList map (readFromLine(_))
+    ingredientsAsText.split("\n") map (readFromLine(_)) toList
   }
 }

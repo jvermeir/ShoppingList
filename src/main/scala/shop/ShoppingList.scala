@@ -18,6 +18,7 @@ import scala.annotation.tailrec
 
     /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
     def getShoppingListItemsWithDateAdded(recipe:Recipe, date:DateTime):List[ShoppingListItem] = {
+      recipe.ingredients map (ingredient => new ShoppingListItem(ingredient, date))
       for(ingredient <- recipe.ingredients) yield new ShoppingListItem(ingredient, date)
     }
 
@@ -39,7 +40,14 @@ import scala.annotation.tailrec
     }
 
     def printShoppinglistForUseWhileShopping: String =
-      menu.printMenu(nameOfDayToDateMap) + "\n" + printShoppinglistButSkipDuplicateCategoryLables + "\n\nrecepten:\n" + menu.printMenuForShoppingList
+      menu.printMenu(nameOfDayToDateMap) + "\n" +
+        printShoppinglistButSkipDuplicateCategoryLables +
+        "\n\nrecepten:\n" +
+        menu.printMenuForShoppingList
+
+    def printShoppinglistButSkipDuplicateCategoryLables2: String = {
+      ""
+    }
 
     def printShoppinglistButSkipDuplicateCategoryLables: String = {
       @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: Category, shoppingListAsString: String): String = {
@@ -64,16 +72,9 @@ import scala.annotation.tailrec
     }
 
     def printShoppinglist: String = {
-      @tailrec def recursivePrint(shoppingListItems: List[ShoppingListItem], printedShoppingListItems: String): String = {
-        shoppingListItems match {
-          case Nil => printedShoppingListItems.substring(1)
-          case head :: tail => recursivePrint(tail, printedShoppingListItems + "\n" + head)
-        }
-      }
-      recursivePrint(shoppingListItemsSortedByCategory, "")
+      shoppingListItemsSortedByCategory mkString "\n"
     }
 
-//    val getNameOfDayToDateMap: Map[String, DateTime] = Menu.getNameOfDayToDateMap(menu.dateOfSaturday)
   }
 
   object ShoppingList {
