@@ -19,7 +19,7 @@ groente:courgette
 
 naam:Wafels met soep en pastasalade
 meel:zelfrijzend bakmeel
-meel:ei (5)
+bakspullen:ei (5)
 toetjes:melk
 meel:soep
 groente:sla
@@ -33,7 +33,7 @@ sauzen:basilicum
 
 naam:Wafels met soep
 meel:zelfrijzend bakmeel
-meel:ei (5)
+bakspullen:ei (5)
 toetjes:melk
 meel:soep
 groente:sla
@@ -41,7 +41,7 @@ groente:tomaat
 
 naam:Wafels
 meel:zelfrijzend bakmeel
-meel:ei (5)
+bakspullen:ei (5)
 toetjes:melk
 
 naam:Nasi
@@ -53,7 +53,7 @@ rijst:kroepoek
 rijst:nasi kruiden
 blik:augurken
 blik:zilveruitjes
-meel:ei (5)
+bakspullen:ei (5)
 koeling:vloeibare bakboter
 
 naam:Vega Nasi
@@ -65,7 +65,7 @@ rijst:kroepoek
 rijst:nasi kruiden
 blik:augurken
 blik:zilveruitjes
-meel:ei (5)
+bakspullen:ei (5)
 koeling:vloeibare bakboter
 
 naam:Bami
@@ -77,7 +77,7 @@ rijst:kroepoek
 rijst:nasi kruiden
 blik:augurken
 blik:zilveruitjes
-meel:ei (5)
+bakspullen:ei (5)
 koeling:vloeibare bakboter
 
 naam:Roti
@@ -133,22 +133,28 @@ groente:courgette
 pasta:passata(750 cl)
 koeling:geraspte kaas
 chips:ongezouten notenmix
-pasta:tagliatelle (AH excellent) 
+pasta:tagliatelle (AH excellent)
 
 naam:Omelet
 groente:prei
 groente:wortel
 groente:kleine champs
-meel:ei(6)
+bakspullen:ei(6)
 beleg:ham
 beleg:salami
+koeling:geraspte kaas
+
+naam:Omelet met krieltjes
+groente:gesneden groente
+groente:krieltjes
+bakspullen:ei(6)
 koeling:geraspte kaas
 
 naam:Spinazietaart
 diepvries:spinazie
 koeling:mozarella
 toetjes:kwark
-meel:ei (4)
+bakspullen:ei (4)
 meel:meel
 meel:paneermeel
 pasta:gedroogde tomaten
@@ -164,7 +170,7 @@ groente:spinazie
 koeling:margarine
 toetjes:melk
 sauzen:nootmuskaat
-meel:ei (2)
+bakspullen:ei (2)
 koeling:geraspte kaas
 groente:aardappels
 
@@ -172,6 +178,7 @@ naam:Tagliatelle met noten
 pasta:olijven
 pasta:tagliatelle (AH excellent)
 chips:cashew noten
+groente:paprika
 koeling:feta
 
 naam:Groentenburgers
@@ -304,7 +311,7 @@ groente:brocolli
 groente:mais
 
 naam:Foe yong hai
-meel:ei (8)
+bakspullen:ei (8)
 rijst:rijst
 pasta:tomatenpuree
 groente:prei (1)
@@ -330,7 +337,7 @@ groente:ui
 groente:knoflook
 groente:rozemarijn
 groente:paddestoelenmelange
-meel:ei (4)
+bakspullen:ei (4)
 koeling:ricotta
 koeling:geitenkaas
 beleg:ontbijtspek
@@ -370,6 +377,16 @@ groente:ui
 koeling:kaas
 brood:stokbrood
 
+naam:Tortellinisoep met courgette
+pasta:gezeefde tomaten (2)
+pasta:tomatenblokjes
+pasta:tortellini
+vlees:gehakt
+groente:courgette
+groente:ui
+koeling:kaas
+brood:stokbrood
+
 naam:Tortellini met kip
 pasta:tortellini
 vlees:kip
@@ -384,7 +401,7 @@ groente:courgette, paprika
 pasta:groene pesto
 vlees:kip
 
-naam:tortilla met kip
+naam:Tortilla met kip
 vlees:kip
 meel:tortilla
 sauzen:ketchup
@@ -410,7 +427,7 @@ diepvries:erwten
 naam:Quiche
 koeling:boter (125 gram)
 meel:meel 225 gram
-meel:ei (5)
+bakspullen:ei (5)
 beleg:ontbijstspek (200 gram)
 beleg:ham
 pasta:olie
@@ -424,7 +441,7 @@ pasta:olijven
 naam:Quiche met spinazie
 koeling:boter (125 gram)
 meel:meel 225 gram
-meel:ei (5)
+bakspullen:ei (5)
 pasta:olie
 toetjes:melk (150 ml)
 koeling:gruiere kaas (125 gram)
@@ -444,7 +461,7 @@ groente:sla
 groente:groenteschijven
 
 naam:Rybnik (niet lekker)
-meel:ei (5)
+bakspullen:ei (5)
 brood:wit (half)
 soep:paddenstoelenbouillon tablet
 groente:zoete ui (1)
@@ -454,6 +471,12 @@ vis:witte vis
 
 naam:Spaghetti met vis
 pasta:spaghetti nr. 11
+vis:koolvis
+pasta:pasta saus
+groente:courgette (2)
+
+naam:Linguine met vis
+pasta:linguine
 vis:koolvis
 pasta:pasta saus
 groente:courgette (2)
@@ -492,7 +515,7 @@ groente:sla
 groente:tomaat
 pasta:olijven
 meel:meel
-meel:ei (4)
+bakspullen:ei (4)
 
 naam:Soep met pannenkoeken
 soep:blik goulash, tomaten, ...
@@ -500,23 +523,23 @@ groente:sla
 groente:tomaat
 pasta:olijven
 meel:meel
-meel:ei (4)
+bakspullen:ei (4)
 
 naam:Pannenkoeken
 meel:meel
-meel:ei (4)
+bakspullen:ei (4)
 
 naam:Boerenomelet
 groente:aardappels
 groente:champignons
 groente:soepgroente
-meel:ei
+bakspullen:ei
 
 naam:Boerenomelet met gehakt
 groente:aardappels
 groente:champignons
 groente:soepgroente
-meel:ei
+bakspullen:ei
 koeling:oude kaas
 blik:augurken
 sauzen:mosterd
@@ -573,11 +596,11 @@ pasta:olijven
 groente:kers tomaten
 
 naam:Taart met ham en tuinerwten
-meel:ei (5)
+bakspullen:ei (5)
 groente:ui
 diepvries:tuinerwten
 beleg:ham blokjes
-toetjes:kookroom
+toetjes:creme fraiche
 koeling:geraspte kaas
 diepvries:bladerdeeg
 
@@ -642,7 +665,7 @@ naam:Fritata
 groente:courgette
 groente:sla
 brood:Turks brood
-meel:ei (6)
+bakspullen:ei (6)
 groente:tomaat
 pasta:olijven
 koeling:geitenkaas
@@ -677,7 +700,7 @@ groente:tomaat
 groente:cherry tomaatjes
 groente:sla
 koeling:mozarella
-meel:ei
+bakspullen:ei
 
 naam:Barbecue
 vlees:BB vlees en vis
@@ -694,7 +717,7 @@ groente:tomaat
 groente:cherry tomaatjes
 groente:sla
 koeling:mozarella
-meel:ei
+bakspullen:ei
 
 naam:Pastasalade
 pasta:fusilli
@@ -755,8 +778,8 @@ pasta:gedroogde tomaat
 meel:pecannoten
 meel:paneermeel
 koeling:brie
-meel:ei (5)
-toetjes:kookroom
+bakspullen:ei (5)
+toetjes:creme fraiche
 
 naam:Boeuf Bourguignon
 vlees:stoofvlees
@@ -787,7 +810,7 @@ vlees:kip
 pasta:rigata
 pasta:tomaat in blokjes (2)
 koeling:ricotta
-meel:ei
+bakspullen:ei
 
 naam:Zalmspies met wokrijst
 rijst:rijst
@@ -805,7 +828,7 @@ groente:tomaten
 blik:kikkererwten
 soep:kippenbouillon
 beleg:ham
-meel:ei (2)
+bakspullen:ei (2)
 
 naam:Tajine
 vlees:biefstukpuntjes
@@ -831,8 +854,8 @@ groente:aardappels
 naam:Brocolli zalm taart
 diepvries:deeg voor hartige taart
 groente:brocolli
-meel:ei (4)
-toetjes:kookroom
+bakspullen:ei (4)
+toetjes:creme fraiche
 sauzen:kerriepoeder
 groente:bosui
 vis:zalmsnippers
@@ -901,7 +924,7 @@ sauzen:oregano
 diepvries:croissantdeeg
 groente:3 aardappels
 koeling:feta
-meel:ei (2)
+bakspullen:ei (2)
 chips:notenmix
 chips:sesamzaad
 pasta:olijven
@@ -911,7 +934,7 @@ diepvries:spinazie
 koeling:geraspte kaas
 meel:paneermeel
 sauzen:nootmuskaat
-meel:ei (5)
+bakspullen:ei (5)
 diepvries:bladerdeeg (8)
 groente:sla
 groente:tomaat
@@ -925,6 +948,13 @@ groente:courgette
 groente:2 prei
 chips:cashewnoten
 vis:garnalen
+rijst:rijst
+
+naam:Rijst met tauge
+groente:tauge
+groente:courgette
+groente:2 prei
+chips:cashewnoten
 rijst:rijst
 
 naam:Kippenbouten met gebakken aardappeltjes en brocolli
@@ -965,7 +995,7 @@ vis:zalm
 
 naam:Carbonara
 groente:bloemkool
-meel:ei
+bakspullen:ei
 pasta:tagliatelle (AH excellent)
 chips:cashewnoten
 chips:pijnboompitten
@@ -1027,7 +1057,7 @@ groente:paprika
 groente:sla
 groente:tomaat
 groente:ui
-meel:ei
+bakspullen:ei
 
 naam:Uiensoep met panpizza
 groente:ui
@@ -1079,7 +1109,7 @@ vlees:kipfilet
 
 naam:Aardappel-wortel gratin
 groente:aardappels (1kg)
-meel:ei (2)
+bakspullen:ei (2)
 sauzen:paprikapoeder
 toetjes:melk
 koeling:geraspte kaas
@@ -1153,9 +1183,17 @@ chips:noten
 
 naam:Boboti
 soep:bobotipak
-diepvries:blik sperziebonen
+diepvries:sperziebonen
 rijst:rijst
 vlees:gehakt
+
+naam:Boboti2
+vlees:gehakt
+vlees:seitan
+diepvries:sperziebonen
+rijst:rijst
+kruiden:kerrie, knoflook, paprika, kurkuma
+bakspullen:ei (2)
 
 naam:Kippenboutjes
 vlees:kippenboutjes
@@ -1186,7 +1224,7 @@ vis:wit/mosselen
 naam:Zalmsalade
 blik:zalm
 sauzen:mayonaise
-meel:ei (4)
+bakspullen:ei (4)
 blik:zure augurken
 
 naam:Vissticks met bloemkool
@@ -1236,7 +1274,7 @@ pasta:spaghetti nr. 11
 pasta:gezeefde tomaten/saus
 vlees:gehakt
 groente:champignons
-groente:groentepakket
+groente:courgette
 koeling:geraspte kaas
 
 naam:Vis en papillotte
@@ -1254,7 +1292,7 @@ groente:witlof
 beleg:ontbijtspek
 diepvries:bladerdeeg
 groente:aardappels
-meel:ei (3)
+bakspullen:ei (3)
 
 naam:Kofta
 soep:Knor Kofta
@@ -1276,7 +1314,7 @@ koeling:200 gr roomkaas
 soep:pompoenpitten
 meel:meel
 dranken:pils
-meel:ei (4)
+bakspullen:ei (4)
 groente:ui
 
 naam:Kip met glibbers
@@ -1301,7 +1339,7 @@ blik:groot blik bruine bonen
 groente:groene kool (350gr)
 toetjes:creme fraiche
 koeling:geraspte kaas
-meel:ei (1)
+bakspullen:ei (1)
 
 naam:Zwartebonenchili
 rijst:rijst
@@ -1353,7 +1391,7 @@ beleg:spekblokjes
 beleg:yorkham
 groente:bosui
 meel:5 ei
-toetjes:kookroom
+toetjes:creme fraiche
 koeling:geraspte kaas
 groente:sla, romaatjes
 
@@ -1382,6 +1420,11 @@ diepvries:boontjes
 vlees:hamlap
 pasta:macaroni
 
+naam:Koolrabi met aardappels
+groente:koolrabi, aardappel
+groente:vlees vervanger
+koeling:geraspte kaas
+
 naam:Tuinbonen met hamburgers en aardappeltjes
 groente:tuinbonen
 vlees:hamburgers
@@ -1392,9 +1435,10 @@ naam:Salade van groene groente met couscous
 rijst:couscous
 groente:komkommer
 groente:paprika
-meel:pijnboompitten
+bakspullen:pijnboompitten, amandelen
 diepvries:fijne tuinerwten
 diepvries:tuinbonen
+kruiden:gedroogde tomaten, olijven
 
 naam:Varkenshaas met gebakken aardappels
 groente:brocolli
@@ -1448,11 +1492,12 @@ naam:Aardappelpartjes met vissticks en brocolli
 groente:aardappelpartjes
 diepvries:vissticks
 groente:brocolli
+groente:vegavissticks
 
 naam:Spaghetti met zalmsnippers
 pasta:spaghetti nr. 11
 vis:Zalmsnippers
-toetjes:kookroom
+toetjes:creme fraiche
 groente:courgette
 
 naam:Tuinbonen met gekookte aardappels
@@ -1519,11 +1564,11 @@ koeling:ricotta
 naam:Diepvries Pizza
 diepvries:2 pizzas
 
-naam:Spaanse spinazie 
+naam:Spaanse spinazie
 meel:tortilla
 groente:krieltjes
 groente:spinazie
-meel:eieren
+bakspullen:eieren
 koeling:geraspte kaas
 
 naam:Zoetzure kippenbout met mihoen
@@ -1587,7 +1632,7 @@ pasta:olijfolie
 groente:2 courgettes
 groente:tomaat
 kruiden:basilicum, knoflook, provencaalse kruiden, peper
-meel:ei (4)
+bakspullen:ei (4)
 
 naam:Crazy Curry
 groente:ui
@@ -1608,6 +1653,15 @@ groente:1 paprika
 blik:kleine tomatenpuree
 kruiden:paprikapoeder, chilipoeder
 meel:tortilla
+beleg:guacamole
+
+naam:Vega chili
+groente:ui, paprika
+kruiden:eetlepel komijn, eetlepel gedroogde koriander, eetlepel chilipoeder, theelepel cayennepoeder, theelepel kaneel, theelepel oregano
+blik:1.5 blik kidneybonen, mais
+pasta:2 blikken (400 ml) gezeefde tomaten, 1 blikje (140ml) tomaten puree
+chips:zak tortilla chips naturel
+rijst:rijst
 beleg:guacamole
 
 naam:Knorr risotto
@@ -1743,3 +1797,87 @@ groente:soepgroente
 dranken:witte wijn
 soep:bouillon
 
+naam:Linzen
+groente:courgette, aubergine
+vlees:kip
+chips:ongezouten notenmix
+blik:linzen
+
+naam:omelet met toast
+bakspullen:ei
+groente:paprika
+groente:champignons
+rijst:rijst
+
+naam:Tortilla met chilibonen en spekjes
+meel:tortilla
+blik:chilibonen, mais
+vlees:spek
+groente:sla
+
+naam:Linzenschotel met aardappel
+groente:spinazie, zoete aardappel, paprika, ui
+blik:linzen
+chips:cashewnoten
+kruiden:paprikapoeder
+
+naam:roerbaknoedels
+chips:cashewnoten
+kruiden:gember, knoflook, chili, koriander, peper
+rijst:mie
+rijst:sojasaus
+groente:chinese kool, ui
+
+naam:Pompoensoep
+groente:pompoen, ui, courgette, paprika
+soep:bouillonblokje
+kruiden:knoflook, kerriepoeder, cayennepeper, kurkuma, komijn
+toetjes:creme fraiche
+
+naam:Bloemkool met gele curry
+groente:bloemkool
+groente:Spinazie
+blik:kikkererwten
+rijst:naans
+rijst:rijst
+rijst:curry pasta
+rijst:blikje kokosmelk
+
+naam:Linzenrijst
+rijst:linzenrijst
+groente:japanse groentenmix
+chips:notenmix
+
+naam:Biet Bourguignon
+groente:bieten, ui, aardappels
+groente:sla, tomaat
+kruiden:laurier, peper
+blik:tomatenpuree
+dranken:rode wijn
+hagelslag:ontbijtkoek
+
+naam:Marokkaanse pompoenstoof
+groente:pompoen, ui, paprika
+kruiden:kaneel, kurkuma, komijn, koriander
+pasta:tomatenblokjes
+blik:zwarte bonen, abrikozen
+rijst:couscous
+
+naam:Harira soep
+groente:ui, tomatenblokjes, wortel
+kruiden:knoflook, ras-el-hanout, paprikapoeder, koriander
+blik:kikkererwten
+soep:groentebouillontabletten
+rijst:rode Linzen
+brood:stokbrood
+koeling:kruidenboter
+
+naam:Paksoi
+groente:paksoi, tauge, courgette
+pasta:rijst
+
+naam:Curry Aloo
+groente:aardappels, pompoen, tomaten, ui
+kruiden:knoflook, chilipeper, gemberbolletjes,laurier, koriander
+kruiden:paprikapoeder, kurkuma, komijn
+rijst:kokosmelk, naans
