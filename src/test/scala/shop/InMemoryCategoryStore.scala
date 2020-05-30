@@ -25,6 +25,26 @@ class InMemoryCookbookStore(implicit val config:Config) extends CookBookStore {
                    |		  naam:R2
                    |		  dranken:d2
                    |		  schoonmaak:s2
+                   |
+                   |		  naam:R0
+                   |		  dranken:d0
+                   |		  schoonmaak:s0
+                   |
+                   |		  naam:R3
+                   |		  dranken:d0
+                   |		  schoonmaak:s0
+                   |
+                   |		  naam:R4
+                   |		  dranken:d0
+                   |		  schoonmaak:s0
+                   |
+                   |		  naam:R5
+                   |		  dranken:d0
+                   |		  schoonmaak:s0
+                   |
+                   |		  naam:R6
+                   |		  dranken:d0
+                   |		  schoonmaak:s0
                    |""".stripMargin)
   }
   override def save:Unit = {}

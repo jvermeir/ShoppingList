@@ -41,4 +41,11 @@ class MenuTest extends Spec {
     assertEquals("02022014", fmt.print(menu.menuItems(1).date))
   }
 
+  def `Week may start on a Wednesday`: Unit = {
+    val fmt = DateTimeFormat.forPattern("ddMMyyyy")
+    val menu = Menu.readFromFile("data/test/menus/somemenu.txt", cookBook)
+    assertEquals("08022014", fmt.print(menu.menuItems(3).date))
+    assertEquals("09022014", fmt.print(menu.menuItems(4).date))
+  }
+
 }

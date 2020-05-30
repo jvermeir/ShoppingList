@@ -18,7 +18,7 @@ class BasicCookBookTest extends Spec {
     val R2 = cookbook.getRecipeByName("R2")
     val expectedRecipe2 = Recipe("R2", List(Ingredient("dranken", "d2"), Ingredient("schoonmaak", "s2")))
     assertEquals(expectedRecipe2, R2)
-    assertEquals(2, cookbook.recipes.size)
+    assertEquals(7, cookbook.recipes.size)
   }
 
   def `Equals always Returns True because there is only one cookbook` {

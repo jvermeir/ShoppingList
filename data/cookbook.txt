@@ -45,9 +45,8 @@ bakspullen:ei (5)
 toetjes:melk
 
 naam:Nasi
-groente:nasi pakket
+groente:nasi pakket, pasksoi
 vlees:kip
-sauzen:sate saus
 rijst:rijst
 rijst:kroepoek
 rijst:nasi kruiden
@@ -55,11 +54,11 @@ blik:augurken
 blik:zilveruitjes
 bakspullen:ei (5)
 koeling:vloeibare bakboter
+sauzen:sate saus
 
 naam:Vega Nasi
-groente:nasi pakket
+groente:nasi pakket, pasksoi
 chips:noten
-sauzen:sate saus
 rijst:rijst
 rijst:kroepoek
 rijst:nasi kruiden
@@ -67,11 +66,11 @@ blik:augurken
 blik:zilveruitjes
 bakspullen:ei (5)
 koeling:vloeibare bakboter
+sauzen:sate saus
 
 naam:Bami
-groente:nasi pakket
+groente:nasi pakket, paksoi
 vlees:kip
-sauzen:sate saus
 rijst:mie
 rijst:kroepoek
 rijst:nasi kruiden
@@ -79,6 +78,7 @@ blik:augurken
 blik:zilveruitjes
 bakspullen:ei (5)
 koeling:vloeibare bakboter
+sauzen:sate saus
 
 naam:Roti
 rijst:roti pannenkoeken + Knorr pak
@@ -115,7 +115,6 @@ pasta:tapenade
 pasta:olijven
 groente:champignons
 beleg:ham
-beleg:salami
 blik:artisjok
 meel:ansjovis
 groente:paprika (2)
@@ -272,6 +271,19 @@ sauzen:ketchup
 sauzen:chili saus
 brood:hamburgerbroodjes
 
+naam:Aardappeltjes met witlof en hamburgers
+groente:sla
+groente:tomaat
+groente:witlof
+blik:augurken
+groente:rode ui
+brood:keizerbroodjes
+groente:aardappeljes
+vlees:hamburgers
+sauzen:mayonaise
+sauzen:ketchup
+sauzen:chili saus
+
 naam:Friet met vissticks
 groente:sla
 groente:tomaat
@@ -308,7 +320,6 @@ diepvries:vissticks
 sauzen:mayo
 groente:aardappeltjes
 groente:brocolli
-groente:mais
 
 naam:Foe yong hai
 bakspullen:ei (8)
@@ -330,6 +341,7 @@ soep:groentebouillon
 pasta:gedroogde tomaten
 groente:spinazie
 koeling:geraspte kaas
+vis:garnalen
 
 naam:Paddenstoelentaart met spek
 diepvries:bladerdeeg
@@ -358,7 +370,7 @@ pasta:macaroni schelpjes
 brood:stokbrood
 
 naam:Kipgoulash
-koeling:boter
+boter:boter
 groente:ui
 sauzen:pikante paprikapoeder
 groente:rode paprika
@@ -381,7 +393,7 @@ naam:Tortellinisoep met courgette
 pasta:gezeefde tomaten (2)
 pasta:tomatenblokjes
 pasta:tortellini
-vlees:gehakt
+groente:prei
 groente:courgette
 groente:ui
 koeling:kaas
@@ -401,10 +413,17 @@ groente:courgette, paprika
 pasta:groene pesto
 vlees:kip
 
+naam:Tortilla met kipnuggets
+vlees:kipnuggets
+meel:tortilla
+sauzen:ketchup
+groente:paprika
+koeling:geraspte kaas
+
 naam:Tortilla met kip
 vlees:kip
 meel:tortilla
-sauzen:ketchup
+sauzen:ketchup, chilisaus
 groente:paprika
 koeling:geraspte kaas
 
@@ -424,8 +443,15 @@ koeling:geraspte kaas
 rijst:burritosaus
 diepvries:erwten
 
+naam:Tortillas met spinazie
+groente:spinazie, 1 paprika
+koeling:geraspte kaas
+rijst:tortilla
+koeling:mozarella
+vlees:kipfilet
+
 naam:Quiche
-koeling:boter (125 gram)
+boter:boter (125 gram)
 meel:meel 225 gram
 bakspullen:ei (5)
 beleg:ontbijstspek (200 gram)
@@ -439,7 +465,7 @@ groente:tomaat
 pasta:olijven
 
 naam:Quiche met spinazie
-koeling:boter (125 gram)
+boter:boter (125 gram)
 meel:meel 225 gram
 bakspullen:ei (5)
 pasta:olie
@@ -451,7 +477,6 @@ groente:tomaat
 pasta:olijven
 groente:spinazie
 vis:plak zalm
-beleg:ham
 
 naam:Groenteschijven
 brood:ciabatta
@@ -530,7 +555,7 @@ meel:meel
 bakspullen:ei (4)
 
 naam:Boerenomelet
-groente:aardappels
+groente:aardappeltjes
 groente:champignons
 groente:soepgroente
 bakspullen:ei
@@ -618,6 +643,13 @@ meel:taco's
 koeling:geraspte kaas
 vlees:vega gehakt
 
+naam:Vega nachos
+blik:1 kidneybonen, 2 chili, mais
+groente:tomatenblokjes
+groente:sla
+chips:nachos
+koeling:geraspte kaas
+
 naam:Nachos
 blik:kidneybonen (3)
 meel:tacosaus
@@ -629,11 +661,18 @@ naam:Ragout
 vlees:kleine kip
 groente:champignons
 meel:meel
-koeling:boter
+boter:boter
 diepvries:bladerdeeg, erwten
 groente:sla
 groente:tomaat
 pasta:olijven
+
+naam:Ragoente
+groente:champignons + paddenstoelen
+meel:meel
+boter:boter
+diepvries:bladerdeeg, erwten
+koeling:sojabonen
 
 naam:Risotto met erwten en chorizo
 diepvries:erwten
@@ -662,7 +701,7 @@ sauzen:kruidnagels
 groente:wortels
 
 naam:Fritata
-groente:courgette
+groente:2 courgette
 groente:sla
 brood:Turks brood
 bakspullen:ei (6)
@@ -681,8 +720,8 @@ pasta:olijven
 naam:Boerenkool stamppot
 groente:boerenkool
 groente:aardappels
-vlees:verse worst
-blik:aurgurken
+vlees:spekjes
+blik:augurken
 blik:zilveruitjes
 blik:picalilly
 
@@ -755,7 +794,7 @@ vis:garnalen
 
 naam:Cannelloni
 pasta:olijfolie
-koeling:boter
+boter:boter
 sauzen:knoflook
 sauzen:oregano
 sauzen:nootmuskaat
@@ -832,7 +871,7 @@ bakspullen:ei (2)
 
 naam:Tajine
 vlees:biefstukpuntjes
-groente:ui
+groente:ui, prei
 pasta:olijfolie
 sauzen:koriander, peper, komijn, kaneel, gember, paprika
 blik:kikkererwten
@@ -902,6 +941,11 @@ vis:witte vis
 
 naam:Vissticks met gebakken aardappels
 diepvries:gevulde vissticks
+groente:kleine aardappels
+groente:witlof
+
+naam:Zeesticks met gebakken aardappels
+groente:Zeesticks
 groente:kleine aardappels
 groente:witlof
 
@@ -1132,6 +1176,12 @@ dranken:witte wijn
 soep:kippenbouillon
 koeling:geraspte kaas
 
+naam:Risotto met spinazie
+groente:1 paprika, ui, verse spinazie, champignons
+rijst:risottorijst
+soep:bouillonblokje
+koeling:geraspte kaas
+
 naam:Aardappelcurry
 groente:aardappels
 groente:ui
@@ -1178,6 +1228,12 @@ chips:noten
 naam:Tortellini met groente en noten
 groente:verse tortellini
 groente:wortel, brocolli
+pasta:pasta saus
+chips:noten
+
+naam:Tortellini met courgette en noten
+groente:verse tortellini
+groente:wortel, courgette, champignons
 pasta:pasta saus
 chips:noten
 
@@ -1229,7 +1285,6 @@ blik:zure augurken
 
 naam:Vissticks met bloemkool
 groente:bloemkool
-diepvries:doperwten
 diepvries:vissticks
 groente:aardappelschijfjes
 
@@ -1286,6 +1341,7 @@ toetjes:creme fraiche
 dranken:witte wijn
 meel:halve amandelen
 groente:citroen
+pasta:verse tortellini
 
 naam:Witloftaart
 groente:witlof
@@ -1453,7 +1509,7 @@ pasta:pasta saus
 pasta:macaroni
 
 naam:Couscous
-groente:ui
+groente:ui, prei
 pasta:olijfolie
 sauzen:koriander, peper, komijn, kaneel, gember, paprika
 blik:kikkererwten
@@ -1498,6 +1554,11 @@ naam:Spaghetti met zalmsnippers
 pasta:spaghetti nr. 11
 vis:Zalmsnippers
 toetjes:creme fraiche
+groente:courgette
+
+naam:Spaghetti met zeesticks
+pasta:spaghetti nr. 11
+groente:Zeesticks, sojabonen
 groente:courgette
 
 naam:Tuinbonen met gekookte aardappels
@@ -1547,11 +1608,17 @@ blik:gepelde tomaten
 blik:kikkererwten
 kruiden:paprikapoeder (eetlepel), rozemarijn, komijn
 
-naam:Paella
+naam:PaellaPak
 soep:Paella pak
 groente:paprika
 diepvries:doperwten
 vis:witte vis
+
+naam:Paella
+groente:paprika, ui, tomaten
+diepvries:doperwten, boontjes
+vis:witte vis, garnalen
+rijst:gele rijst
 
 naam:Pasta met tomaten en ricotta
 groente:verse pasta
@@ -1699,7 +1766,7 @@ blik:kappertjes
 toetjes:creme fraiche
 
 naam:Kip PiriPiri
-pasta:PiriPiri pak
+rijst:PiriPiri pak
 vlees:kip
 diepvries:sperziebonen
 groente:ui
@@ -1709,7 +1776,8 @@ groente:tomaten
 naam:Hokkien noedels
 soep:Knorr Hokkien Noedels
 vlees:kip
-groente:wokgroente
+groente:wokgroente, tauge, champignons
+rijst:kroepoek
 
 naam:Tabouleh (niet lekker)
 soep:Knorr Tabouleh
@@ -1727,12 +1795,12 @@ kruiden:knoflook, basilicumblaadjes, chilipeper
 koeling:feta, geraspte kaas
 
 naam:Geroosterde groente met falafel
-groente:courgette, aubergine
+groente:courgette, aubergine, rode paprika
 brood:pita broodjes
 meel:couscous
 blik:kikkererwten
 groente:falafel
-groente:gebakken aardappeljes
+groente:gekruide aardappeljes met schil
 groente:zoete aardappeljes
 groente:sla en tomaat
 
@@ -1769,7 +1837,7 @@ meel:meel
 naam:Andijviestamppot
 groente:aardappels
 groente:andijvie
-koeling:spektjes
+koeling:spekjes
 
 naam:Salade met Avocado
 groente:avocado
@@ -1829,8 +1897,9 @@ rijst:sojasaus
 groente:chinese kool, ui
 
 naam:Pompoensoep
-groente:pompoen, ui, courgette, paprika
+groente:pompoen, tomaat, courgette, spinazi, prei, knolselder
 soep:bouillonblokje
+blik:kikkererwten,
 kruiden:knoflook, kerriepoeder, cayennepeper, kurkuma, komijn
 toetjes:creme fraiche
 
@@ -1873,11 +1942,57 @@ brood:stokbrood
 koeling:kruidenboter
 
 naam:Paksoi
+groente:vegaburgers, sojabonen
 groente:paksoi, tauge, courgette
-pasta:rijst
+rijst:rijst
+
+naam:Paksoi met mie
+groente:paksoi, tauge, courgette
+rijst:mie
 
 naam:Curry Aloo
 groente:aardappels, pompoen, tomaten, ui
 kruiden:knoflook, chilipeper, gemberbolletjes,laurier, koriander
 kruiden:paprikapoeder, kurkuma, komijn
 rijst:kokosmelk, naans
+
+naam:Spaghetti met vegavissticks
+groente:gesneden groente
+groente:vega vegavissticks
+pasta:spagetti, pastasaus
+
+naam:Knolselderijstamppot
+groente:knolselder, spruiten, aardappels, paddenstoelen
+kruiden:tijm
+
+naam:Tortellini met feta
+groente:paprika, verse Tortellini
+koeling:feta
+chips:cashewnoten
+
+naam:Fusilli met tomaat
+groente:ui, italiaanse groentenmix
+blik:2 gepelde tomaten,
+pasta:fusilli
+koeling:geraspte parmezaanse kaas
+
+naam:Shakshuka
+kruiden:knoflook, tomatenpuree, komijn, paprikapoeder, cayennepeper, peterselie
+groente:paprika, avocado
+pasta:tomatenblokjes
+bakspullen:ei
+rijst:naans
+
+naam:Oosterse groente
+rijst:rijst
+groente:tauge, sojabonen, wortel, paksoi
+chips:cashewnoten
+
+naam:Tandoori
+rijst:rijst, Tandoori pot, naans
+groente:witlof
+
+naam:Aubergines met couscous
+groente:aubergines, courgette, paprika, ui
+koeling:feta, falafel
+rijst:couscous

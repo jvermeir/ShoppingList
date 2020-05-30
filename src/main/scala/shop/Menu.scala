@@ -40,29 +40,29 @@ object Menu {
    */
   def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = menuAsString.split("\n").toList
-    val dateOfSaturday = parseDateForSaturday(menuAsListOfStrings(0).split(":")(1).trim)
+    val dateOfFirstDay = parseDateForFirstDay(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
     val menu: List[MenuItem] = menuAsStringsWithoutHeaderLine map {
-      createMenuLineFromTextLine(_, dateOfSaturday)
+      createMenuLineFromTextLine(_, dateOfFirstDay)
     } filter {
       _ != null
     }
-    new Menu(menu, cookbook, dateOfSaturday)
+    new Menu(menu, cookbook, dateOfFirstDay)
   }
 
-  def getNameOfDayToDateMap (dateOfSaturday:DateTime): Map[String, DateTime] = {
+  def getNameOfDayToDateMap (dateOfFirstDay:DateTime): Map[String, DateTime] = {
     val fmt = (DateTimeFormat forPattern "EEEE").withLocale(new Locale("nl"))
-    val saturday = dateOfSaturday
+    val day = dateOfFirstDay
     val result = for (i <- 0 until 7) yield {
-      Tuple2(fmt.print(saturday.plusDays(i)), saturday.plusDays(i))
+      Tuple2(fmt.print(day.plusDays(i)), day.plusDays(i))
     }
     result.toMap[String, DateTime]
   }
 
-  def createMenuLineFromTextLine(textLine: String, dateOfSaturday: DateTime): MenuItem = {
+  def createMenuLineFromTextLine(textLine: String, dateOfFirstDay: DateTime): MenuItem = {
     if (isValidMenuLine(textLine)) {
       val day: String = textLine.split(":")(0).trim.toLowerCase()
-      val date = getNameOfDayToDateMap(dateOfSaturday)(day)
+      val date = getNameOfDayToDateMap(dateOfFirstDay)(day)
       MenuItem(date, day, textLine.split(":")(1).trim)
     }
     else null
@@ -82,7 +82,7 @@ object Menu {
     apply(menuAsText, cookBook)
   }
 
-  def parseDateForSaturday(saturday: String): DateTime = {
+  def parseDateForFirstDay(saturday: String): DateTime = {
     val fmt = DateTimeFormat forPattern "ddMMyyyy"
     new DateTime(fmt.parseDateTime(saturday))
   }
