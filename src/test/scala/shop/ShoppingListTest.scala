@@ -279,8 +279,69 @@ groente:appels
 """.stripMargin
       expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping.stripMargin
     }
-
   }
+
+  scenario("A menu may start on Wednesday") {
+    Given("a menu with witlof on Friday and Nasi on Saturday and a kookbook with these recipes")
+    val menuAsString =
+      """Vrijdag valt op:29052020
+      	vrijdag:Witlof met kip
+      	zaterdag:Nasi
+        """
+    When("a menu is generated")
+    val menu = Menu(menuAsString, cookbook)
+    val extras: List[Ingredient] = List()
+    val shoppingList = new ShoppingList(menu, extras)
+    Then("and a shopping list is printed")
+    val expectedShoppingList = """29 vrijdag:Witlof met kip
+30 zaterdag:Nasi
+
+zuivel:
+      ei
+      geraspte kaas
+      vloeibare bakboter
+vlees:
+      kipfilet
+      kipfilet plakjes
+groente:
+      nasi pakket(30-05)
+      witlof(29-05)
+sauzen:
+      sate saus
+pasta:
+      gezeefde tomaten
+rijst:
+      kroepoek
+      rijst
+      rijst
+olie:
+      augurken
+      zilveruitjes
+
+recepten:
+vrijdag:name:Witlof met kip
+zuivel:geraspte kaas
+vlees:kipfilet plakjes
+groente:witlof
+pasta:gezeefde tomaten
+rijst:rijst
+
+zaterdag:name:Nasi
+zuivel:ei
+zuivel:vloeibare bakboter
+vlees:kipfilet
+groente:nasi pakket
+sauzen:sate saus
+rijst:kroepoek
+rijst:rijst
+olie:augurken
+olie:zilveruitjes
+"""
+
+    expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
+  }
+
+
 }
 
 class CookbookStoreForShoppingListTest(implicit val config: Config) extends CookBookStore {
