@@ -91,7 +91,7 @@ import scala.annotation.tailrec
       val cookbookFile = args(0)
       val menuFile = args(1)
       implicit object FileCategoryConfig extends Config {
-        lazy val categoryStore = new FileBasedCategoryStore("data/CategoryDatabase.csv")
+        lazy val categoryStore = new FileBasedCategoryStore("data/CategoryDatabase_v2.csv")
         lazy val cookBookStore = new FileBasedCookBookStore(cookbookFile)
       }
 
