@@ -6,4 +6,4 @@ then
 	echo "Usage: runShop.sh <cookbook> <menu>"
 	exit 0
 fi
-java -cp bin/shoppinglist-assembly-1.4.jar shop.ShoppingList $1 $2
+java -cp bin/shoppinglist-assembly-1.5.jar shop.ShoppingList $1 $2

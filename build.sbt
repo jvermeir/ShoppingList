@@ -2,7 +2,7 @@
 //
 //assemblySettings
 
-version := "1.4"
+version := "1.5"
 
 mainClass in assembly := Some("shop.ShoppingList")
 
