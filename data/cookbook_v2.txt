@@ -48,6 +48,7 @@ naam:Nasi
 sla:nasi pakket
 groente:pasksoi
 kip:kip
+vega:kipstukjes
 rijst:rijst
 mixen:kroepoek
 mixen:nasi kruiden
@@ -74,6 +75,7 @@ naam:Bami
 sla:nasi pakket
 groente:pasksoi
 kip:kip
+vega:kipstukjes
 mixen:mie
 mixen:kroepoek
 mixen:nasi kruiden
@@ -86,6 +88,7 @@ sauzen:sate saus
 naam:Roti
 mixen:roti pannenkoeken + Knorr pak
 kip:kip
+vega:kipstukjes
 diepvries:sperziebonen
 sla:krieltjes
 
@@ -194,6 +197,7 @@ sla:aardappelschijfjes
 naam:Kip Jambalaya
 mixen:Jambalaya mix
 kip:kip
+vega:kipstukjes
 groente:paprika
 sla:champignons
 groente:ui
@@ -235,7 +239,7 @@ sauzen:knoflooksaus
 
 naam:Schnitzels
 vlees:schnitzels
-sla:champignons, 
+sla:champignons,
 vega:vega schnitzel
 pasta:tomatensaus
 koeling:geraspte kaas
@@ -401,6 +405,7 @@ brood:stokbrood
 naam:Tortellini met kip
 pasta:tortellini
 kip:kip
+vega:kipstukjes
 diepvries:erwten
 kwark:creme fraiche
 sla:champignons
@@ -411,6 +416,7 @@ mixen:tortilla
 groente:courgette, paprika
 pasta:groene pesto
 kip:kip
+vega:kipstukjes
 
 naam:Tortilla met kipnuggets
 kip:kipnuggets
@@ -421,6 +427,7 @@ koeling:geraspte kaas
 
 naam:Tortilla met kip
 kip:kip
+vega:kipstukjes
 mixen:tortilla
 sauzen:ketchup, chilisaus
 groente:paprika
@@ -819,7 +826,6 @@ bakspullen:pecannoten
 bakspullen:paneermeel
 koeling:brie
 bakspullen:ei (5)
-kwark:creme fraiche
 
 naam:Boeuf Bourguignon
 vlees:stoofvlees
@@ -847,6 +853,7 @@ pasta:gezeefde tomaten
 naam:Timballo
 sla:spinazie
 kip:kip
+vega:kipstukjes
 pasta:rigata
 pasta:tomaat in blokjes (2)
 koeling:ricotta
@@ -1075,6 +1082,7 @@ mixen:Knor Burrito
 groente:paprika
 mixen:tortilla's
 kip:kip
+vega:kipstukjes
 kwark:creme fraiche
 
 naam:Courgettesoep
@@ -1104,6 +1112,7 @@ sla:sla
 groente:tomaat
 groente:ui
 bakspullen:ei
+koeling:geraspte kaas
 
 naam:Uiensoep met panpizza
 groente:ui
@@ -1171,6 +1180,7 @@ rijst:rijst
 
 naam:Risotto met kip
 kip:kip
+vega:kipstukjes
 sla:winterpeen
 groente:bleekselderij
 rijst:risottorijst
@@ -1228,6 +1238,7 @@ sla:wortel
 groente:brocolli, courgette
 pasta:pasta saus
 chips:noten
+koeling:geraspte kaas
 
 naam:Tortellini met groente en noten
 sla:verse tortellini
@@ -1235,6 +1246,7 @@ sla:wortel
 groente:brocolli
 pasta:pasta saus
 chips:noten
+koeling:geraspte kaas
 
 naam:Tortellini met courgette en noten
 sla:verse tortellini
@@ -1242,6 +1254,7 @@ sla:wortel, champignons
 groente:courgette
 pasta:pasta saus
 chips:noten
+koeling:geraspte kaas
 
 naam:Boboti
 mixen:bobotipak
@@ -1314,6 +1327,7 @@ mixen:pot tika massala
 rijst:rijst
 mixen:naans
 kip:kip
+vega:kipstukjes
 diepvries:boontjes
 
 naam:Kip Massala met witlof
@@ -1322,6 +1336,7 @@ rijst:rijst
 mixen:naans
 groente:witlof
 kip:kip
+vega:kipstukjes
 
 naam:Massala met groente
 mixen:pot tika massala
@@ -1381,6 +1396,7 @@ groente:ui
 
 naam:Kip met glibbers
 kip:kip
+vega:kipstukjes
 blik:glibbers
 groente:prei
 rijst:rijst
@@ -1511,6 +1527,7 @@ sauzen:calve mayonaise
 
 naam:Macaroni met kip
 kip:kip
+vega:kipstukjes
 groente:boontjes
 pasta:pasta saus
 pasta:macaroni
@@ -1533,7 +1550,7 @@ sla:wortels
 sla:champignons
 chips:walnoten
 pasta:macaroni
-geraspte kaas
+koeling:geraspte kaas
 
 naam:Wortelstamppot
 sla:wortels
@@ -1576,6 +1593,7 @@ vega:groenteburgers (griekse/toscaanse/spinazie)
 
 naam:Kip madras
 kip:kip
+vega:kipstukjes
 groente:witlof
 mixen:Knor Madras
 
@@ -1668,6 +1686,7 @@ diepvries:erwten (100 gr)
 groente:2 courgette
 pasta:tomatensaus
 kip:kip
+vega:kipstukjes
 
 naam:Ovenschotel met knolselderij en linzen
 groente:ui
@@ -1693,6 +1712,7 @@ rijst:rijst
 
 naam:Kantonese kip
 kip:kip
+vega:kipstukjes
 mixen:Kantonese kip pak
 sla:Oosterse roerbakgroente
 groente:komkommer
@@ -1739,6 +1759,7 @@ beleg:guacamole
 naam:Knorr risotto
 mixen:risotto pak
 kip:kip
+vega:kipstukjes
 sla:champignons
 groente:courgette
 
@@ -1773,6 +1794,7 @@ kwark:creme fraiche
 naam:Kip PiriPiri
 mixen:PiriPiri pak
 kip:kip
+vega:kipstukjes
 diepvries:sperziebonen
 groente:ui
 groente:1 rode paprika
@@ -1781,6 +1803,7 @@ groente:tomaten
 naam:Hokkien noedels
 mixen:Knorr Hokkien Noedels
 kip:kip
+vega:kipstukjes
 sla:wokgroente, tauge, champignons
 mixen:kroepoek
 
@@ -1788,6 +1811,8 @@ naam:Tabouleh (niet lekker)
 mixen:Knorr Tabouleh
 groente:komkommer, cherry tomaten, 2 courgettes
 kip:kip
+vega:kipstukjes
+vega:kipstukjes
 
 naam:Mediterrane pasta
 pasta:400 gram volkoren penne of spagetti
@@ -1863,6 +1888,7 @@ koeling:spekjes
 
 naam:Salade gekruide kip
 kip:kip
+vega:kipstukjes
 sla:sla
 groente:tomaatjes
 groente:rode ui
@@ -1880,6 +1906,7 @@ soep:bouillon
 naam:Linzen
 groente:courgette, aubergine
 kip:kip
+vega:kipstukjes
 wijn:ongezouten notenmix
 blik:linzen
 
