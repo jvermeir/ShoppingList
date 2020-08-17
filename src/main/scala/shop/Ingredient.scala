@@ -1,5 +1,7 @@
 package shop
 
+import scala.language.postfixOps
+
 /**
  * Ingredient represents stuff to buy in a store
  */
@@ -10,7 +12,7 @@ case class Ingredient(categoryName: String, name: String)(implicit val config: C
   /*
    * Sort ingredients by category, name
    */
-  def compare(that: Ingredient) = {
+  def compare(that: Ingredient): Int = {
     if (that != null) {
       category match {
         case that.category => name.compare(that.name)

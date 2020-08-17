@@ -95,7 +95,7 @@ import scala.annotation.tailrec
         lazy val cookBookStore = new FileBasedCookBookStore(cookbookFile)
       }
 
-      val cookbook = new CookBook
+      val cookbook = CookBook(FileCategoryConfig)
       val menuAndListOfExtras = readAndSplit(menuFile)
       val menu = Menu(menuAndListOfExtras._1, cookbook)
       val extras:List[Ingredient]=Ingredient.readFromText(menuAndListOfExtras._2)

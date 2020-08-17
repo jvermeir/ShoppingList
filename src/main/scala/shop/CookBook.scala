@@ -7,7 +7,7 @@ import scala.language.reflectiveCalls
 /**
  * Cook book represents a list of recipes
  */
-case class CookBook(implicit val config: Config) {
+case class CookBook(config: Config) {
   lazy val cookbookStore = config.cookBookStore
   cookbookStore.reload
 
