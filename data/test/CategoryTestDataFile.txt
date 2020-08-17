@@ -1,2 +1,1 @@
-schoonmaak:12345
 dranken:10

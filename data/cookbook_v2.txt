@@ -687,6 +687,12 @@ diepvries:erwten
 soep:chorizo
 rijst:risotto
 
+naam:Risotto met boontjes en champignons
+groente:boontjes, champignons
+pasta:bouillon
+pasta:gedroogde tomaten
+rijst:risotto
+
 naam:Cajun met vis
 vis:garnalen
 groente:ui
@@ -715,7 +721,7 @@ brood:Turks brood
 bakspullen:ei (6)
 groente:tomaat
 pasta:olijven
-koeling:geitenkaas
+koeling:geitenkaas, geraspte kaas
 beleg:hamreepjes
 
 naam:Tagliatelle met cashewnoten
@@ -1382,7 +1388,7 @@ naam:Beef Shanghai
 vlees:gehakt
 sla:tauge
 groente:prei
-mixen:mie
+mixen:mie, beef Shanghai pak
 
 naam:Torentje in het groen
 diepvries:erwten
