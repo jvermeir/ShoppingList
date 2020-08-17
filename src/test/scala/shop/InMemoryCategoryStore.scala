@@ -14,7 +14,7 @@ class InMemoryCategoryStore extends CategoryStore {
   override def save:Unit = {}
 }
 
-class InMemoryCookbookStore(implicit val config:Config) extends CookBookStore {
+class InMemoryCookbookStore()(implicit val config:Config) extends CookBookStore {
   override def reload: Unit = {
     loadFromText("""naam:R1
                    |		  dranken:d1
