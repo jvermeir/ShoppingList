@@ -41,7 +41,7 @@ trait CookBookStore {
     save
   }
 
-  def add(recipe: Recipe) {
+  def add(recipe: Recipe):Unit = {
     recipes += (recipe.name -> recipe)
     save
   }
@@ -54,7 +54,7 @@ trait CookBookStore {
   }
 
   def loadFromListOfRecipes(listOfRecipes: List[Recipe]): Map[String, Recipe] = {
-    recipes.retain(((k, v) => false))
+    recipes.filterInPlace(((k, v) => false))
     recipes ++= listOfRecipes map { case (recipe) => (recipe.name -> recipe) }
   }
 

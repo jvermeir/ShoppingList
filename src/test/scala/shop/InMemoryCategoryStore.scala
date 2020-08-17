@@ -5,7 +5,7 @@ package shop
  */
 class InMemoryCategoryStore extends CategoryStore {
   override def reload: Unit = {
-    categoryMap.retain(((k, v) => false))
+    categoryMap.filterInPlace(((k, v) => false))
     categoryMap ++= loadCategoriesFromAString("""schoonmaak:20
             |dranken:10
             |OneMore:123

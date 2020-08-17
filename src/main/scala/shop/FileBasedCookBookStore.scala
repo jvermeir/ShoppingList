@@ -10,7 +10,7 @@ class FileBasedCookBookStore(fileName: String)(implicit val config:Config) exten
   reload
 
   override def reload = {
-    recipes.retain(((k, v) => false))
+    recipes.filterInPlace(((k, v) => false))
     recipes ++= readFromFile
   }
 

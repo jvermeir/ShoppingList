@@ -57,7 +57,7 @@ trait CategoryStore {
     save
   }
 
-  def add(category: Category) {
+  def add(category: Category):Unit = {
     categoryMap += (category.name -> category)
     save
   }

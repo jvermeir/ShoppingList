@@ -7,7 +7,7 @@ case class Recipe(name: String, ingredients: List[Ingredient])(implicit val conf
   override def toString:String = {
     val result=new StringBuilder()
     result.append("name:").append(name).append("\n")
-    result.append( ("" /: ingredients) (_ + _.toString()+"\n"))
+    result.append(ingredients.foldLeft("")(_ + _.toString()+"\n"))
     result.toString()
   }
 }
