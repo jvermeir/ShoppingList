@@ -1,28 +1,28 @@
 package shop
 
 import org.junit.Assert._
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class IngredientTest extends Spec {
+class IngredientTest extends AnyFlatSpec {
 
   implicit object InMemoryCategoryConfig extends Config {
     lazy val cookBookStore = new InMemoryCookbookStore
     lazy val categoryStore = new InMemoryCategoryStore
   }
 
-  def `sort order of ingredients is according to categories`  {
+  "Ingredients" should "be sorted by according to categories" in {
     val bier = new Ingredient("dranken", "bier ")
     val zeep = new Ingredient("schoonmaak", "zeep")
     assertTrue(bier < zeep)
     assertFalse(zeep < bier)
   }
 
-  def `Null Category Is Less Than Any Other Category` {
+  it should "Null Category Is Less Than Any Other Category" in {
     val bier = new Ingredient("dranken", "bier")
     assert(bier > null)
   }
 
-  def `Create an ingredient using the companion object`: Unit = {
+  it should "Create an ingredient using the companion object" in {
     val bier = Ingredient.readFromLine("dranken:bier")
     assertNotNull(bier)
     intercept[PanicException] {
@@ -30,18 +30,16 @@ class IngredientTest extends Spec {
     }
   }
 
-  def `Equals Returns False If Ingredient name is different` = {
+  it should "Equals Returns False If Ingredient name is different" in {
     assertFalse(Ingredient("dranken", "d1").equals(Ingredient("dranken", "s1")))
   }
 
-  def `Equals Returns False If Ingredient category is different` = {
+  it should "Equals Returns False If Ingredient category is different" in {
     assertFalse(Ingredient("dranken", "d1").equals(Ingredient("schoonmaak", "d1")))
   }
 
-  def `Equals Returns True If Ingredients have the same category and name` = {
+  it should "Equals Returns True If Ingredients have the same category and name" in {
     assertTrue(Ingredient("dranken", "d1").equals(Ingredient("dranken", "d1")))
   }
 
 }
-
-

@@ -3,17 +3,17 @@ package shop
 import java.io.File
 
 import org.apache.commons.io.FileUtils
-import org.junit._
-import Assert._
-import org.scalatest.Spec
+import org.junit.Assert._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class FileBasedCategoryTest extends Spec {
+class FileBasedCategoryTest extends AnyFlatSpec {
 
   implicit object FileCategoryConfig extends Config {
     lazy val categoryDatabaseFileName = "data/test/CategoryTestDataFile.txt"
     lazy val categoryStore = new FileBasedCategoryStore(categoryDatabaseFileName)
     lazy val cookBookStore = new InMemoryCookbookStore
   }
+
   val DATAFILENAME = "./data/test/CategoryTestDataFile.txt"
 
   def reset: Unit = {
@@ -22,14 +22,14 @@ class FileBasedCategoryTest extends Spec {
     FileCategoryConfig.categoryStore.reload
   }
 
-  def `Category Database Can Be Loaded From File` {
+  "Categories " should "be defined in a file" in {
     reset
     val categories: Categories = new Categories
-    assertEquals(20,categories.getByName("schoonmaak").sequence)
-    assertEquals(10,categories.getByName("dranken").sequence)
+    assertEquals(20, categories.getByName("schoonmaak").sequence)
+    assertEquals(10, categories.getByName("dranken").sequence)
   }
 
-  def `A New Category Is Persisted In A DataFile` {
+  it should "Persist a new category" in {
     reset
     val categories: Categories = new Categories
     val contentsOfFileBeforeWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
@@ -39,15 +39,15 @@ class FileBasedCategoryTest extends Spec {
     assertEquals(3, contentsOfFileAfterWrite.size())
   }
 
-  def `Sequence Number Is Updated In File` {
+  it should "Update the sequence number in a file" in {
     reset
     val categories: Categories = new Categories
-    categories.update(Category("schoonmaak", 20),Category("schoonmaak", 12345))
+    categories.update(Category("schoonmaak", 20), Category("schoonmaak", 12345))
     val contentsOfFileAfterWrite = FileUtils.readFileToString(new File(DATAFILENAME), "UTF-8")
     assertTrue(contentsOfFileAfterWrite.contains("12345"))
   }
 
-  def `A Category Is Deleted From The DataFile` {
+  it should "delete a category from the DataFile" in {
     reset
     val categories: Categories = new Categories
     val category = categories.getByName("schoonmaak")
@@ -57,5 +57,4 @@ class FileBasedCategoryTest extends Spec {
     val contentsOfFileAfterWrite = FileUtils.readLines(new File(DATAFILENAME), "UTF-8")
     assertFalse(contentsOfFileAfterWrite.contains("schoonmaak"))
   }
-
 }
