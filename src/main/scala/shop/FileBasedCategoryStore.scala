@@ -18,7 +18,7 @@ class FileBasedCategoryStore(categoryDatabaseFileName:String) extends CategorySt
   // TODO: Is Map concurrent-proof?
   // TODO: find better way to add all elements of new map to old map.
   override def reload: Unit = {
-    categoryMap.retain(((k, v) => false))
+    categoryMap.filterInPlace(((k, v) => false))
     for (category <- loadCategoriesFromFile) { categoryMap += category }
   }
 

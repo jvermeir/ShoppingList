@@ -21,7 +21,7 @@ object Go {
     def prompt = "hello"
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val instanceOfClass = new ImplicitTest("class value")
     println (instanceOfClass)
   }
@@ -32,7 +32,7 @@ object Go2 {
     def prompt = "hello2"
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]): Unit = {
     val usingTwoParamApplyInObject = ImplicitTest("aha", "!")
     println(usingTwoParamApplyInObject)
     val usingThreeParamApplyInObject = ImplicitTest("aha", "!", "?")
@@ -55,7 +55,7 @@ object Go3 {
     }
   }
 
-  def main(args: Array[String]) {
+  def main(args: Array[String]):Unit = {
     val instanceOfClass = new ImplicitTest2("class value")
     println (instanceOfClass)
     ImplicitTest2("through apply", "2")
