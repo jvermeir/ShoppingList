@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 import org.joda.time.DateTime
 

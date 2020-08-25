@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 /**
  * Configurable objects for shop application

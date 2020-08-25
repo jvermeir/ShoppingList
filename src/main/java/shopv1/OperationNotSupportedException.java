@@ -1,4 +1,4 @@
-package shop;
+package shopv1;
 
 public class OperationNotSupportedException extends RuntimeException {
 

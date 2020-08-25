@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 import org.joda.time.DateTime
 import org.junit.Assert._
@@ -7,28 +7,30 @@ import org.scalatest.flatspec.AnyFlatSpec
 
 class ShoppingListItemTest extends AnyFlatSpec with BeforeAndAfterAll {
 
-  CategoryService.config("data/test/categoryDatabase.csv")
-  CookBookService.config("data/test/cookBookForReadFromFileScenario.txt")
+  implicit object InMemoryCategoryConfig extends Config {
+    lazy val cookBookStore = new InMemoryCookbookStore
+    lazy val categoryStore = new InMemoryCategoryStore
+  }
 
   "ShoppingListItems" should "be based on category" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val zeep = ShoppingListItem(Ingredient("schoonmaak", "zeep"), time)
-    val bier = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
+    val zeep = ShoppingListItem(new Ingredient("schoonmaak", "zeep"), time)
+    val bier = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
     assertTrue(zeep > bier)
   }
 
   it should "Sort by name if ingredients Belong To Same Category" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val duvel = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
-    val chouffe = ShoppingListItem(Ingredient("dranken", "Chouffe"), time)
+    val duvel = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(new Ingredient("dranken", "Chouffe"), time)
     assertTrue(duvel > chouffe)
   }
 
   it should "Sort a List" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val duvel = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
-    val chouffe = ShoppingListItem(Ingredient("dranken", "Chouffe"), time)
-    val karmeliet = ShoppingListItem(Ingredient("dranken", "Karmeliet"), time)
+    val duvel = ShoppingListItem(new Ingredient("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(new Ingredient("dranken", "Chouffe"), time)
+    val karmeliet = ShoppingListItem(new Ingredient("dranken", "Karmeliet"), time)
     val result = List(chouffe, duvel, karmeliet)
     val testList = List(duvel, karmeliet, chouffe).sortWith(_ < _)
     assertEquals(result, testList)
@@ -39,7 +41,7 @@ class ShoppingListItemTest extends AnyFlatSpec with BeforeAndAfterAll {
       	|zondag:R1
       	|maandag:R2
       |""".stripMargin
-    val menu = Menu(menuAsString: String)
+    val menu = Menu(menuAsString: String, new CookBook(InMemoryCategoryConfig))
     val list = new ShoppingList(menu, List())
     assertEquals(list.nameOfDayToDateMap("zondag"), new DateTime(2011, 10, 9, 0, 0))
   }

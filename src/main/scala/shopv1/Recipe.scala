@@ -1,9 +1,9 @@
-package shop
+package shopv1
 
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
-case class Recipe(name: String, ingredients: List[Ingredient]) {
+case class Recipe(name: String, ingredients: List[Ingredient])(implicit val config: Config) {
   override def toString:String = {
     val result=new StringBuilder()
     result.append("name:").append(name).append("\n")
@@ -11,8 +11,6 @@ case class Recipe(name: String, ingredients: List[Ingredient]) {
     result.toString()
   }
 }
-
-object DummyRecipe extends Recipe("dummy", List()) {}
 
 object Recipe {
   /*
@@ -24,13 +22,14 @@ object Recipe {
    *    <category>:<name>
    * where <category> refers to some label that makes sense to locate the ingredient in a shop and name is the name of the ingredient.
    */
-  def apply(recipeAsText: String): Recipe = {
+  // TODO: do we need the implicit here?
+  def apply(recipeAsText: String)(implicit config: Config): Recipe = {
     val receptAsLinesOfText = recipeAsText.split("\n").toList
     apply(receptAsLinesOfText)
   }
   
   /* Create a recipe from a list of strings. See comment for apply(String). */
-def apply(recipeAsListOfLines: List[String]): Recipe = {
+  def apply(recipeAsListOfLines: List[String])(implicit config: Config): Recipe = {
     val name = recipeAsListOfLines(0).split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
     val ingredients = for (ingredientLine <- ingredientLines) yield (Ingredient.readFromLine(ingredientLine))
@@ -49,4 +48,5 @@ def apply(recipeAsListOfLines: List[String]): Recipe = {
   def ingredientIsNotEmpty(ingredient: Ingredient): Boolean = {
     ingredient != null && ingredient.name.length > 0 
   }
+
 }

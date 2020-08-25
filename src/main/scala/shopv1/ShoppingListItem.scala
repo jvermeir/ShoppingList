@@ -1,16 +1,15 @@
-package shop
+package shopv1
 
 /**
  * A ShoppingListItem is a Ingredient extended with date it will be used on
  */
 import org.joda.time.DateTime
 import org.joda.time.format._
-import shopv1.PanicException
 
 case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Ordered[ShoppingListItem] {
   if (ingredient == null) throw new PanicException("Ingredient was null")
-  def name: String = ingredient.name
-  def category: Category = ingredient.category
+  def name = ingredient.name
+  def category = ingredient.category
 
   /*
    * If the date doesn't really matter it is filled with Jan 1st 1970. 
@@ -21,21 +20,21 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
   /*
    * Sort shoppingListItems by Ingredient and date
    */
-  def compare(that: ShoppingListItem): Int = {
+  def compare(that: ShoppingListItem) = {
     ingredient match {
       case that.ingredient => date.compareTo(that.date)
       case null => -1
-      case _ if that != null => this.ingredient.compare(that.ingredient)
+      case _ if (that != null)=> this.ingredient.compare(that.ingredient)
       case _ => -1
     }
   }
 
-  def debugToString: String = s"[$name,$category,$date]"
+  def debugToString: String = {
+    "[" + name + "," + category + "," + date + "]"
+  }
 
   override def toString: String = {
-    if (category.name == "groente") {
-      name + "(" + printDate(date) + ")"
-    }
+    if (category.name == "groente") name + "(" + printDate(date) + ")"
     else name
   }
 

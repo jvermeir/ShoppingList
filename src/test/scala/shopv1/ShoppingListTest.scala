@@ -1,15 +1,18 @@
-package shop
+package shopv1
 
 import org.joda.time.DateTime
 import org.scalatest.GivenWhenThen
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
-import shop.Main.split
 
 class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
 
-  CategoryService.config("data/test/categoryDatabase.csv")
-  CookBookService.config("data/test/cookBookForReadFromFileScenario.txt")
+  implicit object FileCategoryConfig extends Config {
+    lazy val categoryStore = new FileBasedCategoryStore("data/test/categoryDatabase.csv")
+    lazy val cookBookStore = new CookbookStoreForShoppingListTest
+  }
+
+  val cookbook = CookBook(FileCategoryConfig)
 
   "Shoppinglist" should "parse a list of groceries per recipe from a text file" in {
     Given("A list of ingredients as strings for the witlof recipe")
@@ -25,11 +28,11 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
     val witlofRecipe = Recipe(witlofIngredientsAsText)
     Then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
     val listOfExpectedIngredients = List(
-      Ingredient("zuivel", "geraspte kaas"),
-      Ingredient("vlees", "kipfilet plakjes"),
-      Ingredient("groente", "witlof"),
-      Ingredient("pasta", "gezeefde tomaten"),
-      Ingredient("rijst", "rijst"))
+      new Ingredient("zuivel", "geraspte kaas"),
+      new Ingredient("vlees", "kipfilet plakjes"),
+      new Ingredient("groente", "witlof"),
+      new Ingredient("pasta", "gezeefde tomaten"),
+      new Ingredient("rijst", "rijst"))
     val expectedWitlofRecipe = new Recipe("Witlof met kip", listOfExpectedIngredients)
     expectedWitlofRecipe mustBe witlofRecipe
   }
@@ -42,28 +45,28 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
       	zondag:Nasi
         """
     When("a menu is generated")
-    val menu = Menu(menuAsString)
+    print (cookbook);
+    val menu = Menu(menuAsString, cookbook)
     val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
     val expectedListOfIngredients = List(
-      ShoppingListItem(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
+      ShoppingListItem(new Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(new Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(new Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(new Ingredient("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(new Ingredient("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(new Ingredient("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(new Ingredient("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
     val expectedIngredientsSortedByCategory = expectedListOfIngredients.sortWith(_ < _)
-    val aap = shoppingList.shoppingListItemsSortedByCategory
-    expectedIngredientsSortedByCategory mustBe shoppingList.shoppingListItemsSortedByCategory
+    expectedListOfIngredients mustBe shoppingList.shoppingListItemsSortedByCategory
   }
 
   it should "A menu with witlof on Sunday and Nasi on Monday results in a list of groceries" in {
@@ -74,7 +77,7 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
       	maandag:Nasi
         """
     When("a menu is generated")
-    val menu = Menu(menuAsString)
+    val menu = Menu(menuAsString, cookbook)
     val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("a shopping list is produced")
@@ -104,7 +107,7 @@ zilveruitjes"""
       	zondag:Nasi
         """
     When("a menu is generated")
-    val menu = Menu(menuAsString)
+    val menu = Menu(menuAsString, cookbook)
     val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("and a shopping list is printed")
@@ -164,7 +167,7 @@ olie:zilveruitjes
       	zaterdag:Witlof met kip
       	zaterdag:Nasi
         """
-    val menu = Menu(menuAsString)
+    val menu = Menu(menuAsString, cookbook)
     When("a shoppinglist is generated")
     val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
@@ -228,11 +231,10 @@ olie:zilveruitjes
       	zeep:vaatwasmiddel
         """
     When("a shoppinglist is generated")
-    val menuAndListOfExtras = split(menuAsString)
-    val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val menuAndList = ShoppingList.split(menuAsString)
+    val menu = Menu(menuAndList._1, cookbook)
+    val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
     val shoppingList = new ShoppingList(menu, extras)
-    val theList = shoppingList.printShoppinglistForUseWhileShopping
     Then("the list contains witlof and the two extra's")
     val expectedShoppingList =
       """8 zaterdag:dish1
@@ -259,9 +261,9 @@ groente:witlof
            zondag:dish2
         """
     When("a shoppinglist is generated")
-    val menuAndListOfExtras = split(menuAsString)
-    val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val menuAndList = ShoppingList.split(menuAsString)
+    val menu = Menu(menuAndList._1, cookbook)
+    val extras: List[Ingredient] = Ingredient.readFromText(menuAndList._2)
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list contains two recipes")
     val expectedShoppingList =
@@ -290,9 +292,8 @@ groente:appels
       	zaterdag:Nasi
         """
     When("a menu is generated")
-    val menuAndListOfExtras = split(menuAsString)
-    val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val menu = Menu(menuAsString, cookbook)
+    val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("and a shopping list is printed")
     val expectedShoppingList =
@@ -343,4 +344,38 @@ olie:zilveruitjes
 
     expectedShoppingList mustBe shoppingList.printShoppinglistForUseWhileShopping
   }
+}
+
+class CookbookStoreForShoppingListTest(implicit val config: Config) extends CookBookStore {
+  override def reload: Unit = {
+    loadFromText(
+      """naam:Witlof met kip
+		  vlees:kipfilet plakjes
+		  pasta:gezeefde tomaten
+		  rijst:rijst
+		  diepvries:
+		  groente:witlof
+		  zuivel:geraspte kaas
+
+		  naam:Nasi
+		  groente:nasi pakket
+		  vlees:kipfilet
+		  sauzen:sate saus
+		  rijst:rijst
+		  rijst:kroepoek
+		  olie:augurken
+		  olie:zilveruitjes
+		  zuivel:ei
+		  zuivel:vloeibare bakboter
+
+      naam:dish1
+      groente:witlof
+
+      naam:dish2
+      groente:appels
+      """.stripMargin)
+  }
+
+  override
+  def save: Unit = {}
 }

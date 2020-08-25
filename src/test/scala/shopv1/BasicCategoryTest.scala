@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 import org.junit.Assert._
 import org.scalatest.GivenWhenThen

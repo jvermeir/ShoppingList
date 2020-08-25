@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 import org.apache.commons.io.FileUtils
 import java.io.File
@@ -6,7 +6,7 @@ import scala.collection.mutable.Map
 /**
  * A FileBasedCategoryStore loads its set of Categories from a file.
  */
-class FileBasedCategoryStore(categoryDatabaseFileName:String) extends CategoryStore {
+class FileBasedCategoryStore (categoryDatabaseFileName:String) extends CategoryStore {
 
   reload
 

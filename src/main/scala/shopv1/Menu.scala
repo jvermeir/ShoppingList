@@ -1,26 +1,24 @@
-package shop
+package shopv1
 
 import java.io.File
 import java.util.Locale
 
 import org.apache.commons.io.FileUtils
-import org.joda.time.format._
 import org.joda.time.DateTime
-
-case class MenuItem (date:DateTime, dayOfWeek:String, recipe:String)
+import org.joda.time.format._
 
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
-class Menu(val menuItems: List[MenuItem], val dateOfSaturday: DateTime) {
+class Menu(val menuItems: List[MenuItem], val cookbook: CookBook, val dateOfSaturday: DateTime) {
 
-  val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, CookBookService.store.getRecipeByName(menuItem.recipe))
+  val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, cookbook.getRecipeByName(menuItem.recipe))
 
   def printMenu(nameOfDayToDateMap: Map[String, DateTime]): String = {
       menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).dayOfMonth.get + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
   }
 
-  def printMenuForShoppingList: String = {
+  def printMenuForShoppingList = {
     recipes.map {case (name,recipe) => name + ":" + recipe.toString } mkString "\n"
   }
 
@@ -40,16 +38,16 @@ object Menu {
    * and recipe refers to a recipe name as specified in a Cook book.
    * Following a line containing the text 'extra' a list of groceries can be added, just like the ingredients in a cook book.
    */
-  def apply(menuAsString: String): Menu = {
+  def apply(menuAsString: String, cookbook: CookBook): Menu = {
     val menuAsListOfStrings = menuAsString.split("\n").toList
-    val dateOfFirstDay = parseDateForFirstDay(menuAsListOfStrings.head.split(":")(1).trim)
+    val dateOfFirstDay = parseDateForFirstDay(menuAsListOfStrings(0).split(":")(1).trim)
     val menuAsStringsWithoutHeaderLine = menuAsListOfStrings.drop(1)
     val menu: List[MenuItem] = menuAsStringsWithoutHeaderLine map {
       createMenuLineFromTextLine(_, dateOfFirstDay)
     } filter {
       _ != null
     }
-    new Menu(menu, dateOfFirstDay)
+    new Menu(menu, cookbook, dateOfFirstDay)
   }
 
   def getNameOfDayToDateMap (dateOfFirstDay:DateTime): Map[String, DateTime] = {
@@ -75,11 +73,13 @@ object Menu {
     text.length() > 0 && text.indexOf(":") > 0 && !text.endsWith(":-")
   }
 
-  def readFromFile(fileName: String): Menu = readFromFile(new File(fileName))
+  def readFromFile(fileName: String, cookBook: CookBook): Menu = {
+    readFromFile(new File(fileName), cookBook)
+  }
 
-  def readFromFile(file: File): Menu = {
+  def readFromFile(file: File, cookBook: CookBook): Menu = {
     val menuAsText = FileUtils.readFileToString(file, "UTF-8")
-    apply(menuAsText)
+    apply(menuAsText, cookBook)
   }
 
   def parseDateForFirstDay(saturday: String): DateTime = {

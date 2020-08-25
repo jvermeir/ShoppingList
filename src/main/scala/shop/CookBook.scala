@@ -1,62 +1,60 @@
 package shop
 
-import scala.collection.mutable.Map
-import scala.language.postfixOps
-import scala.language.reflectiveCalls
+import java.io.File
 
-/**
- * Cook book represents a list of recipes
- */
-case class CookBook(config: Config) {
-  lazy val cookbookStore = config.cookBookStore
-  cookbookStore.reload
+import org.apache.commons.io.FileUtils
 
-  val recipes: Map[String, Recipe] = cookbookStore.recipes
+import scala.collection.mutable
 
-  def getRecipeByName(name: String): Recipe = cookbookStore.getRecipeByName(name)
-  def delete(recipeToDelete: Recipe) = cookbookStore.delete(recipeToDelete)
-  def update(recipe: Recipe, newRecipe: Recipe) = cookbookStore.update(recipe, newRecipe)
-  def add(recipe: Recipe) = cookbookStore.add(recipe)
+case class CookBook(recipes: mutable.Map[String, Recipe])
+
+object CookBookService {
+  var store:CookBookStore = new CookBookStore
+  def config(myStore:CookBookStore): Unit = {
+    store = myStore
+    store.load()
+  }
+
+  def config(cookBookFileName:String):Unit = {
+    store.load(cookBookFileName)
+  }
+
+  def loadRecipes():Unit = store.load()
+  def getRecipeByName(name: String): Recipe = store.getRecipeByName(name)
 }
 
-trait CookBookStore {
-  lazy val recipes: Map[String, Recipe] = Map()
+class CookBookStore {
+  val cookBookFileName ="data/cookbook_v2.txt"
 
-  def save:Unit
-  def reload: Unit
+  lazy val recipes: mutable.Map[String, Recipe] = mutable.Map()
 
-  def getRecipeByName(name: String): Recipe = {
-    val recipe = recipes.get(name)
-    recipe.map { recipe => recipe } getOrElse (throw new PanicException("Recipe named " + name + " not found"))
+  def load():Unit = load(cookBookFileName)
+
+  def load(cookBookFileName:String):Unit = {
+    println(s"load cookbook from $cookBookFileName")
+    readFromFile(cookBookFileName)
   }
 
-  def delete(recipeToDelete: Recipe) = {
-    recipes.remove(recipeToDelete.name)
-    save
+  def readFromFile(fileName:String): mutable.Map[String, Recipe] = {
+    val cookBookAsText = FileUtils.readFileToString(new File(fileName), "UTF-8")
+    loadFromText(cookBookAsText)
   }
 
-  def update(recipe: Recipe, newRecipe: Recipe) = {
-    recipes.remove(recipe.name)
-    recipes += (newRecipe.name -> newRecipe)
-    save
-  }
-
-  def add(recipe: Recipe):Unit = {
-    recipes += (recipe.name -> recipe)
-    save
-  }
-
-  def loadFromText(cookBookAsText: String)(implicit config:Config): Map[String, Recipe] = {
+  def loadFromText(cookBookAsText: String): mutable.Map[String, Recipe] = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = cleanedUpText.split("\n\n")
     val listOfRecipes = cookBookSplitIntoRecipes map { Recipe(_) }
     loadFromListOfRecipes(listOfRecipes.toList)
   }
 
-  def loadFromListOfRecipes(listOfRecipes: List[Recipe]): Map[String, Recipe] = {
-    recipes.filterInPlace(((k, v) => false))
-    recipes ++= listOfRecipes map { case (recipe) => (recipe.name -> recipe) }
+  def loadFromListOfRecipes(listOfRecipes: List[Recipe]): mutable.Map[String, Recipe] = {
+    recipes.filterInPlace((_, _) => false)
+    recipes ++= listOfRecipes map { recipe => recipe.name -> recipe }
   }
+
+  // TODO: refactor to use Options?
+  def getRecipeByName(recipeName:String): Recipe =
+    recipes.getOrElse(recipeName, DummyRecipe)
 
   def cleanUpCookBookText(cookBookAsString: String): String =
     cookBookAsString.replaceAll("\t", "")
@@ -64,4 +62,5 @@ trait CookBookStore {
       .replaceAll("(?m)^[ ]*", "")
       .replaceAll("(?m)[ ]*$", "")
       .replaceAll("(?m)\n\n\n*", "\n\n")
+
 }

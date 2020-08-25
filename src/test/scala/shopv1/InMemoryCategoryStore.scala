@@ -1,4 +1,4 @@
-package shop
+package shopv1
 
 /**
  * In memory stores for use in test cases.

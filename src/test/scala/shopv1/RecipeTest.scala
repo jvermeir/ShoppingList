@@ -1,12 +1,14 @@
-package shop
+package shopv1
 
 import org.junit.Assert._
 import org.scalatest.flatspec.AnyFlatSpec
 
 class RecipeTest extends AnyFlatSpec {
 
-  CategoryService.config("data/test/categoryDatabase.csv")
-  CookBookService.config("data/test/cookBookForReadFromFileScenario.txt")
+  implicit object InMemoryCategoryConfig extends Config {
+    lazy val cookBookStore = new InMemoryCookbookStore
+    lazy val categoryStore = new InMemoryCategoryStore
+  }
 
   "Recipe" should "be loaded from a string" in {
     val recipeText =
@@ -36,7 +38,9 @@ class RecipeTest extends AnyFlatSpec {
         |ingredientCategoryDoesNotExist:d1
         |schoonmaak:d2
       """.stripMargin
+    intercept[PanicException] {
       val recipe = Recipe(recipeText)
+    }
   }
 
   it should "Equals Returns False If Recipe name is different" in {

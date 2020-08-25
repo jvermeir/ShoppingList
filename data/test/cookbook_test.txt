@@ -1,0 +1,8 @@
+naam:Lasagne met gehakt
+vlees:gehakt
+pasta:gezeefde tomaten
+pasta:lasagnebladen
+diepvries:spinazie
+koeling:geraspte kaas
+sla:sla
+groente:tomaat
