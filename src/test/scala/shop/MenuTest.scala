@@ -12,21 +12,21 @@ class MenuTest extends AnyFlatSpec {
   "A menu" should "be loaded from text" in {
     val menu = Menu.apply(
       """Zaterdag valt op:05112011
-        |zaterdag:R1
-        |zondag:R2
+        |zaterdag:dish1
+        |zondag:dish2
         | """.stripMargin)
     assertEquals(2, menu.menuItems.length)
     val recipeDay1 = menu.menuItems.head
-    assertEquals("R1", recipeDay1.recipe)
+    assertEquals("dish1", recipeDay1.recipe)
     val recipeDay2 = menu.menuItems(1)
-    assertEquals("R2", recipeDay2.recipe)
+    assertEquals("dish2", recipeDay2.recipe)
   }
 
   it should "A menu can be read from a file" in {
     val menu = Menu.readFromFile("data/test/menuForReadFromFileScenario.txt")
     assertEquals(2, menu.menuItems.length)
-    assertEquals("R1", menu.recipes.head._2.name)
-    assertEquals("R2", menu.recipes(1)._2.name)
+    val expectedRecipes = List("dish1", "dish2")
+    assertEquals(expectedRecipes, menu.recipes.map(recipe => recipe._2.name))
   }
 
   it should "Date for R1 is 01022014 and date for R2 is 02022014" in {

@@ -1,9 +1,6 @@
-Vis en papillotte
 Witloftaart
-Boerenpannetje
 Boerenomelet
 Moussaka
-Kip met glibbers
 Geroosterde groente met falafel2
 Witlof met kip
 Paksoi met mie
@@ -45,6 +42,9 @@ Schnitzels
 Quessadilas
 Kip Massala
 Spaghetti met gehakt
+Vis en papillotte
+Boerenpannetje
+Kip met glibbers
 
 
 

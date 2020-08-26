@@ -23,7 +23,7 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
 //    that != null && this.toString == that.toString
 //  }
 //
-//  override def toString: String = s"${category.name}:${name}"
+  override def toString: String = s"${category.name}:${name}"
 }
 
 object Ingredient {

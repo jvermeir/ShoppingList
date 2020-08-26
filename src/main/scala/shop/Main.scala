@@ -18,8 +18,8 @@ object Main {
     val cookbookFile = args(0)
     val menuFile: String = args(1)
     val categoryFile = "data/categoryDatabase_v2.csv"
-    CookBookService.config(cookbookFile)
     CategoryService.config(categoryFile)
+    CookBookService.config(cookbookFile)
     //TODO: move to shoppinglist
     val menuAndListOfExtras = readAndSplit(menuFile)
     val menu = Menu(menuAndListOfExtras._1)

@@ -41,3 +41,4 @@ enablePlugins(ScalatraPlugin)
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
+Test / parallelExecution := false

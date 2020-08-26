@@ -1,14 +1,14 @@
-naam:R1
+    naam:Witlof met kip
 		  vlees:kipfilet plakjes
 		  pasta:gezeefde tomaten
 		  rijst:rijst
 		  diepvries:
 		  groente:witlof
 		  zuivel:geraspte kaas
-		  
-		  
-		  
-		  naam:R2
+
+
+
+		  naam:Nasi
 		  groente:nasi pakket
 		  vlees:kipfilet
 		  sauzen:sate saus
@@ -18,4 +18,9 @@ naam:R1
 		  olie:zilveruitjes
 		  zuivel:ei
 		  zuivel:vloeibare bakboter
-		  
+
+		  naam:dish1
+		  groente:witlof
+
+		  name:dish2
+          groente:appels
