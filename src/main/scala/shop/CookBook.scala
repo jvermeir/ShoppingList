@@ -31,7 +31,6 @@ class CookBookStore {
   def load():Unit = load(cookBookFileName)
 
   def load(cookBookFileName:String):Unit = {
-    println(s"load cookbook from $cookBookFileName")
     readFromFile(cookBookFileName)
   }
 

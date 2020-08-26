@@ -1,8 +1,8 @@
 import sbt.Append.appendSeq
 
-version := "1.5"
+version := "1.6"
 
-mainClass in assembly := Some("shop.ShoppingList")
+mainClass in assembly := Some("shop.Main")
 
 organization := "com.example"
 name := "shoppinglist"

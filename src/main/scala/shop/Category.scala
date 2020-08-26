@@ -42,7 +42,6 @@ class CategoryStore {
   def load(): Unit = load(categoryFileName)
 
   def load(categoryFileName:String): Unit = {
-    println(s"load categories from $categoryFileName")
     readFromFile(categoryFileName)
   }
 
