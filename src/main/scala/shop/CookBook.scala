@@ -2,13 +2,12 @@ package shop
 
 import java.io.File
 
-import data.Recipe
 import org.apache.commons.io.FileUtils
 import shop.Recipe.DummyRecipe
 
 import scala.collection.mutable
 
-//case class CookBook(recipes: mutable.Map[String, Recipe])
+case class CookBook(recipes: mutable.Map[String, Recipe])
 
 object CookBookService {
   var store:CookBookStore = new CookBookStore

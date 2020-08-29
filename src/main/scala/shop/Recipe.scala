@@ -1,19 +1,16 @@
 package shop
 
-import data.{Ingredient, Recipe}
-
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
-//final case class Recipe(name: String, ingredients: List[Ingredient])
-  //final case class Recipe(name: String, ingredients: List[Ingredient]) {
-  //  override def toString:String = {
-  //    val result=new StringBuilder()
-//    result.append("name:").append(name).append("\n")
-  //    result.append(ingredients.foldLeft("")(_ + _.toString()+"\n"))
-  //    result.toString()
-//  }
-  //}
+final case class Recipe(name: String, ingredients: List[Ingredient]) {
+  override def toString: String = {
+    val result = new StringBuilder()
+    result.append("name:").append(name).append("\n")
+    result.append(ingredients.foldLeft("")(_ + _.toString() + "\n"))
+    result.toString()
+  }
+}
 
 object Recipe {
 //  implicit val formats = jsonFormat2(Recipe.apply)
@@ -36,7 +33,7 @@ def apply(recipeAsListOfLines: List[String]): Recipe = {
     val name = recipeAsListOfLines.head.split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
     val ingredients = for (ingredientLine <- ingredientLines) yield (shop.Ingredient.readFromLine(ingredientLine))
-    new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
+    Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
   }
 
   def isValidIngredientLine(ingredient: Ingredient): Boolean = {
@@ -52,5 +49,5 @@ def apply(recipeAsListOfLines: List[String]): Recipe = {
     ingredient != null && ingredient.name.length > 0 
   }
 
-  val DummyRecipe = data.Recipe("dummy", List())
+  val DummyRecipe: Recipe = Recipe("dummy", List())
 }

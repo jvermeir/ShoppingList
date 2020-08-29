@@ -7,8 +7,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
-import data.{Category, Ingredient, Recipe}
-import shop.{CategoryService, CookBookService}
+import shop.Main.readAndSplit
+import shop._
 import spray.json.DefaultJsonProtocol
 
 import scala.util.{Failure, Success}
@@ -34,8 +34,11 @@ object WebServer extends DefaultJsonProtocol {
   val categoryFile = "data/categoryDatabase_v2.csv"
   CategoryService.config(categoryFile)
   CookBookService.config(cookbookFile)
+  val menuAndListOfExtras = readAndSplit("menus/2808.txt")
+  val menu = Menu(menuAndListOfExtras._1)
 
   def main(args: Array[String]): Unit = {
+
 
     val rootBehavior = Behaviors.setup[Nothing] { context =>
 
@@ -44,19 +47,23 @@ object WebServer extends DefaultJsonProtocol {
       implicit val recipeJsonFormat = jsonFormat2(Recipe.apply)
 
       val route =
-      path("category" / Segment) { name =>
-        get {
-          complete(CategoryService.getCategoryByName(name))
+        path("category" / Segment) { name =>
+          get {
+            complete(CategoryService.getCategoryByName(name))
+          }
+        } ~ path("categories") {
+          get {
+            complete(CategoryService.allCategories().values)
+          }
+        } ~ path("recipe" / Segment) { name =>
+          get {
+            complete(CookBookService.getRecipeByName(name))
+          }
+        } ~ path("menu") {
+          get {
+            complete(menu.printMenuForShoppingList)
+          }
         }
-      } ~ path("categories") {
-        get {
-          complete(CategoryService.getAllCategories().values)
-        }
-      } ~ path("recipe"/ Segment) { name =>
-        get {
-          complete(CookBookService.getRecipeByName(name))
-        }
-      }
 
       startHttpServer(route, context.system)
 

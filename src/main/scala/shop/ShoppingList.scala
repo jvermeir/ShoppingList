@@ -1,6 +1,5 @@
 package shop
 
-import data.{Category, Ingredient, Recipe}
 import org.joda.time.DateTime
 
 import scala.annotation.tailrec
@@ -10,12 +9,12 @@ import scala.annotation.tailrec
  */
 class ShoppingList(menu: Menu, extras: List[Ingredient]) {
   val nameOfDayToDateMap: Map[String, DateTime] = Menu.getNameOfDayToDateMap(menu.dateOfSaturday)
-  val shoppingListItemsSortedByCategory = getShoppingListItemsSortedByCategory
+  val shoppingListItemsSortedByCategory: List[ShoppingListItem] = getShoppingListItemsSortedByCategory
 
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
   def getShoppingListItemsWithDateAdded(recipe: Recipe, date: DateTime): List[ShoppingListItem] = {
-    recipe.ingredients map (ingredient => new ShoppingListItem(ingredient, date))
-    for (ingredient <- recipe.ingredients) yield new ShoppingListItem(ingredient, date)
+    recipe.ingredients map (ingredient => ShoppingListItem(ingredient, date))
+    for (ingredient <- recipe.ingredients) yield ShoppingListItem(ingredient, date)
   }
 
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = (itemsFromMenu ::: itemsFromExtras).sortWith(_ < _)
@@ -26,7 +25,7 @@ class ShoppingList(menu: Menu, extras: List[Ingredient]) {
   }
 
   def itemsFromExtras: List[ShoppingListItem] = {
-    for (ingredient <- extras; if (ingredient != null)) yield new ShoppingListItem(ingredient)
+    for (ingredient <- extras; if ingredient != null) yield new ShoppingListItem(ingredient)
   }
 
   def findDate(nameOfDay: String): DateTime = {

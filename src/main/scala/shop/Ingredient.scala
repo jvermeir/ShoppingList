@@ -1,34 +1,28 @@
 package shop
 
-import data.{Category, Ingredient}
-
 import scala.language.postfixOps
 
 /**
  * Ingredient represents stuff to buy in a store
  */
-////case class Ingredient(category: Category, name: String) extends Ordered[Ingredient] {
-//
-//  /*
-//   * Sort ingredients by category, name
-//   */
-//  def compare(that: Ingredient): Int = {
-//    if (that != null) {
-//      category match {
-//        case that.category => name.compare(that.name)
-//        case _ => category.compare(that.category)
-//      }
-//    } else 1
-//  }
-//
-////  override def equals(that: Any): Boolean = {
-////    that != null && this.toString == that.toString
-////  }
-////
-//  override def toString: String = s"${category.name}:${name}"
-//}
+case class Ingredient(category: Category, name: String) extends Ordered[Ingredient] {
 
-object Ingredient {
+  /*
+   * Sort ingredients by category, name
+   */
+  def compare(that: Ingredient): Int = {
+    if (that != null) {
+      category match {
+        case that.category => name.compare(that.name)
+        case _ => category.compare(that.category)
+      }
+    } else 1
+  }
+
+  override def toString: String = s"${category.name}:$name"
+}
+
+object  Ingredient {
 
   /*
    * Create an ingredient from a <category>:<name> pair.
@@ -36,17 +30,17 @@ object Ingredient {
   def readFromLine(ingredientLine: String): Ingredient = {
     val ingredient = ingredientLine.split(":")
     ingredient.length match {
-      case 2 => Ingredient.apply(ingredient(0).trim(), ingredient(1).trim())
+      case 2 => Ingredient.applyFromText(ingredient(0).trim(), ingredient(1).trim())
       case _ => null
     }
   }
 
-  def apply(categoryName:String, name:String): Ingredient = {
+  def applyFromText(categoryName:String, name:String): Ingredient = {
     val category: Category = CategoryService.getCategoryByName(categoryName)
-    data.Ingredient(category, name)
+    Ingredient(category, name)
   }
 
   def readFromText(ingredientsAsText: String): List[Ingredient] = {
-    ingredientsAsText.split("\n") map (readFromLine(_)) toList
+    ingredientsAsText.split("\n") map readFromLine toList
   }
 }

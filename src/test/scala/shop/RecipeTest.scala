@@ -1,6 +1,5 @@
 package shop
 
-import data.Recipe
 import org.junit.Assert._
 import org.scalatest.flatspec.AnyFlatSpec
 
@@ -43,20 +42,20 @@ class RecipeTest extends AnyFlatSpec {
   }
 
   it should "Equals Returns False If Recipe name is different" in {
-    val r1 = Recipe("R1", List(Ingredient("dranken", "d1"), Ingredient("schoonmaak", "s1")))
-    val r2 = Recipe("R2", List(Ingredient("dranken", "d1"), Ingredient("schoonmaak", "s1")))
+    val r1 = Recipe("R1", List(Ingredient.applyFromText("dranken", "d1"), Ingredient.applyFromText("schoonmaak", "s1")))
+    val r2 = Recipe("R2", List(Ingredient.applyFromText("dranken", "d1"), Ingredient.applyFromText("schoonmaak", "s1")))
     assertFalse(r1.equals(r2))
   }
 
   it should "Equals Returns False If Recipe ingredients are different" in {
-    val r1 = Recipe("R1", List(Ingredient("dranken", "d1"), Ingredient("schoonmaak", "s1")))
-    val r2 = Recipe("R1", List(Ingredient("dranken", "d2"), Ingredient("schoonmaak", "s2")))
+    val r1 = Recipe("R1", List(Ingredient.applyFromText("dranken", "d1"), Ingredient.applyFromText("schoonmaak", "s1")))
+    val r2 = Recipe("R1", List(Ingredient.applyFromText("dranken", "d2"), Ingredient.applyFromText("schoonmaak", "s2")))
     assertFalse(r1.equals(r2))
   }
 
   it should "Equals Returns True If Recipes are the same" in {
-    val r1 = Recipe("R1", List(Ingredient("dranken", "d1"), Ingredient("schoonmaak", "s1")))
-    val r2 = Recipe("R1", List(Ingredient("dranken", "d1"), Ingredient("schoonmaak", "s1")))
+    val r1 = Recipe("R1", List(Ingredient.applyFromText("dranken", "d1"), Ingredient.applyFromText("schoonmaak", "s1")))
+    val r2 = Recipe("R1", List(Ingredient.applyFromText("dranken", "d1"), Ingredient.applyFromText("schoonmaak", "s1")))
     assertTrue(r1.equals(r2))
   }
 

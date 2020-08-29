@@ -2,7 +2,6 @@ package shop
 
 import java.io.File
 
-import data.Ingredient
 import org.apache.commons.io.FileUtils
 
 object Main {
