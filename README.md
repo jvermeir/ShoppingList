@@ -26,9 +26,28 @@ Still, the goal to learn always have a strong influence. This will lead to solut
 
 # Run
 
+## Commandline utility
+
 ```./bin/r.sh <DDMM>```
 
 example
 
 ```./bin/r.sh 1301``` takes a menu file named 1301.txt that is stored in ./menus, creates a shopping list named 1301.txt in
 the root folder of this project and opens this file in your default editor.
+
+## Web service
+
+build as described in `package`
+
+Start rest.WebServer
+
+    java -cp ./target/scala-2.13/shoppinglist-assembly-1.7-snapshot.jar rest.WebServer
+    
+This service reads a cookbook and a category database from `data/cookbook_v2.txt` and `data/categoryDatabase_v2.csv`.    
+    
+on command line:
+
+    curl -v localhost:8080/category/vega
+    curl -v localhost:8080/recipe/Lasagne%20%met%20%gehakt
+    curl -v localhost:8080/categories
+    

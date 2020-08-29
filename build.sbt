@@ -18,10 +18,6 @@ lazy val akkaVersion    = "2.6.8"
 
 libraryDependencies ++=
   Seq(
-    "org.scalatest" %% "scalatest" % "3.2.0" % "test",
-    "org.scalactic" %% "scalactic" % "3.2.0",
-    "junit" % "junit" % "4.12" % "test",
-
     "joda-time" % "joda-time" % "2.9.4",
     "org.joda" % "joda-convert" % "1.8",
     "org.apache.commons" % "commons-pool2" % "2.4.2",
@@ -30,15 +26,16 @@ libraryDependencies ++=
     "org.slf4j" % "slf4j-log4j12" % "1.7.2" % "provided",
     "log4j" % "log4j" % "1.2.16" % "provided",
 
-      "com.typesafe.akka" %% "akka-http"                % akkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-spray-json"     % akkaHttpVersion,
-      "com.typesafe.akka" %% "akka-actor-typed"         % akkaVersion,
-      "com.typesafe.akka" %% "akka-stream"              % akkaVersion,
-      "ch.qos.logback"    % "logback-classic"           % "1.2.3",
+    "com.typesafe.akka" %% "akka-http"                % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http-spray-json"     % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-actor-typed"         % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream"              % akkaVersion,
+    "ch.qos.logback"    % "logback-classic"           % "1.2.3",
 
-      "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion % Test,
-      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion     % Test
-
+    "org.scalatest" %% "scalatest" % "3.2.0" % Test,
+    "junit" % "junit" % "4.12" % Test,
+    "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion % Test,
+    "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion     % Test
   )
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
