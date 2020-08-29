@@ -1,9 +1,11 @@
 package shop
 
+import data.{Ingredient, Recipe}
+
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
-final case class Recipe(name: String, ingredients: List[Ingredient])
+//final case class Recipe(name: String, ingredients: List[Ingredient])
   //final case class Recipe(name: String, ingredients: List[Ingredient]) {
   //  override def toString:String = {
   //    val result=new StringBuilder()
@@ -13,7 +15,7 @@ final case class Recipe(name: String, ingredients: List[Ingredient])
 //  }
   //}
 
-object RecipeO {
+object Recipe {
 //  implicit val formats = jsonFormat2(Recipe.apply)
   /*
    * Create a recipe from a string. A recipe is list of text lines where the first line represents the name of
@@ -31,9 +33,9 @@ object RecipeO {
   
   /* Create a recipe from a list of strings. See comment for apply(String). */
 def apply(recipeAsListOfLines: List[String]): Recipe = {
-    val name = recipeAsListOfLines(0).split(":")(1)
+    val name = recipeAsListOfLines.head.split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
-    val ingredients = for (ingredientLine <- ingredientLines) yield (IngredientO.readFromLine(ingredientLine))
+    val ingredients = for (ingredientLine <- ingredientLines) yield (shop.Ingredient.readFromLine(ingredientLine))
     new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
   }
 
@@ -49,4 +51,6 @@ def apply(recipeAsListOfLines: List[String]): Recipe = {
   def ingredientIsNotEmpty(ingredient: Ingredient): Boolean = {
     ingredient != null && ingredient.name.length > 0 
   }
+
+  val DummyRecipe = data.Recipe("dummy", List())
 }

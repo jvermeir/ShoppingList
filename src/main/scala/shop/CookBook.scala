@@ -2,12 +2,13 @@ package shop
 
 import java.io.File
 
+import data.Recipe
 import org.apache.commons.io.FileUtils
-import shop.IngredientO.DummyRecipe
+import shop.Recipe.DummyRecipe
 
 import scala.collection.mutable
 
-case class CookBook(recipes: mutable.Map[String, Recipe])
+//case class CookBook(recipes: mutable.Map[String, Recipe])
 
 object CookBookService {
   var store:CookBookStore = new CookBookStore
@@ -43,7 +44,7 @@ class CookBookStore {
   def loadFromText(cookBookAsText: String): mutable.Map[String, Recipe] = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = cleanedUpText.split("\n\n")
-    val listOfRecipes = cookBookSplitIntoRecipes map { RecipeO(_) }
+    val listOfRecipes = cookBookSplitIntoRecipes map { shop.Recipe(_) }
     loadFromListOfRecipes(listOfRecipes.toList)
   }
 

@@ -2,6 +2,7 @@ package shop
 
 import java.io.File
 
+import data.Category
 import org.apache.commons.io.FileUtils
 
 import scala.collection.mutable
@@ -12,11 +13,11 @@ import scala.language.reflectiveCalls
  * through the shop.
  */
 
-case class Category(name: String, sequence: Long) extends Ordered[Category] {
-  def compare(that: Category):Int = sequence.compare(that.sequence)
-
-  def printAsDatabaseString: String = name + ":" + sequence + "\n"
-}
+//case class Category(name: String, sequence: Long) extends Ordered[Category] {
+//  def compare(that: Category):Int = sequence.compare(that.sequence)
+//
+//  def printAsDatabaseString: String = name + ":" + sequence + "\n"
+//}
 
 object CategoryService {
   var store:CategoryStore = new CategoryStore

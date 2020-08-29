@@ -1,8 +1,6 @@
 package shop
 
-import java.io.File
-
-import org.apache.commons.io.FileUtils
+import data.{Category, Ingredient, Recipe}
 import org.joda.time.DateTime
 
 import scala.annotation.tailrec

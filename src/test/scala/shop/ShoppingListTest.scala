@@ -1,5 +1,6 @@
 package shop
 
+import data.{Ingredient, Recipe}
 import org.joda.time.DateTime
 import org.scalatest.GivenWhenThen
 import org.scalatest.flatspec.AnyFlatSpec
@@ -22,15 +23,15 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
       				groente:witlof
       				zuivel:geraspte kaas"""
     When("parse is invoked")
-    val witlofRecipe = RecipeO(witlofIngredientsAsText)
+    val witlofRecipe = shop.Recipe(witlofIngredientsAsText)
     Then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
     val listOfExpectedIngredients = List(
-      IngredientO("zuivel", "geraspte kaas"),
-      IngredientO("vlees", "kipfilet plakjes"),
-      IngredientO("groente", "witlof"),
-      IngredientO("pasta", "gezeefde tomaten"),
-      IngredientO("rijst", "rijst"))
-    val expectedWitlofRecipe = new Recipe("Witlof met kip", listOfExpectedIngredients)
+      Ingredient(CategoryService.getCategoryByName("zuivel"), "geraspte kaas"),
+      Ingredient(CategoryService.getCategoryByName("vlees"), "kipfilet plakjes"),
+      Ingredient(CategoryService.getCategoryByName("groente"), "witlof"),
+      Ingredient(CategoryService.getCategoryByName("pasta"), "gezeefde tomaten"),
+      Ingredient(CategoryService.getCategoryByName("rijst"), "rijst"))
+    val expectedWitlofRecipe = Recipe("Witlof met kip", listOfExpectedIngredients)
     expectedWitlofRecipe mustBe witlofRecipe
   }
 
@@ -43,24 +44,24 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
         """
     When("a menu is generated")
     val menu = Menu(menuAsString)
-    val extras: List[Ingredient] = List()
+    val extras: List[data.Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
     val expectedListOfIngredients = List(
-      ShoppingListItem(IngredientO("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(IngredientO("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(IngredientO("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(IngredientO("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(IngredientO("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(IngredientO("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(IngredientO("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("zuivel"), "ei"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("zuivel"), "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("zuivel"), "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("vlees"), "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("vlees"), "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("groente"), "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("groente"), "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("sauzen"), "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("pasta"), "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("rijst"), "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("rijst"), "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("rijst"), "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("olie"), "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(data.Ingredient(CategoryService.getCategoryByName("olie"), "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
     val expectedIngredientsSortedByCategory = expectedListOfIngredients.sortWith(_ < _)
     val aap = shoppingList.shoppingListItemsSortedByCategory
     expectedIngredientsSortedByCategory mustBe shoppingList.shoppingListItemsSortedByCategory
@@ -230,7 +231,7 @@ olie:zilveruitjes
     When("a shoppinglist is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = shop.Ingredient.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     val theList = shoppingList.printShoppinglistForUseWhileShopping
     Then("the list contains witlof and the two extra's")
@@ -261,7 +262,7 @@ groente:witlof
     When("a shoppinglist is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = shop.Ingredient.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list contains two recipes")
     val expectedShoppingList =
@@ -292,7 +293,7 @@ groente:appels
     When("a menu is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = shop.Ingredient.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     Then("and a shopping list is printed")
     val expectedShoppingList =

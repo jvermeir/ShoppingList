@@ -3,11 +3,12 @@ package shop
 import java.io.File
 import java.util.Locale
 
+import data.{MenuItem, Recipe}
 import org.apache.commons.io.FileUtils
 import org.joda.time.format._
 import org.joda.time.DateTime
 
-case class MenuItem (date:DateTime, dayOfWeek:String, recipe:String)
+//case class MenuItem (date:DateTime, dayOfWeek:String, recipe:String)
 
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.

@@ -7,7 +7,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
-import shop.{Category, CategoryService, CookBookService, Ingredient, Recipe}
+import data.{Category, Ingredient, Recipe}
+import shop.{CategoryService, CookBookService}
 import spray.json.DefaultJsonProtocol
 
 import scala.util.{Failure, Success}
@@ -38,15 +39,12 @@ object WebServer extends DefaultJsonProtocol {
 
     val rootBehavior = Behaviors.setup[Nothing] { context =>
 
-      implicit val formats = jsonFormat2(Category.apply)
+      implicit val categoryJsonFormat = jsonFormat2(Category.apply)
       implicit val ingredientJsonFormat = jsonFormat2(Ingredient.apply)
       implicit val recipeJsonFormat = jsonFormat2(Recipe.apply)
 
-      val route = path("ping") {
-        get {
-          complete("pong")
-        }
-      } ~ path("category" / Segment) { name =>
+      val route =
+      path("category" / Segment) { name =>
         get {
           complete(CategoryService.getCategoryByName(name))
         }

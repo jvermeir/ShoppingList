@@ -3,6 +3,7 @@ package shop
 /**
  * A ShoppingListItem is a Ingredient extended with date it will be used on
  */
+import data.{Category, Ingredient}
 import org.joda.time.DateTime
 import org.joda.time.format._
 import shopv1.PanicException
