@@ -3,9 +3,11 @@ package shop
 import java.io.File
 
 import org.apache.commons.io.FileUtils
+import rest.JsonFormats
 
 import scala.collection.mutable
 import scala.language.reflectiveCalls
+import spray.json._
 
 /**
  * Category represents an area of a shop and the order of the category in the optimal route
@@ -16,9 +18,15 @@ case class Category(name: String, sequence: Long) extends Ordered[Category] {
   def compare(that: Category):Int = sequence.compare(that.sequence)
 
   def printAsDatabaseString: String = name + ":" + sequence + "\n"
+
 }
 
-object CategoryService {
+object Category extends DefaultJsonProtocol with JsonFormats{
+  def fromJson(data: String):Category = data.parseJson.convertTo[Category]
+}
+
+object CategoryService{
+
   var store:CategoryStore = new CategoryStore
   def config(myStore:CategoryStore): Unit = {
     store = myStore
