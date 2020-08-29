@@ -43,7 +43,7 @@ class CookBookStore {
   def loadFromText(cookBookAsText: String): mutable.Map[String, Recipe] = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = cleanedUpText.split("\n\n")
-    val listOfRecipes = cookBookSplitIntoRecipes map { shop.Recipe(_) }
+    val listOfRecipes = cookBookSplitIntoRecipes map { Recipe(_) }
     loadFromListOfRecipes(listOfRecipes.toList)
   }
 
