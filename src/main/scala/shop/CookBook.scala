@@ -3,6 +3,7 @@ package shop
 import java.io.File
 
 import org.apache.commons.io.FileUtils
+import shop.IngredientO.DummyRecipe
 
 import scala.collection.mutable
 
@@ -42,7 +43,7 @@ class CookBookStore {
   def loadFromText(cookBookAsText: String): mutable.Map[String, Recipe] = {
     val cleanedUpText = cleanUpCookBookText(cookBookAsText)
     val cookBookSplitIntoRecipes = cleanedUpText.split("\n\n")
-    val listOfRecipes = cookBookSplitIntoRecipes map { Recipe(_) }
+    val listOfRecipes = cookBookSplitIntoRecipes map { RecipeO(_) }
     loadFromListOfRecipes(listOfRecipes.toList)
   }
 

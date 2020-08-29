@@ -26,14 +26,15 @@ case class Ingredient(category: Category, name: String) extends Ordered[Ingredie
   override def toString: String = s"${category.name}:${name}"
 }
 
-object Ingredient {
+object IngredientO {
+
   /*
    * Create an ingredient from a <category>:<name> pair.
    */
   def readFromLine(ingredientLine: String): Ingredient = {
     val ingredient = ingredientLine.split(":")
     ingredient.length match {
-      case 2 => Ingredient.apply(ingredient(0).trim(), ingredient(1).trim())
+      case 2 => IngredientO.apply(ingredient(0).trim(), ingredient(1).trim())
       case _ => null
     }
   }
@@ -46,4 +47,6 @@ object Ingredient {
   def readFromText(ingredientsAsText: String): List[Ingredient] = {
     ingredientsAsText.split("\n") map (readFromLine(_)) toList
   }
+
+  val DummyRecipe = Recipe("dummy", List())
 }

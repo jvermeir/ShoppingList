@@ -1,6 +1,6 @@
 import sbt.Append.appendSeq
 
-version := "1.6"
+version := "1.7-snapshot"
 
 mainClass in assembly := Some("shop.Main")
 
@@ -13,12 +13,13 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-language:postfixOps")
 
 val ScalatraVersion = "2.7.0"
 resolvers += Classpaths.typesafeReleases
+lazy val akkaHttpVersion = "10.1.12"
+lazy val akkaVersion    = "2.6.8"
 
 libraryDependencies ++=
   Seq(
     "org.scalatest" %% "scalatest" % "3.2.0" % "test",
     "org.scalactic" %% "scalactic" % "3.2.0",
-    "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
     "junit" % "junit" % "4.12" % "test",
 
     "joda-time" % "joda-time" % "2.9.4",
@@ -28,16 +29,17 @@ libraryDependencies ++=
     "org.slf4j" % "slf4j-api" % "1.7.21",
     "org.slf4j" % "slf4j-log4j12" % "1.7.2" % "provided",
     "log4j" % "log4j" % "1.2.16" % "provided",
-    "org.scalatra" %% "scalatra" % ScalatraVersion,
-    "org.scalatra" %% "scalatra-json" % ScalatraVersion,
-    "org.json4s" %% "json4s-jackson" % "3.6.9",
-    "ch.qos.logback" % "logback-classic" % "1.2.3" % "runtime",
-    "org.eclipse.jetty" % "jetty-webapp" % "9.4.28.v20200408" % "container",
-    "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
-  )
 
-enablePlugins(SbtTwirl)
-enablePlugins(ScalatraPlugin)
+      "com.typesafe.akka" %% "akka-http"                % akkaHttpVersion,
+      "com.typesafe.akka" %% "akka-http-spray-json"     % akkaHttpVersion,
+      "com.typesafe.akka" %% "akka-actor-typed"         % akkaVersion,
+      "com.typesafe.akka" %% "akka-stream"              % akkaVersion,
+      "ch.qos.logback"    % "logback-classic"           % "1.2.3",
+
+      "com.typesafe.akka" %% "akka-http-testkit"        % akkaHttpVersion % Test,
+      "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion     % Test
+
+  )
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 

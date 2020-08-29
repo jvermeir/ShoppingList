@@ -32,6 +32,7 @@ object CategoryService {
   def loadCategories():Unit = store.load()
 
   def getCategoryByName(name: String): Category = store.getCategoryByName(name)
+  def getAllCategories(): mutable.Map[String, Category] = store.categories
 }
 
 class CategoryStore {

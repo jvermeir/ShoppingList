@@ -3,18 +3,18 @@ package shop
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
-case class Recipe(name: String, ingredients: List[Ingredient]) {
-  override def toString:String = {
-    val result=new StringBuilder()
-    result.append("name:").append(name).append("\n")
-    result.append(ingredients.foldLeft("")(_ + _.toString()+"\n"))
-    result.toString()
-  }
-}
+final case class Recipe(name: String, ingredients: List[Ingredient])
+  //final case class Recipe(name: String, ingredients: List[Ingredient]) {
+  //  override def toString:String = {
+  //    val result=new StringBuilder()
+//    result.append("name:").append(name).append("\n")
+  //    result.append(ingredients.foldLeft("")(_ + _.toString()+"\n"))
+  //    result.toString()
+//  }
+  //}
 
-object DummyRecipe extends Recipe("dummy", List()) {}
-
-object Recipe {
+object RecipeO {
+//  implicit val formats = jsonFormat2(Recipe.apply)
   /*
    * Create a recipe from a string. A recipe is list of text lines where the first line represents the name of
    * the recipe formatted as:
@@ -33,7 +33,7 @@ object Recipe {
 def apply(recipeAsListOfLines: List[String]): Recipe = {
     val name = recipeAsListOfLines(0).split(":")(1)
     val ingredientLines = recipeAsListOfLines.drop(1)
-    val ingredients = for (ingredientLine <- ingredientLines) yield (Ingredient.readFromLine(ingredientLine))
+    val ingredients = for (ingredientLine <- ingredientLines) yield (IngredientO.readFromLine(ingredientLine))
     new Recipe(name, ingredients.filter(isValidIngredientLine(_)).sortWith(_ < _))
   }
 

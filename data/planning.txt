@@ -1,16 +1,12 @@
-Witloftaart
 Boerenomelet
 Moussaka
 Geroosterde groente met falafel2
 Witlof met kip
-Paksoi met mie
 Tajine
 Risotto met spinazie
 Spaghetti met vis
 Zwartebonenchili
-Nachos
 Bami
-Cannelloni
 Preitaart
 Shakshuka
 Quiche
@@ -27,7 +23,6 @@ Aardappeltjes met witlof en hamburgers
 Spaanse tortilla
 Timballo
 Kofta
-Tagliatelle met cashewnoten
 Marokkaanse pompoenstoof
 Tortilla met kip
 Spinazietaart
@@ -45,6 +40,11 @@ Spaghetti met gehakt
 Vis en papillotte
 Boerenpannetje
 Kip met glibbers
+Nachos
+Cannelloni
+Witloftaart
+Tagliatelle met cashewnoten
+Paksoi met mie
 
 
 

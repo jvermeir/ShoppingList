@@ -8,34 +8,34 @@ class IngredientTest extends AnyFlatSpec {
   CategoryService.config("data/test/categoryDatabase.csv")
 
   "Ingredients" should "be sorted by according to categories" in {
-    val bier = Ingredient.apply("vis", "v")
-    val zeep = Ingredient.apply("soep", "r")
+    val bier = IngredientO.apply("vis", "v")
+    val zeep = IngredientO.apply("soep", "r")
     assertTrue(bier < zeep)
     assertFalse(zeep < bier)
   }
 
   it should "Null Category Is Less Than Any Other Category" in {
-    val bier = Ingredient.apply("dranken", "bier")
+    val bier = IngredientO.apply("dranken", "bier")
     assert(bier > null)
   }
 
   it should "Create an ingredient using the companion object" in {
-    val bier = Ingredient.readFromLine("vis:bier")
+    val bier = IngredientO.readFromLine("vis:bier")
     assertNotNull(bier)
-    val dummy = Ingredient.readFromLine("categoryDoesNotExist:sla")
-    assertEquals(Ingredient.apply("dummy", "sla"), dummy)
+    val dummy = IngredientO.readFromLine("categoryDoesNotExist:sla")
+    assertEquals(IngredientO.apply("dummy", "sla"), dummy)
   }
 
   it should "Equals Returns False If Ingredient name is different" in {
-    assertFalse(Ingredient.apply("vis", "d1").equals(Ingredient("vis", "s1")))
+    assertFalse(IngredientO.apply("vis", "d1").equals(IngredientO("vis", "s1")))
   }
 
   it should "Equals Returns False If Ingredient category is different" in {
-    assertFalse(Ingredient.apply("soep", "d1").equals(Ingredient("vis", "d1")))
+    assertFalse(IngredientO.apply("soep", "d1").equals(IngredientO("vis", "d1")))
   }
 
   it should "Equals Returns True If Ingredients have the same category and name" in {
-    assertTrue(Ingredient.apply("vis", "d1").equals(Ingredient.apply("vis", "d1")))
+    assertTrue(IngredientO.apply("vis", "d1").equals(IngredientO.apply("vis", "d1")))
   }
 
 }

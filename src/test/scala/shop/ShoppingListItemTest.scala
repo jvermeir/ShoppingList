@@ -12,23 +12,23 @@ class ShoppingListItemTest extends AnyFlatSpec with BeforeAndAfterAll {
 
   "ShoppingListItems" should "be based on category" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val zeep = ShoppingListItem(Ingredient("schoonmaak", "zeep"), time)
-    val bier = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
+    val zeep = ShoppingListItem(IngredientO("schoonmaak", "zeep"), time)
+    val bier = ShoppingListItem(IngredientO("dranken", "Duvel"), time)
     assertTrue(zeep > bier)
   }
 
   it should "Sort by name if ingredients Belong To Same Category" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val duvel = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
-    val chouffe = ShoppingListItem(Ingredient("dranken", "Chouffe"), time)
+    val duvel = ShoppingListItem(IngredientO("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(IngredientO("dranken", "Chouffe"), time)
     assertTrue(duvel > chouffe)
   }
 
   it should "Sort a List" in {
     val time = new DateTime(2011, 10, 9, 0, 0)
-    val duvel = ShoppingListItem(Ingredient("dranken", "Duvel"), time)
-    val chouffe = ShoppingListItem(Ingredient("dranken", "Chouffe"), time)
-    val karmeliet = ShoppingListItem(Ingredient("dranken", "Karmeliet"), time)
+    val duvel = ShoppingListItem(IngredientO("dranken", "Duvel"), time)
+    val chouffe = ShoppingListItem(IngredientO("dranken", "Chouffe"), time)
+    val karmeliet = ShoppingListItem(IngredientO("dranken", "Karmeliet"), time)
     val result = List(chouffe, duvel, karmeliet)
     val testList = List(duvel, karmeliet, chouffe).sortWith(_ < _)
     assertEquals(result, testList)

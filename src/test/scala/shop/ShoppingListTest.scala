@@ -22,14 +22,14 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
       				groente:witlof
       				zuivel:geraspte kaas"""
     When("parse is invoked")
-    val witlofRecipe = Recipe(witlofIngredientsAsText)
+    val witlofRecipe = RecipeO(witlofIngredientsAsText)
     Then("a list of groceries ordered by category is returned and the recipe's name is 'Witlof met kip'")
     val listOfExpectedIngredients = List(
-      Ingredient("zuivel", "geraspte kaas"),
-      Ingredient("vlees", "kipfilet plakjes"),
-      Ingredient("groente", "witlof"),
-      Ingredient("pasta", "gezeefde tomaten"),
-      Ingredient("rijst", "rijst"))
+      IngredientO("zuivel", "geraspte kaas"),
+      IngredientO("vlees", "kipfilet plakjes"),
+      IngredientO("groente", "witlof"),
+      IngredientO("pasta", "gezeefde tomaten"),
+      IngredientO("rijst", "rijst"))
     val expectedWitlofRecipe = new Recipe("Witlof met kip", listOfExpectedIngredients)
     expectedWitlofRecipe mustBe witlofRecipe
   }
@@ -47,20 +47,20 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
     val expectedListOfIngredients = List(
-      ShoppingListItem(Ingredient("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
-      ShoppingListItem(Ingredient("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
-      ShoppingListItem(Ingredient("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
+      ShoppingListItem(IngredientO("zuivel", "ei"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("zuivel", "geraspte kaas"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(IngredientO("zuivel", "vloeibare bakboter"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("vlees", "kipfilet"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("vlees", "kipfilet plakjes"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(IngredientO("groente", "nasi pakket"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("groente", "witlof"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(IngredientO("sauzen", "sate saus"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("pasta", "gezeefde tomaten"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(IngredientO("rijst", "kroepoek"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("rijst", "rijst"), new DateTime(2011, 10, 8, 0, 0)),
+      ShoppingListItem(IngredientO("rijst", "rijst"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("olie", "augurken"), new DateTime(2011, 10, 9, 0, 0)),
+      ShoppingListItem(IngredientO("olie", "zilveruitjes"), new DateTime(2011, 10, 9, 0, 0)))
     val expectedIngredientsSortedByCategory = expectedListOfIngredients.sortWith(_ < _)
     val aap = shoppingList.shoppingListItemsSortedByCategory
     expectedIngredientsSortedByCategory mustBe shoppingList.shoppingListItemsSortedByCategory
@@ -230,7 +230,7 @@ olie:zilveruitjes
     When("a shoppinglist is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     val theList = shoppingList.printShoppinglistForUseWhileShopping
     Then("the list contains witlof and the two extra's")
@@ -261,7 +261,7 @@ groente:witlof
     When("a shoppinglist is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list contains two recipes")
     val expectedShoppingList =
@@ -292,7 +292,7 @@ groente:appels
     When("a menu is generated")
     val menuAndListOfExtras = split(menuAsString)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     Then("and a shopping list is printed")
     val expectedShoppingList =

@@ -23,7 +23,7 @@ object Main {
     //TODO: move to shoppinglist
     val menuAndListOfExtras = readAndSplit(menuFile)
     val menu = Menu(menuAndListOfExtras._1)
-    val extras: List[Ingredient] = Ingredient.readFromText(menuAndListOfExtras._2)
+    val extras: List[Ingredient] = IngredientO.readFromText(menuAndListOfExtras._2)
     val shoppingList = new ShoppingList(menu, extras)
     val theList = shoppingList.printShoppinglistForUseWhileShopping
     println(theList)
