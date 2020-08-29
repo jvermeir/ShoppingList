@@ -1,0 +1,11 @@
+Woensdag valt op:05022014
+woensdag:R3
+donderdag:R4
+vrijdag:R5
+zaterdag:R1
+zondag:R2
+maandag:R0
+dinsdag:R6
+
+extra
+
