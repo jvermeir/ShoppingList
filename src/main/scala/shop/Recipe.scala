@@ -1,5 +1,8 @@
 package shop
 
+import rest.JsonFormats
+import spray.json._
+
 /**
  * A recipe is the name and a list of ingredients of something to eat.
  */
@@ -12,8 +15,11 @@ final case class Recipe(name: String, ingredients: List[Ingredient]) {
   }
 }
 
-object Recipe {
-//  implicit val formats = jsonFormat2(Recipe.apply)
+object Recipe extends DefaultJsonProtocol with JsonFormats {
+
+  def fromJson(recipeAsText: String):Recipe = recipeAsText.parseJson.convertTo[Recipe]
+
+  //  implicit val formats = jsonFormat2(Recipe.apply)
   /*
    * Create a recipe from a string. A recipe is list of text lines where the first line represents the name of
    * the recipe formatted as:
