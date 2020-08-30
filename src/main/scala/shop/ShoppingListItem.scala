@@ -3,11 +3,13 @@ package shop
 /**
  * A ShoppingListItem is a Ingredient extended with date it will be used on
  */
-import org.joda.time.DateTime
-import org.joda.time.format._
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 import shopv1.PanicException
 
-case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Ordered[ShoppingListItem] {
+case class ShoppingListItem(ingredient: Ingredient, date: LocalDate) extends Ordered[ShoppingListItem] {
   if (ingredient == null) throw new PanicException("Ingredient was null")
   def name: String = ingredient.name
   def category: Category = ingredient.category
@@ -16,7 +18,7 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
    * If the date doesn't really matter it is filled with Jan 1st 1970. 
    * TODO: think of some better solution. 
    */
-  def this(ingredient: Ingredient) = this(ingredient, new DateTime(1970, 1, 1, 0, 0))
+  def this(ingredient: Ingredient) = this(ingredient, LocalDate.now)
 
   /*
    * Sort shoppingListItems by Ingredient and date
@@ -39,8 +41,7 @@ case class ShoppingListItem(ingredient: Ingredient, date: DateTime) extends Orde
     else name
   }
 
-  def printDate(date: DateTime): String = {
-    val fmt = DateTimeFormat forPattern "dd-MM"
-    fmt.print(date)
-  }
+  val ddMMFormatter = DateTimeFormatter.ofPattern("dd-MM")
+
+  def printDate(date: LocalDate): String = ddMMFormatter.format(date)
 }
