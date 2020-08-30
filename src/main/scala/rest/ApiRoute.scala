@@ -32,7 +32,7 @@ object ApiRoute extends DefaultJsonProtocol {
         }
       } ~ path("menu") {
         get {
-          complete(menu.printMenuForShoppingList)
+          complete(menu)
         }
       }
     route

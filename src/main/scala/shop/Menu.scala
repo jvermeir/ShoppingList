@@ -1,21 +1,23 @@
 package shop
 
 import java.io.File
+import java.time.LocalDate
 import java.util.Locale
-import org.apache.commons.io.FileUtils
-import org.joda.time.format._
-import org.joda.time.DateTime
 
-case class MenuItem (date:DateTime, dayOfWeek:String, recipe:String)
+import org.apache.commons.io.FileUtils
+import rest.JsonFormats
+import spray.json._
+
+case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
 
 /**
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
-class Menu(val menuItems: List[MenuItem], val dateOfSaturday: DateTime) {
+case class Menu(menuItems: List[MenuItem], dateOfSaturday: LocalDate) {
 
   val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, CookBookService.store.getRecipeByName(menuItem.recipe))
 
-  def printMenu(nameOfDayToDateMap: Map[String, DateTime]): String = {
+  def printMenu(nameOfDayToDateMap: Map[String, LocalDate]): String = {
       menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).dayOfMonth.get + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
   }
 
@@ -23,13 +25,14 @@ class Menu(val menuItems: List[MenuItem], val dateOfSaturday: DateTime) {
     recipes.map {case (name,recipe) => name + ":" + recipe.toString } mkString "\n"
   }
 
-  def getNameOfDayToDateMap:Map[String, DateTime] = {
+  def getNameOfDayToDateMap:Map[String, LocalDate] = {
     Menu.getNameOfDayToDateMap(dateOfSaturday)
   }
 
 }
 
-object Menu {
+object Menu extends DefaultJsonProtocol with JsonFormats {
+  def fromJson(data: String):Menu = data.parseJson.convertTo[Menu]
   /*
    * Create a menu from a list of strings representing day:recipe pairs and a cook book.
    * The first line of input is the date for Saturday. This line should look like this:
@@ -51,16 +54,18 @@ object Menu {
     new Menu(menu, dateOfFirstDay)
   }
 
-  def getNameOfDayToDateMap (dateOfFirstDay:DateTime): Map[String, DateTime] = {
-    val fmt = (DateTimeFormat forPattern "EEEE").withLocale(new Locale("nl"))
+  val dayInMs = 24*60*60*1000
+
+  def getNameOfDayToDateMap (dateOfFirstDay:LocalDate): Map[String, LocalDate] = {
+    val fmt = (LocalDateFormat forPattern "EEEE").withLocale(new Locale("nl"))
     val day = dateOfFirstDay
     val result = for (i <- 0 until 7) yield {
       Tuple2(fmt.print(day.plusDays(i)), day.plusDays(i))
     }
-    result.toMap[String, DateTime]
+    result.toMap[String, LocalDate]
   }
 
-  def createMenuLineFromTextLine(textLine: String, dateOfFirstDay: DateTime): MenuItem = {
+  def createMenuLineFromTextLine(textLine: String, dateOfFirstDay: LocalDate): MenuItem = {
     if (isValidMenuLine(textLine)) {
       val day: String = textLine.split(":")(0).trim.toLowerCase()
       val date = getNameOfDayToDateMap(dateOfFirstDay)(day)
@@ -81,8 +86,8 @@ object Menu {
     apply(menuAsText)
   }
 
-  def parseDateForFirstDay(saturday: String): DateTime = {
-    val fmt = DateTimeFormat forPattern "ddMMyyyy"
-    new DateTime(fmt.parseDateTime(saturday))
+  def parseDateForFirstDay(saturday: String): LocalDate = {
+    val fmt = LocalDateFormat forPattern "ddMMyyyy"
+    new LocalDate(fmt.parseLocalDate(saturday))
   }
 }
