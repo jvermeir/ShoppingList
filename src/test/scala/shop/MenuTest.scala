@@ -1,8 +1,8 @@
 package shop
 
-import org.joda.time.format.DateTimeFormat
 import org.junit.Assert._
 import org.scalatest.flatspec.AnyFlatSpec
+import shop.Dates.dateToIsoString
 
 class MenuTest extends AnyFlatSpec {
 
@@ -30,17 +30,15 @@ class MenuTest extends AnyFlatSpec {
   }
 
   it should "Date for R1 is 01022014 and date for R2 is 02022014" in {
-    val fmt = DateTimeFormat.forPattern("ddMMyyyy")
     val menu = Menu.readFromFile("data/test/menuFiles/0101.txt")
-    assertEquals("01022014", fmt.print(menu.menuItems.head.date))
-    assertEquals("02022014", fmt.print(menu.menuItems(1).date))
+    assertEquals("01022014", dateToIsoString(menu.menuItems.head.date))
+    assertEquals("02022014", dateToIsoString(menu.menuItems(1).date))
   }
 
   it should "Week may start on a Wednesday" in {
-    val fmt = DateTimeFormat.forPattern("ddMMyyyy")
     val menu = Menu.readFromFile("data/test/menuFiles/somemenu.txt")
-    assertEquals("08022014", fmt.print(menu.menuItems(3).date))
-    assertEquals("09022014", fmt.print(menu.menuItems(4).date))
+    assertEquals("08022014", dateToIsoString(menu.menuItems(3).date))
+    assertEquals("09022014", dateToIsoString(menu.menuItems(4).date))
   }
 
 }

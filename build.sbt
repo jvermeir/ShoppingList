@@ -18,8 +18,6 @@ lazy val akkaVersion    = "2.6.8"
 
 libraryDependencies ++=
   Seq(
-    "joda-time" % "joda-time" % "2.9.4",
-    "org.joda" % "joda-convert" % "1.8",
     "org.apache.commons" % "commons-pool2" % "2.4.2",
     "commons-io" % "commons-io" % "2.5",
     "org.slf4j" % "slf4j-api" % "1.7.21",
