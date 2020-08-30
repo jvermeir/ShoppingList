@@ -21,7 +21,7 @@ case class Category(name: String, sequence: Long) extends Ordered[Category] {
 
 }
 
-object Category extends DefaultJsonProtocol with JsonFormats{
+object Category extends DefaultJsonProtocol with JsonFormats {
   def fromJson(data: String):Category = data.parseJson.convertTo[Category]
 }
 
