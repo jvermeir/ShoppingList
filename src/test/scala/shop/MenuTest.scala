@@ -3,6 +3,7 @@ package shop
 import org.junit.Assert._
 import org.scalatest.flatspec.AnyFlatSpec
 import shop.Dates.dateToIsoString
+import spray.json.enrichAny
 
 class MenuTest extends AnyFlatSpec {
 
@@ -41,4 +42,10 @@ class MenuTest extends AnyFlatSpec {
     assertEquals("09022014", dateToIsoString(menu.menuItems(4).date))
   }
 
+  it should "Load a menu from a json file" in {
+    val menu = Menu.readFromFile("data/test/menuFiles/somemenu.txt")
+    val menuAsJson = menu.toJson
+    val res = Menu.fromJson(menuAsJson.toString)
+    assertEquals(menu, res)
+  }
 }
