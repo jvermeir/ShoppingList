@@ -1,6 +1,4 @@
 Boerenomelet
-Moussaka
-Geroosterde groente met falafel2
 Witlof met kip
 Tajine
 Risotto met spinazie
@@ -45,7 +43,9 @@ Cannelloni
 Witloftaart
 Tagliatelle met cashewnoten
 Paksoi met mie
-
+Moussaka
+Geroosterde groente met falafel2
+Pompoensoep
 
 
 Tortillas met spinazie

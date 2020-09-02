@@ -12,7 +12,7 @@ object ApiRoute extends DefaultJsonProtocol {
   val categoryFile = "data/categoryDatabase_v2.csv"
   CategoryService.config(categoryFile)
   CookBookService.config(cookbookFile)
-  val menuAndListOfExtras: (String, String) = readAndSplit("menus/2808.txt")
+  val menuAndListOfExtras: (String, String) = readAndSplit("data/test/2808.txt")
   val menu: Menu = Menu(menuAndListOfExtras._1)
 
   def getRoute: Route = {
