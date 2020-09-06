@@ -2,12 +2,15 @@ package shop
 
 import java.time.LocalDate
 
+import rest.JsonFormats
+import spray.json.DefaultJsonProtocol
+
 import scala.annotation.tailrec
 
 /**
  * ShoppingList creates a list of groceries sorted by category for a given Menu.
  */
-class ShoppingList(menu: Menu, extras: List[Ingredient]) {
+case class ShoppingList(menu: Menu, extras: List[Ingredient]) {
   val nameOfDayToDateMap: Map[String, LocalDate] = Menu.getNameOfDayToDateMap(menu.startOfPeriod)
   val shoppingListItemsSortedByCategory: List[ShoppingListItem] = getShoppingListItemsSortedByCategory
 
@@ -20,8 +23,8 @@ class ShoppingList(menu: Menu, extras: List[Ingredient]) {
   def getShoppingListItemsSortedByCategory: List[ShoppingListItem] = (itemsFromMenu ::: itemsFromExtras).sortWith(_ < _)
 
   def itemsFromMenu: List[ShoppingListItem] = {
-    val items = for (recipe <- menu.recipes) yield getShoppingListItemsWithDateAdded(recipe._2, findDate(recipe._1))
-    items.flatten
+    val items = for (recipe <- menu.recipes) yield getShoppingListItemsWithDateAdded(recipe._2, recipe._1)
+    items.flatten.toList
   }
 
   def itemsFromExtras: List[ShoppingListItem] = {
@@ -67,4 +70,8 @@ class ShoppingList(menu: Menu, extras: List[Ingredient]) {
     shoppingListItemsSortedByCategory mkString "\n"
   }
 
+}
+
+object ShoppingList extends DefaultJsonProtocol with JsonFormats {
+  def apply(menu: Menu, extras: List[Ingredient]) = new ShoppingList(menu, extras)
 }
