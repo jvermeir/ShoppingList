@@ -13,11 +13,12 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-language:postfixOps")
 
 val ScalatraVersion = "2.7.0"
 resolvers += Classpaths.typesafeReleases
-lazy val akkaHttpVersion = "10.1.12"
+lazy val akkaHttpVersion = "10.2.0"
 lazy val akkaVersion    = "2.6.8"
 
 libraryDependencies ++=
   Seq(
+      "ch.megard" %% "akka-http-cors" % "1.1.0",
     "org.apache.commons" % "commons-pool2" % "2.4.2",
     "commons-io" % "commons-io" % "2.5",
     "org.slf4j" % "slf4j-api" % "1.7.21",

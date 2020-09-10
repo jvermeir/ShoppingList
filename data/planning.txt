@@ -1,14 +1,4 @@
-Boerenomelet
-Witlof met kip
-Tajine
-Risotto met spinazie
-Spaghetti met vis
-Zwartebonenchili
-Bami
-Preitaart
-Shakshuka
-Quiche
-Hokkien noedels
+Geroosterde groente met falafel2
 Shoarma
 Paperdelle met spinazie en mozarella
 Erwtensoep
@@ -44,8 +34,18 @@ Witloftaart
 Tagliatelle met cashewnoten
 Paksoi met mie
 Moussaka
-Geroosterde groente met falafel2
 Pompoensoep
+Spaghetti met vis
+Zwartebonenchili
+Witlof met kip
+Tajine
+Risotto met spinazie
+Boerenomelet
+Bami
+Preitaart
+Shakshuka
+Quiche
+Hokkien noedels
 
 
 Tortillas met spinazie

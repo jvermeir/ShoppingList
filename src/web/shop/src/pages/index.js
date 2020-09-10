@@ -1,17 +1,12 @@
 import React from "react";
-import Groente from "./category";
 
 export default function Home() {
     return (
-        <div>
-            <div>This weeks menu:</div>
-            <div>groente category: <Groente/></div>
-            <div><App/></div>
-        </div>
+        <div><div><App/></div></div>
     )
 }
 
-const host = "http://localhost:8080/api";
+const api = "http://localhost:8080/api";
 
 class App extends React.Component {
     constructor(props) {
@@ -24,15 +19,41 @@ class App extends React.Component {
     }
 
     render() {
-        return (
-            <div>
-            <MenuItemsList menuItems={this.state.menuItems}/>
-            </div>
-        )
+        return <div>menu
+            <table>
+                <thead><tr><th>date</th><th>day</th><th>recipe</th><th> </th></tr></thead>
+                <tbody>
+                {this.state.menuItems.map((item, index) => {
+                    return (
+                            <MenuItem key={item.date} menuItem={item}
+                                      onClick={() => this.handleClick(item.date, index)}
+                            />
+                    );
+                })}
+                </tbody>
+            </table>
+        </div>
+    }
+
+    updateMenu(date, index) {
+        const items = this.state.menuItems.slice();
+        if (index > -1) {
+            items.splice(index, 1);
+        }
+        this.setState({menuItems: items});
+    }
+
+    handleClick(date, index) {
+        fetch(`${api}/menu/items/${date}`, {
+            method: 'DELETE',
+        })
+            .then(res => res.text())
+            .then(res => console.log(res))
+            .then(_ => this.updateMenu(date, index))
     }
 
     getMenu() {
-        fetch(`${host}/menu`)
+        fetch(`${api}/menu`)
             .then(res => res.json())
             .then((data) => {
                 this.setState({menuItems: data.menuItems})
@@ -41,46 +62,15 @@ class App extends React.Component {
     }
 }
 
-class MenuItemsList extends React.Component {
-    render() {
-        const menuItems = this.props.menuItems.map(menuItem =>
-            <MenuItem key={menuItem.date} menuItem={menuItem}/>
-        );
-        return (
-            <table>
-                <tbody>
-                <tr>
-                    <th>date</th>
-                    <th>dayOfWeek</th>
-                    <th>recipe</th>
-                </tr>
-                {menuItems}
-                </tbody>
-            </table>
-        )
-    }
-}
-
 class MenuItem extends React.Component {
-    onDelete(id) {
-        console.log("delete");
-        fetch(`${host}/menu/items/${id}`, {
-            method: 'DELETE',
-        })
-            .then(res => res.text())
-            .then(res => console.log(res))
-    }
-
     render() {
         return (
-            <tr>
+                <tr>
                 <td>{this.props.menuItem.date}</td>
                 <td>{this.props.menuItem.dayOfWeek}</td>
                 <td>{this.props.menuItem.recipe}</td>
-                <td>
-                    <button onClick={() => this.onDelete(this.props.menuItem.date)}>Delete</button>
-                </td>
-            </tr>
+                <td><button onClick={() => this.props.onClick()}>delete</button></td>
+                </tr>
         )
     }
 }
