@@ -6,10 +6,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import org.apache.commons.io.FileUtils
-import spray.json.DefaultJsonProtocol
 import rest.JsonFormats
 import shop.Dates.parseIsoDateString
-import spray.json._
+import spray.json.{DefaultJsonProtocol, _}
 
 case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
 
@@ -17,8 +16,9 @@ case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends De
  * A menu is a collection of recipes for a week starting on a Saturday.
  */
 case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
-
-  val recipes: List[(String, Recipe)] = for (menuItem <- menuItems) yield (menuItem.dayOfWeek, CookBookService.store.getRecipeByName(menuItem.recipe))
+// TODO: revert mutable change
+  val rs: Map[LocalDate, Recipe] = menuItems.map( i => (i.date, CookBookService.store.getRecipeByName(i.recipe))).toMap
+  var recipes = collection.mutable.Map(rs.toSeq: _*)
 
   def printMenu(nameOfDayToDateMap: Map[String, LocalDate]): String = {
       menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).getDayOfMonth + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
@@ -36,6 +36,12 @@ case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
 
 object Menu extends DefaultJsonProtocol with JsonFormats {
   def fromJson(data: String):Menu = data.parseJson.convertTo[Menu]
+
+  def newMenuWithADayRemoved(menu: Menu, dateToBeRemoved: LocalDate): Menu = {
+    val newMenuItems = menu.menuItems.filter(item => dateToBeRemoved != item.date)
+    Menu(newMenuItems, menu.startOfPeriod)
+  }
+
   /*
    * Create a menu from a list of strings representing day:recipe pairs and a cook book.
    * The first line of input is the date for Saturday. This line should look like this:

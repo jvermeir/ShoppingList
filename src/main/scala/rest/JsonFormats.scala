@@ -30,4 +30,5 @@ trait JsonFormats extends DefaultJsonProtocol {
   implicit val recipeJsonFormat: RootJsonFormat[Recipe] = jsonFormat2(Recipe.apply)
   implicit val menuItemJsonFormat: RootJsonFormat[MenuItem] = jsonFormat(MenuItem.apply, "date", "dayOfWeek", "recipe")
   implicit val menuJsonFormat: RootJsonFormat[Menu] = jsonFormat(Menu.apply, "menuItems", "startOfPeriod")
+  implicit val shoppingListJsonFormat: RootJsonFormat[ShoppingList] = jsonFormat(ShoppingList.apply, "menu", "extras")
 }

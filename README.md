@@ -51,3 +51,20 @@ on command line:
     curl -v localhost:8080/recipe/Lasagne%20%met%20%gehakt
     curl -v localhost:8080/categories
     
+## Website
+
+Used Gatsby like this:
+
+    gatsby new shop https://github.com/gatsbyjs/gatsby-starter-hello-world
+    
+start with
+
+    gatsby develop
+    
+React tutorial
+
+    https://reactjs.org/tutorial/tutorial.html
+    
+state example:
+
+    https://codepen.io/gaearon/pen/gWWQPY?editors=0010                    

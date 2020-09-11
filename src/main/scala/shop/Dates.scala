@@ -11,7 +11,7 @@ object Dates {
   def dateToIsoString(date: LocalDate): String =
     ddMMyyyyFormatter.format(date)
 
-   def parseIsoDateString(date: String): Option[LocalDate] =
+   def  parseIsoDateString(date: String): Option[LocalDate] =
     Try {
       LocalDate.from(ddMMyyyyFormatter.parse(date))
     }.toOption
