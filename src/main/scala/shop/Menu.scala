@@ -7,7 +7,7 @@ import java.util.Locale
 
 import org.apache.commons.io.FileUtils
 import rest.JsonFormats
-import shop.Dates.parseIsoDateString
+import shop.Dates.{ddMMyyyyFormatter, parseIsoDateString}
 import spray.json.{DefaultJsonProtocol, _}
 
 case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
@@ -37,8 +37,17 @@ case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
 object Menu extends DefaultJsonProtocol with JsonFormats {
   def fromJson(data: String):Menu = data.parseJson.convertTo[Menu]
 
+  def item(date: String, dayOfWeek:String, recipe: String):MenuItem = {
+    new MenuItem(LocalDate.from(ddMMyyyyFormatter.parse(date)), dayOfWeek, recipe)
+  }
+
   def newMenuWithADayRemoved(menu: Menu, dateToBeRemoved: LocalDate): Menu = {
     val newMenuItems = menu.menuItems.filter(item => dateToBeRemoved != item.date)
+    Menu(newMenuItems, menu.startOfPeriod)
+  }
+
+  def newMenuWithADayAdded(menu: Menu, menuItem: MenuItem): Menu = {
+    val newMenuItems = menuItem :: menu.menuItems
     Menu(newMenuItems, menu.startOfPeriod)
   }
 

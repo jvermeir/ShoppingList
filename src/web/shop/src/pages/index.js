@@ -1,8 +1,11 @@
 import React from "react";
+import './shop.css';
 
 export default function Home() {
     return (
-        <div><div><App/></div></div>
+        <div>
+            <div><App/></div>
+        </div>
     )
 }
 
@@ -19,20 +22,25 @@ class App extends React.Component {
     }
 
     render() {
-        return <div>menu
-            <table>
-                <thead><tr><th>date</th><th>day</th><th>recipe</th><th> </th></tr></thead>
-                <tbody>
-                {this.state.menuItems.map((item, index) => {
-                    return (
-                            <MenuItem key={item.date} menuItem={item}
-                                      onClick={() => this.handleClick(item.date, index)}
-                            />
-                    );
-                })}
-                </tbody>
-            </table>
-        </div>
+        return (
+            <div>Menu
+                <div className="top">
+                    <div className="grid-container">
+                        <div className="grid-item">date</div>
+                        <div className="grid-item">day</div>
+                        <div className="grid-item">recipe</div>
+                        <div className="grid-item">action</div>
+                        {this.state.menuItems.map((item, index) => {
+                            return (
+                                <MenuItem key={item.date} menuItem={item}
+                                          onClick={() => this.handleClick(item.date, index)}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     updateMenu(date, index) {
@@ -65,12 +73,14 @@ class App extends React.Component {
 class MenuItem extends React.Component {
     render() {
         return (
-                <tr>
-                <td>{this.props.menuItem.date}</td>
-                <td>{this.props.menuItem.dayOfWeek}</td>
-                <td>{this.props.menuItem.recipe}</td>
-                <td><button onClick={() => this.props.onClick()}>delete</button></td>
-                </tr>
+            <React.Fragment>
+                <div className="grid-item">{this.props.menuItem.date}</div>
+                <div className="grid-item">{this.props.menuItem.dayOfWeek}</div>
+                <div className="grid-item">{this.props.menuItem.recipe}</div>
+                <div className="grid-item">
+                    <button onClick={() => this.props.onClick()}>delete</button>
+                </div>
+            </React.Fragment>
         )
     }
 }

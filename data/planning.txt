@@ -1,11 +1,7 @@
 Geroosterde groente met falafel2
 Shoarma
-Paperdelle met spinazie en mozarella
-Erwtensoep
 Witlof met ham
 Aubergines met couscous
-Tandoori
-Zalm in bladerdeeg
 Ravioli met groente en noten
 Aardappeltjes met witlof en hamburgers
 Spaanse tortilla
@@ -46,6 +42,11 @@ Preitaart
 Shakshuka
 Quiche
 Hokkien noedels
+Tandoori
+Paperdelle met spinazie en mozarella
+Erwtensoep
+Schnitzels
+Zalm in bladerdeeg
 
 
 Tortillas met spinazie

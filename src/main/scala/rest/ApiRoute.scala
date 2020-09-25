@@ -1,10 +1,13 @@
 package rest
 
+import java.time.LocalDate
+
+import akka.http.javadsl.server.Directives.request
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
 import shop.Main.readAndSplit
-import shop.{CategoryService, CookBookService, Dates, Menu, ShoppingList}
+import shop.{CategoryService, CookBookService, Dates, Menu, MenuItem, ShoppingList}
 import spray.json.DefaultJsonProtocol
 
 object ApiRoute extends DefaultJsonProtocol with CORSHandler {
@@ -54,7 +57,13 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
               menu = Menu.newMenuWithADayRemoved(menu, Dates.parseIsoDateString(date).get)
               complete(menu)
             }
+          } ~ path("items" / "add") {
+          post {
+            formFields(Symbol("date").as[String], Symbol("dayOfWeek").as[String], Symbol("recipe").as[String]) {
+              (date, dayOfWeek, recipe) => complete(Menu.newMenuWithADayAdded(menu, Menu.item(date, dayOfWeek, recipe)))
+            }
           }
+        }
       }
 
     val shoppingListRoute =
