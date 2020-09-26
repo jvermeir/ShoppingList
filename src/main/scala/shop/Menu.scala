@@ -17,11 +17,6 @@ case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends De
  * A menu is a collection of recipes for a period of a week or less.
  */
 case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
-
-//  val rs: Map[LocalDate, Recipe] = menuItems.map( i => (i.date, CookBookService.store.getRecipeByName(i.recipe))).toMap
-//  var recipes = collection.mutable.Map(rs.toSeq: _*)
-
-
   val recipes: List[(LocalDate, Recipe)] = for (menuItem <- menuItems) yield (menuItem.date, CookBookService.store.getRecipeByName(menuItem.recipe))
 
   def printMenu(nameOfDayToDateMap: Map[String, LocalDate]): String = {
