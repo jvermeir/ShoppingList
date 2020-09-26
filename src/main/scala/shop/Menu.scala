@@ -14,12 +14,15 @@ import spray.json.{DefaultJsonProtocol, _}
 case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
 
 /**
- * A menu is a collection of recipes for a week starting on a Saturday.
+ * A menu is a collection of recipes for a period of a week or less.
  */
 case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
-// TODO: revert mutable change
-  val rs: Map[LocalDate, Recipe] = menuItems.map( i => (i.date, CookBookService.store.getRecipeByName(i.recipe))).toMap
-  var recipes = collection.mutable.Map(rs.toSeq: _*)
+
+//  val rs: Map[LocalDate, Recipe] = menuItems.map( i => (i.date, CookBookService.store.getRecipeByName(i.recipe))).toMap
+//  var recipes = collection.mutable.Map(rs.toSeq: _*)
+
+
+  val recipes: List[(LocalDate, Recipe)] = for (menuItem <- menuItems) yield (menuItem.date, CookBookService.store.getRecipeByName(menuItem.recipe))
 
   def printMenu(nameOfDayToDateMap: Map[String, LocalDate]): String = {
       menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).getDayOfMonth + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
