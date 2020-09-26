@@ -8,6 +8,7 @@ import java.util.Locale
 import org.apache.commons.io.FileUtils
 import rest.JsonFormats
 import shop.Dates.parseIsoDateString
+import shop.Menu.toDutchNameOfDayformatter
 import spray.json.{DefaultJsonProtocol, _}
 
 case class MenuItem (date:LocalDate, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
@@ -25,7 +26,7 @@ case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
   }
 
   def printMenuForShoppingList: String = {
-    recipes.map {case (name,recipe) => name + ":" + recipe.toString } mkString "\n"
+    recipes.map {case (date,recipe) => date.format(toDutchNameOfDayformatter) + ":" + recipe.toString } mkString "\n"
   }
 
   def getNameOfDayToDateMap:Map[String, LocalDate] = {
