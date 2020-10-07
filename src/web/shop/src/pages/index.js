@@ -14,7 +14,7 @@ const api = "http://localhost:8080/api";
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {menuItems: []};
+        this.state = {menuItems: [], theValue: "", timeout: null};
     }
 
     componentDidMount() {
@@ -39,9 +39,36 @@ class App extends React.Component {
                         })}
                     </div>
                 </div>
+                <form>
+                    <label>
+                        Search:
+                        <input type="text" onChange={this.handleChange(event)}/>
+                    </label>
+                </form>
+                <p>Search Value: {this.state.theValue}</p>
+
             </div>
         )
     }
+
+    // debounce =
+    //     clearTimeout(timeout);
+    //
+    //     timeout = setTimeout(function () {
+    //         console.log('Input Value:', textInput.value);
+    //     }, 1000);
+
+    handleChange = (event) => {
+        let tm = this.state.timeout;
+        console.log(`tm: ${tm}`);
+        clearTimeout(tm);
+        tm = setTimeout(function () {
+            console.log('Input Value:', event.target.value);
+            this.setState({theValue: event.target.value});
+        }, 1000);
+        this.setState({timeout: tm});
+        // or send request to server here
+    };
 
     updateMenu(date, index) {
         const items = this.state.menuItems.slice();

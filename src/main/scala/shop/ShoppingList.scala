@@ -37,15 +37,11 @@ case class ShoppingList(menu: Menu, extras: List[Ingredient]) {
 
   def printShoppinglistForUseWhileShopping: String =
     menu.printMenu(nameOfDayToDateMap) + "\n" +
-      printShoppinglistButSkipDuplicateCategoryLables +
+      printShoppinglistButSkipDuplicateCategoryLabels +
       "\n\nrecepten:\n" +
       menu.printMenuForShoppingList
 
-  def printShoppinglistButSkipDuplicateCategoryLables2: String = {
-    ""
-  }
-
-  def printShoppinglistButSkipDuplicateCategoryLables: String = {
+  def printShoppinglistButSkipDuplicateCategoryLabels: String = {
     @tailrec def recursiveAdd(shopingListItems: List[ShoppingListItem], currentCategory: Category, shoppingListAsString: String): String = {
       shopingListItems match {
         case Nil => shoppingListAsString

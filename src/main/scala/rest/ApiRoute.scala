@@ -7,7 +7,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
 import shop.Main.readAndSplit
-import shop.{CategoryService, CookBookService, Dates, Menu, MenuItem, ShoppingList}
+import shop._
 import spray.json.DefaultJsonProtocol
 
 object ApiRoute extends DefaultJsonProtocol with CORSHandler {
@@ -101,49 +101,6 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
         }
       )
 
-    //    val route =
-    //      corsHandler(
-    //        pathPrefix("api") {
-    //          path("category" / Segment) { name =>
-    //            get {
-    //              println(s"get - category: ${name}")
-    //              complete(CategoryService.getCategoryByName(name))
-    //            }
-    //          } ~ path("categories") {
-    //            get {
-    //              complete(CategoryService.allCategories().values)
-    //            }
-    //          } ~ path("menu") {
-    //            get {
-    //              println("get menu")
-    //              complete(menu)
-    //            }
-    //          } ~ path("shoppinglist") {
-    //            get {
-    //              println("get shoppinglist")
-    //              complete(shoppingList)
-    //            }
-    //          } ~ path("category" / Segment) { name =>
-    //            put {
-    //              println(s"put - category: ${name}")
-    //              complete(CategoryService.getCategoryByName(name))
-    //            }
-    //          } ~ path("post" / Segment) { name =>
-    //            post {
-    //              println(s"post - category: ${name}")
-    //              complete(CategoryService.getCategoryByName(name))
-    //            }
-    //          } ~ path("delete" / Segment) { name =>
-    //            delete {
-    //              println(s"delete - category: ${name}")
-    //              complete(CategoryService.getCategoryByName(name))
-    //            }
-    //          } ~ path("recipe" / Segment) { name =>
-    //            get {
-    //              complete(CookBookService.getRecipeByName(name))
-    //            }
-    //          }
-    //        })
     route
   }
 }
