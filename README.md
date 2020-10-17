@@ -16,6 +16,10 @@ The road map now looks like this:
 
 Still, the goal to learn always have a strong influence. This will lead to solutions that might be over engineered or rewritten several times just to get it right. 
 
+## Bugs
+
+Entering a recipe that doesn't exist in the cookbook results in a line with 'Dummy' in the output. This should be an error in stead. 
+
 # Build and test
 
 ```sbt clean test```
