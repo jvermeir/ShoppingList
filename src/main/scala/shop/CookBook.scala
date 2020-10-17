@@ -22,6 +22,7 @@ object CookBookService {
 
   def loadRecipes():Unit = store.load()
   def getRecipeByName(name: String): Recipe = store.getRecipeByName(name)
+  def getRecipeByPrefix(prefix: String): Iterable[Recipe] = store.getRecipeByPrefix(prefix)
 }
 
 class CookBookStore {
@@ -55,6 +56,11 @@ class CookBookStore {
   // TODO: refactor to use Options?
   def getRecipeByName(recipeName:String): Recipe =
     recipes.getOrElse(recipeName, DummyRecipe)
+
+  def getRecipeByPrefix(prefix:String): Iterable[Recipe] = {
+    val searchString = prefix.toLowerCase
+    recipes.view.filterKeys(_.toLowerCase.contains(searchString)).toMap.values
+  }
 
   def cleanUpCookBookText(cookBookAsString: String): String =
     cookBookAsString.replaceAll("\t", "")

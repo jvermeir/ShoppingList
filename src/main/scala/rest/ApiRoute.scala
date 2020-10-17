@@ -83,6 +83,11 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
             println(s"get - recipe ${name}")
             complete(CookBookService.getRecipeByName(name))
           }
+        } ~ path ("search" / Segment) { prefix =>
+          get {
+            println(s"get - recipe/search ${prefix}")
+            complete(CookBookService.getRecipeByPrefix(prefix))
+          }
         }
       }
 

@@ -12,18 +12,42 @@ export default function Home() {
 const api = "http://localhost:8080/api";
 
 class App extends React.Component {
+    timeout;
+
     constructor(props) {
         super(props);
-        this.state = {menuItems: [], theValue: "", timeout: null};
+        this.state = {menuItems: [], theValue: "", searchResults: [], day: ""};
     }
 
     componentDidMount() {
         this.getMenu()
     }
 
+    filterRecipes = (value, context) => {
+        this.setState({theValue: value});
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(function () {
+                context.searchRecipe(value);
+            },
+            1000);
+    };
+
+    _onBlur = (value, context) => {
+        this.setState({day: value});
+        console.log(`value: ${value}`);
+    }
+
+    firstDay (day) {
+        var today = new Date();
+        
+    }
+
     render() {
         return (
-            <div>Menu
+            <div><form>
+                <label>Menu for week starting on
+                    <input type="text" onBlur={e => this._onBlur(e.target.value, this)}/>
+            </label></form>
                 <div className="top">
                     <div className="grid-container">
                         <div className="grid-item">date</div>
@@ -33,7 +57,7 @@ class App extends React.Component {
                         {this.state.menuItems.map((item, index) => {
                             return (
                                 <MenuItem key={item.date} menuItem={item}
-                                          onClick={() => this.handleClick(item.date, index)}
+                                          onClick={() => this.deleteMenuItem(item.date, index)}
                                 />
                             );
                         })}
@@ -42,33 +66,19 @@ class App extends React.Component {
                 <form>
                     <label>
                         Search:
-                        <input type="text" onChange={this.handleChange(event)}/>
+                        <input type="text" onChange={e => this.filterRecipes(e.target.value, this)}/>
                     </label>
                 </form>
                 <p>Search Value: {this.state.theValue}</p>
-
+                <div>{this.state.searchResults.map((recipe) => {
+                    return (
+                        <Recipe key={recipe.name} recipe={recipe}/>
+                    )
+                })}
+                </div>
             </div>
         )
     }
-
-    // debounce =
-    //     clearTimeout(timeout);
-    //
-    //     timeout = setTimeout(function () {
-    //         console.log('Input Value:', textInput.value);
-    //     }, 1000);
-
-    handleChange = (event) => {
-        let tm = this.state.timeout;
-        console.log(`tm: ${tm}`);
-        clearTimeout(tm);
-        tm = setTimeout(function () {
-            console.log('Input Value:', event.target.value);
-            this.setState({theValue: event.target.value});
-        }, 1000);
-        this.setState({timeout: tm});
-        // or send request to server here
-    };
 
     updateMenu(date, index) {
         const items = this.state.menuItems.slice();
@@ -78,13 +88,19 @@ class App extends React.Component {
         this.setState({menuItems: items});
     }
 
-    handleClick(date, index) {
+    deleteMenuItem(date, index) {
         fetch(`${api}/menu/items/${date}`, {
             method: 'DELETE',
         })
             .then(res => res.text())
             .then(res => console.log(res))
             .then(_ => this.updateMenu(date, index))
+    }
+
+    searchRecipe(name) {
+        fetch(`${api}/recipe/search/${name}`)
+            .then(res => res.json())
+            .then((data) => this.setState({searchResults: data}))
     }
 
     getMenu() {
@@ -107,6 +123,16 @@ class MenuItem extends React.Component {
                 <div className="grid-item">
                     <button onClick={() => this.props.onClick()}>delete</button>
                 </div>
+            </React.Fragment>
+        )
+    }
+}
+
+class Recipe extends React.Component {
+    render() {
+        return (
+            <React.Fragment>
+                <div>{this.props.recipe.name}</div>
             </React.Fragment>
         )
     }
