@@ -10,7 +10,7 @@ export default function Home() {
     )
 }
 
-const api = "http://localhost:8080/api";
+const api = `http://${window.location.hostname}:8080/api`;
 
 Date.prototype.addDays = function (days) {
     let date = new Date(this.valueOf());
