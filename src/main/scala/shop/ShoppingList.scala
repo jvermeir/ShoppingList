@@ -1,6 +1,6 @@
 package shop
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 
 import rest.JsonFormats
 import spray.json.DefaultJsonProtocol
@@ -11,11 +11,11 @@ import scala.annotation.tailrec
  * ShoppingList creates a list of groceries sorted by category for a given Menu.
  */
 case class ShoppingList(menu: Menu, extras: List[Ingredient]) {
-  val nameOfDayToDateMap: Map[String, LocalDate] = Menu.getNameOfDayToDateMap(menu.startOfPeriod)
+  val nameOfDayToDateMap: Map[String, LocalDateTime] = Menu.getNameOfDayToDateMap(menu.startOfPeriod)
   val shoppingListItemsSortedByCategory: List[ShoppingListItem] = getShoppingListItemsSortedByCategory
 
   /* Construct the list of ShoppingListItems by combining a Recipe and a date. */
-  def getShoppingListItemsWithDateAdded(recipe: Recipe, date: LocalDate): List[ShoppingListItem] = {
+  def getShoppingListItemsWithDateAdded(recipe: Recipe, date: LocalDateTime): List[ShoppingListItem] = {
     recipe.ingredients map (ingredient => ShoppingListItem(ingredient, date))
     for (ingredient <- recipe.ingredients) yield ShoppingListItem(ingredient, date)
   }
@@ -31,7 +31,7 @@ case class ShoppingList(menu: Menu, extras: List[Ingredient]) {
     for (ingredient <- extras; if ingredient != null) yield new ShoppingListItem(ingredient)
   }
 
-  def findDate(nameOfDay: String): LocalDate = {
+  def findDate(nameOfDay: String): LocalDateTime = {
     nameOfDayToDateMap(nameOfDay)
   }
 

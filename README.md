@@ -59,7 +59,8 @@ Used Gatsby like this:
     
 start with
 
-    gatsby develop
+    gatsby develop # localhost only
+    gatsby develop --host=0.0.0.0
     
 React tutorial
 
@@ -67,4 +68,34 @@ React tutorial
     
 state example:
 
-    https://codepen.io/gaearon/pen/gWWQPY?editors=0010                    
+    https://codepen.io/gaearon/pen/gWWQPY?editors=0010
+
+## UI experiments
+
+- enter the first day of the planning period using a 
+    date picker
+    dropdown
+- this loads or creates a menu starting on that day
+- remove days using button (done)
+- add a recipe for a day         
+- allow multiple recipes per day
+- add a generate shopping list button
+- allow reordering by draging the recipe part
+- delete by swiping away
+
+recipe lines show as:
+
+- day of the week | recipe | delete button
+- day can be changed using dropdown menu
+- recipe can be changed by typing in a text field
+
+api:
+
+- find or start menu starting on a date
+- add day/recipe line
+- remove day/recipe line
+- print shopping list
+
+show day-month and recipe name in list 
+use id to update 
+store date as a datetime so day-month string can be derived.    

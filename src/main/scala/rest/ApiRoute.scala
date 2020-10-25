@@ -1,12 +1,10 @@
 package rest
 
-import java.time.LocalDate
-
-import akka.http.javadsl.server.Directives.request
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
 import shop.Main.readAndSplit
+import shop.Menu.menuJsonFormat
 import shop._
 import spray.json.DefaultJsonProtocol
 
@@ -24,22 +22,18 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
       pathPrefix("category") {
         path(Segment) { name =>
           get {
-            println(s"get - category: ${name}")
             complete(CategoryService.getCategoryByName(name))
           }
         } ~ path(Segment) { name =>
           put {
-            println(s"put - category: ${name}")
             complete(CategoryService.getCategoryByName(name))
           }
         } ~ path(Segment) { name =>
           post {
-            println(s"post - category: ${name}")
             complete(CategoryService.getCategoryByName(name))
           }
         } ~ path(Segment) { name =>
           delete {
-            println(s"delete - category: ${name}")
             complete(CategoryService.getCategoryByName(name))
           }
         }
@@ -48,19 +42,24 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
     val menuRoute =
       pathPrefix("menu") {
         get {
-          println(s"get - menu")
           complete(menu)
         } ~
-          path("items" / Segment) { date =>
+          post {
+            entity(as[String]) { newMenu => {
+              menu = Menu.fromJson(newMenu)
+              complete("OK")
+            }
+            }
+          } ~
+          path("items" / Segment) { id =>
             delete {
-              println(s"delete - menu item for date: ${date}")
-              menu = Menu.newMenuWithADayRemoved(menu, Dates.parseIsoDateString(date).get)
+              menu = Menu.newMenuWithARecordRemoved(menu, id)
               complete(menu)
             }
           } ~ path("items" / "add") {
           post {
-            formFields(Symbol("date").as[String], Symbol("dayOfWeek").as[String], Symbol("recipe").as[String]) {
-              (date, dayOfWeek, recipe) => complete(Menu.newMenuWithADayAdded(menu, Menu.item(date, dayOfWeek, recipe)))
+            formFields(Symbol("id").as[String], Symbol("date").as[String], Symbol("dayOfWeek").as[String], Symbol("recipe").as[String]) {
+              (id, date, dayOfWeek, recipe) => complete(Menu.newMenuWithADayAdded(menu, Menu.item(id, date, dayOfWeek, recipe)))
             }
           }
         }
@@ -70,7 +69,6 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
       pathPrefix("shoppinglist") {
         path(Segment) { name =>
           get {
-            println(s"get - shoppinglist")
             complete(shoppingList)
           }
         }
@@ -80,12 +78,10 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
       pathPrefix("recipe") {
         path(Segment) { name =>
           get {
-            println(s"get - recipe ${name}")
             complete(CookBookService.getRecipeByName(name))
           }
-        } ~ path ("search" / Segment) { prefix =>
+        } ~ path("search" / Segment) { prefix =>
           get {
-            println(s"get - recipe/search ${prefix}")
             complete(CookBookService.getRecipeByPrefix(prefix))
           }
         }
@@ -93,19 +89,25 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
 
     val route =
       corsHandler(
-        pathPrefix("api") {
-          categoryRoute ~
-            menuRoute ~
-            shoppingListRoute ~
-            recipeRoute ~
-            path("categories") {
-              get {
-                complete(CategoryService.allCategories().values)
-              }
+        ctx => {
+          extractLog { log =>
+            log.info("uri:{}, method:{}", ctx.request.uri, ctx.request.method)
+            pathPrefix("api") {
+              categoryRoute ~
+                menuRoute ~
+                shoppingListRoute ~
+                recipeRoute ~
+                path("categories") {
+                  get {
+                    complete(CategoryService.allCategories().values)
+                  }
+                }
             }
+          }(ctx)
         }
       )
 
     route
   }
+
 }

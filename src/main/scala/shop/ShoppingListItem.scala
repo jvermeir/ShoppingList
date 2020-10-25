@@ -4,12 +4,12 @@ package shop
  * A ShoppingListItem is a Ingredient extended with date it will be used on
  */
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 import shopv1.PanicException
 
-case class ShoppingListItem(ingredient: Ingredient, date: LocalDate) extends Ordered[ShoppingListItem] {
+case class ShoppingListItem(ingredient: Ingredient, date: LocalDateTime) extends Ordered[ShoppingListItem] {
   if (ingredient == null) throw new PanicException("Ingredient was null")
   def name: String = ingredient.name
   def category: Category = ingredient.category
@@ -18,7 +18,7 @@ case class ShoppingListItem(ingredient: Ingredient, date: LocalDate) extends Ord
    * If the date doesn't really matter it is filled with Jan 1st 1970. 
    * TODO: think of some better solution. 
    */
-  def this(ingredient: Ingredient) = this(ingredient, LocalDate.now)
+  def this(ingredient: Ingredient) = this(ingredient, LocalDateTime.now)
 
   /*
    * Sort shoppingListItems by Ingredient and date
@@ -43,5 +43,5 @@ case class ShoppingListItem(ingredient: Ingredient, date: LocalDate) extends Ord
 
   val ddMMFormatter = DateTimeFormatter.ofPattern("dd-MM")
 
-  def printDate(date: LocalDate): String = ddMMFormatter.format(date)
+  def printDate(date: LocalDateTime): String = ddMMFormatter.format(date)
 }

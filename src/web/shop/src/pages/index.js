@@ -1,5 +1,6 @@
 import React from "react";
 import './shop.css';
+import DatePicker from './DatePicker.js';
 
 export default function Home() {
     return (
@@ -11,12 +12,18 @@ export default function Home() {
 
 const api = "http://localhost:8080/api";
 
+Date.prototype.addDays = function (days) {
+    let date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
+
 class App extends React.Component {
     timeout;
 
     constructor(props) {
         super(props);
-        this.state = {menuItems: [], theValue: "", searchResults: [], day: ""};
+        this.state = {menuItems: [], theValue: "", searchResults: [], startOfPeriod: ""};
     }
 
     componentDidMount() {
@@ -32,32 +39,50 @@ class App extends React.Component {
             1000);
     };
 
-    _onBlur = (value, context) => {
-        this.setState({day: value});
-        console.log(`value: ${value}`);
+    getNameOfDayFromDate = (newDate) => {
+        const dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+        return dayNames[new Date(newDate).getDay()];
     }
 
-    firstDay (day) {
-        var today = new Date();
-        
+    getMonthAndDayFromDate = (newDate) => {
+        return `${newDate.getMonth()+1} - ${newDate.getDate()}`;
+    }
+
+    dateChanged = (newDate, context) => {
+        let theDay = new Date(newDate);
+        const menuItems = this.state.menuItems;
+        const newItems = menuItems.map(item => {
+            const currentDay = theDay;
+            theDay = theDay.addDays(1)
+            return {
+                ...item,
+                dayOfWeek: this.getNameOfDayFromDate(currentDay),
+                date: currentDay
+            };
+        });
+        this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
+        console.log(`value: ${newDate}`);
     }
 
     render() {
         return (
-            <div><form>
-                <label>Menu for week starting on
-                    <input type="text" onBlur={e => this._onBlur(e.target.value, this)}/>
+            <div>
+                <DatePicker onChange={e => this.dateChanged(e.target.value, this)}/>
+                <form>
+                <label>Menu for week starting on date (yyyymmdd)
+                    <input type="text" onBlur={e => this.dateChanged(e.target.value, this)}/>
             </label></form>
                 <div className="top">
                     <div className="grid-container">
+                        <div className="hidden">id</div>
                         <div className="grid-item">date</div>
                         <div className="grid-item">day</div>
                         <div className="grid-item">recipe</div>
                         <div className="grid-item">action</div>
                         {this.state.menuItems.map((item, index) => {
                             return (
-                                <MenuItem key={item.date} menuItem={item}
-                                          onClick={() => this.deleteMenuItem(item.date, index)}
+                                <MenuItem key={item.id} menuItem={item} parent={this}
+                                          onClick={() => this.deleteMenuItem(item.id, index)}
                                 />
                             );
                         })}
@@ -88,13 +113,13 @@ class App extends React.Component {
         this.setState({menuItems: items});
     }
 
-    deleteMenuItem(date, index) {
-        fetch(`${api}/menu/items/${date}`, {
+    deleteMenuItem(id, index) {
+        fetch(`${api}/menu/items/${id}`, {
             method: 'DELETE',
         })
             .then(res => res.text())
             .then(res => console.log(res))
-            .then(_ => this.updateMenu(date, index))
+            .then(_ => this.updateMenu(id, index))
     }
 
     searchRecipe(name) {
@@ -107,9 +132,29 @@ class App extends React.Component {
         fetch(`${api}/menu`)
             .then(res => res.json())
             .then((data) => {
-                this.setState({menuItems: data.menuItems})
+                this.setState({menuItems: this.parseMenuItems(data.menuItems)})
+                this.setState({startOfPeriod: data.startOfPeriod})
             })
             .catch(console.log)
+    }
+
+    saveMenu() {
+        console.log(JSON.stringify({startOfPeriod: this.state.startOfPeriod, menuItems: this.state.menuItems}));
+        fetch(`${api}/menu`, {
+            method: 'POST',
+            body: JSON.stringify({startOfPeriod: this.state.startOfPeriod, menuItems: this.state.menuItems}),
+            headers: {"Content-type": "application/json"}
+        })
+            .then(res => res.text())
+            .then(res => console.log(res))
+    }
+
+    parseMenuItems(menuItems) {
+        return menuItems.map(item => { return {
+        ...item,
+        date: new Date(item.date)
+        }
+        });
     }
 }
 
@@ -117,8 +162,10 @@ class MenuItem extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <div className="grid-item">{this.props.menuItem.date}</div>
-                <div className="grid-item">{this.props.menuItem.dayOfWeek}</div>
+                <div className="hidden">{this.props.menuItem.id}</div>
+                <div className="hidden">{this.props.menuItem.date.toJSON()}</div>
+                <div className="grid-item">{this.props.parent.getNameOfDayFromDate(this.props.menuItem.date)}</div>
+                <div className="grid-item">{this.props.parent.getMonthAndDayFromDate(this.props.menuItem.date)}</div>
                 <div className="grid-item">{this.props.menuItem.recipe}</div>
                 <div className="grid-item">
                     <button onClick={() => this.props.onClick()}>delete</button>

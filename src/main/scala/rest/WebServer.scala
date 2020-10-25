@@ -26,17 +26,11 @@ object WebServer {
   }
 
   def main(args: Array[String]): Unit = {
-
     val rootBehavior = Behaviors.setup[Nothing] { context =>
-
       val route: Route = ApiRoute.getRoute
-
       startHttpServer(route, context.system)
-
       Behaviors.empty
     }
     val system = ActorSystem[Nothing](rootBehavior, "HelloAkkaHttpServer")
-
   }
-
 }

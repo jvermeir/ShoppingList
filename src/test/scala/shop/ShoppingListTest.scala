@@ -1,6 +1,6 @@
 package shop
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 
 import org.scalatest.GivenWhenThen
 import org.scalatest.flatspec.AnyFlatSpec
@@ -47,8 +47,8 @@ class ShoppingListTest extends AnyFlatSpec with GivenWhenThen {
     val extras: List[Ingredient] = List()
     val shoppingList = new ShoppingList(menu, extras)
     Then("the list of ingredients on the shopping list equals the list of ingredients from both categories combined ordered by category name")
-    val oktober9th2011 = LocalDate.of(2011, 10, 9)
-    val oktober8th2011 = LocalDate.of(2011, 10, 8)
+    val oktober9th2011 = LocalDateTime.of(2011, 10, 9, 0, 0, 0)
+    val oktober8th2011 = LocalDateTime.of(2011, 10, 8, 0, 0, 0)
 
     val expectedListOfIngredients = List(
       ShoppingListItem(Ingredient.applyFromText("zuivel", "ei"), oktober9th2011),

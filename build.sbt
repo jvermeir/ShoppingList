@@ -13,7 +13,7 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-language:postfixOps")
 
 val ScalatraVersion = "2.7.0"
 resolvers += Classpaths.typesafeReleases
-lazy val akkaHttpVersion = "10.2.0"
+lazy val akkaHttpVersion = "10.2.1"
 lazy val akkaVersion    = "2.6.8"
 
 libraryDependencies ++=
