@@ -5,6 +5,9 @@
  */
 
 module.exports = {
-  /* Your site config here */
+  proxy: {
+    prefix: "/api",
+    url: "http://localhost:8080",
+  },
   plugins: [],
 }

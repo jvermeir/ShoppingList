@@ -2058,3 +2058,14 @@ groente:aubergines, courgette, paprika, ui
 koeling:feta
 vega:falafel
 rijst:couscous
+
+naam:Soep
+soep:blik soep
+brood:afbakstokbrood
+
+naam:Naantaart met pompoen
+groente:ui, pompoen, champignons
+bakspullen:meel, bakpoeder, 3 ei
+boter:kleine yoghurt
+kruiden:koriander, kerriepoeder
+chips:cashewnoten

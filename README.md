@@ -97,5 +97,5 @@ api:
 - print shopping list
 
 show day-month and recipe name in list 
-use id to update 
+done - use id to update 
 store date as a datetime so day-month string can be derived.    

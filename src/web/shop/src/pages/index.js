@@ -10,7 +10,7 @@ export default function Home() {
     )
 }
 
-const api = `http://${window.location.hostname}:8080/api`;
+const api = `/api`;
 
 Date.prototype.addDays = function (days) {
     let date = new Date(this.valueOf());
@@ -161,7 +161,7 @@ class App extends React.Component {
 class MenuItem extends React.Component {
     render() {
         return (
-            <React.Fragment>
+            <>
                 <div className="hidden">{this.props.menuItem.id}</div>
                 <div className="hidden">{this.props.menuItem.date.toJSON()}</div>
                 <div className="grid-item">{this.props.parent.getNameOfDayFromDate(this.props.menuItem.date)}</div>
@@ -170,7 +170,7 @@ class MenuItem extends React.Component {
                 <div className="grid-item">
                     <button onClick={() => this.props.onClick()}>delete</button>
                 </div>
-            </React.Fragment>
+            </>
         )
     }
 }
