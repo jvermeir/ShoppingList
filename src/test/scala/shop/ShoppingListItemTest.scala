@@ -1,6 +1,6 @@
 package shop
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 import org.junit.Assert._
 import org.scalatest.BeforeAndAfterAll
@@ -10,7 +10,7 @@ class ShoppingListItemTest extends AnyFlatSpec with BeforeAndAfterAll {
 
   CategoryService.config("data/test/categoryDatabase.csv")
   CookBookService.config("data/test/cookBookForReadFromFileScenario.txt")
-  val date = LocalDateTime.of(2011, 10, 9, 0, 0, 0)
+  val date = LocalDate.of(2011, 10, 9)
 
   "ShoppingListItems" should "be based on category" in {
     val zeep = ShoppingListItem(Ingredient.applyFromText("schoonmaak", "zeep"), date)

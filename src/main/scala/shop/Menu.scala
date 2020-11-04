@@ -1,46 +1,49 @@
 package shop
 
 import java.io.File
-import java.time.{LocalDate, LocalDateTime}
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.{Locale, UUID}
 
 import org.apache.commons.io.FileUtils
 import rest.JsonFormats
-import shop.Dates.{jsonDateFormatter, parseIsoDateString, parseddMMyyyyDateString}
+import shop.Dates.{jsonDateFormatter, parseddMMyyyyDateString}
 import shop.Menu.toDutchNameOfDayFormatter
 import spray.json.{DefaultJsonProtocol, _}
 
-case class MenuItem (id:String, date:LocalDateTime, dayOfWeek:String, recipe:String) extends DefaultJsonProtocol
+case class MenuItem (id:String, date:LocalDate, recipe:String)
+
+object MenuItem extends DefaultJsonProtocol with JsonFormats {
+  def fromJson(recipeAsText: String):MenuItem = recipeAsText.parseJson.convertTo[MenuItem]
+}
 
 /**
  * A menu is a collection of recipes for a period of a week or less.
  */
-case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDateTime) {
-  val recipes: List[(LocalDateTime, Recipe)] = for (menuItem <- menuItems) yield (menuItem.date, CookBookService.store.getRecipeByName(menuItem.recipe))
+case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
+  val recipes: List[(LocalDate, Recipe)] = for (menuItem <- menuItems) yield (menuItem.date, CookBookService.store.getRecipeByName(menuItem.recipe))
 
-  def printMenu(nameOfDayToDateMap: Map[String, LocalDateTime]): String = {
-      menuItems.map (menuItem => nameOfDayToDateMap(menuItem.dayOfWeek).getDayOfMonth + " " + menuItem.dayOfWeek + ":" + menuItem.recipe) mkString "\n"
+  def printMenu(nameOfDayToDateMap: Map[String, LocalDate]): String = {
+      menuItems.map (menuItem => menuItem.date.getDayOfMonth + " " + menuItem.date.format(toDutchNameOfDayFormatter) + ":" + menuItem.recipe) mkString "\n"
   }
 
   def printMenuForShoppingList: String = {
     recipes.map {case (date,recipe) => date.format(toDutchNameOfDayFormatter) + ":" + recipe.toString } mkString "\n"
   }
 
-  def getNameOfDayToDateMap:Map[String, LocalDateTime] = {
+  def getNameOfDayToDateMap:Map[String, LocalDate] = {
     Menu.getNameOfDayToDateMap(startOfPeriod)
   }
-
 }
 
 object Menu extends DefaultJsonProtocol with JsonFormats {
   def fromJson(data: String):Menu = data.parseJson.convertTo[Menu]
 
   def item(id:String, date:String, dayOfWeek:String, recipe: String):MenuItem = {
-    MenuItem(id, LocalDateTime.from(jsonDateFormatter.parse(date)), dayOfWeek, recipe)
+    MenuItem(id, LocalDate.from(jsonDateFormatter.parse(date)), recipe)
   }
 
-  def newMenuWithADayRemoved(menu: Menu, dateToBeRemoved: LocalDateTime): Menu = {
+  def newMenuWithADayRemoved(menu: Menu, dateToBeRemoved: LocalDate): Menu = {
     val newMenuItems = menu.menuItems.filter(item => dateToBeRemoved != item.date)
     Menu(newMenuItems, menu.startOfPeriod)
   }
@@ -78,19 +81,19 @@ object Menu extends DefaultJsonProtocol with JsonFormats {
 
   val toDutchNameOfDayFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE", new Locale("nl", "NL"))
 
-  def getNameOfDayToDateMap (dateOfFirstDay:LocalDateTime): Map[String, LocalDateTime] = {
+  def getNameOfDayToDateMap (dateOfFirstDay:LocalDate): Map[String, LocalDate] = {
     val day = dateOfFirstDay
     val result = for (i <- 0 until 7) yield {
       Tuple2(day.plusDays(i).format(toDutchNameOfDayFormatter).toLowerCase, day.plusDays(i))
     }
-    result.toMap[String, LocalDateTime]
+    result.toMap[String, LocalDate]
   }
 
-  def createMenuLineFromTextLine(textLine: String, dateOfFirstDay: LocalDateTime): MenuItem = {
+  def createMenuLineFromTextLine(textLine: String, dateOfFirstDay: LocalDate): MenuItem = {
     if (isValidMenuLine(textLine)) {
       val day: String = textLine.split(":")(0).trim.toLowerCase()
       val date = getNameOfDayToDateMap(dateOfFirstDay)(day)
-      MenuItem(UUID.randomUUID.toString, date, day, textLine.split(":")(1).trim)
+      MenuItem(UUID.randomUUID.toString, date, textLine.split(":")(1).trim)
     }
     else null
   }

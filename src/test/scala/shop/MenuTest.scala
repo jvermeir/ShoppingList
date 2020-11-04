@@ -32,14 +32,14 @@ class MenuTest extends AnyFlatSpec {
 
   it should "Date for R1 is 01022014 and date for R2 is 02022014" in {
     val menu = Menu.readFromFile("data/test/menuFiles/0101.txt")
-    assertEquals("2014-02-01T00:00:00.000Z", dateToIsoString(menu.menuItems.head.date))
-    assertEquals("2014-02-02T00:00:00.000Z", dateToIsoString(menu.menuItems(1).date))
+    assertEquals("2014-02-01", dateToIsoString(menu.menuItems.head.date))
+    assertEquals("2014-02-02", dateToIsoString(menu.menuItems(1).date))
   }
 
   it should "Week may start on a Wednesday" in {
     val menu = Menu.readFromFile("data/test/menuFiles/somemenu.txt")
-    assertEquals("2014-02-08T00:00:00.000Z", dateToIsoString(menu.menuItems(3).date))
-    assertEquals("2014-02-09T00:00:00.000Z", dateToIsoString(menu.menuItems(4).date))
+    assertEquals("2014-02-08", dateToIsoString(menu.menuItems(3).date))
+    assertEquals("2014-02-09", dateToIsoString(menu.menuItems(4).date))
   }
 
   it should "Load a menu from a json file" in {

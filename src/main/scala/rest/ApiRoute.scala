@@ -4,7 +4,6 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
 import shop.Main.readAndSplit
-import shop.Menu.menuJsonFormat
 import shop._
 import spray.json.DefaultJsonProtocol
 
@@ -42,11 +41,14 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
     val menuRoute =
       pathPrefix("menu") {
         get {
+              println(s"get menu: $menu")
           complete(menu)
         } ~
           post {
             entity(as[String]) { newMenu => {
+              println(s"post menu (posted): $menu")
               menu = Menu.fromJson(newMenu)
+              println(s"post menu new: $menu")
               complete("OK")
             }
             }
@@ -61,6 +63,11 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
             formFields(Symbol("id").as[String], Symbol("date").as[String], Symbol("dayOfWeek").as[String], Symbol("recipe").as[String]) {
               (id, date, dayOfWeek, recipe) => complete(Menu.newMenuWithADayAdded(menu, Menu.item(id, date, dayOfWeek, recipe)))
             }
+          }
+        } ~ path ("reset") {
+          get {
+            menu = Menu(menuAndListOfExtras._1)
+            complete(menu)
           }
         }
       }

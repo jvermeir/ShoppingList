@@ -49,29 +49,25 @@ class App extends React.Component {
     }
 
     dateChanged = (newDate, context) => {
-        let theDay = new Date(newDate);
-        const menuItems = this.state.menuItems;
+        const newStartDay = Math.trunc(newDate/(24*60*60*1000));
+        const oldStartDay = Math.trunc(context.state.startOfPeriod/(24*60*60*1000));
+        const delta = newStartDay - oldStartDay;
+        console.log(`delta: ${delta}`);
+        const menuItems = context.state.menuItems;
         const newItems = menuItems.map(item => {
-            const currentDay = theDay;
-            theDay = theDay.addDays(1)
             return {
                 ...item,
-                dayOfWeek: this.getNameOfDayFromDate(currentDay),
-                date: currentDay
+                date: item.date.addDays(delta)
             };
         });
-        this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
+        context.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
         console.log(`value: ${newDate}`);
     }
 
     render() {
         return (
             <div>
-                <DatePicker onChange={e => this.dateChanged(e.target.value, this)}/>
-                <form>
-                <label>Menu for week starting on date (yyyymmdd)
-                    <input type="text" onBlur={e => this.dateChanged(e.target.value, this)}/>
-            </label></form>
+                <DatePicker onChange={e => this.dateChanged(e.target.value._d, this)}/>
                 <div className="top">
                     <div className="grid-container">
                         <div className="hidden">id</div>
@@ -132,9 +128,10 @@ class App extends React.Component {
         fetch(`${api}/menu`)
             .then(res => res.json())
             .then((data) => {
-                this.setState({menuItems: this.parseMenuItems(data.menuItems)})
-                this.setState({startOfPeriod: data.startOfPeriod})
+                this.setState({menuItems: this.parseMenuItems(data.menuItems)});
+                this.setState({startOfPeriod: new Date(data.startOfPeriod+"T10:00:00")});
             })
+            .then(res => console.log(res))
             .catch(console.log)
     }
 
@@ -152,7 +149,7 @@ class App extends React.Component {
     parseMenuItems(menuItems) {
         return menuItems.map(item => { return {
         ...item,
-        date: new Date(item.date)
+        date: new Date(item.date+"T10:00:00")
         }
         });
     }
