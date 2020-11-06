@@ -14,7 +14,7 @@ object WebServer {
     implicit val classicSystem: akka.actor.ActorSystem = system.toClassic
     import system.executionContext
 
-    val futureBinding = Http().bindAndHandle(routes, "localhost", 8080)
+    val futureBinding = Http().bindAndHandle(routes, "0.0.0.0", 8080)
     futureBinding.onComplete {
       case Success(binding) =>
         val address = binding.localAddress
@@ -26,17 +26,11 @@ object WebServer {
   }
 
   def main(args: Array[String]): Unit = {
-
     val rootBehavior = Behaviors.setup[Nothing] { context =>
-
       val route: Route = ApiRoute.getRoute
-
       startHttpServer(route, context.system)
-
       Behaviors.empty
     }
     val system = ActorSystem[Nothing](rootBehavior, "HelloAkkaHttpServer")
-
   }
-
 }

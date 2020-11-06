@@ -1,9 +1,8 @@
 #!/bin/bash
 
-# if [ "$1" == "" -o "$2" == "" ]
-if test $# -lt 2
+if test $# -lt 3
 then
-	echo "Usage: runShop.sh <cookbook> <menu>"
+	echo "Usage: runShop.sh <cookbook> <menu> <categoryDatabase>"
 	exit 0
 fi
-java -cp bin/shoppinglist-assembly-1.6.jar shop.Main $1 $2
+java -cp bin/shoppinglist-assembly-1.7.jar shop.Main $1 $2 $3
