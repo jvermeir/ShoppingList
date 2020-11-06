@@ -1,6 +1,6 @@
 import sbt.Append.appendSeq
 
-version := "1.7-snapshot"
+version := "1.7"
 
 mainClass in assembly := Some("shop.Main")
 
