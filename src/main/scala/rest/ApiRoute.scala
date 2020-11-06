@@ -8,8 +8,8 @@ import shop._
 import spray.json.DefaultJsonProtocol
 
 object ApiRoute extends DefaultJsonProtocol with CORSHandler {
-  val cookbookFile = "data/cookbook_v2.txt"
-  val categoryFile = "data/categoryDatabase_v2.csv"
+  val cookbookFile = "../ShoppingListData/cookbook_v2.txt"
+  val categoryFile = "../ShoppingListData/categoryDatabase_v2.csv"
   CategoryService.config(categoryFile)
   CookBookService.config(cookbookFile)
   val menuAndListOfExtras: (String, String) = readAndSplit("data/test/2808.txt")

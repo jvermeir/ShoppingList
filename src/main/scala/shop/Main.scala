@@ -10,14 +10,14 @@ object Main {
    * See if it works.
    */
   def main(args: Array[String]): Unit = {
-    if (args.length < 2) {
-      println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu>")
+    if (args.length < 3) {
+      println("Usage: shop.ShoppingList <path to cookbook> <path to week-menu> <path to categoryDatabase>")
       System.exit(-1)
     }
 
     val cookbookFile = args(0)
     val menuFile: String = args(1)
-    val categoryFile = "data/categoryDatabase_v2.csv"
+    val categoryFile = args(2)
     CategoryService.config(categoryFile)
     CookBookService.config(cookbookFile)
     //TODO: move to shoppinglist

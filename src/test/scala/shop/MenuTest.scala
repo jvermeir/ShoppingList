@@ -42,10 +42,4 @@ class MenuTest extends AnyFlatSpec {
     assertEquals("2014-02-09", dateToIsoString(menu.menuItems(4).date))
   }
 
-  it should "Load a menu from a json file" in {
-    val menu = Menu.readFromFile("data/test/menuFiles/somemenu.txt")
-    val menuAsJson = menu.toJson
-    val res = Menu.fromJson(menuAsJson.toString)
-    assertEquals(menu, res)
-  }
 }

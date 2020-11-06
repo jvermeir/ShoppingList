@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object Dates {
-  val jsonDateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME // .ofPattern("yyyy-MM-dd")
-  val jsonOutputDateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE // .ofPattern("yyyy-MM-dd")
+  val jsonDateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
+  val jsonOutputDateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE
   val ddMMyyyyFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMyyyy")
 
   def dateToIsoString(date: LocalDate): String = {
