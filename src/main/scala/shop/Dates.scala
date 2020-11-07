@@ -11,7 +11,6 @@ object Dates {
   val ddMMyyyyFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("ddMMyyyy")
 
   def dateToIsoString(date: LocalDate): String = {
-    println(jsonOutputDateFormatter.format(date))
     jsonOutputDateFormatter.format(date)
   }
 

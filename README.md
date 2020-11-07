@@ -1,6 +1,6 @@
 # ShoppingList
 
-Shopping list is a vehicle to teach myself Scala.
+Shopping list is a vehicle to teach myself Scala. And React. 
 It also serves a real purpose because it is supposed to generate shopping lists optimized for the super market I visit each week. 
 There have been several incarnations of this program: a Oracle Forms version (lost in the mists of time, this is probably a good thing), a Drools version (worked, but was too ambitious because it tried to magically generate a menu as well as a shopping list)
 and a couple of Scala versions that tried to support natural language to specify recipes.
@@ -36,7 +36,7 @@ Entering a recipe that doesn't exist in the cookbook results in a line with 'Dum
 
 example
 
-```./bin/r.sh 1301``` takes a menu file named 1301.txt that is stored in ./menus, creates a shopping list named 1301.txt in
+```./bin/r.sh 1301``` takes a menu file named 1301.txt that is stored in ../ShoppingListData/menus, creates a shopping list named 1301.txt in
 the root folder of this project and opens this file in your default editor.
 
 ## Web service
@@ -45,9 +45,13 @@ build as described in `package`
 
 Start rest.WebServer
 
+    java -cp ./target/scala-2.13/shoppinglist-assembly-<version>.jar rest.WebServer
+    
+e.g.
+    
     java -cp ./target/scala-2.13/shoppinglist-assembly-1.7-snapshot.jar rest.WebServer
     
-This service reads a cookbook and a category database from `data/cookbook_v2.txt` and `data/categoryDatabase_v2.csv`.    
+This service reads a cookbook and a category database from `../ShoppingListData/cookbook_v2.txt` and `../ShoppingListData/categoryDatabase_v2.csv`.    
     
 on command line:
 
@@ -76,11 +80,11 @@ state example:
 
 ## UI experiments
 
-- enter the first day of the planning period using a 
+done - enter the first day of the planning period using a 
     date picker
-    dropdown
+done - this changes the start date for the period to the date selected.     
 - this loads or creates a menu starting on that day
-- remove days using button (done)
+done - remove days using button 
 - add a recipe for a day         
 - allow multiple recipes per day
 - add a generate shopping list button
@@ -89,7 +93,7 @@ state example:
 
 recipe lines show as:
 
-- day of the week | recipe | delete button
+done - day of the week | recipe | delete button
 - day can be changed using dropdown menu
 - recipe can be changed by typing in a text field
 
@@ -97,9 +101,9 @@ api:
 
 - find or start menu starting on a date
 - add day/recipe line
-- remove day/recipe line
+done remove day/recipe line
 - print shopping list
 
-show day-month and recipe name in list 
+done - show day-month and recipe name in list 
 done - use id to update 
-store date as a datetime so day-month string can be derived.    
+done - store date as a datetime so day-month string can be derived.    

@@ -41,14 +41,11 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
     val menuRoute =
       pathPrefix("menu") {
         get {
-              println(s"get menu: $menu")
           complete(menu)
         } ~
           post {
             entity(as[String]) { newMenu => {
-              println(s"post menu (posted): $menu")
               menu = Menu.fromJson(newMenu)
-              println(s"post menu new: $menu")
               complete("OK")
             }
             }
