@@ -103,6 +103,7 @@ api:
 - add day/recipe line
 done remove day/recipe line
 - print shopping list
+- store menus so we can do some data mining on them
 
 done - show day-month and recipe name in list 
 done - use id to update 

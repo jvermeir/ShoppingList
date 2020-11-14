@@ -1,5 +1,7 @@
 package rest
 
+import java.time.LocalDate.now
+
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
@@ -13,7 +15,10 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
   CategoryService.config(categoryFile)
   CookBookService.config(cookbookFile)
   val menuAndListOfExtras: (String, String) = readAndSplit("data/test/2808.txt")
-  var menu: Menu = Menu(menuAndListOfExtras._1)
+  var menu = new Menu(List(MenuItem("1", now, "Paksoi met mie")
+    , MenuItem("3", now.plusDays(2), "Witloftaart")
+    , MenuItem("2", now.plusDays(1L), "Cannelloni")
+    , MenuItem("4", now.plusDays(3), "Tagliatelle met cashewnoten")), now())
   val shoppingList = new ShoppingList(menu, List())
 
   def getRoute: Route = {
@@ -41,19 +46,19 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
     val menuRoute =
       pathPrefix("menu") {
         get {
-          complete(menu)
+          complete(menu.sorted)
         } ~
           post {
             entity(as[String]) { newMenu => {
               menu = Menu.fromJson(newMenu)
-              complete("OK")
+              complete(menu.sorted)
             }
             }
           } ~
           path("items" / Segment) { id =>
             delete {
               menu = Menu.newMenuWithARecordRemoved(menu, id)
-              complete(menu)
+              complete(menu.sorted)
             }
           } ~ path("items" / "add") {
           post {
@@ -61,10 +66,10 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
               (id, date, dayOfWeek, recipe) => complete(Menu.newMenuWithADayAdded(menu, Menu.item(id, date, dayOfWeek, recipe)))
             }
           }
-        } ~ path ("reset") {
+        } ~ path("reset") {
           get {
             menu = Menu(menuAndListOfExtras._1)
-            complete(menu)
+            complete(menu.sorted)
           }
         }
       }

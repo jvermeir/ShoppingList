@@ -34,6 +34,10 @@ case class Menu(menuItems: List[MenuItem], startOfPeriod: LocalDate) {
   def getNameOfDayToDateMap:Map[String, LocalDate] = {
     Menu.getNameOfDayToDateMap(startOfPeriod)
   }
+
+  def sorted:Menu = {
+    Menu(menuItems.sortWith((i:MenuItem, j:MenuItem) => i.date.isBefore(j.date)), startOfPeriod)
+  }
 }
 
 object Menu extends DefaultJsonProtocol with JsonFormats {

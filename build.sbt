@@ -7,7 +7,7 @@ mainClass in assembly := Some("shop.Main")
 organization := "com.example"
 name := "shoppinglist"
 
-scalaVersion := "2.13.2"
+scalaVersion := "2.13.3"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-language:postfixOps")
 
