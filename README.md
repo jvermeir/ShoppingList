@@ -86,7 +86,7 @@ done - this changes the start date for the period to the date selected.
 - this loads or creates a menu starting on that day
 done - remove days using button 
 - add a recipe for a day         
-- allow multiple recipes per day
+done - allow multiple recipes per day
 - add a generate shopping list button
 - allow reordering by draging the recipe part
 - delete by swiping away
@@ -94,7 +94,7 @@ done - remove days using button
 recipe lines show as:
 
 done - day of the week | recipe | delete button
-- day can be changed using dropdown menu
+done - day can be changed using dropdown menu
 - recipe can be changed by typing in a text field
 
 api:

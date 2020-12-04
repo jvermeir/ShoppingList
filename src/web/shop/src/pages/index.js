@@ -2,7 +2,8 @@ import React from "react";
 import Dropdown from 'react-dropdown'
 import './shop.css';
 import DatePicker from './DatePicker.js';
-import Parent from './x.js';
+import Parent from './experimental.js';
+import RecipeSelector from './RecipeSelector.js';
 
 export default function Home() {
     return (
@@ -28,6 +29,8 @@ class App extends React.Component {
         super(props);
         this.saveMenu = this.saveMenu.bind(this);
         this.updateDate = this.updateDate.bind(this);
+        this.filterRecipes = this.filterRecipes.bind(this);
+        this.searchRecipe = this.searchRecipe.bind(this);
         this.state = {menuItems: [], theValue: "", searchResults: [], startOfPeriod: "", dummy:"SomeValue"};
     }
 
@@ -35,14 +38,18 @@ class App extends React.Component {
         this.getMenu()
     }
 
-    filterRecipes = (value, context) => {
+    filterRecipes = (value, item) => {
         this.setState({theValue: value});
+        const context = this;
+        console.log(`value: ${value}`);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function () {
+                console.log(`search value: ${value}`);
                 context.searchRecipe(value);
+                item.value = context.state.searchResults[0].name;
             },
             1000);
-    };
+    }
 
     getNameOfDayFromDate = (newDate) => {
         const dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
@@ -79,29 +86,17 @@ class App extends React.Component {
                         <div className="grid-item">day</div>
                         <div className="grid-item">date</div>
                         <div className="grid-item">recipe</div>
-                        <div className="grid-item">action</div>
+                        <div className="grid-item"></div>
                         {this.state.menuItems.map((item, index) => {
                             return (
                                 <MenuItem key={item.id} menuItems={this.state.menuItems} menuItem={item}
                                           startOfPeriod={this.state.startOfPeriod} parent={this} updateDateMethod={this.updateDate}
+                                          filterRecipes={this.filterRecipes}
                                           onClick={() => this.deleteMenuItem(item.id, index)}
                                 />
                             );
                         })}
                     </div>
-                </div>
-                <form>
-                    <label>
-                        Search:
-                        <input type="text" onChange={e => this.filterRecipes(e.target.value, this)}/>
-                    </label>
-                </form>
-                <p>Search Value: {this.state.theValue}</p>
-                <div>{this.state.searchResults.map((recipe) => {
-                    return (
-                        <Recipe key={recipe.name} recipe={recipe}/>
-                    )
-                })}
                 </div>
             </div>
         )
@@ -197,13 +192,15 @@ class MenuItem extends React.Component {
                 <div className="hidden">{this.props.menuItem.id}</div>
                 <div className="hidden">{this.props.menuItem.date.toJSON()}</div>
                 <div className="hidden">{this.props.parent.getNameOfDayFromDate(this.props.menuItem.date)}</div>
-                <div className="grid-item"><Drop menuItems={this.props.menuItems}
+                <div className="grid-item"><Days menuItems={this.props.menuItems}
                                                  currentItem={this.props.menuItem}
                                                  startOfPeriod={this.props.startOfPeriod}
                                                  updateDateMethod={this.props.updateDateMethod}
                                                  /></div>
                 <div className="grid-item">{this.props.parent.getMonthAndDayFromDate(this.props.menuItem.date)}</div>
-                <div className="grid-item">{this.props.menuItem.recipe}</div>
+                <div className="grid-item"><RecipeSelector key={this.props.menuItem.id}
+                                                           menuItems={this.props.menuItems}
+                                                           theItem={this.props.menuItem}/></div>
                 <div className="grid-item">
                     <button onClick={() => this.props.onClick()}>delete</button>
                 </div>
@@ -212,22 +209,12 @@ class MenuItem extends React.Component {
     }
 }
 
-class Drop extends React.Component {
+class Days extends React.Component {
     dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 
     render() {
         return (<Dropdown options={this.dayNames}
                           onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
                           value={this.dayNames[this.props.currentItem.date.getDay()]} placeholder="Select an option"/>)
-    }
-}
-
-class Recipe extends React.Component {
-    render() {
-        return (
-            <React.Fragment>
-                <div>{this.props.recipe.name}</div>
-            </React.Fragment>
-        )
     }
 }

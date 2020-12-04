@@ -19,7 +19,8 @@
     "react-dom": "^16.12.0",
     "react-datepicker": "3.3.0",
     "react-dates": "21.5.1",
-    "react-dropdown": "1.9.0"
+    "react-dropdown": "1.9.0",
+    "react-autocomplete": "1.8.1"
   },
   "devDependencies": {
     "prettier": "2.1.0"
