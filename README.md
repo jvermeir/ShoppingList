@@ -80,12 +80,11 @@ state example:
 
 ## UI experiments
 
-done - enter the first day of the planning period using a 
-    date picker
+done - enter the first day of the planning period using a date picker
 done - this changes the start date for the period to the date selected.     
 - this loads or creates a menu starting on that day
 done - remove days using button 
-- add a recipe for a day         
+- add a recipe for a day
 done - allow multiple recipes per day
 - add a generate shopping list button
 - allow reordering by draging the recipe part
@@ -95,7 +94,7 @@ recipe lines show as:
 
 done - day of the week | recipe | delete button
 done - day can be changed using dropdown menu
-- recipe can be changed by typing in a text field
+done - recipe can be changed by typing in a text field
 
 api:
 
