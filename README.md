@@ -89,6 +89,7 @@ done - allow multiple recipes per day
 - add a generate shopping list button
 - allow reordering by draging the recipe part
 - delete by swiping away
+- make sure ui scales to the max available width
 
 recipe lines show as:
 

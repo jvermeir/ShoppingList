@@ -14,6 +14,7 @@ export default class RecipeSelector extends React.Component {
         return (
             <div className="autocomplete-wrapper">
                 <Autocomplete
+                    key={this.props.theItem.id}
                     value={this.state.val}
                     items={this.props.menuItems}
                     getItemValue={item => item.recipe}
