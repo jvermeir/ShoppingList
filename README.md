@@ -90,6 +90,7 @@ done - allow multiple recipes per day
 - allow reordering by draging the recipe part
 - delete by swiping away
 - make sure ui scales to the max available width
+- replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
 
 recipe lines show as:
 
