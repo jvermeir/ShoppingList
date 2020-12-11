@@ -6,7 +6,7 @@ export default class RecipeSelector extends React.Component {
 
     renderMenuItem(state, val) {
         return (
-            state.recipe.toLowerCase().indexOf(val.toLowerCase()) !== -1
+            state.toLowerCase().indexOf(val.toLowerCase()) !== -1
         );
     }
 
@@ -16,8 +16,8 @@ export default class RecipeSelector extends React.Component {
                 <Autocomplete
                     key={this.props.theItem.id}
                     value={this.state.val}
-                    items={this.props.menuItems}
-                    getItemValue={item => item.recipe}
+                    items={this.props.allRecipes}
+                    getItemValue={item => item}
                     shouldItemRender={this.renderMenuItem}
                     renderMenu={item => (
                         <div className="dropdown">
@@ -25,8 +25,8 @@ export default class RecipeSelector extends React.Component {
                         </div>
                     )}
                     renderItem={(item, isHighlighted) =>
-                        <div className={`item ${isHighlighted ? 'selected-item' : ''}`}>
-                            {item.recipe}
+                        <div key={item} className={`item ${isHighlighted ? 'selected-item' : ''}`}>
+                            {item}
                         </div>
                     }
                     onChange={(event, val) => {
