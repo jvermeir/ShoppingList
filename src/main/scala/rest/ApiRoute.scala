@@ -85,7 +85,11 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
 
     val recipeRoute =
       pathPrefix("recipe") {
-        path(Segment) { name =>
+        path("names") {
+          get {
+            complete(CookBookService.getAllRecipeNames())
+          }
+        } ~ path(Segment) { name =>
           get {
             complete(CookBookService.getRecipeByName(name))
           }

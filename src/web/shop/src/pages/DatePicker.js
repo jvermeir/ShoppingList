@@ -9,6 +9,7 @@ export default function DatePicker({ date, onChange }) {
     return (
         <SingleDatePicker
             date={date}
+            selected={date}
             onDateChange={date => onChange({ target: { value: date } })}
             focused={focused}
             onFocusChange={({ focused }) => setFocused(focused)}
