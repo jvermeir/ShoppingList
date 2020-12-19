@@ -20,8 +20,8 @@ rm -rf ${output_file}
 touch ${output_file}
 echo "${week_day} valt op:${today}" > ${output_file}
 for i in {0..6}; do
-  NEXT_DATE=$(date -j -v +${i}d -f %d%m%Y ${today} +%A)
-  echo ${NEXT_DATE}:- >> ${output_file}
+  the_day=$(date -j -v +${i}d -f %d%m%Y ${today} +%A)
+  echo ${the_day}:- >> ${output_file}
 done
 
 echo "" >> ${output_file}
