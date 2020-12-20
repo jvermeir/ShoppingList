@@ -224,30 +224,11 @@ class MenuItem extends React.Component {
                                                              menuItems={this.props.menuItems}
                                                              allRecipes={this.props.allRecipes}
                                                              theItem={this.props.menuItem}/></div>
-                <div>
-                    <button onClick={() => this.props.onClick()}>&#128465;</button>
-                {/*    <BrowserRouter>*/}
-                {/*        <Link to={() => this.props.onClick()}>&#128465;</Link>*/}
-                {/*    </BrowserRouter>*/}
-
-                </div>
+                <div><button onClick={() => this.props.onClick()}>&#128465;</button></div>
             </>
         )
     }
 }
-
-// <Link to={() => this.props.onClick()}>&#128465;</Link>
-// <a href={() => this.props.onClick()}>&#128465;</a>
-//onClick={() => this.props.onClick()}
-// <Link to={this.props.onClick}>&#128465;</Link>
-/*
-        <link
-          as="script"
-          rel={script.rel}
-          key={script.name}
-          href={`${__PATH_PREFIX__}/${script.name}`}
-        />
- */
 
 class Days extends React.Component {
     dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
