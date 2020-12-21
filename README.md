@@ -78,6 +78,10 @@ state example:
 
     https://codepen.io/gaearon/pen/gWWQPY?editors=0010
 
+test with gatsby and jest:
+
+    https://www.gatsbyjs.com/docs/how-to/testing/unit-testing/
+
 ## UI experiments
 
 done - enter the first day of the planning period using a date picker

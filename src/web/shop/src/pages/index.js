@@ -1,26 +1,27 @@
 import React from "react";
-import Dropdown from 'react-dropdown'
 import './shop.css';
 import DatePicker from './DatePicker.js';
 import Parent from './experimental.js';
 import RecipeSelector from './RecipeSelector.js';
+import Gridje from './grid.js';
 import moment from 'moment';
+import DaySelector from "./select";
 
 export default function Home() {
     return (
         <div>
             <div><App/></div>
             <div><Parent/></div>
+            <div><Gridje/></div>
+            <div><DaySelector selectedOption="0"/></div>
         </div>
     )
 }
 
 const api = `/api`;
 
-Date.prototype.addDays = function (days) {
-    let date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
+const addDaysToDate = (date, days) => {
+    return new Date(date.setDate(date.getDate() + days));
 }
 
 class App extends React.Component {
@@ -32,7 +33,14 @@ class App extends React.Component {
         this.updateDate = this.updateDate.bind(this);
         this.filterRecipes = this.filterRecipes.bind(this);
         this.searchRecipe = this.searchRecipe.bind(this);
-        this.state = {menuItems: [], theValue: "", searchResults: [], startOfPeriod: "", dummy:"SomeValue", allRecipes: []};
+        this.state = {
+            menuItems: [],
+            theValue: "",
+            searchResults: [],
+            startOfPeriod: "",
+            dummy: "SomeValue",
+            allRecipes: []
+        };
     }
 
     componentDidMount() {
@@ -71,7 +79,7 @@ class App extends React.Component {
         const newItems = menuItems.map(item => {
             return {
                 ...item,
-                date: item.date.addDays(delta)
+                date: addDaysToDate(item.date,delta)
             };
         });
         this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
@@ -81,19 +89,25 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <div>Start: <DatePicker date={moment(this.state.startOfPeriod)} onChange={e => this.dateChanged(e.target.value._d)}/></div>
+                <div>First day of this menu:
+                    <DatePicker date={moment(this.state.startOfPeriod)}
+                                onChange={e => this.dateChanged(e.target.value._d)}/>
+                </div>
                 <div className="top">
-                    <div className="grid-container">
+                    <div className="table-header">
                         <div className="hidden">id</div>
-                        <div className="grid-item">day</div>
-                        <div className="grid-item">date</div>
-                        <div className="grid-item">recipe</div>
-                        <div className="grid-item"></div>
+                        <div>day</div>
+                        <div>date</div>
+                        <div>recipe</div>
+                        <div>&#128465;</div>
+                    </div>
+                    <div className="wrapper">
                         {this.state.menuItems.map((item, index) => {
                             return (
                                 <MenuItem key={item.id} menuItems={this.state.menuItems} menuItem={item}
                                           allRecipes={this.state.allRecipes}
-                                          startOfPeriod={this.state.startOfPeriod} parent={this} updateDateMethod={this.updateDate}
+                                          startOfPeriod={this.state.startOfPeriod} parent={this}
+                                          updateDateMethod={this.updateDate}
                                           filterRecipes={this.filterRecipes}
                                           onClick={() => this.deleteMenuItem(item.id, index)}
                                 />
@@ -131,7 +145,9 @@ class App extends React.Component {
     getAllRecipes() {
         fetch(`${api}/recipe/names`)
             .then(res => res.json())
-            .then((data) => { this.setState({allRecipes: data})})
+            .then((data) => {
+                this.setState({allRecipes: data})
+            })
             .catch(console.log)
     }
 
@@ -162,22 +178,21 @@ class App extends React.Component {
 
     calculateDate(startOfPeriod, newDay) {
         let newDate = startOfPeriod;
-        while (this.getNameOfDayFromDate(newDate) !== newDay) {
-            newDate = newDate.addDays(1);
+        while (newDate.getDay() !== newDay) {
+            newDate = addDaysToDate(newDate,1);
         }
         return newDate;
     }
 
     updateDate(currentItem, daySelected) {
-        const newDate = this.calculateDate(this.state.startOfPeriod, daySelected);
+        const newDate = this.calculateDate(this.state.startOfPeriod,  Number(daySelected));
         const newItems = this.state.menuItems.map(item => {
             if (item.id === currentItem.id) {
                 return {
                     ...item,
                     date: newDate
                 }
-            }
-            else {
+            } else {
                 return item;
             }
         });
@@ -199,33 +214,25 @@ class MenuItem extends React.Component {
     render() {
         return (
             <>
-                <div className="hidden">{this.props.menuItem.id}</div>
-                <div className="hidden">{this.props.menuItem.date.toJSON()}</div>
                 <div className="hidden">{this.props.parent.getNameOfDayFromDate(this.props.menuItem.date)}</div>
-                <div className="grid-item"><Days menuItems={this.props.menuItems}
-                                                 currentItem={this.props.menuItem}
-                                                 startOfPeriod={this.props.startOfPeriod}
-                                                 updateDateMethod={this.props.updateDateMethod}
-                                                 /></div>
-                <div className="grid-item">{this.props.parent.getMonthAndDayFromDate(this.props.menuItem.date)}</div>
-                <div className="grid-item"><RecipeSelector key={this.props.menuItem.id}
-                                                           menuItems={this.props.menuItems}
-                                                           allRecipes={this.props.allRecipes}
-                                                           theItem={this.props.menuItem}/></div>
-                <div className="grid-item">
-                    <button onClick={() => this.props.onClick()}>delete</button>
-                </div>
+                <div><SelectADay currentItem={this.props.menuItem}
+                                 updateDateMethod={this.props.updateDateMethod}
+                /></div>
+                <div>{this.props.parent.getMonthAndDayFromDate(this.props.menuItem.date)}</div>
+                <div><RecipeSelector key={this.props.menuItem.id}
+                                     menuItems={this.props.menuItems}
+                                     allRecipes={this.props.allRecipes}
+                                     theItem={this.props.menuItem}/></div>
+                <div><button onClick={() => this.props.onClick()}>&#128465;</button></div>
             </>
         )
     }
 }
 
-class Days extends React.Component {
-    dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-
+class SelectADay extends React.Component {
     render() {
-        return (<Dropdown options={this.dayNames}
-                          onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
-                          value={this.dayNames[this.props.currentItem.date.getDay()]} placeholder="Select an option"/>)
+        return (<DaySelector selectedOption={this.props.currentItem.date.getDay()}
+                             onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
+        />)
     }
 }
