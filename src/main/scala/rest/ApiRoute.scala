@@ -45,9 +45,6 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
 
     val menuRoute =
       pathPrefix("menu") {
-        get {
-          complete(menu.sorted)
-        } ~
           post {
             entity(as[String]) { newMenu => {
               menu = Menu.fromJson(newMenu)
@@ -71,7 +68,9 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
             menu = Menu(menuAndListOfExtras._1)
             complete(menu.sorted)
           }
-        }
+        } ~ get {
+            complete(menu.sorted)
+          }
       }
 
     val shoppingListRoute =

@@ -69,6 +69,10 @@ start with
 
     gatsby develop # localhost only
     gatsby develop --host=0.0.0.0
+
+after adding a new dependency it may be necessary to run
+
+    gatsby build
     
 React tutorial
 
@@ -95,6 +99,7 @@ done - allow multiple recipes per day
 - delete by swiping away
 - make sure ui scales to the max available width
 - replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
+- Molecules? Atoms?
 
 recipe lines show as:
 

@@ -1,4 +1,4 @@
-import React, { FC, Children } from "react";
+import React, { Children } from "react";
 import { AutoComplete } from "@react-md/autocomplete";
 import { GridList, GridListCell } from "@react-md/utils";
 
