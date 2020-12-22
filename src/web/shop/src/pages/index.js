@@ -6,6 +6,7 @@ import RecipeSelector from './RecipeSelector.js';
 import Gridje from './grid.js';
 import moment from 'moment';
 import DaySelector from "./select";
+import { recalcDates, addDaysToDate, getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateFromStartOfPeriod } from "../menuFunctions";
 
 export default function Home() {
     return (
@@ -20,18 +21,13 @@ export default function Home() {
 
 const api = `/api`;
 
-const addDaysToDate = (date, days) => {
-    return new Date(date.setDate(date.getDate() + days));
-}
-
-class App extends React.Component {
+export class App extends React.Component {
     timeout;
 
     constructor(props) {
         super(props);
         this.saveMenu = this.saveMenu.bind(this);
         this.updateDate = this.updateDate.bind(this);
-        this.filterRecipes = this.filterRecipes.bind(this);
         this.searchRecipe = this.searchRecipe.bind(this);
         this.state = {
             menuItems: [],
@@ -48,40 +44,8 @@ class App extends React.Component {
         this.getAllRecipes();
     }
 
-    filterRecipes = (value, item) => {
-        this.setState({theValue: value});
-        const context = this;
-        console.log(`value: ${value}`);
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(function () {
-                console.log(`search value: ${value}`);
-                context.searchRecipe(value);
-                item.value = context.state.searchResults[0].name;
-            },
-            1000);
-    }
-
-    getNameOfDayFromDate = (newDate) => {
-        const dayNames = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-        return dayNames[new Date(newDate).getDay()];
-    }
-
-    getMonthAndDayFromDate = (newDate) => {
-        return `${newDate.getMonth() + 1} - ${newDate.getDate()}`;
-    }
-
     dateChanged = (newDate) => {
-        const newStartDay = Math.trunc(newDate / (24 * 60 * 60 * 1000));
-        const oldStartDay = Math.trunc(this.state.startOfPeriod / (24 * 60 * 60 * 1000));
-        const delta = newStartDay - oldStartDay;
-        console.log(`delta: ${delta}`);
-        const menuItems = this.state.menuItems;
-        const newItems = menuItems.map(item => {
-            return {
-                ...item,
-                date: addDaysToDate(item.date,delta)
-            };
-        });
+        const newItems = recalcDates(newDate, this.state.menuItems, this.state.startOfPeriod);
         this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
         console.log(`value: ${newDate}`);
     }
@@ -108,7 +72,6 @@ class App extends React.Component {
                                           allRecipes={this.state.allRecipes}
                                           startOfPeriod={this.state.startOfPeriod} parent={this}
                                           updateDateMethod={this.updateDate}
-                                          filterRecipes={this.filterRecipes}
                                           onClick={() => this.deleteMenuItem(item.id, index)}
                                 />
                             );
@@ -176,16 +139,8 @@ class App extends React.Component {
             .catch(console.log)
     }
 
-    calculateDate(startOfPeriod, newDay) {
-        let newDate = startOfPeriod;
-        while (newDate.getDay() !== newDay) {
-            newDate = addDaysToDate(newDate,1);
-        }
-        return newDate;
-    }
-
     updateDate(currentItem, daySelected) {
-        const newDate = this.calculateDate(this.state.startOfPeriod,  Number(daySelected));
+        const newDate = recalcDateFromStartOfPeriod(this.state.startOfPeriod,  Number(daySelected));
         const newItems = this.state.menuItems.map(item => {
             if (item.id === currentItem.id) {
                 return {
@@ -214,11 +169,11 @@ class MenuItem extends React.Component {
     render() {
         return (
             <>
-                <div className="hidden">{this.props.parent.getNameOfDayFromDate(this.props.menuItem.date)}</div>
+                <div className="hidden">{getNameOfDayFromDate(this.props.menuItem.date)}</div>
                 <div><SelectADay currentItem={this.props.menuItem}
                                  updateDateMethod={this.props.updateDateMethod}
                 /></div>
-                <div>{this.props.parent.getMonthAndDayFromDate(this.props.menuItem.date)}</div>
+                <div>{getMonthAndDayFromDate(this.props.menuItem.date)}</div>
                 <div><RecipeSelector key={this.props.menuItem.id}
                                      menuItems={this.props.menuItems}
                                      allRecipes={this.props.allRecipes}
