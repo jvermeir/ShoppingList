@@ -14,11 +14,15 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
   val categoryFile = "../ShoppingListData/categoryDatabase_v2.csv"
   CategoryService.config(categoryFile)
   CookBookService.config(cookbookFile)
-  val menuAndListOfExtras: (String, String) = readAndSplit("data/test/2808.txt")
-  var menu = new Menu(List(MenuItem("1", now, "Paksoi met mie")
-    , MenuItem("3", now.plusDays(2), "Witloftaart")
-    , MenuItem("2", now.plusDays(1L), "Cannelloni")
-    , MenuItem("4", now.plusDays(3), "Tagliatelle met cashewnoten")), now())
+  var menu = resetMenu
+
+  private def resetMenu:Menu = {
+    new Menu(List(MenuItem("1", now, "Paksoi met mie")
+      , MenuItem("3", now.plusDays(2), "Witloftaart")
+      , MenuItem("2", now.plusDays(1L), "Cannelloni")
+      , MenuItem("4", now.plusDays(3), "Tagliatelle met cashewnoten")), now())
+  }
+
   val shoppingList = new ShoppingList(menu, List())
 
   def getRoute: Route = {
@@ -65,7 +69,7 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
           }
         } ~ path("reset") {
           get {
-            menu = Menu(menuAndListOfExtras._1)
+            menu = resetMenu
             complete(menu.sorted)
           }
         } ~ get {
