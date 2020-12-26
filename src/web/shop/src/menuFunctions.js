@@ -1,7 +1,3 @@
-function x() {
-    return 2;
-}
-
 const addDaysToDate = (date, days) => {
     const newDate = new Date(date);
     return new Date(newDate.setDate(date.getDate() + days));
@@ -29,7 +25,7 @@ const recalcDates = (newStartOfPeriod, menuItems, startOfPeriod) => {
     return newMenuItems;
 }
 
-const recalcDateFromStartOfPeriod = (startOfPeriod, newDay) => {let newDate = startOfPeriod;
+const recalcDateForDayOfWeekFromStartOfPeriod = (startOfPeriod, newDay) => {
     const dayOfStartOfPeriod = startOfPeriod.getDay();
     let delta = newDay - dayOfStartOfPeriod;
     if (delta<0) delta += 7;
@@ -37,6 +33,6 @@ const recalcDateFromStartOfPeriod = (startOfPeriod, newDay) => {let newDate = st
 }
 
 export {
-    recalcDates, x, addDaysToDate, getNameOfDayFromDate,
-    getMonthAndDayFromDate, recalcDateFromStartOfPeriod
+    recalcDates, addDaysToDate, getNameOfDayFromDate,
+    getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod
 };

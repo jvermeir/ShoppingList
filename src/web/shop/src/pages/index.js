@@ -6,7 +6,12 @@ import RecipeSelector from './RecipeSelector.js';
 import Gridje from './grid.js';
 import moment from 'moment';
 import DaySelector from "./select";
-import { recalcDates, addDaysToDate, getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateFromStartOfPeriod } from "../menuFunctions";
+import {
+    getMonthAndDayFromDate,
+    getNameOfDayFromDate,
+    recalcDateForDayOfWeekFromStartOfPeriod,
+    recalcDates
+} from "../menuFunctions";
 
 export default function Home() {
     return (
@@ -31,10 +36,8 @@ export class App extends React.Component {
         this.searchRecipe = this.searchRecipe.bind(this);
         this.state = {
             menuItems: [],
-            theValue: "",
             searchResults: [],
             startOfPeriod: "",
-            dummy: "SomeValue",
             allRecipes: []
         };
     }
@@ -45,9 +48,9 @@ export class App extends React.Component {
     }
 
     dateChanged = (newDate) => {
+        this.printContext("dateChanged", this.state.startOfPeriod, this.state.menuItems);
         const newItems = recalcDates(newDate, this.state.menuItems, this.state.startOfPeriod);
         this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
-        console.log(`value: ${newDate}`);
     }
 
     render() {
@@ -82,21 +85,17 @@ export class App extends React.Component {
         )
     }
 
-    updateMenu(date, index) {
-        const items = this.state.menuItems.slice();
-        if (index > -1) {
-            items.splice(index, 1);
-        }
-        this.setState({menuItems: items});
-    }
-
     deleteMenuItem(id, index) {
+        this.printContext("deleteMenuItem", this.state.startOfPeriod, this.state.menuItems);
         fetch(`${api}/menu/items/${id}`, {
             method: 'DELETE',
         })
             .then(res => res.text())
             .then(res => console.log(res))
-            .then(_ => this.updateMenu(id, index))
+            .then(_ => {
+                console.log("calling getMenu from deleteMenuItem")
+                this.getMenu()
+            })
     }
 
     searchRecipe(name) {
@@ -115,34 +114,44 @@ export class App extends React.Component {
     }
 
     getMenu() {
+        this.printContext("getMenu", this.state.startOfPeriod, this.state.menuItems);
         fetch(`${api}/menu`)
             .then(res => res.json())
             .then((data) => {
-                this.setState({menuItems: this.parseMenuItems(data.menuItems)});
-                this.setState({startOfPeriod: new Date(data.startOfPeriod + "T10:00:00")});
+                const newMenuItems = this.parseMenuItems(data.menuItems);
+                this.setState({menuItems: newMenuItems});
+                const newStartOfPeriod = new Date(data.startOfPeriod + "T10:00:00");
+                this.setState({startOfPeriod: newStartOfPeriod})
+                this.printContext("getMenu - end", newStartOfPeriod, newMenuItems);
             })
-            .catch(console.log)
+            .catch(console.log);
+    }
+
+    printContext(tag, startOfPeriod, menuItems) {
+        console.log(JSON.stringify({tag, startOfPeriod, menuItems}));
     }
 
     saveMenu() {
-        console.log(JSON.stringify({startOfPeriod: this.state.startOfPeriod, menuItems: this.state.menuItems}));
+        this.printContext("saveMenu", this.state.startOfPeriod, this.state.menuItems);
         fetch(`${api}/menu`, {
             method: 'POST',
             body: JSON.stringify({startOfPeriod: this.state.startOfPeriod, menuItems: this.state.menuItems}),
             headers: {"Content-type": "application/json"}
         })
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({menuItems: this.parseMenuItems(data.menuItems)});
-                this.setState({startOfPeriod: new Date(data.startOfPeriod + "T10:00:00")});
+            .then(() => {
+                console.log("calling getMenu from saveMenu");
+                this.getMenu()
             })
             .catch(console.log)
     }
 
     updateDate(currentItem, daySelected) {
-        const newDate = recalcDateFromStartOfPeriod(this.state.startOfPeriod,  Number(daySelected));
+        this.printContext("updateDate", this.state.startOfPeriod, this.state.menuItems);
+        const newDate = recalcDateForDayOfWeekFromStartOfPeriod(this.state.startOfPeriod, Number(daySelected));
+        console.log(`updating ${currentItem.id} with date ${newDate}`);
         const newItems = this.state.menuItems.map(item => {
             if (item.id === currentItem.id) {
+                console.log("item found");
                 return {
                     ...item,
                     date: newDate
@@ -178,12 +187,15 @@ class MenuItem extends React.Component {
                                      menuItems={this.props.menuItems}
                                      allRecipes={this.props.allRecipes}
                                      theItem={this.props.menuItem}/></div>
-                <div><button onClick={() => this.props.onClick()}>&#128465;</button></div>
+                <div>
+                    <button onClick={() => this.props.onClick()}>&#128465;</button>
+                </div>
             </>
         )
     }
 }
 
+// TODO: this only updates a day, it should also refresh the list of menuitems.
 class SelectADay extends React.Component {
     render() {
         return (<DaySelector selectedOption={this.props.currentItem.date.getDay()}
