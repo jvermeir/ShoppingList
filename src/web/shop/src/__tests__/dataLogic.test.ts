@@ -1,4 +1,4 @@
-import {getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateFromStartOfPeriod, recalcDates} from "../menuFunctions";
+import {getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
 
 describe("test menu functions",  () => {
     test('name of day is "mon" on december 21st 2020', () => {
@@ -17,9 +17,9 @@ describe("test menu functions",  () => {
         const monday = new Date(2020, 11, 21);
         const sundayNextWeek = new Date(2020, 11, 27);
         const wednesday = new Date(2020, 11, 23);
-        expect(recalcDateFromStartOfPeriod(monday, 1)).toStrictEqual(monday);
-        expect(recalcDateFromStartOfPeriod(monday, 0)).toStrictEqual(sundayNextWeek);
-        expect(recalcDateFromStartOfPeriod(monday, 3)).toStrictEqual(wednesday);
+        expect(recalcDateForDayOfWeekFromStartOfPeriod(monday, 1)).toStrictEqual(monday);
+        expect(recalcDateForDayOfWeekFromStartOfPeriod(monday, 0)).toStrictEqual(sundayNextWeek);
+        expect(recalcDateForDayOfWeekFromStartOfPeriod(monday, 3)).toStrictEqual(wednesday);
     });
 
 });
