@@ -26,16 +26,10 @@ describe("test menu functions",  () => {
 
 describe("test date calculations",  () => {
     class MenuItem {
-        date: Date;
-        id: String;
-        recipe: String;
-        constructor(date: Date, id: String, recipe: String) {
-            this.date = date;
-            this.id = id;
-            this.recipe = recipe;
+        constructor(readonly date: Date, readonly id: String, readonly recipe: String) {
         }
     }
-
+    
     test('new start date for menuItems if start of period is equal to first date in menu', () => {
         const data = JSON.parse(
             '{"startOfPeriod":"2020-12-21T09:00:00.000Z","menuItems":[{"date":"2020-12-21T09:00:00.000Z","id":"2","recipe":"Cannelloni"},{"date":"2020-12-22T09:00:00.000Z","id":"3","recipe":"Witloftaart"},{"date":"2020-12-23T09:00:00.000Z","id":"4","recipe":"Tagliatelle met cashewnoten"},{"date":"2020-12-24T09:00:00.000Z","id":"1","recipe":"Paksoi met mie"}]}'

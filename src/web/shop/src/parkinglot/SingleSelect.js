@@ -16,15 +16,21 @@ export const colourOptions = [
 ];
 
 export default class SingleSelect extends Component {
+    state = {
+        selectedOption: this.props.selectedOption,
+    };
+
+
     render() {
         return (
             <Fragment>
                 <Select
                     className="basic-single"
                     classNamePrefix="select"
-                    defaultValue={colourOptions[0]}
+                    defaultValue={colourOptions[this.state.selectedOption]}
                     name="color"
                     options={colourOptions}
+                    onChange={this.props.onChange}
                 />
             </Fragment>
         );

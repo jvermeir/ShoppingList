@@ -8,26 +8,25 @@ const days = [
     { value: '3', label: 'Wed' },
     { value: '4', label: 'Thu' },
     { value: '5', label: 'Fri' },
-    { value: '6', label: 'Sat' },
+    { value: '6', label: 'Sat' }
 ];
 
 export default class DaySelector extends React.Component {
 
     state = {
-        selectedOption: this.props.selectedOption,
         onChange: this.props.onChange
     };
 
     render() {
-        const { selectedOption, onChange } = this.state;
-
         return (
             <Select
-                defaultValue={days[selectedOption]}
+                defaultValue={days[this.props.selectedOption]}
                 name="days"
                 options={days}
-                onChange={onChange}
+                value={days[this.props.selectedOption]}
+                onChange={this.state.onChange}
             />
         );
     }
 }
+

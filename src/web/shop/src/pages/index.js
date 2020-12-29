@@ -1,33 +1,20 @@
 import React from "react";
 import './shop.css';
 import DatePicker from './DatePicker.js';
-import Parent from './experimental.js';
 import RecipeSelector from './RecipeSelector.js';
-import Gridje from './grid.js';
 import moment from 'moment';
-import DaySelector from "./select";
-import {
-    getMonthAndDayFromDate,
-    getNameOfDayFromDate,
-    recalcDateForDayOfWeekFromStartOfPeriod,
-    recalcDates
-} from "../menuFunctions";
+import DaySelector from "./DaySelector";
+import {getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
 
 export default function Home() {
     return (
-        <div>
-            <div><App/></div>
-            <div><Parent/></div>
-            <div><Gridje/></div>
-            <div><DaySelector selectedOption="0"/></div>
-        </div>
+        <div><App/></div>
     )
 }
 
 const api = `/api`;
 
 export class App extends React.Component {
-    timeout;
 
     constructor(props) {
         super(props);
@@ -71,9 +58,11 @@ export class App extends React.Component {
                     <div className="wrapper">
                         {this.state.menuItems.map((item, index) => {
                             return (
-                                <MenuItem key={item.id} menuItems={this.state.menuItems} menuItem={item}
+                                <MenuItem key={item.id}
+                                          menuItems={this.state.menuItems}
+                                          menuItem={item}
                                           allRecipes={this.state.allRecipes}
-                                          startOfPeriod={this.state.startOfPeriod} parent={this}
+                                          startOfPeriod={this.state.startOfPeriod}
                                           updateDateMethod={this.updateDate}
                                           onClick={() => this.deleteMenuItem(item.id, index)}
                                 />
@@ -178,7 +167,6 @@ class MenuItem extends React.Component {
     render() {
         return (
             <>
-                <div className="hidden">{getNameOfDayFromDate(this.props.menuItem.date)}</div>
                 <div><SelectADay currentItem={this.props.menuItem}
                                  updateDateMethod={this.props.updateDateMethod}
                 /></div>
@@ -195,7 +183,6 @@ class MenuItem extends React.Component {
     }
 }
 
-// TODO: this only updates a day, it should also refresh the list of menuitems.
 class SelectADay extends React.Component {
     render() {
         return (<DaySelector selectedOption={this.props.currentItem.date.getDay()}
