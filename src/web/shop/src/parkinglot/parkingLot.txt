@@ -1,0 +1,13 @@
+    filterRecipes = (value, item) => {
+        this.setState({theValue: value});
+        const context = this;
+        console.log(`value: ${value}`);
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(function () {
+                console.log(`search value: ${value}`);
+                context.searchRecipe(value);
+                item.value = context.state.searchResults[0].name;
+            },
+            1000);
+    }
+
