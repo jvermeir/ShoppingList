@@ -32,7 +32,17 @@ const recalcDateForDayOfWeekFromStartOfPeriod = (startOfPeriod, newDay) => {
     return addDaysToDate(startOfPeriod, delta);
 }
 
+const getOptionsForDaySelector = (startOfPeriod) => {
+    let days = [];
+    let date = startOfPeriod;
+    for (let i = 0; i < 7; i++) {
+        days.push({value: date.getDay(), label: getMonthAndDayFromDate(date)})
+        date = addDaysToDate(date, 1);
+    }
+    return days;
+}
+
 export {
-    recalcDates, addDaysToDate, getNameOfDayFromDate,
+    recalcDates, addDaysToDate, getNameOfDayFromDate, getOptionsForDaySelector,
     getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod
 };

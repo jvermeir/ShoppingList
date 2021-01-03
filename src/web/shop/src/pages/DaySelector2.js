@@ -19,14 +19,14 @@ export default class DaySelector2 extends React.Component {
     };
 
     render() {
-            console.log(`options: ${this.props.options}`);
+            console.log("options:");
+            console.log(this.props.options);
         return (
             <Select
-                defaultValue={days[this.props.selectedOption]}
+                defaultValue={this.props.options? this.props.options[this.props.selectedOption]:0}
+                value={this.props.options? this.props.options[this.props.selectedOption]:0}
                 name="days"
                 options={this.props.options}
-                value={this.props.selectedOption}
-                // value={days[this.props.selectedOption]}
                 onChange={this.state.onChange}
             />
         );

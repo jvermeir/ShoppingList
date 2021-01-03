@@ -1,4 +1,4 @@
-import {getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
+import {getNameOfDayFromDate, getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates, getOptionsForDaySelector} from "../menuFunctions";
 
 describe("test menu functions",  () => {
     test('name of day is "mon" on december 21st 2020', () => {
@@ -79,5 +79,35 @@ describe("test date calculations",  () => {
         expect(menuStartingWednesday[1].date).toStrictEqual(new Date("2021-01-04T09:00:00.000Z"));
         expect(menuStartingWednesday[2].date).toStrictEqual(new Date("2021-01-05T09:00:00.000Z"));
         expect(menuStartingWednesday[3].date).toStrictEqual(new Date("2021-01-06T09:00:00.000Z"));
+    });
+
+    test('options for day selector list follow startOfPeriod', () => {
+        /* if the first day of the interval is tuesday, dec 22nd, then sunday should be the next sunday (27th)
+        so, element 0 should get the value 27-12
+        1 -> 28-12
+        2 -> 22-12 (because this is tuesday, the start of the interval
+
+        alternatively: put the first day of the interval in slot 0, second in slot 1, and so on
+        then, translate the number of the day into a slot number by searching through the list of values.
+        use this info when
+        - showing the selected option
+        - translate the selected option to a value.
+
+        the 'value' of a Select is taken from the array of values, but it is referenced by its sequence number
+           <div><Select
+                value={testOpts[0]}
+                options={testOpts}
+                onChange={e => console.log(e.value)}
+            /></div>
+
+        */
+        const startOfPeriod = new Date("2020-12-22T09:00:00.000Z");
+        const options = getOptionsForDaySelector(startOfPeriod);
+        expect(options[0].value).toStrictEqual(0);
+        expect(options[0].label).toStrictEqual("12 - 27");
+        expect(options[2].value).toStrictEqual(2);
+        expect(options[2].label).toStrictEqual("12 - 22");
+        expect(options[6].value).toStrictEqual(6);
+        expect(options[6].label).toStrictEqual("12 - 26");
     });
 });
