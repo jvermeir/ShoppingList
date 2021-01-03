@@ -4,18 +4,31 @@ import DatePicker from './DatePicker.js';
 import RecipeSelector from './RecipeSelector.js';
 import moment from 'moment';
 import DaySelector2 from "./DaySelector2";
+import Select from 'react-select';
+
 import {
-    addDaysToDate,
     getMonthAndDayFromDate,
+    getOptionsForDaySelector,
     recalcDateForDayOfWeekFromStartOfPeriod,
     recalcDates
 } from "../menuFunctions";
 
+const testOpts=[{value: '5', label: 'Sun'},
+    {value: '1', label: 'Mon'}
+];
+
 export default function Home() {
     return (
-        <div><App/></div>
+        <div>
+            <div><App/></div>
+            <div><Select
+                value={testOpts[0]}
+                options={testOpts}
+                onChange={e => console.log(e.value)}
+            /></div>
+        </div>
     )
-}
+};
 
 const api = `/api`;
 
@@ -42,18 +55,11 @@ export class App extends React.Component {
     dateChanged = (newDate) => {
         this.printContext("dateChanged", this.state.startOfPeriod, this.state.menuItems);
         const newItems = recalcDates(newDate, this.state.menuItems, this.state.startOfPeriod);
-        this.getOptionsForDaySelector(newDate);
-        this.setState({menuItems: newItems, startOfPeriod: newDate}, this.saveMenu);
-    }
-
-    getOptionsForDaySelector = (startOfPeriod) => {
-        let days = [];
-        let day = startOfPeriod;
-        for (let i = 0; i < 7; i++) {
-            days.push({value: i, label: getMonthAndDayFromDate(day)})
-            day = addDaysToDate(day, 1);
-        }
-        this.setState({optionsForDaySelector:days});
+        const optionsForDaySelector = getOptionsForDaySelector(newDate);
+        this.setState({
+            menuItems: newItems, startOfPeriod: newDate,
+            optionsForDaySelector: optionsForDaySelector
+        }, this.saveMenu);
     }
 
     render() {
@@ -127,7 +133,8 @@ export class App extends React.Component {
                 const newMenuItems = this.parseMenuItems(data.menuItems);
                 this.setState({menuItems: newMenuItems});
                 const newStartOfPeriod = new Date(data.startOfPeriod + "T10:00:00");
-                this.setState({startOfPeriod: newStartOfPeriod})
+                const optionsForDaySelector = getOptionsForDaySelector(newStartOfPeriod);
+                this.setState({startOfPeriod: newStartOfPeriod, optionsForDaySelector})
                 this.printContext("getMenu - end", newStartOfPeriod, newMenuItems);
             })
             .catch(console.log);
@@ -204,12 +211,25 @@ class MenuItem extends React.Component {
 
 class SelectADay extends React.Component {
 
-    render() {
+    dateToOption(currentDay, options) {
+        let i = 0;
+        while (i < options.length && options[i].label !== currentDay.getDay()) i = i++;
 
-        return (<DaySelector2 selectedOption={this.props.currentItem.date.getDay()}
-                              startOfPeriod={this.props.startOfPeriod}
-                              options={this.props.options}
-                              onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
+
+        return i;
+    }
+
+    /*
+    */
+
+    // {this.dateToOption(this.props.currentItem.date, this.props.options ? this.props.options : [])}
+    render() {
+        return (<DaySelector2
+            selectedOption=
+                {this.props.currentItem.date.getDay()}
+            startOfPeriod={this.props.startOfPeriod}
+            options={this.props.options}
+            onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
         />)
     }
 }
