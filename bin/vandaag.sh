@@ -9,10 +9,17 @@ else
   start_date=$(date -v +${1}d +%d%m%Y)
 fi
 
+if [ -f ${BASH_SOURCE[0]} ];
+then
+  BIN=$(dirname "$(readlink "${BASH_SOURCE[0]}")")
+else
+  BIN=$(dirname ${BASH_SOURCE[0]})
+fi
+
 today=$(date -j -f %d%m%Y ${start_date} +%d%m%Y)
 file_name=$(date -j -f %d%m%Y ${start_date} +%d%m.txt)
 week_day=$(date -j -f %d%m%Y ${start_date} +%A)
-output_folder=../ShoppingListData/menus
+output_folder=${BIN}/../../ShoppingListData/menus
 
 mkdir -p ${output_folder}
 output_file=${output_folder}/${file_name}
@@ -26,5 +33,7 @@ done
 
 echo "" >> ${output_file}
 echo "extra" >> ${output_file}
+
+echo results in ${output_file}
 
 atom ${output_file}
