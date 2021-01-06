@@ -39,6 +39,23 @@ example
 ```./bin/r.sh 1301``` takes a menu file named 1301.txt that is stored in ../ShoppingListData/menus, creates a shopping list named 1301.txt in
 the root folder of this project and opens this file in your default editor.
 
+```./bin/vandaag.sh [A number between 1 and 6]``` 
+
+creates a menu file for today or X days after today:
+
+```
+# for today:
+./bin/vandaag.sh
+# for tomorrow:
+./bin/vandaag.sh 1
+```
+
+install symlinks in your path (tested on OSX):
+
+```
+./bin/install.sh
+```
+
 ## Web service
 
 build as described in `package`
