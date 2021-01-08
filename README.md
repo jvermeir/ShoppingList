@@ -13,6 +13,7 @@ The road map now looks like this:
 - Configure the recipes and menu in text files (DONE)
 - Enter the recipes and menu using a GUI
 - Generate a menu based on constraints like the season, the amount of time the cook has on a particular day and other fuzzy logic (some of the old ambition shining through here)
+- Store menus and use history to generate a new menu
 
 Still, the goal to learn always have a strong influence. This will lead to solutions that might be over engineered or rewritten several times just to get it right. 
 
@@ -115,8 +116,10 @@ done - allow multiple recipes per day
 - allow reordering by draging the recipe part
 - delete by swiping away
 - make sure ui scales to the max available width
-- replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
+done - replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
 - Molecules? Atoms?
+- refactor: https://reactjs.org/docs/components-and-props.html
+- add mobile style 
 
 recipe lines show as:
 
@@ -136,7 +139,7 @@ done - show day-month and recipe name in list
 done - use id to update 
 done - store date as a datetime so day-month string can be derived.
 
-# Uitzoeken 
+# Research 
 
     https://flexboxfroggy.com/#nl
     https://reactjs.org/docs/components-and-props.html
