@@ -1,41 +1,30 @@
 import React from "react";
 import Select from 'react-select';
 
-const days = [
-    { value: '0', label: 'Sun' },
-    { value: '1', label: 'Mon' },
-    { value: '2', label: 'Tue' },
-    { value: '3', label: 'Wed' },
-    { value: '4', label: 'Thu' },
-    { value: '5', label: 'Fri' },
-    { value: '6', label: 'Sat' }
-];
-
 export default class DaySelector extends React.Component {
 
     state = {
         onChange: this.props.onChange
     };
 
-    valueRenderer (option) {
-        console.log(`valueRenderer ${option}`);
-        return `aap ${option.label} noot`;
-        /*
-        renderValue: function(option) {
-		return <strong style={{ color: option.hex }}>{option.label}</strong>;
-	},
-         */
+    getOptionIndexFromDay() {
+        if (this.props.options === undefined) {
+            return 0;
+        }
+        let i = 0;
+        while (i < this.props.options.length && this.props.options[i].value !== this.props.dayNumber) i++;
+        return this.props.options[i];
     }
 
+    // TODO: this seems more complicated than necessary...
     render() {
         return (
             <Select
-                defaultValue={days[this.props.selectedOption]}
+                defaultValue={this.getOptionIndexFromDay()}
+                value={this.getOptionIndexFromDay()}
                 name="days"
-                options={days}
-                value={days[this.props.selectedOption]}
+                options={this.props.options}
                 onChange={this.state.onChange}
-                valueRenderer={this.valueRenderer}
             />
         );
     }

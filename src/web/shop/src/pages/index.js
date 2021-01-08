@@ -3,11 +3,10 @@ import './shop.css';
 import DatePicker from './DatePicker.js';
 import RecipeSelector from './RecipeSelector.js';
 import moment from 'moment';
-import DaySelector2 from "./DaySelector2";
+import DaySelector from "./DaySelector";
 import Select from 'react-select';
 
 import {
-    getMonthAndDayFromDate,
     getOptionsForDaySelector,
     recalcDateForDayOfWeekFromStartOfPeriod,
     recalcDates
@@ -73,7 +72,6 @@ export class App extends React.Component {
                     <div className="table-header">
                         <div className="hidden">id</div>
                         <div>day</div>
-                        <div>date</div>
                         <div>recipe</div>
                         <div>&#128465;</div>
                     </div>
@@ -196,7 +194,6 @@ class MenuItem extends React.Component {
                                  options={this.props.dayOptions}
                                  updateDateMethod={this.props.updateDateMethod}
                 /></div>
-                <div>{getMonthAndDayFromDate(this.props.menuItem.date)}</div>
                 <div><RecipeSelector key={this.props.menuItem.id}
                                      menuItems={this.props.menuItems}
                                      allRecipes={this.props.allRecipes}
@@ -211,22 +208,9 @@ class MenuItem extends React.Component {
 
 class SelectADay extends React.Component {
 
-    dateToOption(currentDay, options) {
-        let i = 0;
-        while (i < options.length && options[i].label !== currentDay.getDay()) i = i++;
-
-
-        return i;
-    }
-
-    /*
-    */
-
-    // {this.dateToOption(this.props.currentItem.date, this.props.options ? this.props.options : [])}
     render() {
-        return (<DaySelector2
-            selectedOption=
-                {this.props.currentItem.date.getDay()}
+        return (<DaySelector
+            dayNumber={this.props.currentItem.date.getDay()}
             startOfPeriod={this.props.startOfPeriod}
             options={this.props.options}
             onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}

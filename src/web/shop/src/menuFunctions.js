@@ -8,8 +8,8 @@ const getNameOfDayFromDate = (newDate) => {
     return dayNames[new Date(newDate).getDay()];
 }
 
-const getMonthAndDayFromDate = (newDate) => {
-    return `${newDate.getMonth() + 1} - ${newDate.getDate()}`;
+const getOptionTextFromDate = (newDate) => {
+    return `${getNameOfDayFromDate(newDate)} ${newDate.getMonth() + 1} - ${newDate.getDate()}`;
 }
 
 const recalcDates = (newStartOfPeriod, menuItems, startOfPeriod) => {
@@ -36,13 +36,13 @@ const getOptionsForDaySelector = (startOfPeriod) => {
     let days = [];
     let date = startOfPeriod;
     for (let i = 0; i < 7; i++) {
-        days.push({value: date.getDay(), label: getMonthAndDayFromDate(date)})
+        days.push({value: date.getDay(), label: getOptionTextFromDate(date)})
         date = addDaysToDate(date, 1);
     }
     return days;
 }
 
 export {
-    recalcDates, addDaysToDate, getNameOfDayFromDate, getOptionsForDaySelector,
-    getMonthAndDayFromDate, recalcDateForDayOfWeekFromStartOfPeriod
+    recalcDates, addDaysToDate, getNameOfDayFromDate, getOptionsForDaySelector, getOptionTextFromDate,
+    recalcDateForDayOfWeekFromStartOfPeriod
 };
