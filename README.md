@@ -119,6 +119,9 @@ done - make sure ui scales to the max available width
 done - replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
 - Molecules? Atoms?
 - refactor: https://reactjs.org/docs/components-and-props.html
+- clean up use of state in components
+- extract App (rename?), MenuItem and SelectADay into separate files.
+- use typescript   
 - add mobile style 
 - recipe name field should fill available width
 - configure day selector so it works well on mobile
