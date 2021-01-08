@@ -134,4 +134,9 @@ done remove day/recipe line
 
 done - show day-month and recipe name in list 
 done - use id to update 
-done - store date as a datetime so day-month string can be derived.    
+done - store date as a datetime so day-month string can be derived.
+
+# Uitzoeken 
+
+    https://flexboxfroggy.com/#nl
+    https://reactjs.org/docs/components-and-props.html
