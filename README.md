@@ -108,18 +108,20 @@ test with gatsby and jest:
 
 done - enter the first day of the planning period using a date picker
 done - this changes the start date for the period to the date selected.     
-- this loads or creates a menu starting on that day
+- load or creates a menu starting on the day selected in the day selector
 done - remove days using button 
 - add a recipe for a day
 done - allow multiple recipes per day
 - add a generate shopping list button
-- allow reordering by draging the recipe part
+- allow reordering by dragging the recipe part
 - delete by swiping away
-- make sure ui scales to the max available width
+done - make sure ui scales to the max available width
 done - replace autocomplete with https://react-md.dev/packages/autocomplete/demos#using-object-data-sets
 - Molecules? Atoms?
 - refactor: https://reactjs.org/docs/components-and-props.html
 - add mobile style 
+- recipe name field should fill available width
+- configure day selector so it works well on mobile
 
 recipe lines show as:
 
