@@ -6,13 +6,9 @@ import moment from 'moment';
 import DaySelector from "./DaySelector";
 import Select from 'react-select';
 
-import {
-    getOptionsForDaySelector,
-    recalcDateForDayOfWeekFromStartOfPeriod,
-    recalcDates
-} from "../menuFunctions";
+import {getOptionsForDaySelector, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
 
-const testOpts=[{value: '5', label: 'Sun'},
+const testOpts = [{value: '5', label: 'Sun'},
     {value: '1', label: 'Mon'}
 ];
 
@@ -79,6 +75,9 @@ export class App extends React.Component {
                         {this.state.menuItems.map((item, index) => {
                             return (
                                 <MenuItem key={item.id}
+                                          draggable
+                                          onDragOver={(e) => e.preventDefault()}
+                                          onDrop={(e) => this.handleDrop(e, item.id)}
                                           menuItems={this.state.menuItems}
                                           menuItem={item}
                                           allRecipes={this.state.allRecipes}
@@ -93,6 +92,17 @@ export class App extends React.Component {
                 </div>
             </div>
         )
+    }
+
+    handleDragStart(e, menuItem) {
+        console.log(e);
+        console.log(menuItem);
+        e.dataTransfer.setData('text/plain', menuItem);
+    }
+
+    handleDrop(e, index) {
+        console.log(`index: ${index}`);
+        console.log(e);
     }
 
     deleteMenuItem(id, index) {

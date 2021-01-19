@@ -73,9 +73,9 @@ This service reads a cookbook and a category database from `../ShoppingListData/
     
 on command line:
 
-    curl -v localhost:8080/category/vega
-    curl -v localhost:8080/recipe/Lasagne%20%met%20%gehakt
-    curl -v localhost:8080/categories
+    curl -v localhost:8080/api/category/vega
+    curl -v localhost:8080/api/recipe/Lasagne%20%met%20%gehakt
+    curl -v localhost:8080/api/categories
     
 ## Website
 
