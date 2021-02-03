@@ -1,5 +1,18 @@
 #!/bin/bash
 
+#
+# Generate a shopping list based on the menu for the specified date.
+#
+# Usage: ./r.sh <DDMM>
+#        ./r.sh 0112   this will use the 0112.txt file in ${BIN}/../../ShoppingListData/menus as input
+#
+
+if test $# -lt 1
+then
+	echo "Usage: ./r.sh <DDMM>"
+	exit 0
+fi
+
 if [ -f ${BASH_SOURCE[0]} ];
 then
   BIN=$(dirname "$(readlink "${BASH_SOURCE[0]}")")

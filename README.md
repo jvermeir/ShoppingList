@@ -31,6 +31,11 @@ Entering a recipe that doesn't exist in the cookbook results in a line with 'Dum
 
 # Run
 
+## Prerequisites
+
+- Scripts rely on `readlink`. Install readlink using `brew istall coreutils`
+- Scripts were tested on OSX 
+
 ## Commandline utility
 
 ```./bin/r.sh <DDMM>```
