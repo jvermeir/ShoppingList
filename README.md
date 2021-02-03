@@ -23,6 +23,14 @@ Entering a recipe that doesn't exist in the cookbook results in a line with 'Dum
 
 # Build and test
 
+## Prerequisites
+
+install Artima (https://www.artima.com/supersafe_user_guide_1_0.html) by adding 
+
+    resolvers += ("Artima Maven Repository" at "http://repo.artima.com/releases").withAllowInsecureProtocol(true)
+
+to your sbt global config file `~/.sbt/1.0/global.sbt`
+
 ```sbt clean test```
 
 # Package
