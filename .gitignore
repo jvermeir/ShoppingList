@@ -6,3 +6,4 @@ target/
 ShoppingList.iml
 .scala_dependencies
 *jar
+node_modules
