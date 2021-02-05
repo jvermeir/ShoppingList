@@ -5,8 +5,12 @@ import RecipeSelector from './RecipeSelector.js';
 import moment from 'moment';
 import DaySelector from "./DaySelector";
 import Select from 'react-select';
+import Groups from './drag';
+import {Container, Draggable} from 'react-smooth-dnd';
+
 
 import {getOptionsForDaySelector, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
+import {applyDrag} from "./utils";
 
 const testOpts = [{value: '5', label: 'Sun'},
     {value: '1', label: 'Mon'}
@@ -21,6 +25,7 @@ export default function Home() {
                 options={testOpts}
                 onChange={e => console.log(e.value)}
             /></div>
+            <div><Groups/></div>
         </div>
     )
 };
@@ -71,41 +76,33 @@ export class App extends React.Component {
                         <div>recipe</div>
                         <div>&#128465;</div>
                     </div>
-                    <div className="wrapper">
-                        {this.state.menuItems.map((item, index) => {
-                            return (
-                                <MenuItem key={item.id}
-                                          draggable
-                                          onDragOver={(e) => e.preventDefault()}
-                                          onDrop={(e) => this.handleDrop(e, item.id)}
-                                          menuItems={this.state.menuItems}
-                                          menuItem={item}
-                                          allRecipes={this.state.allRecipes}
-                                          startOfPeriod={this.state.startOfPeriod}
-                                          updateDateMethod={this.updateDate}
-                                          dayOptions={this.state.optionsForDaySelector}
-                                          onClick={() => this.deleteMenuItem(item.id, index)}
-                                />
-                            );
-                        })}
-                    </div>
+                    <Container groupName="1" getChildPayload={i => this.state.menuItems[i]}
+                               onDrop={e => this.setState({menuItems: applyDrag(this.state.menuItems, e)})}
+                    >
+                        {
+                            this.state.menuItems.map(item => {
+                                return (
+                                    <Draggable key={item.id}>
+                                        <MenuItem key={item.id}
+                                                  menuItems={this.state.menuItems}
+                                                  menuItem={item}
+                                                  allRecipes={this.state.allRecipes}
+                                                  startOfPeriod={this.state.startOfPeriod}
+                                                  updateDateMethod={this.updateDate}
+                                                  dayOptions={this.state.optionsForDaySelector}
+                                                  onClick={() => this.deleteMenuItem(item.id)}
+                                        />
+                                    </Draggable>
+                                );
+                            })
+                        }
+                    </Container>
                 </div>
             </div>
         )
     }
 
-    handleDragStart(e, menuItem) {
-        console.log(e);
-        console.log(menuItem);
-        e.dataTransfer.setData('text/plain', menuItem);
-    }
-
-    handleDrop(e, index) {
-        console.log(`index: ${index}`);
-        console.log(e);
-    }
-
-    deleteMenuItem(id, index) {
+    deleteMenuItem(id) {
         this.printContext("deleteMenuItem", this.state.startOfPeriod, this.state.menuItems);
         fetch(`${api}/menu/items/${id}`, {
             method: 'DELETE',
