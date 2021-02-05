@@ -14,7 +14,7 @@ class CookBookTest extends AnyFlatSpec {
     assertEquals("Lasagne met gehakt", lasagne.name)
   }
 
-  it should "properly split tekst with multiple whitespace chareacters" in {
+  it should "properly split text with multiple whitespace chareacters" in {
     val stringWithDoubleBackslashN = "part1\n\npart2"
     val splitOnDoubleBackslashN = stringWithDoubleBackslashN.split("\n\n")
     assertEquals(2, splitOnDoubleBackslashN.length)

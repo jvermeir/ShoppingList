@@ -4,7 +4,7 @@
 # Generate empty menu file starting on today or as many days in the future as specified by the optional parameter.
 #
 # Usage: vandaag.sh
-#        vandaag.sh +2  will create a men for the day after tomorrow
+#        vandaag.sh 2  will create a men for the day after tomorrow
 #
 
 export LC_ALL=nl_NL
@@ -27,7 +27,7 @@ today=$(date -j -f %d%m%Y ${start_date} +%d%m%Y)
 file_name=$(date -j -f %d%m%Y ${start_date} +%d%m.txt)
 week_day=$(date -j -f %d%m%Y ${start_date} +%A)
 tmp_output_folder=${BIN}/../../ShoppingListData/menus
-output_folder=$(cd "$(dirname "${output_file}")"; pwd -P)
+output_folder=$(cd "${tmp_output_folder}"; pwd -P)
 
 mkdir -p ${output_folder}
 output_file=${output_folder}/${file_name}
@@ -41,6 +41,17 @@ done
 
 echo "" >> ${output_file}
 echo "extra" >> ${output_file}
+echo "boter:melk" >> ${output_file}
+echo "brood:volkoren" >> ${output_file}
+echo "koffie:koffiebonen" >> ${output_file}
+echo "groente:appel, banaan" >> ${output_file}
+echo "kwark:alpro perzik" >> ${output_file}
+echo "kwark:alpro aardbei" >> ${output_file}
+echo "kwark:alpro kersen" >> ${output_file}
+echo "kwark:alpro bosbessen" >> ${output_file}
+echo "boter:danio bosbessen" >> ${output_file}
+echo "boter:danio kersen" >> ${output_file}
+echo "boter:danio kiwi" >> ${output_file}
 
 echo results in ${output_file}
 
