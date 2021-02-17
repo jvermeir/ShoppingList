@@ -46,3 +46,5 @@ export {
     recalcDates, addDaysToDate, getNameOfDayFromDate, getOptionsForDaySelector, getOptionTextFromDate,
     recalcDateForDayOfWeekFromStartOfPeriod
 };
+
+console.log("hello world!");
