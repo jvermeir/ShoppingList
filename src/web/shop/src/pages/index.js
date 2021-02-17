@@ -76,6 +76,8 @@ export class App extends React.Component {
                         <div>recipe</div>
                         <div>&#128465;</div>
                     </div>
+                </div>
+                <div>
                     <Container groupName="1" getChildPayload={i => this.state.menuItems[i]}
                                onDrop={e => this.setState({menuItems: applyDrag(this.state.menuItems, e)})}
                     >
@@ -195,7 +197,7 @@ class MenuItem extends React.Component {
 
     render() {
         return (
-            <>
+            <div className="table-row">
                 <div><SelectADay currentItem={this.props.menuItem}
                                  startOfPeriod={this.props.startOfPeriod}
                                  options={this.props.dayOptions}
@@ -208,7 +210,7 @@ class MenuItem extends React.Component {
                 <div>
                     <button onClick={() => this.props.onClick()}>&#128465;</button>
                 </div>
-            </>
+            </div>
         )
     }
 }
