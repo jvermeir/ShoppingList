@@ -4,28 +4,18 @@ import DatePicker from './DatePicker.js';
 import RecipeSelector from './RecipeSelector.js';
 import moment from 'moment';
 import DaySelector from "./DaySelector";
-import Select from 'react-select';
-import Groups from './drag';
 import {Container, Draggable} from 'react-smooth-dnd';
-
 
 import {getOptionsForDaySelector, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
 import {applyDrag} from "./utils";
-
-const testOpts = [{value: '5', label: 'Sun'},
-    {value: '1', label: 'Mon'}
-];
+import Test from "./test";
 
 export default function Home() {
     return (
-        <div>
-            <div><App/></div>
-            <div><Select
-                value={testOpts[0]}
-                options={testOpts}
-                onChange={e => console.log(e.value)}
-            /></div>
-            <div><Groups/></div>
+        <div>hello
+            <div><Test/></div>
+            world
+            {/*<div><App/></div>*/}
         </div>
     )
 };

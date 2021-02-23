@@ -1,11 +1,11 @@
 package rest
 
 import java.time.LocalDate.now
-
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Directives.{complete, get, path, _}
 import akka.http.scaladsl.server.Route
 import shop.Main.readAndSplit
+import shop.Menu.getSevenDayMenuWithRecipeForEachDay
 import shop._
 import spray.json.DefaultJsonProtocol
 
@@ -17,9 +17,10 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
   var menu = resetMenu
 
   private def resetMenu:Menu = {
-    new Menu(List(MenuItem("1", now, "Paksoi met mie")
+    new Menu(List(
+      MenuItem("5", now.plusDays(4), "Paksoi met mie")
+      , MenuItem("2", now.plusDays(1), "Cannelloni")
       , MenuItem("3", now.plusDays(2), "Witloftaart")
-      , MenuItem("2", now.plusDays(1L), "Cannelloni")
       , MenuItem("4", now.plusDays(3), "Tagliatelle met cashewnoten")), now())
   }
 
@@ -52,7 +53,7 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
           post {
             entity(as[String]) { newMenu => {
               menu = Menu.fromJson(newMenu)
-              complete(menu.sorted)
+              complete(getSevenDayMenuWithRecipeForEachDay(menu).sorted)
             }
             }
           } ~
@@ -70,10 +71,10 @@ object ApiRoute extends DefaultJsonProtocol with CORSHandler {
         } ~ path("reset") {
           get {
             menu = resetMenu
-            complete(menu.sorted)
+            complete(getSevenDayMenuWithRecipeForEachDay(menu).sorted)
           }
         } ~ get {
-            complete(menu.sorted)
+            complete(getSevenDayMenuWithRecipeForEachDay(menu).sorted)
           }
       }
 
