@@ -72,6 +72,8 @@
     background-color: #ffffff;
     border: 1px solid #0F67FF;
     border-top: none;
+    z-index: 500;
+    position: fixed;
 }
 
 .autocomplete-wrapper .item  {

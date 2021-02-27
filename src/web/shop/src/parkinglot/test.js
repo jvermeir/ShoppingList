@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import {Container, Draggable} from 'react-smooth-dnd';
-import {applyDrag} from './utils';
 import moment from 'moment';
 
-import RecipeSelector from "./RecipeSelector";
+import RecipeSelector from "../pages/RecipeSelector";
 import {
+    applyDrag,
     recalcDates,
     getOptionsForDaySelector,
     getMenu,
     getAllRecipes, generateDays, saveMenu
 } from "../menuFunctions";
-import DatePicker from "./DatePicker";
+import DatePicker from "../pages/DatePicker";
 
 export function Test() {
 
@@ -32,14 +32,12 @@ export function Test() {
 
     const dateChanged = (newDate) => {
         const newItems = recalcDates(newDate, menu.menuItems, menu.startOfPeriod);
-        // todo: this will become data for the day column
-        const optionsForDaySelector = getOptionsForDaySelector(newDate);
+        setDays(getOptionsForDaySelector(newDate));
         setMenu({menuItems: newItems, startOfPeriod: newDate});
     }
 
-    // TODO: add first column with dates
-    // TODO: add some space at the start of each recipe to use as a handle
     // TODO: add a remove option that clears the menu for a day
+    // TODO: update recipe when selecting from drop down
     return (
         <div>
             {menu &&
@@ -49,7 +47,20 @@ export function Test() {
             </div>}
             {
                 menu && recipes &&
-                <div>
+                <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+                    <div style={{flex: 10}}>
+                        {
+                            days && days.map(day => {
+                                return (
+                                    <div style={{display: 'flex', alignItems: 'center', height: 42}}
+                                         key={day.date}
+                                    >
+                                        <span>{day.month} {day.date}</span>
+                                    </div>
+                                );
+                            })
+                        }
+                    </div>
                     <Container groupName="1" getChildPayload={i => menu.menuItems[i]}
                                onDrop={e => {
                                    const menuItems = applyDrag(menu.menuItems, e, menu.startOfPeriod);
@@ -58,26 +69,26 @@ export function Test() {
                                    setMenu(newMenu);
                                }
                                }
+                               style={{flex: 100, marginLeft: '5px'}}
                     >
                         {
                             menu.menuItems.map(item => {
                                 return (
-                                    <Draggable key={item.id}>
-                                        <div style={{flex: 1, flexDirection: 'row'}}>
-                                            <div>handle</div>
-                                            <RecipeSelector key={item.id}
-                                                            menuItems={menu.menuItems}
-                                                            allRecipes={recipes}
-                                                            theItem={item}/>
-                                        </div>
+                                    <Draggable key={item.id}
+                                               style={{display: 'flex', flexDirection: 'row'}}>
+                                        <img src="drag.png" style={{display: 'block', height: 40, width: 'auto'}} alt="drag"/>
+                                        <RecipeSelector key={item.id}
+                                                        allRecipes={recipes}
+                                                        theMenuItem={item}/>
                                     </Draggable>
                                 );
                             })
-                            }
-                            </Container>
-                            </div>}
+                        }
+                    </Container>
                 </div>
-                );
             }
+        </div>
+    );
+}
 
 export default Test;

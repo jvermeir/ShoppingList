@@ -1,27 +1,31 @@
-import React from "react";
+import React, {useState} from 'react';
 import Autocomplete from "react-autocomplete";
 
-export default class RecipeSelector extends React.Component {
-    state = { val: this.props.theItem.recipe };
+export function RecipeSelector({recipeList, theMenuItem, updateMenu}) {
+    const [menuItem, setMenuItem] = useState(theMenuItem.recipe);
+    const [recipes] = useState(recipeList);
 
-    renderMenuItem(state, val) {
+    function renderMenuItem(menuItem, val) {
+        if (val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1) {
+            console.log({"event": "renderMenuItem, found match",menuItem, val});
+        }
         return (
-            state.toLowerCase().indexOf(val.toLowerCase()) !== -1
+            val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1
         );
     }
 
-    render() {
-        return (
-            <div className="autocomplete-wrapper">
+    return (
+        <>
+            {menuItem && recipes && <div className="autocomplete-wrapper">
                 <Autocomplete
-                    key={this.props.theItem.id}
-                    value={this.state.val}
-                    items={this.props.allRecipes}
-                    getItemValue={item => item}
-                    shouldItemRender={this.renderMenuItem}
-                    renderMenu={item => (
+                    key={menuItem}
+                    value={menuItem}
+                    items={recipes}
+                    getItemValue={menuItem => menuItem}
+                    shouldItemRender={renderMenuItem}
+                    renderMenu={menuItem => (
                         <div className="dropdown">
-                            {item}
+                            {menuItem}
                         </div>
                     )}
                     renderItem={(item, isHighlighted) =>
@@ -30,12 +34,19 @@ export default class RecipeSelector extends React.Component {
                         </div>
                     }
                     onChange={(event, val) => {
-                        this.setState({val});
-                        console.log(val);
+                        setMenuItem(val);
+                        console.log({"event":"onChange", "val":val});
                     }}
-                    onSelect={val => this.setState({ val })}
+                    onSelect={(val) => {
+                        console.log({"event":"onSelect", "val":val});
+                        setMenuItem(val);
+                        updateMenu(val, theMenuItem);
+                    }}
                 />
             </div>
-        );
-    }
+            }
+        </>
+    );
 }
+
+export default RecipeSelector;

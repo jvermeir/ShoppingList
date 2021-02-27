@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Draggable } from 'react-smooth-dnd';
-import { applyDrag, generateItems } from './utils';
+import { applyDrag, generateItems } from '../menuFunctions';
 const groupStyle = {
     marginLeft: '50px',
     flex: 1

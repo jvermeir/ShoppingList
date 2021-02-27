@@ -11,7 +11,11 @@ const getNameOfDayFromDate = (newDate) => {
 }
 
 const getOptionTextFromDate = (newDate) => {
-    return `${getNameOfDayFromDate(newDate)} ${newDate.getMonth() + 1} - ${newDate.getDate()}`;
+    return {
+        day: getNameOfDayFromDate(newDate)
+        , month: newDate.getMonth() + 1
+        , date: newDate.getDate()
+    }
 }
 
 const recalcDates = (newStartOfPeriod, menuItems, startOfPeriod) => {
@@ -94,7 +98,38 @@ const generateDays = (dateOfFirstDay) => {
     return result;
 };
 
+const applyDrag = (arr, dragResult, startOfPeriod) => {
+    const { removedIndex, addedIndex, payload } = dragResult;
+    if (removedIndex === null && addedIndex === null) return arr;
+
+    const result = [...arr];
+    let itemToAdd = payload;
+
+    if (removedIndex !== null) {
+        itemToAdd = result.splice(removedIndex, 1)[0];
+    }
+
+    if (addedIndex !== null) {
+        result.splice(addedIndex, 0, itemToAdd);
+    }
+    let i = 0;
+    const newData = result.map(item => updateDate(item, i++, startOfPeriod));
+    return newData;
+};
+
+const updateDate = (menuItem, i, startOfPeriod) => {
+    return { ...menuItem, date: addDaysToDate(startOfPeriod, i)};
+}
+
+const generateItems = (count, creator) => {
+    const result = [];
+    for (let i = 0; i < count; i++) {
+        result.push(creator(i));
+    }
+    return result;
+};
+
 export {
     recalcDates, addDaysToDate, getNameOfDayFromDate, getOptionsForDaySelector, getOptionTextFromDate,
-    recalcDateForDayOfWeekFromStartOfPeriod, getAllRecipes, getMenu, saveMenu, generateDays
+    recalcDateForDayOfWeekFromStartOfPeriod, getAllRecipes, getMenu, saveMenu, generateDays, updateDate, generateItems, applyDrag
 };

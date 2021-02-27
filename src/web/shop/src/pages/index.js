@@ -1,88 +1,101 @@
-import React from "react";
-import './shop.css';
-import DatePicker from './DatePicker.js';
-import RecipeSelector from './RecipeSelector.js';
-import moment from 'moment';
-import DaySelector from "./DaySelector";
+import React, {useState, useEffect} from 'react';
 import {Container, Draggable} from 'react-smooth-dnd';
+import moment from 'moment';
+import './shop.css';
 
-import {getOptionsForDaySelector, recalcDateForDayOfWeekFromStartOfPeriod, recalcDates} from "../menuFunctions";
-import {applyDrag} from "./utils";
-import Test from "./test";
+import RecipeSelector from "./RecipeSelector";
+import {
+    applyDrag,
+    recalcDates,
+    getOptionsForDaySelector,
+    getMenu,
+    getAllRecipes, generateDays, saveMenu
+} from "../menuFunctions";
+import DatePicker from "./DatePicker";
 
+// TODO: turn this into typescript and introduce types
 export default function Home() {
     return (
-        <div>hello
-            <div><Test/></div>
-            world
-            {/*<div><App/></div>*/}
-        </div>
+        <div><App/></div>
     )
 };
 
-const api = `/api`;
+function App() {
 
-export class App extends React.Component {
+    const [recipes, setRecipes] = useState();
+    const [menu, setMenu] = useState();
+    const [days, setDays] = useState();
 
-    constructor(props) {
-        super(props);
-        this.saveMenu = this.saveMenu.bind(this);
-        this.updateDate = this.updateDate.bind(this);
-        this.searchRecipe = this.searchRecipe.bind(this);
-        this.state = {
-            menuItems: [],
-            searchResults: [],
-            startOfPeriod: "",
-            allRecipes: []
-        };
+    useEffect(() => {
+        getAllRecipes(setRecipes);
+        getMenu(setMenu);
+    }, []);
+
+    useEffect(() => {
+        if (menu) {
+            saveMenu(menu);
+            setDays(generateDays(menu.startOfPeriod));
+        }
+    }, [menu])
+
+    const dateChanged = (newDate) => {
+        const newItems = recalcDates(newDate, menu.menuItems, menu.startOfPeriod);
+        setDays(getOptionsForDaySelector(newDate));
+        setMenu({menuItems: newItems, startOfPeriod: newDate});
     }
 
-    componentDidMount() {
-        this.getMenu();
-        this.getAllRecipes();
+    const updateMenu = (recipeName, menuItem) => {
+        console.log({text:"updateMenu", recipeName});
+        const newMenuItem = {...menuItem, recipe:recipeName};
+        const newMenuItems = menu.menuItems.map(m => m.id !== menuItem.id ? m : newMenuItem);
+        setMenu({...menu, menuItems:newMenuItems});
     }
 
-    dateChanged = (newDate) => {
-        this.printContext("dateChanged", this.state.startOfPeriod, this.state.menuItems);
-        const newItems = recalcDates(newDate, this.state.menuItems, this.state.startOfPeriod);
-        const optionsForDaySelector = getOptionsForDaySelector(newDate);
-        this.setState({
-            menuItems: newItems, startOfPeriod: newDate,
-            optionsForDaySelector: optionsForDaySelector
-        }, this.saveMenu);
-    }
-
-    render() {
-        return (
-            <div>
-                <div>First day of this menu:
-                    <DatePicker date={moment(this.state.startOfPeriod)}
-                                onChange={e => this.dateChanged(e.target.value._d)}/>
-                </div>
-                <div className="top">
-                    <div className="table-header">
-                        <div className="hidden">id</div>
-                        <div>day</div>
-                        <div>recipe</div>
-                        <div>&#128465;</div>
+    // TODO: add a remove option that clears the menu for a day
+    // TODO: update recipe when selecting from drop down
+    return (
+        <div>
+            {menu &&
+            <div>First day of this menu:
+                <DatePicker date={moment(menu.startOfPeriod)}
+                            onChange={e => dateChanged(e.target.value._d)}/>
+            </div>}
+            {
+                menu && recipes &&
+                <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
+                    <div style={{flex: 10}}>
+                        {
+                            days && days.map(day => {
+                                return (
+                                    <div style={{display: 'flex', alignItems: 'center', height: 42}}
+                                         key={day.date}
+                                    >
+                                        <span>{day.month} {day.date}</span>
+                                    </div>
+                                );
+                            })
+                        }
                     </div>
-                </div>
-                <div>
-                    <Container groupName="1" getChildPayload={i => this.state.menuItems[i]}
-                               onDrop={e => this.setState({menuItems: applyDrag(this.state.menuItems, e)})}
+                    <Container groupName="1" getChildPayload={i => menu.menuItems[i]}
+                               onDrop={e => {
+                                   const menuItems = applyDrag(menu.menuItems, e, menu.startOfPeriod);
+                                   const newMenu = {...menu, menuItems};
+                                   console.log({newMenu});
+                                   setMenu(newMenu);
+                               }
+                               }
+                               style={{flex: 100, marginLeft: '5px'}}
                     >
                         {
-                            this.state.menuItems.map(item => {
+                            menu.menuItems.map(item => {
                                 return (
-                                    <Draggable key={item.id}>
-                                        <MenuItem key={item.id}
-                                                  menuItems={this.state.menuItems}
-                                                  menuItem={item}
-                                                  allRecipes={this.state.allRecipes}
-                                                  startOfPeriod={this.state.startOfPeriod}
-                                                  updateDateMethod={this.updateDate}
-                                                  dayOptions={this.state.optionsForDaySelector}
-                                                  onClick={() => this.deleteMenuItem(item.id)}
+                                    <Draggable key={item.id}
+                                               style={{display: 'flex', flexDirection: 'row'}}>
+                                        <img src="drag.png" style={{display: 'block', height: 40, width: 'auto'}} alt="drag"/>
+                                        <RecipeSelector key={item.id}
+                                                        recipeList={recipes}
+                                                        theMenuItem={item}
+                                                        updateMenu={updateMenu}
                                         />
                                     </Draggable>
                                 );
@@ -90,129 +103,7 @@ export class App extends React.Component {
                         }
                     </Container>
                 </div>
-            </div>
-        )
-    }
-
-    deleteMenuItem(id) {
-        this.printContext("deleteMenuItem", this.state.startOfPeriod, this.state.menuItems);
-        fetch(`${api}/menu/items/${id}`, {
-            method: 'DELETE',
-        })
-            .then(res => res.text())
-            .then(res => console.log(res))
-            .then(_ => {
-                console.log("calling getMenu from deleteMenuItem")
-                this.getMenu()
-            })
-    }
-
-    searchRecipe(name) {
-        fetch(`${api}/recipe/search/${name}`)
-            .then(res => res.json())
-            .then((data) => this.setState({searchResults: data}))
-    }
-
-    getAllRecipes() {
-        fetch(`${api}/recipe/names`)
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({allRecipes: data})
-            })
-            .catch(console.log)
-    }
-
-    getMenu() {
-        this.printContext("getMenu", this.state.startOfPeriod, this.state.menuItems);
-        fetch(`${api}/menu`)
-            .then(res => res.json())
-            .then((data) => {
-                const newMenuItems = this.parseMenuItems(data.menuItems);
-                this.setState({menuItems: newMenuItems});
-                const newStartOfPeriod = new Date(data.startOfPeriod + "T10:00:00");
-                const optionsForDaySelector = getOptionsForDaySelector(newStartOfPeriod);
-                this.setState({startOfPeriod: newStartOfPeriod, optionsForDaySelector})
-                this.printContext("getMenu - end", newStartOfPeriod, newMenuItems);
-            })
-            .catch(console.log);
-    }
-
-    printContext(tag, startOfPeriod, menuItems) {
-        console.log(JSON.stringify({tag, startOfPeriod, menuItems}));
-    }
-
-    saveMenu() {
-        this.printContext("saveMenu", this.state.startOfPeriod, this.state.menuItems);
-        fetch(`${api}/menu`, {
-            method: 'POST',
-            body: JSON.stringify({startOfPeriod: this.state.startOfPeriod, menuItems: this.state.menuItems}),
-            headers: {"Content-type": "application/json"}
-        })
-            .then(() => {
-                console.log("calling getMenu from saveMenu");
-                this.getMenu()
-            })
-            .catch(console.log)
-    }
-
-    updateDate(currentItem, daySelected) {
-        this.printContext("updateDate", this.state.startOfPeriod, this.state.menuItems);
-        const newDate = recalcDateForDayOfWeekFromStartOfPeriod(this.state.startOfPeriod, Number(daySelected));
-        console.log(`updating ${currentItem.id} with date ${newDate}`);
-        const newItems = this.state.menuItems.map(item => {
-            if (item.id === currentItem.id) {
-                console.log("item found");
-                return {
-                    ...item,
-                    date: newDate
-                }
-            } else {
-                return item;
             }
-        });
-        this.setState({menuItems: newItems}, this.saveMenu);
-    }
-
-    parseMenuItems(menuItems) {
-        return menuItems.map(item => {
-            return {
-                ...item,
-                date: new Date(item.date + "T10:00:00")
-            }
-        });
-    }
-}
-
-class MenuItem extends React.Component {
-
-    render() {
-        return (
-            <div className="table-row">
-                <div><SelectADay currentItem={this.props.menuItem}
-                                 startOfPeriod={this.props.startOfPeriod}
-                                 options={this.props.dayOptions}
-                                 updateDateMethod={this.props.updateDateMethod}
-                /></div>
-                <div><RecipeSelector key={this.props.menuItem.id}
-                                     menuItems={this.props.menuItems}
-                                     allRecipes={this.props.allRecipes}
-                                     theItem={this.props.menuItem}/></div>
-                <div>
-                    <button onClick={() => this.props.onClick()}>&#128465;</button>
-                </div>
-            </div>
-        )
-    }
-}
-
-class SelectADay extends React.Component {
-
-    render() {
-        return (<DaySelector
-            dayNumber={this.props.currentItem.date.getDay()}
-            startOfPeriod={this.props.startOfPeriod}
-            options={this.props.options}
-            onChange={e => this.props.updateDateMethod(this.props.currentItem, e.value)}
-        />)
-    }
+        </div>
+    );
 }
