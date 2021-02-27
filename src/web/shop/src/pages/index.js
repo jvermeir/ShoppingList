@@ -45,8 +45,9 @@ function App() {
     }
 
     const updateMenu = (recipeName, menuItem) => {
-        console.log({text:"updateMenu", recipeName});
-        const newMenuItem = {...menuItem, recipe:recipeName};
+        const finalRecipeName = recipeName === "" ? "-" : recipeName;
+        console.log({text:"updateMenu", finalRecipeName});
+        const newMenuItem = {...menuItem, recipe:finalRecipeName};
         const newMenuItems = menu.menuItems.map(m => m.id !== menuItem.id ? m : newMenuItem);
         setMenu({...menu, menuItems:newMenuItems});
     }

@@ -6,9 +6,9 @@ export function RecipeSelector({recipeList, theMenuItem, updateMenu}) {
     const [recipes] = useState(recipeList);
 
     function renderMenuItem(menuItem, val) {
-        if (val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1) {
-            console.log({"event": "renderMenuItem, found match",menuItem, val});
-        }
+        // if (val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1) {
+        //     console.log({"event": "renderMenuItem, found match",menuItem, val});
+        // }
         return (
             val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1
         );
@@ -34,8 +34,10 @@ export function RecipeSelector({recipeList, theMenuItem, updateMenu}) {
                         </div>
                     }
                     onChange={(event, val) => {
-                        setMenuItem(val);
-                        console.log({"event":"onChange", "val":val});
+                        const finalRecipeName = val === "" ? "-" : val;
+                        setMenuItem(finalRecipeName);
+                        console.log({"event":"onChange", "val":finalRecipeName});
+                        updateMenu(val, theMenuItem);
                     }}
                     onSelect={(val) => {
                         console.log({"event":"onSelect", "val":val});
