@@ -1,28 +1,27 @@
-import React, {useState} from 'react';
+    import React from "react";
 import Autocomplete from "react-autocomplete";
 
-export function RecipeSelector({recipeList, theMenuItem, updateMenu}) {
-    const [menuItem, setMenuItem] = useState(theMenuItem.recipe);
-    const [recipes] = useState(recipeList);
+export default class RecipeSelector extends React.Component {
+    state = {val: this.props.theItem.recipe};
 
-    function renderMenuItem(menuItem, val) {
+    renderMenuItem(state, val) {
         return (
-            val === "" || menuItem.toLowerCase().indexOf(val.toLowerCase()) !== -1
+            state.toLowerCase().indexOf(val.toLowerCase()) !== -1
         );
     }
 
-    return (
-        <>
-            {menuItem && recipes && <div className="autocomplete-wrapper">
+    render() {
+        return (
+            <div className="autocomplete-wrapper">
                 <Autocomplete
-                    key={menuItem}
-                    value={menuItem}
-                    items={recipes}
-                    getItemValue={menuItem => menuItem}
-                    shouldItemRender={renderMenuItem}
-                    renderMenu={menuItem => (
+                    key={this.props.theItem.id}
+                    value={this.state.val}
+                    items={this.props.allRecipes}
+                    getItemValue={item => item}
+                    shouldItemRender={this.renderMenuItem}
+                    renderMenu={item => (
                         <div className="dropdown">
-                            {menuItem}
+                            {item}
                         </div>
                     )}
                     renderItem={(item, isHighlighted) =>
@@ -30,28 +29,15 @@ export function RecipeSelector({recipeList, theMenuItem, updateMenu}) {
                             {item}
                         </div>
                     }
-                    onChange={(event, val) => {
-                        // TODO: this event should not cause a rest call, so updateMenu should not be called
-                        // if the field is emptied, it gets a default of -, this value is set automatically and should
-                        // therefore trigger updateMenu(). this seems a bit complicated...
-                        // now you can't empty the field because it will get a value of -
-                        const finalRecipeName = val === "" ? "-" : val;
-                        setMenuItem(finalRecipeName);
-                        console.log({"event": "onChange", "val": finalRecipeName});
-                        if (finalRecipeName === "-") {
-                            updateMenu(finalRecipeName, theMenuItem);
-                        }
-                    }}
-                    onSelect={(val) => {
-                        console.log({"event": "onSelect", "val": val});
-                        setMenuItem(val);
-                        updateMenu(val, theMenuItem);
+                    onChange={(event, val) =>
+                        this.setState({val})
+                    }
+                    onSelect={val => {
+                        this.setState({val});
+                        this.props.updateMenu(val, this.props.theItem)
                     }}
                 />
             </div>
-            }
-        </>
-    );
+        )
+    }
 }
-
-export default RecipeSelector;

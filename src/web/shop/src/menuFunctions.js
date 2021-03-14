@@ -67,7 +67,7 @@ const parseMenuItems = (menuItems) => {
 }
 
 function getMenu(setMenu) {
-    console.log('getMenu');
+    console.log('getMenu - start');
     fetch(`${api}/menu`)
         .then(res => res.json())
         .then((data) => {
@@ -77,16 +77,18 @@ function getMenu(setMenu) {
                 console.log({menu});
                 setMenu(menu);
             }
-        )
+        );
+    console.log('getMenu - end');
 }
 
 function saveMenu(menu) {
-    console.log('save menu');
+    console.log('save menu -  start');
     fetch(`${api}/menu`, {
         method: 'POST',
         body: JSON.stringify({startOfPeriod: menu.startOfPeriod, menuItems: menu.menuItems}),
         headers: {"Content-type": "application/json"}
     }).catch(console.log)
+    console.log('save menu - end');
 }
 
 const generateDays = (dateOfFirstDay) => {

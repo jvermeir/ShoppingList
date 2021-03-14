@@ -4,6 +4,7 @@ import moment from 'moment';
 import './shop.css';
 
 import RecipeSelector from "./RecipeSelector";
+import RecipeSelector2 from "./RecipeSelector2";
 import {
     applyDrag,
     recalcDates,
@@ -94,10 +95,17 @@ function App() {
                                                style={{display: 'flex', flexDirection: 'row'}}>
                                         <img src="drag.png" style={{display: 'block', height: 40, width: 'auto'}} alt="drag"/>
                                         <RecipeSelector key={item.id}
-                                                        recipeList={recipes}
-                                                        theMenuItem={item}
+                                                        menuItems={menu.menuItems}
+                                                        allRecipes={recipes}
+                                                        theItem={item}
                                                         updateMenu={updateMenu}
                                         />
+                                        {/*<RecipeSelector2 key={item.id}*/}
+                                        {/*                menuItems={menu.menuItems}*/}
+                                        {/*                allRecipes={recipes}*/}
+                                        {/*                theItem={item}*/}
+                                        {/*                updateMenu={updateMenu}*/}
+                                        {/*/>*/}
                                     </Draggable>
                                 );
                             })
@@ -108,3 +116,11 @@ function App() {
         </div>
     );
 }
+
+/*
+          <div><RecipeSelector key={this.props.menuItem.id}
+                                     menuItems={this.props.menuItems}
+                                     allRecipes={this.props.allRecipes}
+                                     theItem={this.props.menuItem}/></div>
+                <div>
+ */
