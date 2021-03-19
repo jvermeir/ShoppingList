@@ -105,6 +105,12 @@ start with
     gatsby develop # localhost only
     gatsby develop --host=0.0.0.0
 
+todo: 
+
+    gatsby develop --https --host 0.0.0.0
+
+???
+
 after adding a new dependency it may be necessary to run
 
     gatsby build
