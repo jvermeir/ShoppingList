@@ -18,5 +18,5 @@ output_folder=$(cd "${DATA}"; pwd -P)
 most_recent_menu=$(ls -Art ${output_folder} | tail -n 1)
 output=${output_folder}/${most_recent_menu}
 echo ${output}
-cp ${output} ~/Dropbox/transfer
+cp ${output} ~/Dropbox/menu
 p ${output}
