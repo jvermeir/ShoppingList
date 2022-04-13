@@ -35,7 +35,7 @@ case class ShoppingListItem(ingredient: Ingredient, date: LocalDate) extends Ord
   def debugToString: String = s"[$name,$category,$date]"
 
   override def toString: String = {
-    if (category.name == "groente" || category.name == "sla") {
+    if (category.name.indexOf("groente")>=0) {
       name + "(" + printDate(date) + ")"
     }
     else name

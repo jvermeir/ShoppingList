@@ -12,6 +12,10 @@ echo linking to ${BIN}/vandaag.sh
 rm -f /usr/local/bin/vandaag
 ln -s ${BIN}/vandaag.sh /usr/local/bin/vandaag
 
+echo linking to ${BIN}/morgen.sh
+rm -f /usr/local/bin/morgen
+ln -s ${BIN}/morgen.sh /usr/local/bin/morgen
+
 echo linking to ${BIN}/r.sh
 rm -f /usr/local/bin/runshop
 ln -s ${BIN}/r.sh /usr/local/bin/runshop

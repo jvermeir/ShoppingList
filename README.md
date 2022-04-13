@@ -35,7 +35,7 @@ to your sbt global config file `~/.sbt/1.0/global.sbt`
 
 # Package
 
-```sbt assembly``` creates a jar in target/scala-2.12. Copy this into ./bin
+```sbt assembly``` creates a jar in target/scala-2.13. Copy this into ./bin
 
 # Run
 
