@@ -1,0 +1,28 @@
+{
+  "root": "apps/todos-e2e",
+  "sourceRoot": "apps/todos-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/todos-e2e/cypress.json",
+        "devServerTarget": "todos:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "todos:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/todos-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["todos"]
+}
