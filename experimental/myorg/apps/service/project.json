@@ -1,0 +1,62 @@
+{
+  "root": "apps/service",
+  "sourceRoot": "apps/service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:format-check",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "run": {
+      "executor": "@nxrocks/nx-spring-boot:run",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "serve": {
+      "executor": "@nxrocks/nx-spring-boot:serve",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "buildImage": {
+      "executor": "@nxrocks/nx-spring-boot:buildImage",
+      "options": {
+        "root": "apps/service"
+      }
+    },
+    "buildInfo": {
+      "executor": "@nxrocks/nx-spring-boot:buildInfo",
+      "options": {
+        "root": "apps/service"
+      }
+    }
+  },
+  "tags": []
+}

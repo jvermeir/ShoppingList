@@ -27,6 +27,7 @@
     "@nrwl/react": "13.10.2",
     "@nrwl/web": "13.10.2",
     "@nrwl/workspace": "13.10.2",
+    "@nxrocks/nx-spring-boot": "^4.0.2",
     "@testing-library/react": "13.0.0",
     "@testing-library/react-hooks": "7.0.2",
     "@types/express": "4.17.13",

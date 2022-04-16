@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "gatsby-cli": "^2.15.0"
+  },
+  "devDependencies": {
+    "@nxrocks/nx-spring-boot": "^4.0.2"
   }
 }
