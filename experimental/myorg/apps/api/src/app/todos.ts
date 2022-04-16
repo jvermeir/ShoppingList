@@ -1,7 +1,6 @@
 import { Express } from 'express';
 import {Todo} from "@myorg/data";
 
-
 const todos: Todo[] = [{ title: 'Todo 1' }, { title: 'Todo 2' }];
 
 export function addTodoRoutes(app: Express) {
@@ -11,7 +10,6 @@ export function addTodoRoutes(app: Express) {
       title: `New todo ${Math.floor(Math.random() * 1000)}`,
     };
     todos.push(newTodo);
-    console.log(newTodo);
     resp.send(newTodo);
   });
 }
