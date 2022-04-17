@@ -9,7 +9,7 @@ export function Todos(props: TodosProps) {
   return (
     <ul>
       {props.todos.map((t) => (
-        <li className={'todo'}>{t.title}</li>
+        <li className={'todo'} key={t.title}>{t.title}</li>
       ))}
     </ul>
   );

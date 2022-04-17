@@ -1,12 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.6.6"
+	id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	war
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
-	id("com.diffplug.spotless") version "6.2.2"
 }
 
 group = "com.xebia"
@@ -18,10 +16,12 @@ repositories {
 }
 
 dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+	runtimeOnly("com.h2database:h2")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -34,29 +34,4 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-springBoot {
-	buildInfo()
-}
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-    
-    format("misc") {
-        // define the files to apply 'misc' to
-        target("*.gradle.kts", "*.md", ".gitignore")
-    
-        // define the steps to apply to those files
-        trimTrailingWhitespace()
-        indentWithTabs() // or spaces. Takes an integer argument if you don't like 4
-        endWithNewline()
-    }
-    
-    kotlin { // to customize, go to https://github.com/diffplug/spotless/tree/main/plugin-gradle#kotlin
-
-        // Apply ktfmt formatter(similar to google-java-format, but for Kotlin)
-        ktfmt()
-    }
-    kotlinGradle {
-        target("*.gradle.kts") // default target for kotlinGradle
-        ktfmt()
-    }
 }

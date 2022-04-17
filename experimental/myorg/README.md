@@ -3,6 +3,33 @@
 # Myorg
 
 This project was generated using [Nx](https://nx.dev).
+Using tutorial at https://nx.dev/react-tutoria
+
+## Adding kotlin service 
+
+Use plugin: https://www.linkedin.com/pulse/integrating-spring-boot-application-inside-nx-workspace-tine-kondo/
+
+    npm install @nxrocks/nx-spring-boot --save-dev
+    nx g @nxrocks/nx-spring-boot:new service
+
+Remove all files in apps/service, except settings.gradle.kts 
+Copy Kotlin demo app (https://kotlinlang.org/docs/jvm-spring-boot-restful.html) into apps/service
+
+nx run service starts the service on port 8080 
+
+    curl localhost:8080/kotlin/todos
+
+    curl --location --request POST 'localhost:8080/kotlin/todo' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{"text":"text2"}'
+
+
+
+
+
+
+
+## archive 
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
 
