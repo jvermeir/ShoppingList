@@ -1,10 +1,10 @@
-package com.xebia.space
+package com.xebia.kotlintodo
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class SpaceApplicationTests {
+class TodoApplicationTests {
 
 	@Test
 	fun contextLoads() {

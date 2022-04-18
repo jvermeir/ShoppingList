@@ -1,1 +1,1 @@
-rootProject.name = "test"
+rootProject.name = "kotlin-todo"

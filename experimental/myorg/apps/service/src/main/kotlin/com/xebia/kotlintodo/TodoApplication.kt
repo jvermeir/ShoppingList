@@ -1,4 +1,4 @@
-package com.xebia.space
+package com.xebia.kotlintodo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
