@@ -6,6 +6,7 @@
     "todos": "apps/todos",
     "todos-e2e": "apps/todos-e2e",
     "ui": "libs/ui",
-    "service": "apps/service"
+    "service": "apps/service",
+    "shop": "apps/shop"
   }
 }

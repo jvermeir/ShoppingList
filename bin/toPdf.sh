@@ -13,4 +13,4 @@ then
 	exit 0
 fi
 
-enscript $1.txt  --output=- | pstopdf -o ~/dropbox/menu/$1.pdf
+enscript $1.txt  --output=- | pstopdf -o ~/dropbox/1menu/$1.pdf

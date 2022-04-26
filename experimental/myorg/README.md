@@ -3,9 +3,9 @@
 # Myorg
 
 This project was generated using [Nx](https://nx.dev).
-Using tutorial at https://nx.dev/react-tutoria
+Using tutorial at https://nx.dev/react-tutorial
 
-## Adding kotlin service 
+## Adding a Kotlin service 
 
 Use plugin: https://www.linkedin.com/pulse/integrating-spring-boot-application-inside-nx-workspace-tine-kondo/
 
@@ -15,7 +15,7 @@ Use plugin: https://www.linkedin.com/pulse/integrating-spring-boot-application-i
 Remove all files in apps/service, except settings.gradle.kts 
 Copy Kotlin demo app (https://kotlinlang.org/docs/jvm-spring-boot-restful.html) into apps/service
 
-nx run service starts the service on port 8080 
+`nx run service` starts the service on port 8080 
 
     curl localhost:8080/kotlin/todos
 

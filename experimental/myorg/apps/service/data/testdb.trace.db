@@ -1,0 +1,6 @@
+2022-04-26 20:59:40 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "menuitems" not found; SQL statement:
+INSERT INTO "menuitems" ("ID", "ITEM") VALUES (?, ?) [42102-200]
+2022-04-26 21:02:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "menuitems" not found; SQL statement:
+INSERT INTO "menuitems" ("ID", "ITEM") VALUES (?, ?) [42102-200]
