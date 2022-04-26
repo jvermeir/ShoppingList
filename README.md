@@ -1,5 +1,79 @@
 # ShoppingList
 
+## Goodbye to Scala
+
+Scala was interesting, but it seems to have lost its appeal. Time for a new version
+of the shopping list quest. Following a Oracle Forms, Java and Scala version, I'll switch to Kotlin and Typescript (because 25 years after the Oracle Forms version, having a proper UI seems nice). While I'm at it, I'll also introduce NX so I can
+combine different languages and build tools.
+
+The version in the `production` branch is still Scala. I'm using it's output every day to make shopping lists, so I'll need it for a while.
+
+I'll leave the text about the Scala version for a bit, just for nostalgic reasons.
+
+## Production version
+
+### Build and test
+
+### Prerequisites
+
+install Artima (https://www.artima.com/supersafe_user_guide_1_0.html) by adding
+
+    resolvers += ("Artima Maven Repository" at "http://repo.artima.com/releases").withAllowInsecureProtocol(true)
+
+to your sbt global config file `~/.sbt/1.0/global.sbt`
+
+```
+sbt clean test
+```
+
+### Package
+
+`sbt assembly` creates a jar in target/scala-2.13. Copy this into ./bin
+
+### Run
+
+#### Prerequisites
+
+- Scripts rely on `readlink`. Install readlink using `brew istall coreutils`
+- Scripts were tested on OSX
+
+#### Commandline utility
+
+```
+./bin/r.sh <DDMM>
+```
+
+example
+
+`./bin/r.sh 1301` takes a menu file named 1301.txt that is stored in ../ShoppingListData/menus, creates a shopping list named 1301.txt in
+the root folder of this project and opens this file in your default editor.
+
+```
+./bin/vandaag.sh [A number between 1 and 6]
+```
+
+creates a menu file for today or X days after today:
+
+```
+### for today:
+
+./bin/vandaag.sh
+
+### for tomorrow:
+
+./bin/vandaag.sh 1
+
+```
+
+install symlinks in your path (tested on OSX):
+
+```
+./bin/install.sh
+```
+
+
+## Older junk
+
 Shopping list is a vehicle to teach myself Scala. And React.
 It also serves a real purpose because it is supposed to generate shopping lists optimized for the super market I visit each week.
 There have been several incarnations of this program: a Oracle Forms version (lost in the mists of time, this is probably a good thing), a Drools version (worked, but was too ambitious because it tried to magically generate a menu as well as a shopping list)
@@ -15,60 +89,12 @@ The road map now looks like this:
 - Generate a menu based on constraints like the season, the amount of time the cook has on a particular day and other fuzzy logic (some of the old ambition shining through here)
 - Store menus and use history to generate a new menu
 
-Still, the goal to learn always have a strong influence. This will lead to solutions that might be over engineered or rewritten several times just to get it right. 
+Still, the goal to learn always have a strong influence. This will lead to solutions that might be over engineered or rewritten several times just to get it right.
 
 ## Bugs
 
 Entering a recipe that doesn't exist in the cookbook results in a line with 'Dummy' in the output. This should be an error in stead.
 
-# Build and test
-
-## Prerequisites
-
-install Artima (https://www.artima.com/supersafe_user_guide_1_0.html) by adding 
-
-    resolvers += ("Artima Maven Repository" at "http://repo.artima.com/releases").withAllowInsecureProtocol(true)
-
-to your sbt global config file `~/.sbt/1.0/global.sbt`
-
-```sbt clean test```
-
-# Package
-
-```sbt assembly``` creates a jar in target/scala-2.13. Copy this into ./bin
-
-# Run
-
-## Prerequisites
-
-- Scripts rely on `readlink`. Install readlink using `brew istall coreutils`
-- Scripts were tested on OSX 
-
-## Commandline utility
-
-```./bin/r.sh <DDMM>```
-
-example
-
-```./bin/r.sh 1301``` takes a menu file named 1301.txt that is stored in ../ShoppingListData/menus, creates a shopping list named 1301.txt in
-the root folder of this project and opens this file in your default editor.
-
-```./bin/vandaag.sh [A number between 1 and 6]```
-
-creates a menu file for today or X days after today:
-
-```
-# for today:
-./bin/vandaag.sh
-# for tomorrow:
-./bin/vandaag.sh 1
-```
-
-install symlinks in your path (tested on OSX):
-
-```
-./bin/install.sh
-```
 
 ## Web service
 
@@ -105,7 +131,7 @@ start with
     gatsby develop # localhost only
     gatsby develop --host=0.0.0.0
 
-todo: 
+todo:
 
     gatsby develop --https --host 0.0.0.0
 
