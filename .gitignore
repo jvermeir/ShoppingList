@@ -1,4 +1,6 @@
 *.iml
+.gradle
+build
 .bsp
 stuff
 junk
