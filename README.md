@@ -10,6 +10,8 @@ The version in the `production` branch is still Scala. I'm using it's output eve
 
 I'll leave the text about the Scala version for a bit, just for nostalgic reasons.
 
+See [README.md](https://github.com/jvermeir/ShoppingList/blob/main/shop/README.md) to get started.
+
 ## Production version
 
 ### Build and test
