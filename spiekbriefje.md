@@ -12,8 +12,16 @@ npx create-nx-workspace@latest
 
 ### Run
 
+Run the app: 
+
 ```
 nx serve todos
+```
+
+Run shop-api:
+
+```
+nx serve shop-api
 ```
 
 ### Generate Spring boot service 
@@ -22,3 +30,5 @@ nx serve todos
 npm install @nxrocks/nx-spring-boot --save-dev
 nx g @nxrocks/nx-spring-boot:new shop
 ```
+
+

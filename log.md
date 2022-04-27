@@ -39,7 +39,7 @@ I'll replace the files in shop-api by a starter app generated on the spring boot
 needed for the Kotlin service, so I'll keep it. 
 To generate a shop-api Kotlin service, I've used this tutorial https://kotlinlang.org/docs/jvm-spring-boot-restful.html. This first creates a starter application and a zip file. 
 I've downloaded the zip file and used it to replace the contents of `shop/apps/shop-api`, but I've KEPT THE PROJECT.JSON FILE as it was generated earlier.
-The kotlin/spring-boot tutorial shows how to create web services and a database. Note that the table name in 
+The kotlin/spring-boot tutorial shows how to create web services and a database. Note that the table name needs to be uppercase in: 
 
 ```
 @Table("MENUITEMS")
@@ -57,7 +57,32 @@ Back to the nx tutorial here: https://nx.dev/react-tutorial/06-proxy. Since I di
 }
 ```
 
-needs to be uppercase. 
+and also `nx g @nxrocks/nx-spring-boot:new shop-api` creates an api, but it doesn't register the proxy in `shop/project.json`. To fix that problem, add `proxyConfig...` at the end of the `serve` property:
+
+```
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "shop:build",
+        "hmr": true,
+        "proxyConfig": "apps/shop/proxy.conf.json"
+      },
+```
+
+Also note that the Kotlin service defines paths like this: `  @GetMapping("/api/menuitems")`, so that includes `/api`. This prefix is the same as the prefix used in proxy.conf.json (see above).
+
+To start the application we need to run two processes from the root folder of the shop project: 
+
+```
+# run the front end and the proxy to backend services
+nx serve shop
+
+# run the backend service 
+nx serve shop-api 
+```
+
+I've tested the result using the `request.http` file in apps/shop-api. 
 
 ## 20220426
 
