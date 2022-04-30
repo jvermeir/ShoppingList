@@ -1,3 +1,4 @@
+*trace.db
 *.iml
 .gradle
 build

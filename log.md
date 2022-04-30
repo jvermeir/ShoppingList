@@ -2,6 +2,22 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220430
+
+Based on the kotlin/spring-boot tutorial, I've added a category table and REST endpoints to add and list categories.
+There's also a sort of datamodel in apps/shop-api/doc. 
+
+It turns out that table names in `@Table` annotations are case sensitive, so you should use
+
+```
+@Table("CATEGORIES")
+```
+
+and not its lowercase version. 
+Experiments with entity and references from one table to another failed for the time being. Since I've been working on a DynamoDB project for a customer, where foreign keys are all in the eye of the beholder, 
+I don't really mind much. Maybe decades of conditioning with 3rd normal form will catch up with me later. For now I gave up on
+foreign keys and will just put the logic in Kotlin code. 
+
 ## 20220427
 
 Copying code from the NX tutorial, chapter 4 (https://nx.dev/react-tutorial/04-connect-to-api). 
