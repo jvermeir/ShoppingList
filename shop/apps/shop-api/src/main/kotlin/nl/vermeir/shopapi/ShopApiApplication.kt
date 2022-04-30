@@ -19,33 +19,31 @@ fun main(args: Array<String>) {
   runApplication<ShopApiApplication>(*args)
 }
 
-@RestController
-class MenuItemResource(val service: MenuItemService) {
-  @GetMapping("/api/menuitems")
-  fun index(): List<MenuItem> = service.findMenuItems()
+@Table("MESSAGES")
+data class Message(@Id val id: String?, val text: String)
+interface MessageRepository : CrudRepository<Message, String> {
 
-  @PostMapping("/api/addMenuItem")
-  fun post(@RequestBody menuItem: MenuItem) {
-    service.post(menuItem)
+  @Query("select * from messages")
+  fun findMessages(): List<Message>
+}
+
+@Service
+class MessageService(val db: MessageRepository) {
+
+  fun findMessages(): List<Message> = db.findMessages()
+
+  fun post(message: Message){
+    db.save(message)
   }
 }
 
-@Table("MENUITEMS")
-data class MenuItem(@Id val id: String?, val name: String)
+@RestController
+class MessageResource(val service: MessageService) {
+  @GetMapping
+  fun index(): List<Message> = service.findMessages()
 
-interface MenuItemRepository : CrudRepository<MenuItem, String> {
-
-  @Query("select * from menuitems")
-  fun findMenuItems(): List<MenuItem>
-}
-
-
-@Service
-class MenuItemService(val db: MenuItemRepository) {
-
-  fun findMenuItems(): List<MenuItem> = db.findMenuItems()
-
-  fun post(menuItem: MenuItem) {
-    db.save(menuItem)
+  @PostMapping
+  fun post(@RequestBody message: Message) {
+    service.post(message)
   }
 }

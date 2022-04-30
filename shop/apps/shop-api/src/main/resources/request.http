@@ -1,21 +1,11 @@
-POST http://localhost:8080/api/addMenuItem
-Content-Type: application/json
-
-{"name": "een"}
-
 ###
-
-POST http://localhost:8080/api/addMenuItem
+### Post 'Hello!"
+POST http://localhost:8080/
 Content-Type: application/json
 
-{"name": "twee"}
-
-###
-
-POST http://localhost:8080/api/addMenuItem
-Content-Type: application/json
-
-{"name": "drie"}
+{
+  "text": "Hello!"
+}
 
 ### Get all the messages
-GET http://localhost:8080/api/menuitems
+GET http://localhost:8080/
