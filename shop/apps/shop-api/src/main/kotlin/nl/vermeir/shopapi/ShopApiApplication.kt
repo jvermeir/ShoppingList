@@ -1,11 +1,9 @@
 package nl.vermeir.shopapi
 
+import nl.vermeir.shopapi.data.Message
+import nl.vermeir.shopapi.data.MessageRepository
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.data.annotation.Id
-import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.relational.core.mapping.Table
-import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,12 +17,15 @@ fun main(args: Array<String>) {
   runApplication<ShopApiApplication>(*args)
 }
 
-@Table("MESSAGES")
-data class Message(@Id val id: String?, val text: String)
-interface MessageRepository : CrudRepository<Message, String> {
+@RestController
+class MessageResource(val messageService: MessageService) {
+  @GetMapping("/api/messages")
+  fun index(): List<Message> = messageService.findMessages()
 
-  @Query("select * from messages")
-  fun findMessages(): List<Message>
+  @PostMapping("/api/message")
+  fun post(@RequestBody message: Message) {
+    messageService.post(message)
+  }
 }
 
 @Service
@@ -34,16 +35,5 @@ class MessageService(val db: MessageRepository) {
 
   fun post(message: Message){
     db.save(message)
-  }
-}
-
-@RestController
-class MessageResource(val service: MessageService) {
-  @GetMapping
-  fun index(): List<Message> = service.findMessages()
-
-  @PostMapping
-  fun post(@RequestBody message: Message) {
-    service.post(message)
   }
 }
