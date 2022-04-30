@@ -1,5 +1,5 @@
 ###
-### Post 'Hello!"
+### Post message
 POST http://localhost:8080/api/message
 Content-Type: application/json
 
@@ -9,3 +9,15 @@ Content-Type: application/json
 
 ### Get all the messages
 GET http://localhost:8080/api/messages
+
+###
+### Post category
+POST http://localhost:8080/api/category
+Content-Type: application/json
+
+{
+  "name": "pasta"
+}
+
+###
+GET http://localhost:8080/api/categories
