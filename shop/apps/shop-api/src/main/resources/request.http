@@ -21,3 +21,44 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/api/categories
+
+###
+### Post ingredient
+POST http://localhost:8080/api/ingredient
+Content-Type: application/json
+
+{
+  "name": "tagliatelle",
+  "categoryId": "10f33887-75f1-418f-a1ec-86df9a1a9f51"
+}
+
+###
+GET http://localhost:8080/api/ingredients
+
+###
+### Post recipe
+POST http://localhost:8080/api/recipe
+Content-Type: application/json
+
+{
+  "name": "Veggie tagliatelle"
+}
+
+###
+GET http://localhost:8080/api/recipes
+
+###
+### Post recipe_ingredient
+POST http://localhost:8080/api/recipe-ingredient
+Content-Type: application/json
+
+{
+  "recipeId": "ed66bff4-29cd-4ad2-ba59-f333c5e399a6",
+  "ingredientId": "b1ba4413-541e-417d-aa20-161a17973fec"
+}
+
+###
+GET http://localhost:8080/api/recipe-ingredients
+
+###
+GET http://localhost:8080/api/recipe-ingredients/details
