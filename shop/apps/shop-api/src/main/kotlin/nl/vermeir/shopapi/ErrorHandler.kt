@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.context.request.WebRequest
 import java.util.*
+import kotlin.NoSuchElementException
 
 // inspired by https://www.javaguides.net/2021/10/spring-boot-exception-handling-example.html
 
@@ -32,6 +33,19 @@ class GlobalExceptionHandler {
     return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
   }
 
+  @ExceptionHandler(NoSuchElementException::class)
+  fun handleNoSuchElementException(
+    exception: NoSuchElementException,
+    webRequest: WebRequest
+  ): ResponseEntity<ErrorDetails> {
+    val errorDetails = exception.message?.let {
+      ErrorDetails(
+        Date(), it,
+        webRequest.getDescription(false)
+      )
+    }
+    return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
+  }
 
   @ExceptionHandler(java.lang.Exception::class)
   fun handleGlobalException(

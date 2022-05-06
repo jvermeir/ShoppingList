@@ -7,10 +7,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.context.request.WebRequest
-
-
-
+import java.util.*
 
 @SpringBootApplication
 class ShopApiApplication
@@ -29,9 +26,15 @@ class CategoryResource(val categoryService: CategoryService) {
   fun post(@RequestBody category: Category):ResponseEntity<Category> {
        return ResponseEntity(categoryService.post(category),  HttpStatus.CREATED)
   }
+
   @GetMapping("/category")
   fun getCategoryByName(@RequestParam(name = "name") name:String): ResponseEntity<Category> {
     return ResponseEntity.ok(categoryService.getCategoryByName(name));
+  }
+
+  @GetMapping("/category/{id}")
+  fun getCategoryById(@PathVariable(name = "id") id:String): ResponseEntity<Category> {
+    return ResponseEntity.ok(categoryService.findById(id).get());
   }
 }
 
@@ -82,6 +85,9 @@ class CategoryService(val db: CategoryRepository) {
 
   fun getCategoryByName(name: String):Category =
     db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
+
+  fun findById(id: String):Optional<Category> =
+    db.findById(id)
 }
 
 @Service

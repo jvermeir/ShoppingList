@@ -5,6 +5,37 @@ This file is a history of the experiments I've done and what I learned along the
 
 
 
+## 20220406 
+
+I wanted to implement a `findById` method on the category service. This finder uses the default `findById` from the category repository. 
+That method returns an Optional which can't be used as the result of a findById method in CategoryService. 
+
+```
+@Table("CATEGORIES")
+data class Category(@Id val id: String?, val name: String, val shopOrder: Int)
+interface CategoryRepository : CrudRepository<Category, String> {
+...
+```
+and 
+```
+@Service
+class CategoryService(val db: CategoryRepository) {
+...
+  fun findById(id: String):Optional<Category> = db.findById(id)
+}
+```
+and finally 
+```
+@RestController
+class CategoryResource(val categoryService: CategoryService) {
+...
+  @GetMapping("/category/{id}")
+  fun getCategoryById(@PathVariable(name = "id") id:String): ResponseEntity<Category> {
+    return ResponseEntity.ok(categoryService.findById(id).get());
+  }
+```
+Now `findById` may throw `NoSuchElementException`, so I've added a exception handler in `ErrorHandler.kt`.  
+
 ## 20220405 
 
 Using a Java based example in https://www.javaguides.net/2021/10/spring-boot-exception-handling-example.html, I've implemented a form of error handling and 

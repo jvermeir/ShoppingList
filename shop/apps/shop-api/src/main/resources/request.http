@@ -20,8 +20,17 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/api/categories
 
-###
+### return error
 GET http://localhost:8080/api/category?name=geba
+
+### return category details
+GET http://localhost:8080/api/category?name=gebak
+
+### return category details by id
+GET http://localhost:8080/api/category/4e8dcaf3-1678-4afd-a683-25d5e7e9a81c
+
+### return category details by id, error, this should return 404
+GET http://localhost:8080/api/category/notfound
 
 ###
 ### Post ingredient
