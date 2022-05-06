@@ -15,12 +15,13 @@ GET http://localhost:8080/api/messages
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{
-  "name": "pasta"
-}
+{"name": "gebak", "shopOrder": "30"}
 
 ###
 GET http://localhost:8080/api/categories
+
+###
+GET http://localhost:8080/api/category?name=geba
 
 ###
 ### Post ingredient
@@ -45,15 +46,36 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/recipes
+### Post recipe
+POST http://localhost:8080/api/recipe
+Content-Type: application/json
+
+{
+  "name": "Lasagne"
+}
 
 ###
-### Post recipe_ingredient
+GET http://localhost:8080/api/recipes
+
+### by name
+GET http://localhost:8080/api/recipe?name=Lasagne
+
+###
+### Post recipe_ingredient for Veggie Lasagne
 POST http://localhost:8080/api/recipe-ingredient
 Content-Type: application/json
 
 {
   "recipeId": "ed66bff4-29cd-4ad2-ba59-f333c5e399a6",
+  "ingredientId": "b1ba4413-541e-417d-aa20-161a17973fec"
+}
+
+### Post recipe_ingredient for Tagliatelle
+POST http://localhost:8080/api/recipe-ingredient
+Content-Type: application/json
+
+{
+  "recipeId": "24420126-bf14-495a-af4c-d58fcfe7634e",
   "ingredientId": "b1ba4413-541e-417d-aa20-161a17973fec"
 }
 

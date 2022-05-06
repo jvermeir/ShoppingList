@@ -2,6 +2,49 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+
+
+
+## 20220405 
+
+Using a Java based example in https://www.javaguides.net/2021/10/spring-boot-exception-handling-example.html, I've implemented a form of error handling and 
+custom error responses for the category controller. It's nice to see how 40+ lines of Java code are condensed into 2 oneliners of Kotlin. I was feeling dubious about 
+the aspect thingy to handle exceptions, but after trying it out it does make sense. Using the `@ControllerAdvice` annotation makes aspects painless. 
+
+One aspect where Java and Spring come close to the Kotlin implementation is illustrated by the service implementation. 
+
+```
+    @Override
+    public PostDto getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+        return mapToDTO(post);
+    }
+```    
+becomes 
+
+```
+    fun getCategoryByName(name: String):Category =
+        db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
+```
+in Kotlin. If the record isn't found in the database (`db.findByName(name)` returns null), the `?:` operator makes sure the exception is thrown. 
+Much like `.orElseThrow(()...` in the Java version. 
+
+
+## 20220404 
+
+TODO: 
+- test the
+  - https://kotlinlang.org/api/latest/kotlin.test/
+- dependency injection 
+  - https://blog.kotlin-academy.com/dependency-injection-the-pattern-without-the-framework-33cfa9d5f312
+  - https://code.imaginesoftware.it/kotlin-and-the-simplest-dependency-injection-tutorial-ever-b437d8c338fe
+  - https://developer.android.com/training/dependency-injection
+  - https://auth0.com/blog/dependency-injection-with-kotlin-and-koin/
+- persistence 
+  - https://www.baeldung.com/kotlin/exposed-persistence, https://github.com/JetBrains/Exposed/wiki
+  - https://www.ktorm.org/
+
+
 ## 20220430
 
 Based on the kotlin/spring-boot tutorial, I've added a category table and REST endpoints to add and list categories.
