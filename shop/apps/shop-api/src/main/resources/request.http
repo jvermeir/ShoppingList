@@ -1,14 +1,6 @@
 ###
-### Post message
-POST http://localhost:8080/api/message
-Content-Type: application/json
-
-{
-  "text": "daar"
-}
-
-### Get all the messages
-GET http://localhost:8080/api/messages
+### Category
+###
 
 ###
 ### Post category
@@ -23,14 +15,18 @@ GET http://localhost:8080/api/categories
 ### return error
 GET http://localhost:8080/api/category?name=geba
 
-### return category details
+### get by name
 GET http://localhost:8080/api/category?name=gebak
 
-### return category details by id
-GET http://localhost:8080/api/category/4e8dcaf3-1678-4afd-a683-25d5e7e9a81c
+### get by id
+GET http://localhost:8080/api/category/b6d840ea-f226-4529-bfb0-4f922067b078
 
-### return category details by id, error, this should return 404
+### get by id, 404 error
 GET http://localhost:8080/api/category/notfound
+
+###
+### ingredient
+###
 
 ###
 ### Post ingredient
@@ -44,6 +40,10 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8080/api/ingredients
+
+###
+### recipe
+###
 
 ###
 ### Post recipe
@@ -70,13 +70,17 @@ GET http://localhost:8080/api/recipes
 GET http://localhost:8080/api/recipe?name=Lasagne
 
 ###
+### recipe-ingredients
+###
+
+###
 ### Post recipe_ingredient for Veggie Lasagne
 POST http://localhost:8080/api/recipe-ingredient
 Content-Type: application/json
 
 {
-  "recipeId": "ed66bff4-29cd-4ad2-ba59-f333c5e399a6",
-  "ingredientId": "b1ba4413-541e-417d-aa20-161a17973fec"
+  "recipeId": "cc732e65-5641-4b66-a879-e75303c45743",
+  "ingredientId": dff1801f-926b-4105-bc69-dafd1f755b64"
 }
 
 ### Post recipe_ingredient for Tagliatelle
@@ -93,3 +97,6 @@ GET http://localhost:8080/api/recipe-ingredients
 
 ###
 GET http://localhost:8080/api/recipe-ingredients/details
+
+### cleanup
+POST http://localhost:8080/api/cleanup

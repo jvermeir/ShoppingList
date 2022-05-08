@@ -2,8 +2,44 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220408 
 
+I'm struggling with defaults in json. Calling a function like `fun post(category: Category) = db.save(category)` through the web api like this:
 
+```
+POST http://localhost:8080/api/category
+Content-Type: application/json
+
+{"name": "gebak", "shopOrder": "30"}
+```
+
+so without a value for the `id` field, works just fine. But then I was writing a utility that inserts some data using the web api. I've built this as a Kotlin program:
+
+```
+inline fun <reified T> save(data: T, path: String): T {
+  val (_, _, result) = "${baseUrl}/${path}".httpPost().jsonBody(Json.encodeToString(data))
+    .responseString()
+  return Json.decodeFromString<T>(result.get())
+}
+```
+
+This is a little complex, but I wanted the generics because I have four domain concepts and didn't want to repeat code. 
+
+To call this I use:
+
+```
+save(Category(id = null, name = "cat1", shopOrder = 10), path = "category")
+```
+
+So with an explicit null value for `id` because without it the code doesn't compile. Maybe I should use a default value of null in the `Category` data class?
+Or I could write a serializer? Or is this problem caused by reusing code that lives in a service? 
+
+All data classes now have a `@Serialization` annotation. This isn't necessary for Spring because it will automatically set `Content-Type: application/json`. 
+It is necessary if you want to use `httpPost().jsonBody(Json.encodeToString(data))` as shown above. 
+
+Other than that, it feels like some structure is evolving. As an experiment I grouped all `Category` related code in `Category.kt`. This helps me keeping track better than having a file per layer, but it's still early, so we'll see.  
+
+The http client is fuel (https://github.com/kittinunf/Fuel) which works well enough. See `IngegrationTest.kt` for details.
 
 ## 20220406 
 
@@ -81,7 +117,7 @@ TODO:
 Based on the kotlin/spring-boot tutorial, I've added a category table and REST endpoints to add and list categories.
 There's also a sort of datamodel in apps/shop-api/doc. 
 
-It turns out that table names in `@Table` annotations are case sensitive, so you should use
+It turns out that table names in `@Table` annotations are case-sensitive, so you should use
 
 ```
 @Table("CATEGORIES")
