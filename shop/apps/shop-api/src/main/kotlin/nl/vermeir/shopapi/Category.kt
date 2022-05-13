@@ -32,7 +32,17 @@ class CategoryService(val db: CategoryRepository) {
 
   fun findCategories(): List<Category> = db.findAll().toList()
 
-  fun post(category: Category) = db.save(category)
+  fun post(category: Category): Category {
+    if (category.id != null) {
+      return db.save(category)
+    } else {
+      val cat = db.findByName(category.name)
+      if (cat!=null) {
+        return db.save(cat.copy(shopOrder=category.shopOrder))
+      }
+      return db.save(category)
+    }
+  }
 
   fun getCategoryByName(name: String):Category = db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
 

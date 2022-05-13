@@ -37,10 +37,10 @@ class IngredientService(val db: IngredientRepository) {
 data class Ingredient(@Id val id: String?, val name: String, val categoryId: String)
 
 @Serializable
-data class IngredientDetails(val ingredientId: String, val ingredientName:String, val categoryId: String, val categoryName:String)
+data class IngredientDetails(val recipeIngredientId: String?, val ingredientId: String?, val ingredientName:String, val categoryId: String, val categoryName:String)
 interface IngredientRepository : CrudRepository<Ingredient, String> {
   @Query(
-    value = "SELECT i.name as ingredient_name, i.id as ingredient_id, c.name as category_name, c.id as category_id  FROM ingredients i, recipe_ingredients ri, categories c where ri.recipe_id = :recipeId and ri.ingredient_id = i.id and i.category_id = c.id"
+    value = "SELECT ri.id as recipe_ingredient_id, i.name as ingredient_name, i.id as ingredient_id, c.name as category_name, c.id as category_id  FROM ingredients i, recipe_ingredients ri, categories c where ri.recipe_id = :recipeId and ri.ingredient_id = i.id and i.category_id = c.id"
   )
   fun ingredientsByRecipe(recipeId:String):List<IngredientDetails>
 }

@@ -2,12 +2,12 @@ package nl.vermeir.shopapi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.filter.CommonsRequestLoggingFilter
+
 
 @SpringBootApplication
 class ShopApiApplication
@@ -30,5 +30,19 @@ class ManagementResource(
     recipeService.deleteAll()
     recipeIngredientService.deleteAll()
     println(categoryService.findCategories())
+  }
+}
+
+@Configuration
+class RequestLoggingFilterConfig {
+  @Bean
+  fun logFilter(): CommonsRequestLoggingFilter {
+    val filter = CommonsRequestLoggingFilter()
+    filter.setIncludeQueryString(true)
+    filter.setIncludePayload(true)
+    filter.setMaxPayloadLength(10000)
+    filter.setIncludeHeaders(false)
+    filter.setAfterMessagePrefix("REQUEST DATA : ")
+    return filter
   }
 }

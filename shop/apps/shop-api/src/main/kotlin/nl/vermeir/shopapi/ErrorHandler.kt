@@ -56,6 +56,7 @@ class GlobalExceptionHandler {
       Date(), exception.message!!,
       webRequest.getDescription(false)
     )
+    println(errorDetails)
     return ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 }

@@ -100,7 +100,7 @@ Much like `.orElseThrow(()...` in the Java version.
 ## 20220404 
 
 TODO: 
-- test the
+- test
   - https://kotlinlang.org/api/latest/kotlin.test/
 - dependency injection 
   - https://blog.kotlin-academy.com/dependency-injection-the-pattern-without-the-framework-33cfa9d5f312
@@ -110,6 +110,7 @@ TODO:
 - persistence 
   - https://www.baeldung.com/kotlin/exposed-persistence, https://github.com/JetBrains/Exposed/wiki
   - https://www.ktorm.org/
+  - https://github.com/leszko/springboot-caching (use caching config)
 
 
 ## 20220430

@@ -7,14 +7,26 @@
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"name": "gebak", "shopOrder": "30"}
+{"id": null, "name": "gebak", "shopOrder": "30"}
 
+###
+### Post category, change shopOrder
+POST http://localhost:8080/api/category
+Content-Type: application/json
+
+{"id": null, "name": "gebak", "shopOrder": "30"}
+
+### {"id": "e159d9b9-e924-47c5-846a-b753729b686f", "name": "gebak", "shopOrder": "30"}
+
+###
 ###
 GET http://localhost:8080/api/categories
 
+###
 ### return error
 GET http://localhost:8080/api/category?name=geba
 
+###
 ### get by name
 GET http://localhost:8080/api/category?name=gebak
 
@@ -38,6 +50,7 @@ Content-Type: application/json
   "categoryId": "10f33887-75f1-418f-a1ec-86df9a1a9f51"
 }
 
+###
 ###
 GET http://localhost:8080/api/ingredients
 
@@ -64,10 +77,16 @@ Content-Type: application/json
 }
 
 ###
+###
 GET http://localhost:8080/api/recipes
 
+###
 ### by name
 GET http://localhost:8080/api/recipe?name=Lasagne
+
+###
+### by id
+GET http://localhost:8080/api/recipe?id=73910f26-e4d2-43ac-8ff1-dc936b0b9560
 
 ###
 ### recipe-ingredients
@@ -83,6 +102,7 @@ Content-Type: application/json
   "ingredientId": dff1801f-926b-4105-bc69-dafd1f755b64"
 }
 
+###
 ### Post recipe_ingredient for Tagliatelle
 POST http://localhost:8080/api/recipe-ingredient
 Content-Type: application/json
@@ -93,10 +113,18 @@ Content-Type: application/json
 }
 
 ###
+###
 GET http://localhost:8080/api/recipe-ingredients
 
 ###
+###
 GET http://localhost:8080/api/recipe-ingredients/details
 
+###
+### by id
+GET http://localhost:8080/api/recipe-details?id=63d25029-1bd4-466f-a155-c1f1a6e72ebb
+
+
+###
 ### cleanup
 POST http://localhost:8080/api/cleanup

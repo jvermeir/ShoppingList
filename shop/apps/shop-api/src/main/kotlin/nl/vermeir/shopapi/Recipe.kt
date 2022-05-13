@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity
 @Serializable
 data class RecipeDetails(val recipe: Recipe, val ingredients: List<IngredientDetails>);
 data class RI (val recipeName: String, val ingredientName:String)
+fun main() {
 
+}
 @RestController
 class RecipeResource(val recipeService: RecipeService) {
   @GetMapping("/recipes")
@@ -23,14 +25,20 @@ class RecipeResource(val recipeService: RecipeService) {
   fun getById(@RequestParam("id") id: String) = recipeService.findById(id)
 
   @GetMapping("/recipe-details")
-  fun getRecipeWithDetails(@RequestParam("name") name: String) = recipeService.findByName(name)
+  fun getRecipeWithDetails(@RequestParam("id") id: String):RecipeDetails = recipeService.getRecipeWithDetails(recipeService.findById(id))
 
   @PostMapping("/recipe")
   fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.post(recipe),  HttpStatus.CREATED)
+
+  @PostMapping("/recipe-details")
+  fun postRecipeWithDetails(@RequestBody recipeDetails: RecipeDetails) {
+    println(";post recipe details")
+    ResponseEntity(recipeService.post(recipeDetails), HttpStatus.CREATED)
+  }
 }
 
 @Service
-class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientRepository) {
+class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientRepository, val recipeIngedientDb: RecipeIngredientRepository) {
   fun findRecipes(): List<Recipe> = db.findAll().toList()
 
   fun findByName(name:String): RecipeDetails {
@@ -44,6 +52,16 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
   }
 
   fun post(recipe: Recipe)= db.save(recipe)
+
+  fun post(recipe: RecipeDetails) {
+    val newRecipe = db.save(recipe.recipe)
+    recipe.ingredients.forEach {
+      val ingredient = ingredientDb.save(ingredientFrom(it))
+      recipeIngedientDb.save(RecipeIngredient(it.recipeIngredientId, newRecipe.id.orEmpty(), ingredient.id.orEmpty()))
+    }
+  }
+
+  fun ingredientFrom(detail: IngredientDetails): Ingredient = Ingredient(detail.ingredientId, detail.ingredientName, detail.categoryId)
 
   fun findById(id:String): Recipe = db.findById(id).get()
 
