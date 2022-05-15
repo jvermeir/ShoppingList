@@ -73,7 +73,9 @@ POST http://localhost:8080/api/recipe
 Content-Type: application/json
 
 {
-  "name": "Lasagne"
+  "id": null,
+  "name": "Lasagne2",
+  "favorite": false
 }
 
 ###
@@ -116,14 +118,35 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/api/recipe-ingredients
 
-###
+#
 ###
 GET http://localhost:8080/api/recipe-ingredients/details
 
 ###
 ### by id
-GET http://localhost:8080/api/recipe-details?id=63d25029-1bd4-466f-a155-c1f1a6e72ebb
+GET http://localhost:8080/api/recipe-details?id=3c57874a-89b0-45ce-a523-943e17e039e8
 
+###
+### post new recipe with details
+POST http://localhost:8080/api/recipe-details
+Content-Type: application/json
+
+{
+  "recipe": {
+    "id": null,
+    "name": "recipe2",
+    "favorite": false
+  },
+  "ingredients": [
+    {
+      "recipeIngredientId": null,
+      "ingredientId": null,
+      "ingredientName": "recipe2-ing1",
+      "categoryId": "48c27f33-753e-4b1c-8c38-b1dcd287ab7a",
+      "categoryName": "cat1"
+    }
+  ]
+}
 
 ###
 ### cleanup

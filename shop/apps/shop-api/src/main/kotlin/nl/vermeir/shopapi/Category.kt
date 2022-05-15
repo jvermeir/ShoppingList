@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 
 @RestController
 class CategoryResource(val categoryService: CategoryService) {
-  // TODO: stream output
+  // TODO: stream output?
   @GetMapping("/categories")
   fun index(): List<Category> = categoryService.findCategories()
 

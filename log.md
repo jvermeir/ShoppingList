@@ -2,7 +2,48 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
-## 20220408 
+## 20220514 
+
+Updating an existing record has its challenges. I wanted an insert-or-update method that creates a record if it doesn't exist and updates if it does. `save()` does exactly that, but only 
+based on the key. I may have complicated things by 
+introducing an `id` field that works as a primary key and a `name` that should be unique. This complicates the behavior of 
+`save()`. If a category with a non-empty id is received, we can assume an update, so a regular `save()` call will work in that case. 
+If the id field is empty, but the name field isn't, we might be updating an existing record (setting its shopOrder field), so I first look for the category by name and update if it exists. 
+This update works with a neat Kotlin feature called `copy()` that copies all fields of a class and overrides values passed as an argument: `return db.save(cat.copy(shopOrder=category.shopOrder))`.
+The code in the category service looks like this: 
+
+```
+  fun post(category: Category): Category {
+    if (category.id != null) {
+      return db.save(category)
+    } else {
+      val cat = db.findByName(category.name)
+      if (cat!=null) {
+        return db.save(cat.copy(shopOrder=category.shopOrder))
+      }
+      return db.save(category)
+    }
+  }
+```
+
+It seems there's a difference between doing this in the RestController: 
+
+```
+  @PostMapping("/recipe")
+  fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.post(recipe),  HttpStatus.CREATED)
+```
+
+and this 
+
+```
+@PostMapping("/recipe")
+fun post(@RequestBody recipe: Recipe) { ResponseEntity(recipeService.post(recipe),  HttpStatus.CREATED)}
+```
+
+The latter returns the result of recipeService.post(recipe) but as text and with an empty response body, rather than `Content-Type : application/json` and the JSON version of the new recipe. 
+This led me to set a rule that methods in the RestControllers can only be one-liners, which is probably a good idea anyway. But still, it would be nice to know what happens exactly. 
+
+## 20220508 
 
 I'm struggling with defaults in json. Calling a function like `fun post(category: Category) = db.save(category)` through the web api like this:
 
@@ -41,7 +82,7 @@ Other than that, it feels like some structure is evolving. As an experiment I gr
 
 The http client is fuel (https://github.com/kittinunf/Fuel) which works well enough. See `IngegrationTest.kt` for details.
 
-## 20220406 
+## 20220506 
 
 I wanted to implement a `findById` method on the category service. This finder uses the default `findById` from the category repository. 
 That method returns an Optional which can't be used as the result of a findById method in CategoryService. 
@@ -72,7 +113,7 @@ class CategoryResource(val categoryService: CategoryService) {
 ```
 Now `findById` may throw `NoSuchElementException`, so I've added a exception handler in `ErrorHandler.kt`.  
 
-## 20220405 
+## 20220505 
 
 Using a Java based example in https://www.javaguides.net/2021/10/spring-boot-exception-handling-example.html, I've implemented a form of error handling and 
 custom error responses for the category controller. It's nice to see how 40+ lines of Java code are condensed into 2 oneliners of Kotlin. I was feeling dubious about 
@@ -97,7 +138,7 @@ in Kotlin. If the record isn't found in the database (`db.findByName(name)` retu
 Much like `.orElseThrow(()...` in the Java version. 
 
 
-## 20220404 
+## 20220504 
 
 TODO: 
 - test
