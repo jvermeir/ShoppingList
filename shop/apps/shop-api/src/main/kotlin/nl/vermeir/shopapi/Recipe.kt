@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
+import java.util.function.Supplier
 
 @Serializable
 data class RecipeDetails(val recipe: Recipe, val ingredients: List<IngredientDetails>);
@@ -22,9 +23,7 @@ class RecipeResource(val recipeService: RecipeService) {
   fun getById(@RequestParam("id") id: String) = recipeService.findById(id)
 
   @PostMapping("/recipe")
-  fun post(@RequestBody recipe: Recipe) {
-    ResponseEntity(recipeService.post(recipe), HttpStatus.CREATED)
-  }
+  fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.post(recipe), HttpStatus.CREATED)
 
   @GetMapping("/recipe-details")
   fun getRecipeWithDetails(@RequestParam("id") id: String):RecipeDetails = recipeService.getRecipeWithDetails(recipeService.findById(id))
@@ -34,22 +33,24 @@ class RecipeResource(val recipeService: RecipeService) {
 }
 
 @Service
-class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientRepository, val recipeIngedientDb: RecipeIngredientRepository) {
+class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientRepository, val recipeIngedientDb: RecipeIngredientRepository, val categoryDb: CategoryRepository) {
   fun findRecipes(): List<Recipe> = db.findAll().toList()
-
-  fun findByName(name:String): RecipeDetails = getRecipeWithDetails(db.findByName(name))
 
   fun getRecipeWithDetails(recipe:Recipe): RecipeDetails {
     val ingredients = ingredientDb.ingredientsByRecipe(recipe.id.orEmpty())
     return RecipeDetails(recipe, ingredients)
   }
 
-  fun post(recipe: Recipe)= db.save(recipe)
+  fun post(recipe: Recipe)= save(recipe)
 
   fun post(recipe: RecipeDetails): RecipeDetails {
-    val newRecipe = db.save(recipe.recipe)
+    val newRecipe = save(recipe.recipe)
     recipe.ingredients.forEach {
-      // TODO: check category fk
+
+      categoryDb
+        .findById(it.categoryId)
+        .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+
       val ingredient = ingredientDb.save(ingredientFrom(it))
       recipeIngedientDb.save(RecipeIngredient(it.recipeIngredientId, newRecipe.id.orEmpty(), ingredient.id.orEmpty()))
     }
@@ -62,6 +63,17 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
 
   fun deleteAll() = db.deleteAll()
 
+  fun save(recipe: Recipe): Recipe {
+    if (recipe.id != null) {
+      return db.save(recipe)
+    } else {
+      val rec = db.findByName(recipe.name)
+      if (rec!=null) {
+        return db.save(rec.copy(favorite = recipe.favorite))
+      }
+      return db.save(recipe)
+    }
+  }
 }
 
 @Serializable
@@ -69,7 +81,7 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
 data class Recipe(@Id val id: String?, val name: String, val favorite: Boolean)
 interface RecipeRepository : CrudRepository<Recipe, String> {
   @Query(value = "SELECT * FROM recipes WHERE name = :name")
-  fun findByName(name: String): Recipe;
+  fun findByName(name: String): Recipe?;
 }
 
 @RestController

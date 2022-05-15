@@ -2,6 +2,43 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220515 
+
+Last week I added a comment to `RecipeService.post()` saying that I should test if a category exists for a given ingredient in a recipe. This is a consequence of a bold statement I made earlier, 
+saying `For now, I gave up on foreign keys and will just put the logic in Kotlin code`. Ha! So now I'm trying to find a nice way to implement that logic in the Recipe class. 
+One solution would look like this:
+
+```
+      val category = categoryDb.findById(it.categoryId)
+      if (category == null)
+        throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found")
+```
+
+Classic, works just fine. But how can I do this in a more Kotlinish way? I thought something like this should work:
+
+```
+      categoryDb.findById(it.categoryId).orElseThrow(
+          ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found"))
+```
+
+If findById succeeds we know its ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should impolement a Supplier. Here's my next attempts:
+
+```
+      categoryDb
+        .findById(it.categoryId)
+        .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+```
+
+This is ok, but can be improved (as suggested by IntelliJ), because the `Supplier` classname is redundant. The final version looks like this:
+
+```
+      categoryDb
+        .findById(it.categoryId)
+        .orElseThrow({ throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+```
+
+
+
 ## 20220514 
 
 Updating an existing record has its challenges. I wanted an insert-or-update method that creates a record if it doesn't exist and updates if it does. `save()` does exactly that, but only 
@@ -167,7 +204,7 @@ It turns out that table names in `@Table` annotations are case-sensitive, so you
 
 and not its lowercase version. 
 Experiments with entity and references from one table to another failed for the time being. Since I've been working on a DynamoDB project for a customer, where foreign keys are all in the eye of the beholder, 
-I don't really mind much. Maybe decades of conditioning with 3rd normal form will catch up with me later. For now I gave up on
+I don't really mind much. Maybe decades of conditioning with 3rd normal form will catch up with me later. For now, I gave up on
 foreign keys and will just put the logic in Kotlin code. 
 
 ## 20220427

@@ -142,7 +142,7 @@ Content-Type: application/json
       "recipeIngredientId": null,
       "ingredientId": null,
       "ingredientName": "recipe2-ing1",
-      "categoryId": "48c27f33-753e-4b1c-8c38-b1dcd287ab7a",
+      "categoryId": "c471e614-2a78-4d12-9026-f7dae988fec5",
       "categoryName": "cat1"
     }
   ]
