@@ -2,6 +2,20 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220516 
+
+There isn't much logic we can test, but Recipe does complex things that may fail (we probably won't use the service like this, but for now I'm leaving it in).
+I've using Mockito to mock all database calls. This leads to rather large tests, see 
+
+``` 
+  @Test
+  fun `recipeDetails are saved in recipe, recipeDetails and ingredients tables`() {
+```
+
+for an example.
+
+It might be better to just extend `IntegrationTest.kt`?
+
 ## 20220515 
 
 Last week I added a comment to `RecipeService.post()` saying that I should test if a category exists for a given ingredient in a recipe. This is a consequence of a bold statement I made earlier, 
@@ -21,7 +35,7 @@ Classic, works just fine. But how can I do this in a more Kotlinish way? I thoug
           ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found"))
 ```
 
-If findById succeeds we know its ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should impolement a Supplier. Here's my next attempts:
+If findById succeeds we know It's ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should impolement a Supplier. Here's my next attempts:
 
 ```
       categoryDb
@@ -185,6 +199,7 @@ TODO:
   - https://code.imaginesoftware.it/kotlin-and-the-simplest-dependency-injection-tutorial-ever-b437d8c338fe
   - https://developer.android.com/training/dependency-injection
   - https://auth0.com/blog/dependency-injection-with-kotlin-and-koin/
+  - https://ktor.io/
 - persistence 
   - https://www.baeldung.com/kotlin/exposed-persistence, https://github.com/JetBrains/Exposed/wiki
   - https://www.ktorm.org/

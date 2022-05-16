@@ -51,7 +51,7 @@ fun loadTestData() {
 
   val recipeDetails = RecipeDetails(Recipe(id=null, name="r1", true), listOf(IngredientDetails(recipeIngredientId = null, ingredientId = null, "newIng1","${cat1.id}", categoryName = "${cat1.name}" )) )
   val encoded = Json.encodeToString(recipeDetails)
-  val (request, response, result) = "${baseUrl}/recipe-details".httpPost().jsonBody(encoded)
+  val (_, response, result) = "${baseUrl}/recipe-details".httpPost().jsonBody(encoded)
     .responseString()
   println("recipe details: ${result}: ${response}")
   val rdNew = Json.decodeFromString<RecipeDetails>(result.get())

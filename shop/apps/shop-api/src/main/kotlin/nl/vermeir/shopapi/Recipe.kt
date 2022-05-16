@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
+import java.util.NoSuchElementException
 import java.util.function.Supplier
 
 @Serializable
@@ -43,13 +44,12 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
 
   fun post(recipe: Recipe)= save(recipe)
 
-  fun post(recipe: RecipeDetails): RecipeDetails {
-    val newRecipe = save(recipe.recipe)
-    recipe.ingredients.forEach {
-
+  fun post(recipeDetails: RecipeDetails): RecipeDetails {
+    val newRecipe = save(recipeDetails.recipe)
+    recipeDetails.ingredients.forEach {
       categoryDb
         .findById(it.categoryId)
-        .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+        .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} not found") })
 
       val ingredient = ingredientDb.save(ingredientFrom(it))
       recipeIngedientDb.save(RecipeIngredient(it.recipeIngredientId, newRecipe.id.orEmpty(), ingredient.id.orEmpty()))
@@ -71,7 +71,7 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
       if (rec!=null) {
         return db.save(rec.copy(favorite = recipe.favorite))
       }
-      return db.save(recipe)
+      throw  NoSuchElementException("${recipe}")
     }
   }
 }

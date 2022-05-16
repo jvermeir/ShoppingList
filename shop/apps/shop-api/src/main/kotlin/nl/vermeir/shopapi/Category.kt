@@ -38,9 +38,9 @@ class CategoryService(val db: CategoryRepository) {
     } else {
       val cat = db.findByName(category.name)
       if (cat!=null) {
-        return db.save(cat.copy(shopOrder=category.shopOrder))
+        return db.save(cat.copy(shopOrder = category.shopOrder))
       }
-      return db.save(category)
+      throw  NoSuchElementException("${category}")
     }
   }
 

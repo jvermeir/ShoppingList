@@ -16,7 +16,13 @@ Content-Type: application/json
 
 {"id": null, "name": "gebak", "shopOrder": "30"}
 
-### {"id": "e159d9b9-e924-47c5-846a-b753729b686f", "name": "gebak", "shopOrder": "30"}
+
+###
+### Post category, emtpy id, name not found
+POST http://localhost:8080/api/category
+Content-Type: application/json
+
+{"id": null, "name": "notfound", "shopOrder": "30"}
 
 ###
 ###
