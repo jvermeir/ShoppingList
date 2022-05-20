@@ -21,10 +21,11 @@ class CategoryResource(val categoryService: CategoryService) {
   fun post(@RequestBody category: Category) = ResponseEntity(categoryService.post(category), HttpStatus.CREATED)
 
   @GetMapping("/category")
-  fun getCategoryByName(@RequestParam(name = "name") name:String) = ResponseEntity.ok(categoryService.getCategoryByName(name));
+  fun getCategoryByName(@RequestParam(name = "name") name: String) =
+    ResponseEntity.ok(categoryService.getCategoryByName(name))
 
   @GetMapping("/category/{id}")
-  fun getCategoryById(@PathVariable(name = "id") id:String) = ResponseEntity.ok(categoryService.findById(id).get());
+  fun getCategoryById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id).get())
 }
 
 @Service
@@ -32,19 +33,21 @@ class CategoryService(val db: CategoryRepository) {
 
   fun findCategories(): List<Category> = db.findAll().toList()
 
+  // TODO: fix this madness
   fun post(category: Category): Category {
-    if (category.id != null) {
-      return db.save(category)
+    return if (category.id != null) {
+      db.save(category)
     } else {
       val cat = db.findByName(category.name)
-      if (cat!=null) {
+      if (cat != null) {
         return db.save(cat.copy(shopOrder = category.shopOrder))
       }
-      throw  NoSuchElementException("${category}")
+      db.save(category)
     }
   }
 
-  fun getCategoryByName(name: String):Category = db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
+  fun getCategoryByName(name: String): Category =
+    db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
 
   fun findById(id: String): Optional<Category> = db.findById(id)
 
@@ -57,5 +60,5 @@ data class Category(@Id val id: String?, val name: String, val shopOrder: Int)
 
 interface CategoryRepository : CrudRepository<Category, String> {
   @Query("SELECT * FROM categories WHERE name = :name")
-  fun findByName(name: String):Category?
+  fun findByName(name: String): Category?
 }

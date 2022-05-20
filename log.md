@@ -2,6 +2,43 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220520 
+
+Switching to Kotest (kotest.io) turns out to be painful. Finding examples of code is easy, but finding a working setup with all dependencies in place was hard. ]
+The gradle build file now has these dependencies:
+
+```
+  testImplementation("io.kotest:kotest-framework-engine:5.2.2")
+  testImplementation ("io.kotest:kotest-assertions-core:5.2.2")
+```
+
+and the secret to get this to actually work is to add a `gradle.properties` file in the root of the Kotlin project. For now it contains a single line:
+
+```
+kotlin-coroutines.version=1.6.0
+```
+
+Note the version says `1.6.0` and not `1.6.21` like I would expect based on the Kotlin version.
+
+I've removed outdated tests and started on a integration level test that calls the api over http. Not too pretty, but given the limited business logic it sort of makes sense to me.
+
+## 20220519 
+
+I got stuck on the semantics of `save()`. I was assuming that if I would pass a value for the `id` field, it would be used in an insert. This is not the case, however. If a value for id is 
+supplied, Spring assumes an update. Right. I've made a start with a test against a running service. This is not ideal but on the other hand, there is so little logic to test that 
+any other kind of test seems useless. Maybe I should use https://www.testcontainers.org/ (as suggested today by James Ward in his talk on Kotlin Dev Day)?
+
+Lots of inspiring ideas I'd like to try:
+- Kotlin.runCatching ... onFailure ... onSuccess ...
+- XX?.let {}.also {}
+- suspend fun
+- companion object {} 
+- fun xx() = SomeClass().apply{ variable1 = "xx" ...}
+- kotlin.incremental.useClasspathSnapshot=true
+- Quarkus
+- Kotlin native vs python or node service
+
+
 ## 20220516 
 
 There isn't much logic we can test, but Recipe does complex things that may fail (we probably won't use the service like this, but for now I'm leaving it in).
