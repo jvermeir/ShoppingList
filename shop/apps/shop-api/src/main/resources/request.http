@@ -7,14 +7,14 @@
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"name": "gebak", "shopOrder": "30"}
+{"name": "gebak2", "shopOrder": "30"}
 
 ###
 ### Post category, change shopOrder
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"id": null, "name": "gebak", "shopOrder": "30"}
+{"id": "b90b9ecd-ef60-4e58-b693-d567524f43d2", "name": "gebak2", "shopOrder": "40"}
 
 
 ###

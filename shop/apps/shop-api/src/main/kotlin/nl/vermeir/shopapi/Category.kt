@@ -24,7 +24,7 @@ class CategoryResource(val categoryService: CategoryService) {
     ResponseEntity.ok(categoryService.getCategoryByName(name))
 
   @GetMapping("/category/{id}")
-  fun getCategoryById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id).get())
+  fun getCategoryById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id))
 }
 
 @Service
@@ -37,8 +37,7 @@ class CategoryService(val db: CategoryRepository) {
   fun getCategoryByName(name: String): Category =
     db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
 
-  // TODO: compare to findByName, why is this optional?
-  fun findById(id: String): Optional<Category> = db.findById(id)
+  fun findById(id: String): Category = db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
 
   fun deleteAll() = db.deleteAll()
 }

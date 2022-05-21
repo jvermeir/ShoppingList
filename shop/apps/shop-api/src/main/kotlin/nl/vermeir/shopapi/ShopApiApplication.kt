@@ -28,7 +28,6 @@ class ManagementResource(
     ingredientService.deleteAll()
     recipeService.deleteAll()
     recipeIngredientService.deleteAll()
-    println(categoryService.findCategories())
   }
 }
 

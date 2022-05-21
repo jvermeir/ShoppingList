@@ -1,4 +1,4 @@
-package nl.vermeir.shop
+package nl.vermeir.shopapi
 
 import com.github.kittinunf.fuel.core.Parameters
 import com.github.kittinunf.fuel.core.extensions.jsonBody

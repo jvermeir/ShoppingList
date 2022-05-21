@@ -3,7 +3,6 @@ import com.github.kittinunf.fuel.httpPost
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import nl.vermeir.shop.*
 import nl.vermeir.shopapi.*
 
 fun main(args: Array<String>) {
