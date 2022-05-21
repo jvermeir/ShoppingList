@@ -6,6 +6,7 @@ plugins {
   kotlin("jvm") version "1.6.21"
   kotlin("plugin.spring") version "1.6.21"
   kotlin("plugin.serialization") version "1.6.21"
+  id("io.kotest") version "0.3.9"
 }
 
 group = "nl.vermeir"
@@ -28,7 +29,7 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("io.kotest:kotest-framework-engine:5.2.2")
   testImplementation ("io.kotest:kotest-assertions-core:5.2.2")
-  testImplementation("org.mockito:mockito-all:1.9.5")
+  testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.1.9")
 }
 
 tasks.withType<KotlinCompile> {
@@ -40,4 +41,9 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
   useJUnitPlatform()
+  testLogging.showStandardStreams = true
+
+  testLogging {
+    events ;"PASSED"; "FAILED"; "SKIPPED"; "STANDARD_OUT"; "STANDARD_ERROR"
+  }
 }

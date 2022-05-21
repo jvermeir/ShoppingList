@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import kotlinx.serialization.Serializable
 
 @RestController
 class CategoryResource(val categoryService: CategoryService) {
@@ -33,28 +32,17 @@ class CategoryService(val db: CategoryRepository) {
 
   fun findCategories(): List<Category> = db.findAll().toList()
 
-  // TODO: fix this madness
-  fun post(category: Category): Category {
-    return if (category.id != null) {
-      db.save(category)
-    } else {
-      val cat = db.findByName(category.name)
-      if (cat != null) {
-        return db.save(cat.copy(shopOrder = category.shopOrder))
-      }
-      db.save(category)
-    }
-  }
+  fun post(category: Category): Category = db.save(category)
 
   fun getCategoryByName(name: String): Category =
     db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
 
+  // TODO: compare to findByName, why is this optional?
   fun findById(id: String): Optional<Category> = db.findById(id)
 
   fun deleteAll() = db.deleteAll()
 }
 
-@Serializable
 @Table("CATEGORIES")
 data class Category(@Id val id: String?, val name: String, val shopOrder: Int)
 

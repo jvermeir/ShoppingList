@@ -7,7 +7,7 @@
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"id": null, "name": "gebak", "shopOrder": "30"}
+{"name": "gebak", "shopOrder": "30"}
 
 ###
 ### Post category, change shopOrder
@@ -157,3 +157,16 @@ Content-Type: application/json
 ###
 ### cleanup
 POST http://localhost:8080/api/cleanup
+
+
+### Post 'Hello!"
+POST http://localhost:8080/api/message
+Content-Type: application/json
+
+{
+  "text": "Hello!"
+}
+
+###
+### Get 'hello'
+GET http://localhost:8080/api/messages

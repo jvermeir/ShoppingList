@@ -22,6 +22,12 @@ inline fun <reified T> save(data: T, path: String): T {
   return Json.decodeFromString<T>(result.get())
 }
 
+inline fun <reified T> saveJson(data: String, path: String): T {
+  val (_, _, result) = "${baseUrl}/${path}".httpPost().jsonBody(data)
+    .responseString()
+  return Json.decodeFromString<T>(result.get())
+}
+
 inline fun <reified T> load(path: String, params: Parameters = listOf()): T {
   val (_, _, result) = "${baseUrl}/${path}".httpGet(params).responseString()
   log(result.get())
