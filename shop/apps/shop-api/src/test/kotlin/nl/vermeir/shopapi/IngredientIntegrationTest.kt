@@ -66,7 +66,7 @@ class IngredientIntegrationTest {
   }
 
   @Test
-  fun `a ingredient should be returned by getIngredientByName`() {
+  fun `a ingredient should be returned by findByName`() {
     val ing1 = save(ing1, path = "ingredient")
     val ing1ByName: Ingredient = load("ingredient", listOf(Pair("name", ing1.name)))
     ing1ByName shouldBe ing1

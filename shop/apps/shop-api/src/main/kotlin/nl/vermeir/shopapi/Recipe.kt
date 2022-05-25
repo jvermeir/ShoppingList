@@ -1,6 +1,5 @@
 package nl.vermeir.shopapi
 
-import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
@@ -9,23 +8,24 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import java.util.NoSuchElementException
+import java.util.*
 import java.util.function.Supplier
-
-@Serializable
-data class RecipeDetails(val recipe: Recipe, val ingredients: List<IngredientDetails>);
 
 @RestController
 class RecipeResource(val recipeService: RecipeService) {
   @GetMapping("/recipes")
-  fun index(): List<Recipe> = recipeService.findRecipes()
+  fun list(): List<Recipe> = recipeService.list()
+
+  @GetMapping("/recipe/{id}")
+  fun findById(@PathVariable("id") id: String) = ResponseEntity.ok(recipeService.findById(id))
 
   @GetMapping("/recipe")
-  fun getById(@RequestParam("id") id: String) = recipeService.findById(id)
+  fun findByName(@RequestParam(name="name") name: String) = ResponseEntity.ok(recipeService.findByName(name))
 
   @PostMapping("/recipe")
-  fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.post(recipe), HttpStatus.CREATED)
+  fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.save(recipe), HttpStatus.CREATED)
 
+  // TODO: do we need these?
   @GetMapping("/recipe-details")
   fun getRecipeWithDetails(@RequestParam("id") id: String):RecipeDetails = recipeService.getRecipeWithDetails(recipeService.findById(id))
 
@@ -35,14 +35,22 @@ class RecipeResource(val recipeService: RecipeService) {
 
 @Service
 class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientRepository, val recipeIngedientDb: RecipeIngredientRepository, val categoryDb: CategoryRepository) {
-  fun findRecipes(): List<Recipe> = db.findAll().toList()
+  fun list(): List<Recipe> = db.findAll().toList()
 
+  fun findById(id:String): Recipe = db.findById(id).orElseThrow { ResourceNotFoundException("Recipe '${id}' not found") }
+
+  fun findByName(name: String): Recipe =
+    db.findByName(name).orElseThrow { ResourceNotFoundException("Recipe '${name}' not found")}
+
+  fun save(recipe: Recipe): Recipe = db.save(recipe)
+
+  fun deleteAll() = db.deleteAll()
+
+  // TODO: do we need these?
   fun getRecipeWithDetails(recipe:Recipe): RecipeDetails {
     val ingredients = ingredientDb.ingredientsByRecipe(recipe.id.orEmpty())
     return RecipeDetails(recipe, ingredients)
   }
-
-  fun post(recipe: Recipe)= save(recipe)
 
   fun post(recipeDetails: RecipeDetails): RecipeDetails {
     val newRecipe = save(recipeDetails.recipe)
@@ -58,53 +66,12 @@ class RecipeService(val db: RecipeRepository, val ingredientDb: IngredientReposi
   }
 
   fun ingredientFrom(detail: IngredientDetails): Ingredient = Ingredient(detail.ingredientId, detail.ingredientName, detail.categoryId)
-
-  fun findById(id:String): Recipe = db.findById(id).get()
-
-  fun deleteAll() = db.deleteAll()
-
-  fun save(recipe: Recipe): Recipe {
-    if (recipe.id != null) {
-      return db.save(recipe)
-    } else {
-      val rec = db.findByName(recipe.name)
-      if (rec!=null) {
-        return db.save(rec.copy(favorite = recipe.favorite))
-      }
-      throw  NoSuchElementException("${recipe}")
-    }
-  }
 }
 
-@Serializable
 @Table("RECIPES")
 data class Recipe(@Id val id: String?, val name: String, val favorite: Boolean)
+
 interface RecipeRepository : CrudRepository<Recipe, String> {
   @Query(value = "SELECT * FROM recipes WHERE name = :name")
-  fun findByName(name: String): Recipe?;
-}
-
-@RestController
-class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {
-  @GetMapping("/recipe-ingredients")
-  fun index(): List<RecipeIngredient> = recipeIngredientService.findRecipeIngredients()
-
-  @PostMapping("/recipe-ingredient")
-  fun post(@RequestBody recipeIngredient: RecipeIngredient) = ResponseEntity(recipeIngredientService.post(recipeIngredient),  HttpStatus.CREATED)
-}
-
-@Service
-class RecipeIngredientService(val db: RecipeIngredientRepository) {
-  fun findRecipeIngredients(): List<RecipeIngredient> = db.findAll().toList()
-
-  fun post(recipeIngredient: RecipeIngredient) = db.save(recipeIngredient)
-
-  fun deleteAll() = db.deleteAll()
-}
-
-@Serializable
-@Table("RECIPE_INGREDIENTS")
-data class RecipeIngredient(@Id val id: String?, val recipeId: String, val ingredientId: String)
-
-interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, String> {
+  fun findByName(name: String): Optional<Recipe>
 }
