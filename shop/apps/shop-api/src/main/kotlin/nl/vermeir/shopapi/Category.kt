@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 class CategoryResource(val categoryService: CategoryService) {
@@ -16,15 +15,15 @@ class CategoryResource(val categoryService: CategoryService) {
   @GetMapping("/categories")
   fun index(): List<Category> = categoryService.findCategories()
 
+  @GetMapping("/category/{id}")
+  fun getCategoryById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id))
+
   @PostMapping("/category")
   fun post(@RequestBody category: Category) = ResponseEntity(categoryService.post(category), HttpStatus.CREATED)
 
   @GetMapping("/category")
   fun getCategoryByName(@RequestParam(name = "name") name: String) =
     ResponseEntity.ok(categoryService.getCategoryByName(name))
-
-  @GetMapping("/category/{id}")
-  fun getCategoryById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id))
 }
 
 @Service

@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS categories
 CREATE TABLE IF NOT EXISTS ingredients
 (
   id          VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
-  name        VARCHAR NOT NULL,
+  name        VARCHAR NOT NULL UNIQUE,
   category_id VARCHAR(60)
 );
 

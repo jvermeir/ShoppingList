@@ -14,9 +14,9 @@ import org.springframework.data.annotation.Id
 @kotlinx.serialization.Serializable
 data class Category(@Id val id: String? = null, val name: String, val shopOrder: Int)
 
-class IntegrationTest {
-  val cat1 = Category(name = "cat1", shopOrder = 10)
-  val cat2 = Category(name = "cat2", shopOrder = 20)
+class CategoryIntegrationTest {
+  private val cat1 = Category(name = "cat1", shopOrder = 10)
+  private val cat2 = Category(name = "cat2", shopOrder = 20)
 
   @BeforeEach
   fun init() {
@@ -46,13 +46,13 @@ class IntegrationTest {
   }
 
   @Test
-  fun `shopOrder should return 404 when category not found by id`() {
+  fun `GET category should return 404 when category not found by id`() {
     val (_, response, _) = "${baseUrl}/category/doesNotExist".httpGet().response()
     response.statusCode shouldBe 404
   }
 
   @Test
-  fun `shopOrder should return 404 when category not found by name`() {
+  fun `GET category should return 404 when category not found by name`() {
     val (_, response, _) = "${baseUrl}/category".httpGet(listOf(Pair("name", "doesNotExist"))).response()
     response.statusCode shouldBe 404
   }
@@ -64,5 +64,19 @@ class IntegrationTest {
     val (_, _, result) = "${baseUrl}/categories".httpGet().responseString()
     val categories = Json.decodeFromString<List<Category>>(result.get())
     categories shouldBe listOf(cat1saved, cat2saved)
+  }
+
+  @Test
+  fun `a category should be returned by findById`() {
+    val cat1 = save(cat1, path = "category")
+    val cat1ById:Category = load("category/${cat1.id}",listOf())
+    cat1ById shouldBe cat1
+  }
+
+  @Test
+  fun `a category should be returned by getCategoryByName`() {
+    val cat1 = save(cat1, path = "category")
+    val cat1ByName:Category = load("category",listOf(Pair("name",cat1.name)))
+    cat1ByName shouldBe cat1
   }
 }
