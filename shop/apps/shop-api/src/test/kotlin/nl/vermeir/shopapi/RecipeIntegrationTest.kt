@@ -14,9 +14,6 @@ import org.springframework.data.annotation.Id
 data class Recipe(@Id val id: String? = null, val name: String, val favorite: Boolean)
 
 class RecipeIntegrationTest {
-  private val r1 = Recipe(name = "r1", favorite = true)
-  private val r2 = Recipe(name = "r2", favorite = false)
-
   @BeforeEach
   fun init() {
     cleanUpDatabase()
@@ -70,5 +67,10 @@ class RecipeIntegrationTest {
     val r1 = save(r1, path = "recipe")
     val r1ByName: Recipe = load("recipe", listOf(Pair("name", r1.name)))
     r1ByName shouldBe r1
+  }
+
+  companion object {
+    private val r1 = Recipe(name = "r1", favorite = true)
+    private val r2 = Recipe(name = "r2", favorite = false)
   }
 }

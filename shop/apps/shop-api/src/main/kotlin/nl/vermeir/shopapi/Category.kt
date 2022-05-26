@@ -12,7 +12,6 @@ import java.util.*
 
 @RestController
 class CategoryResource(val categoryService: CategoryService) {
-  // TODO: stream output?
   @GetMapping("/categories")
   fun list(): List<Category> = categoryService.find()
 

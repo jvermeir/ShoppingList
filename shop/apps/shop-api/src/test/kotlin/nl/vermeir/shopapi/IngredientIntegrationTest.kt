@@ -14,9 +14,6 @@ import org.springframework.data.annotation.Id
 data class Ingredient(@Id val id: String? = null, val name: String, val categoryId: String)
 
 class IngredientIntegrationTest {
-  private val ing1 = Ingredient(name = "ing1", categoryId = "cat1")
-  private val ing2 = Ingredient(name = "ing2",  categoryId = "cat2")
-
   @BeforeEach
   fun init() {
     cleanUpDatabase()
@@ -70,5 +67,10 @@ class IngredientIntegrationTest {
     val ing1 = save(ing1, path = "ingredient")
     val ing1ByName: Ingredient = load("ingredient", listOf(Pair("name", ing1.name)))
     ing1ByName shouldBe ing1
+  }
+
+  companion object {
+    private val ing1 = Ingredient(name = "ing1", categoryId = "cat1")
+    private val ing2 = Ingredient(name = "ing2",  categoryId = "cat2")
   }
 }

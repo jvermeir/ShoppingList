@@ -19,7 +19,7 @@ fun readTestData() {
   println(load<List<Ingredient>>("ingredients"))
   println(load<List<Recipe>>("recipes"))
   println(load<List<RecipeIngredient>>("recipe-ingredients"))
-  println(load<RecipeDetails>("recipe-details", listOf(Pair("id", recipe1.id))))
+  println(load<RecipeIngredients>("recipe-details", listOf(Pair("id", recipe1.id))))
   println(load<Recipe>("recipe", listOf(Pair("id", recipe1.id))))
 }
 
@@ -37,12 +37,12 @@ fun loadTestData() {
   save(RecipeIngredient(id = null, recipe1.id.orEmpty(), ing2.id.orEmpty()), path = "recipe-ingredient")
   save(RecipeIngredient(id = null, favoriteRecipe.id.orEmpty(), ing3.id.orEmpty()), path = "recipe-ingredient")
   save(RecipeIngredient(id = null, favoriteRecipe.id.orEmpty(), ing4.id.orEmpty()), path = "recipe-ingredient")
-
-  val recipeDetails = RecipeDetails(Recipe(id=null, name="r1", true), listOf(IngredientDetails(recipeIngredientId = null, ingredientId = null, "newIng1","${cat1.id}", categoryName = "${cat1.name}" )) )
-  val encoded = Json.encodeToString(recipeDetails)
-  val (_, response, result) = "${baseUrl}/recipe-details".httpPost().jsonBody(encoded)
-    .responseString()
-  println("recipe details: ${result}: ${response}")
-  val rdNew = Json.decodeFromString<RecipeDetails>(result.get())
-  println("rdNew: ${rdNew}")
+//
+//  val recipeIngredients = RecipeIngredients(Recipe(id=null, name="r1", true), listOf(IngredientDetails(recipeIngredientId = null, ingredientId = null, "newIng1","${cat1.id}", categoryName = "${cat1.name}" )) )
+//  val encoded = Json.encodeToString(recipeIngredients)
+//  val (_, response, result) = "${baseUrl}/recipe-details".httpPost().jsonBody(encoded)
+//    .responseString()
+//  println("recipe details: ${result}: ${response}")
+//  val rdNew = Json.decodeFromString<RecipeIngredients>(result.get())
+//  println("rdNew: ${rdNew}")
 }

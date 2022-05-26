@@ -1,6 +1,5 @@
 package nl.vermeir.shopapi
 
-import kotlinx.serialization.Serializable
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
@@ -44,15 +43,8 @@ class IngredientService(val db: IngredientRepository) {
 @Table("INGREDIENTS")
 data class Ingredient(@Id val id: String?, val name: String, val categoryId: String)
 
-@Serializable
-data class IngredientDetails(val recipeIngredientId: String?, val ingredientId: String?, val ingredientName:String, val categoryId: String, val categoryName:String)
 interface IngredientRepository : CrudRepository<Ingredient, String> {
   @Query("SELECT * FROM ingredients WHERE name = :name")
   fun findByName(name: String): Optional<Ingredient>
-
-  @Query(
-    value = "SELECT ri.id as recipe_ingredient_id, i.name as ingredient_name, i.id as ingredient_id, c.name as category_name, c.id as category_id  FROM ingredients i, recipe_ingredients ri, categories c where ri.recipe_id = :recipeId and ri.ingredient_id = i.id and i.category_id = c.id"
-  )
-  fun ingredientsByRecipe(recipeId:String):List<IngredientDetails>
 }
 

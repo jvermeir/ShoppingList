@@ -15,9 +15,6 @@ import org.springframework.data.annotation.Id
 data class Category(@Id val id: String? = null, val name: String, val shopOrder: Int)
 
 class CategoryIntegrationTest {
-  private val cat1 = Category(name = "cat1", shopOrder = 10)
-  private val cat2 = Category(name = "cat2", shopOrder = 20)
-
   @BeforeEach
   fun init() {
     cleanUpDatabase()
@@ -78,5 +75,10 @@ class CategoryIntegrationTest {
     val cat1 = save(cat1, path = "category")
     val cat1ByName:Category = load("category",listOf(Pair("name",cat1.name)))
     cat1ByName shouldBe cat1
+  }
+
+  companion object {
+    private val cat1 = Category(name = "cat1", shopOrder = 10)
+    private val cat2 = Category(name = "cat2", shopOrder = 20)
   }
 }
