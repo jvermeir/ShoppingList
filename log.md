@@ -2,6 +2,46 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220528
+
+After a long struggle with different date formats, I've ditched Kotlin date and used `java.time.LocalDate`, but not in test code. This decision makes handling dates in REST apis and 
+database calls way easier, because you don't need any explicit transformations at the repository layer anymore. 
+You need to be specific about the format for a date at the api level. I've chosen to ignore the time part (this will probably hurt later when I'm building a UI, but we'll see). Date parameters are handled like this:
+
+```
+  fun findByFirstDay(@RequestParam(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) =
+```
+
+in the api layer. From that point on we've got a LocalDate instance which can be handled automatically by the repository code, i.e. the automatically created save and findById methods, but also
+custom queries like this:
+
+```
+  @Query("SELECT * FROM menus WHERE first_day  = :first_day")
+  fun findByFirstDay(first_day: LocalDate): Optional<Menu>
+```
+
+The only date-related problem left is when converting to and from JSON. To handle that case we need a serializer and a deserializer. 
+Jackson allows this kind of code to translate to and from LocalDate:
+
+```
+object DateConversions {
+  object Serializer : JsonSerializer<LocalDate>() {
+    override fun serialize(value: LocalDate, gen: JsonGenerator, serializers: SerializerProvider) {
+      with(gen) {
+        writeString(value.toString())
+      }
+    }
+  }
+
+  object Deserializer : JsonDeserializer<LocalDate>() {
+    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LocalDate {
+      val node = p.readValueAsTree<JsonNode>()
+      return LocalDate.parse(node.textValue())
+    }
+  }
+}
+```
+
 ## 20220526
 
 I've standardized Category, Recipe, Ingredient and RecipeIngredient classes and removed code I don't need yet. Also, I've added tests for each class using its REST endpoints. 
