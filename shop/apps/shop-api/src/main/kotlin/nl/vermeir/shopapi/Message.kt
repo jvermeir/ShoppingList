@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @RestController
 class MessageResource(val service: MessageService) {
@@ -17,18 +18,24 @@ class MessageResource(val service: MessageService) {
 
   @PostMapping("/message")
   fun post(@RequestBody message: Message) = service.post(message)
+
+
 }
 
 @Service
 class MessageService(val db: MessageRepository) {
+  fun deleteAll() = db.deleteAll()
 
   fun findMessages(): List<Message> = db.findMessages()
 
-  fun post(message: Message):Message = db.save(message)
+  fun post(message: Message):Message {
+    val x = db.save(message)
+    return x
+  }
 }
 
 @Table("MESSAGES")
-data class Message(@Id val id: String?, val text: String)
+data class Message(@Id val id: String?, val text: String, val first_day: LocalDate)
 
 interface MessageRepository : CrudRepository<Message, String> {
   @Query("select * from messages")

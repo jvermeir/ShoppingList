@@ -25,6 +25,8 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
   implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+  implementation ("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
+  implementation("javax.persistence:javax.persistence-api:2.2")
   runtimeOnly("com.h2database:h2:2.1.212")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("io.kotest:kotest-framework-engine:5.2.2")

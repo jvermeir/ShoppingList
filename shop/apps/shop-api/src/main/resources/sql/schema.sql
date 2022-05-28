@@ -1,3 +1,16 @@
+CREATE TABLE IF NOT EXISTS menus
+(
+  id         VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
+  first_day  DATE
+);
+
+CREATE TABLE IF NOT EXISTS menu_items
+(
+  id         VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
+  theDay     DATE,
+  recipe_id  VARCHAR(60)
+);
+
 CREATE TABLE IF NOT EXISTS categories
 (
   id         VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
@@ -29,5 +42,6 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients
 CREATE TABLE IF NOT EXISTS messages
 (
   id   VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
-  text VARCHAR NOT NULL
+  text VARCHAR NOT NULL,
+  first_day  DATE
 );

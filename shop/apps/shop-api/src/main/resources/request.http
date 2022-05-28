@@ -1,4 +1,27 @@
 ###
+### Menu
+###
+
+###
+### Post menu
+POST http://localhost:8080/api/menu
+Content-Type: application/json
+
+{"firstDay": "2022-02-02"}
+
+###
+### Get Menu by id
+GET http://localhost:8080/api/menu/64e8c40a-2d73-4819-b327-78ff9494d002
+
+###
+### Get Menu by firstDay
+GET http://localhost:8080/api/menu?firstDay=2022-02-02
+
+###
+### Get Menus
+GET http://localhost:8080/api/menus
+
+###
 ### Category
 ###
 
@@ -164,9 +187,12 @@ POST http://localhost:8080/api/message
 Content-Type: application/json
 
 {
-  "text": "Hello!"
+  "text": "Hello!",
+  "first_day": "2022-01-01T01:01:01"
 }
 
 ###
 ### Get 'hello'
 GET http://localhost:8080/api/messages
+
+

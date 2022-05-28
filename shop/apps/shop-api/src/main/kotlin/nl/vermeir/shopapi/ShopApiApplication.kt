@@ -20,7 +20,9 @@ class ManagementResource(
   val categoryService: CategoryService,
   val ingredientService: IngredientService,
   val recipeService: RecipeService,
-  val recipeIngredientService: RecipeIngredientService
+  val recipeIngredientService: RecipeIngredientService,
+  val messageService: MessageService,
+  val menuService: MenuService
 ) {
   @PostMapping("/cleanup")
   fun post() {
@@ -28,6 +30,8 @@ class ManagementResource(
     ingredientService.deleteAll()
     recipeService.deleteAll()
     recipeIngredientService.deleteAll()
+    messageService.deleteAll()
+    menuService.deleteAll()
   }
 }
 
