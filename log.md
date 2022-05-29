@@ -6,10 +6,10 @@ This file is a history of the experiments I've done and what I learned along the
 
 Today I had to refactor my test code. the problem was that the tests are run in parallel and each tests starts by deleting all data from the database. This is a problem of running tests against a 
 live server, of course, but since I have hardly any code at all except annotated methods, I thought it better to run this kind of integration level testing. To make the parallel test work I first tried
-to make the run sequentially by adding  `maxParallelForks = 1` to `tasks.withType<Test> { ... }`. Either this syntax is not correct or Gradle ignores the directive. To make my tests more robust
+to make the run sequentially by adding `maxParallelForks = 1` to `tasks.withType<Test> { ... }`. Either this syntax is not correct or Gradle ignores the directive. To make my tests more robust
 I generate random UUIDs for test data. This makes each test run unique and leaves a lot of junk behind, but it is way more robust. 
 
-
+Now I need to find a way to test this code in a meaningful way without starting servers. 
 
 ## 20220528
 
