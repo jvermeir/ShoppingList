@@ -1,6 +1,8 @@
 package nl.vermeir.shopapi
 
 import com.github.kittinunf.fuel.httpGet
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldMatch
@@ -9,6 +11,7 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.annotation.Id
+import java.util.UUID
 
 @kotlinx.serialization.Serializable
 data class Ingredient(@Id val id: String? = null, val name: String, val categoryId: String)
@@ -21,6 +24,7 @@ class IngredientIntegrationTest {
 
   @Test
   fun `an ingredient without id and all properties set is saved correctly and can be loaded`() {
+    val ing1 = createAnIngredient("cat1")
     val ing1saved = save(ing1, path = "ingredient")
     ing1.name shouldMatch ing1saved.name
     ing1.categoryId shouldMatch ing1saved.categoryId
@@ -29,6 +33,7 @@ class IngredientIntegrationTest {
 
   @Test
   fun `a ingredient should be updated`() {
+    val ing1 = createAnIngredient("cat1")
     val ing1saved = save(ing1, path = "ingredient")
     val ing1savedAgain = save(ing1saved.copy(categoryId = "cat2"), path = "ingredient")
     ing1savedAgain.categoryId shouldBe "cat2"
@@ -48,29 +53,28 @@ class IngredientIntegrationTest {
 
   @Test
   fun `a list of ingredients should be returned`() {
+    val ing1 = createAnIngredient("cat1")
+    val ing2 = createAnIngredient("cat2")
     val ing1saved = save(ing1, path = "ingredient")
     val ing2saved = save(ing2, path = "ingredient")
     val (_, _, result) = "${baseUrl}/ingredients".httpGet().responseString()
     val ingredients = Json.decodeFromString<List<Ingredient>>(result.get())
-    ingredients shouldBe listOf(ing1saved, ing2saved)
+    ingredients shouldContainAll listOf(ing1saved, ing2saved)
   }
 
   @Test
   fun `a ingredient should be returned by findById`() {
-    val ing1 = save(ing1, path = "ingredient")
-    val ing1ById: Ingredient = load("ingredient/${ing1.id}", listOf())
-    ing1ById shouldBe ing1
+    val ing1 = createAnIngredient("cat1")
+    val ing1Saved = save(ing1, path = "ingredient")
+    val ing1ById: Ingredient = load("ingredient/${ing1Saved.id}", listOf())
+    ing1ById shouldBe ing1Saved
   }
 
   @Test
   fun `a ingredient should be returned by findByName`() {
-    val ing1 = save(ing1, path = "ingredient")
+    val ing1 = createAnIngredient("cat1")
+    val ing1Saved = save(ing1, path = "ingredient")
     val ing1ByName: Ingredient = load("ingredient", listOf(Pair("name", ing1.name)))
-    ing1ByName shouldBe ing1
-  }
-
-  companion object {
-    private val ing1 = Ingredient(name = "ing1", categoryId = "cat1")
-    private val ing2 = Ingredient(name = "ing2",  categoryId = "cat2")
+    ing1ByName shouldBe ing1Saved
   }
 }

@@ -42,6 +42,26 @@ object DateConversions {
 }
 ```
 
+Kotlin's date handling still lives in test code. The test client defines its own domain classes, so there's a version of Menu in the test code:
+
+```
+@kotlinx.serialization.Serializable
+data class Menu(@Id val id: String? = null, val firstDay: LocalDate)
+```
+
+where LocalDate is defined in `import kotlinx.datetime.*`. This allows elegant code like this to create a date instance: 
+
+```
+    private val march10th = "2022-03-10".toLocalDate()
+```
+
+which is an extension method on String: 
+
+```
+public fun String.toLocalDate(): LocalDate = LocalDate.parse(this)
+```
+
+
 ## 20220526
 
 I've standardized Category, Recipe, Ingredient and RecipeIngredient classes and removed code I don't need yet. Also, I've added tests for each class using its REST endpoints. 

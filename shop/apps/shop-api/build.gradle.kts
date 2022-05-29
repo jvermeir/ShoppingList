@@ -48,4 +48,6 @@ tasks.withType<Test> {
   testLogging {
     events ;"PASSED"; "FAILED"; "SKIPPED"; "STANDARD_OUT"; "STANDARD_ERROR"
   }
+  maxParallelForks = 1
 }
+

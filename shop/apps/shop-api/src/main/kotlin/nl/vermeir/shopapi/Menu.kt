@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
 
-
 @RestController
 class MenuResource(val menuService: MenuService) {
   @GetMapping("/menus")

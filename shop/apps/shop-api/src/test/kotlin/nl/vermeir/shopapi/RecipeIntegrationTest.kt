@@ -1,12 +1,12 @@
 package nl.vermeir.shopapi
 
 import com.github.kittinunf.fuel.httpGet
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldMatch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.annotation.Id
 
@@ -14,13 +14,9 @@ import org.springframework.data.annotation.Id
 data class Recipe(@Id val id: String? = null, val name: String, val favorite: Boolean)
 
 class RecipeIntegrationTest {
-  @BeforeEach
-  fun init() {
-    cleanUpDatabase()
-  }
-
   @Test
   fun `a recipe without id and all properties set is saved correctly and can be loaded`() {
+    val r1 = createARecipe(true)
     val r1saved = save(r1, path = "recipe")
     r1.name shouldMatch r1saved.name
     r1.favorite shouldBe r1saved.favorite
@@ -29,6 +25,7 @@ class RecipeIntegrationTest {
 
   @Test
   fun `a recipe should be updated`() {
+    val r1 = createARecipe(true)
     val r1saved = save(r1, path = "recipe")
     val r1savedAgain = save(r1saved.copy(favorite = false), path = "recipe")
     r1savedAgain.favorite shouldBe false
@@ -48,29 +45,28 @@ class RecipeIntegrationTest {
 
   @Test
   fun `a list of recipes should be returned`() {
+    val r1 = createARecipe(true)
+    val r2 = createARecipe(false)
     val r1saved = save(r1, path = "recipe")
     val r2saved = save(r2, path = "recipe")
     val (_, _, result) = "${baseUrl}/recipes".httpGet().responseString()
     val recipes = Json.decodeFromString<List<Recipe>>(result.get())
-    recipes shouldBe listOf(r1saved, r2saved)
+    recipes shouldContainAll listOf(r1saved, r2saved)
   }
 
   @Test
   fun `a recipe should be returned by findById`() {
-    val r1 = save(r1, path = "recipe")
-    val r1ById: Recipe = load("recipe/${r1.id}", listOf())
-    r1ById shouldBe r1
+    val r1 = createARecipe(true)
+    val r1Saved = save(r1, path = "recipe")
+    val r1ById: Recipe = load("recipe/${r1Saved.id}", listOf())
+    r1ById shouldBe r1Saved
   }
 
   @Test
   fun `a recipe should be returned by findByName`() {
-    val r1 = save(r1, path = "recipe")
-    val r1ByName: Recipe = load("recipe", listOf(Pair("name", r1.name)))
-    r1ByName shouldBe r1
-  }
-
-  companion object {
-    private val r1 = Recipe(name = "r1", favorite = true)
-    private val r2 = Recipe(name = "r2", favorite = false)
+    val r1 = createARecipe(true)
+    val r1Saved = save(r1, path = "recipe")
+    val r1ByName: Recipe = load("recipe", listOf(Pair("name", r1Saved.name)))
+    r1ByName shouldBe r1Saved
   }
 }
