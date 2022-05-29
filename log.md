@@ -2,6 +2,15 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220529
+
+Today I had to refactor my test code. the problem was that the tests are run in parallel and each tests starts by deleting all data from the database. This is a problem of running tests against a 
+live server, of course, but since I have hardly any code at all except annotated methods, I thought it better to run this kind of integration level testing. To make the parallel test work I first tried
+to make the run sequentially by adding  `maxParallelForks = 1` to `tasks.withType<Test> { ... }`. Either this syntax is not correct or Gradle ignores the directive. To make my tests more robust
+I generate random UUIDs for test data. This makes each test run unique and leaves a lot of junk behind, but it is way more robust. 
+
+
+
 ## 20220528
 
 After a long struggle with different date formats, I've ditched Kotlin date and used `java.time.LocalDate`, but not in test code. This decision makes handling dates in REST apis and 

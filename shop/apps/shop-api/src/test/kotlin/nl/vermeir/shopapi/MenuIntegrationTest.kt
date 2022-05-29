@@ -19,45 +19,41 @@ class MenuIntegrationTest {
   @Test
   fun `a menu without id and all properties set is saved correctly and can be loaded`() {
     val menu1 = createAMenu(march10th)
-    val menu1saved = save(menu1, path)
+    val menu1saved = save(menu1, MENU)
     menu1.firstDay shouldBeEqualComparingTo menu1saved.firstDay
     menu1saved.id shouldNotBe null
   }
 
   @Test
   fun `a menu should be updated`() {
-    val menu1 = createAMenu(march10th)
-    val menu1saved = save(menu1, path)
-    val menu1savedAgain = save(menu1saved, path)
+    val menu1saved = save(createAMenu(march10th), MENU)
+    val menu1savedAgain = save(menu1saved, MENU)
     menu1saved shouldBe menu1savedAgain
   }
 
   @Test
   fun `firstDay should be updated`() {
-    val menu1 = createAMenu(march10th)
-    val menu1saved = save(menu1, path)
-    val menu1savedAgain = save(menu1saved.copy(firstDay = august9th), path)
+    val menu1saved = save(createAMenu(march10th), MENU)
+    val menu1savedAgain = save(menu1saved.copy(firstDay = august9th), MENU)
     menu1savedAgain.firstDay shouldBeEqualComparingTo august9th
   }
 
   @Test
   fun `GET menu should return 404 when menu not found by id`() {
-    val (_, response, _) = "${baseUrl}/menu/doesNotExist".httpGet().response()
+    val (_, response, _) = "${baseUrl}/${MENU}/doesNotExist".httpGet().response()
     response.statusCode shouldBe 404
   }
 
   @Test
   fun `GET menu should return 404 when menu not found by firstDay`() {
-    val (_, response, _) = "${baseUrl}/menu".httpGet(listOf(Pair("firstDay", january1th))).response()
+    val (_, response, _) = "${baseUrl}/${MENU}".httpGet(listOf(Pair("firstDay", january1th))).response()
     response.statusCode shouldBe 404
   }
 
   @Test
   fun `a list of menus should be returned`() {
-    val menu1 = createAMenu(march10th)
-    val menu2 = createAMenu(august9th)
-    val menu1saved = save(menu1, path)
-    val menu2saved = save(menu2, path)
+    val menu1saved = save(createAMenu(march10th), MENU)
+    val menu2saved = save(createAMenu(august9th), MENU)
     val (_, _, result) = "${baseUrl}/menus".httpGet().responseString()
     val menus = Json.decodeFromString<List<Menu>>(result.get())
     menus shouldContainAll listOf(menu1saved, menu2saved)
@@ -65,22 +61,20 @@ class MenuIntegrationTest {
 
   @Test
   fun `a menu should be returned by findById`() {
-    val menu1 = createAMenu(march10th)
-    val menu1Saved = save(menu1, path)
-    val menu1ById: Menu = load("menu/${menu1Saved.id}", listOf())
+    val menu1Saved = save(createAMenu(march10th), MENU)
+    val menu1ById: Menu = load("${MENU}/${menu1Saved.id}", listOf())
     menu1ById shouldBe menu1Saved
   }
 
   @Test
   fun `a menu should be returned by getByFirstDay`() {
-    val menu1 = createAMenu(randomDate())
-    val menu1Saved = save(menu1, path)
-    val menu1ByFirstDay: Menu = load("menu", listOf(Pair("firstDay", menu1.firstDay)))
+    val menu1Saved = save(createAMenu(randomDate()), MENU)
+    val menu1ByFirstDay: Menu = load(MENU, listOf(Pair("firstDay", menu1Saved.firstDay)))
     menu1ByFirstDay shouldBe menu1Saved
   }
 
   companion object {
-    private val path = "menu"
+    private const val MENU = "menu"
     private val march10th = "2022-03-10".toLocalDate()
     private val august9th = "2022-08-09".toLocalDate()
     private val january1th = "2022-01-01".toLocalDate()
