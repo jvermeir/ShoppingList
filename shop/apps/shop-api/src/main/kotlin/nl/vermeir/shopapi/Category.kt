@@ -1,5 +1,6 @@
 package nl.vermeir.shopapi
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
@@ -11,7 +12,10 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-class CategoryResource(val categoryService: CategoryService) {
+class CategoryResource() {
+  @Autowired
+  lateinit var categoryService: CategoryService
+
   @GetMapping("/categories")
   fun list(): List<Category> = categoryService.find()
 

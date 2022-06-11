@@ -14,12 +14,14 @@ data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredien
 
 @RestController
 class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {
+  @GetMapping("/recipe-ingredients")
+  fun list() = recipeIngredientService.list()
+
   @GetMapping("/recipe-ingredient/{id}")
   fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(recipeIngredientService.findById(id))
 
-  @GetMapping("/recipe-ingredients")
-  fun findByRecipeId(@RequestParam(name = "recipeId") recipeId:String) =
-    ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
+  @GetMapping("/recipe-ingredient")
+  fun findByRecipeId(@RequestParam(name="recipeId") recipeId: String) = ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
 
   @PostMapping("/recipe-ingredient")
   fun post(@RequestBody recipeIngredient: RecipeIngredient) = ResponseEntity(recipeIngredientService.save(recipeIngredient),  HttpStatus.CREATED)
@@ -27,7 +29,7 @@ class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientServ
 
 @Service
 class RecipeIngredientService(val db: RecipeIngredientRepository) {
-  fun findRecipeIngredients(): List<RecipeIngredient> = db.findAll().toList()
+  fun list(): List<RecipeIngredient> = db.findAll().toList()
 
   fun findById(id: String):RecipeIngredient = db.findById(id).orElseThrow { ResourceNotFoundException("RecipeIngredient '${id}' not found") }
 

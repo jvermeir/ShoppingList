@@ -2,14 +2,49 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220611
+
+I've replaced the integration tests that rely on a running server by tests using WebMvcTest. This is of course way friendlier for tests running on a build server. I've mocked the database using
+`MockkBean`:
+
+```
+@MockkBean
+lateinit var recipeIngredientRepository: RecipeIngredientRepository
+```
+
+This allows more elegant mocks than Mockito would: 
+
+```
+every { recipeIngredientRepository.save(recipeIngredient1) } returns recipeIngredient1
+```
+
+Add this dependency to build.gradle.kts:
+
+```
+testImplementation ("com.ninja-squad:springmockk:3.1.1")
+```
+
+One pitfall I struggled with for while, is that when using WebMvcTest, you need to wire all dependencies needed by the test like this:
+
+```
+@WebMvcTest(value = [RecipeIngredientResource::class, RecipeIngredientService::class])
+```
+
+So in this case only the RecipeIngredientRepository is mocked but the service and rest layers are the real thing. 
+
 ## 20220529
 
-Today I had to refactor my test code. the problem was that the tests are run in parallel and each tests starts by deleting all data from the database. This is a problem of running tests against a 
-live server, of course, but since I have hardly any code at all except annotated methods, I thought it better to run this kind of integration level testing. To make the parallel test work I first tried
+Today I had to refactor my test code. The problem was that the tests are run in parallel and each tests starts by deleting all data from the database. This is a problem of running tests against a 
+live server, of course, but since I have hardly any code at all except annotated methods, I thought it's better to run this kind of integration level testing. To make the parallel test work I first tried
 to make the run sequentially by adding `maxParallelForks = 1` to `tasks.withType<Test> { ... }`. Either this syntax is not correct or Gradle ignores the directive. To make my tests more robust
 I generate random UUIDs for test data. This makes each test run unique and leaves a lot of junk behind, but it is way more robust. 
 
 Now I need to find a way to test this code in a meaningful way without starting servers. 
+
+MockMvc might help: https://stackabuse.com/guide-to-unit-testing-spring-boot-rest-apis/
+This would allow me to test the REST endpoints and service code, while mocking the database. 
+Or how about https://springframework.guru/testing-spring-boot-restful-services/ ?
+Or https://betterprogramming.pub/how-to-write-human-readable-tests-in-kotlin-with-kotest-and-mockk-1b614da32148
 
 ## 20220528
 
@@ -18,15 +53,15 @@ database calls way easier, because you don't need any explicit transformations a
 You need to be specific about the format for a date at the api level. I've chosen to ignore the time part (this will probably hurt later when I'm building a UI, but we'll see). Date parameters are handled like this:
 
 ```
-  fun findByFirstDay(@RequestParam(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) =
+fun findByFirstDay(@RequestParam(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) =
 ```
 
 in the api layer. From that point on we've got a LocalDate instance which can be handled automatically by the repository code, i.e. the automatically created save and findById methods, but also
 custom queries like this:
 
 ```
-  @Query("SELECT * FROM menus WHERE first_day  = :first_day")
-  fun findByFirstDay(first_day: LocalDate): Optional<Menu>
+@Query("SELECT * FROM menus WHERE first_day  = :first_day")
+fun findByFirstDay(first_day: LocalDate): Optional<Menu>
 ```
 
 The only date-related problem left is when converting to and from JSON. To handle that case we need a serializer and a deserializer. 
@@ -61,7 +96,7 @@ data class Menu(@Id val id: String? = null, val firstDay: LocalDate)
 where LocalDate is defined in `import kotlinx.datetime.*`. This allows elegant code like this to create a date instance: 
 
 ```
-    private val march10th = "2022-03-10".toLocalDate()
+private val march10th = "2022-03-10".toLocalDate()
 ```
 
 which is an extension method on String: 
@@ -391,7 +426,7 @@ TODO:
 
 ## 20220430
 
-Based on the kotlin/spring-boot tutorial, I've added a category table and REST endpoints to add and list categories.
+Based on the kotlin/spring-boot tutorial (https://spring.io/guides/tutorials/spring-boot-kotlin/), I've added a category table and REST endpoints to add and list categories.
 There's also a sort of datamodel in apps/shop-api/doc. 
 
 It turns out that table names in `@Table` annotations are case-sensitive, so you should use
@@ -518,4 +553,3 @@ Start the app:
 cd shop
 nx serve shop
 ```
-
