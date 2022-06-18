@@ -22,6 +22,9 @@ class CategoryResource() {
   @GetMapping("/category/{id}")
   fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id))
 
+  @DeleteMapping("/category/{id}")
+  fun delete(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.delete(id))
+
   @GetMapping("/category")
   fun findByName(@RequestParam(name = "name") name: String) =
     ResponseEntity.ok(categoryService.findByName(name))
@@ -42,6 +45,8 @@ class CategoryService(val db: CategoryRepository) {
   fun save(category: Category): Category = db.save(category)
 
   fun deleteAll() = db.deleteAll()
+
+  fun delete(id: String) = db.deleteById(id)
 }
 
 @Table("CATEGORIES")

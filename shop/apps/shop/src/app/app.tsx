@@ -1,43 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.scss';
-import {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import './theme/index.css';
+import CategoriesPage from "./pages/categories";
 
-interface MenuItem {
-  name: string;
-}
-
-export const App = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-
-  useEffect(() => {
-    fetch('/api/menuitems')
-      .then((_) => _.json())
-      .then(setMenuItems);
-  }, []);
-
-  function addMenuItem() {
-    const newMenuItem = {name:`New menu item ${Math.floor(Math.random() * 1000)}`};
-    fetch('/api/addMenuItem', {
-      method: 'POST',
-      body: JSON.stringify(newMenuItem),
-    })
-      .then((_) => _.json())
-      .then((newMenuItem) => {
-        setMenuItems([...menuItems, newMenuItem]);
-      });
-  }
-
+export function App() {
   return (
-    <>
-      <h1>MenuItems</h1>
-      <ul>
-        {menuItems.map((t) => (
-          <li className={'todo'}>{t.name}</li>
-        ))}
-      </ul>
-      <button id={'add-menuItem'} onClick={addMenuItem}>Add MenuItem</button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<CategoriesPage />}>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
-};
+}
 
 export default App;

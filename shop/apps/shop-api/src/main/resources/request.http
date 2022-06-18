@@ -30,15 +30,19 @@ GET http://localhost:8080/api/menus
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"name": "gebak2", "shopOrder": "30"}
+{"name": "gebak2333", "shopOrder": "30"}
 
 ###
 ### Post category, change shopOrder
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"id": "b90b9ecd-ef60-4e58-b693-d567524f43d2", "name": "gebak2", "shopOrder": "40"}
+{"id": "db6665d8-391e-478a-a27e-e24f0e7c7f82", "name": "gebak4", "shopOrder": "40"}
 
+
+###
+### Delete
+DELETE  http://localhost:8080/api/category/9d30c1ff-a41c-49d8-a649-e19e1d6e4efa
 
 ###
 ### Post category, emtpy id, name not found
@@ -194,5 +198,3 @@ Content-Type: application/json
 ###
 ### Get 'hello'
 GET http://localhost:8080/api/messages
-
-
