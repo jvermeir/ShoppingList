@@ -18,19 +18,18 @@ const CategoriesPage = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
 
   function getCategories() {
-    console.log('getCategories');
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(setCategories);
+      .then(categories => {
+        setCategories(categories)
+      });
   }
 
   useEffect(() => {
-    console.log('use effect')
     getCategories();
   }, []);
 
   function refetch() {
-    console.log('refetch');
     getCategories();
   }
 
@@ -72,14 +71,15 @@ const CategoriesPage = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {[...categories]
+                    {categories
                       .sort((a, b) => {
                         if (a?.shopOrder === b?.shopOrder || !a?.shopOrder || !b?.shopOrder) return 0;
                         return a.shopOrder < b.shopOrder ? -1 : 1;
                       })
-                      .map((category: CategoryData) => {
-                        return category && <Category key={category?.id} category={category} onCompleted={refetch}/>
-                      })}
+                      .filter(category => !!category)
+                      .map((category) =>
+                        <Category key={category.id} category={category} onCompleted={refetch}/>
+                      )}
                   </TableBody>
                 </Table>
               </TableContainer>

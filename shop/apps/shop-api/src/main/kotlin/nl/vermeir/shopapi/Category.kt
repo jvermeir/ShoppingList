@@ -35,7 +35,11 @@ class CategoryResource() {
 
 @Service
 class CategoryService(val db: CategoryRepository) {
-  fun find(): List<Category> = db.findAll().toList()
+  fun find(): List<Category> {
+    val x = db.findAll().toList()
+    println(x)
+    return x
+  }
 
   fun findById(id: String): Category = db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
 

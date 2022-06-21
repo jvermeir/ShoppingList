@@ -49,7 +49,8 @@
       "options": {
         "buildTarget": "shop:build",
         "hmr": true,
-        "proxyConfig": "apps/shop/proxy.conf.json"
+        "proxyConfig": "apps/shop/proxy.conf.json",
+        "host": "0.0.0.0"
       },
       "configurations": {
         "development": {

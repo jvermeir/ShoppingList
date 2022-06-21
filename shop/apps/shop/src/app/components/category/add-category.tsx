@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField
-} from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import {useState} from "react";
 import {Plus} from "react-feather";
 
@@ -17,8 +8,8 @@ export interface CreateCategoryProps {
 
 // TODO: handle loading and error
 // TODO: naming
-// TODO: parameter to add vs. edit?
-// TODO: why does this form show previous values?
+// TODO: reuse EditCategory code? parameter to add vs. edit?
+// TODO: why does this form show previous values? unless set to empty/0 explicitly
 
 export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
   const [name, setName] = useState<string>('')
@@ -26,7 +17,6 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
   const [open, setOpen] = useState(false);
 
   const [done, setDone] = useState<boolean>(false);
-  const [showAddDialog, setShowAddDialog] = useState<boolean>(true);
 
   const handleSave = () => {
     // TODO: handle errors
@@ -41,7 +31,12 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
         name: name,
         shopOrder: shopOrder
       }),
-    }).then(_ => onCompleted && onCompleted());
+    }).then(_ => {
+      onCompleted && onCompleted()
+    });
+
+    setName('');
+    setShopOrder(0);
   }
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +48,8 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
     setShopOrder(isNaN(number) ? 0 : number);
   };
 
-  const handleCloseADdDialog = () => {
-    setShowAddDialog(false);
+  const handleCloseAddDialog = () => {
+    setOpen(  false);
   };
 
   return (
@@ -68,9 +63,8 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
     >
-      <DialogTitle id="form-dialog-title">Category {name}</DialogTitle>
+      <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
       <DialogContent>
-        <DialogContentText>Add Category</DialogContentText>
         <Box mt={2}>
           <TextField
             autoFocus
@@ -87,7 +81,6 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
           />
 
           <TextField
-            autoFocus
             margin="dense"
             id="shopOrder"
             label="Shop order"
@@ -100,7 +93,7 @@ export const AddCategory = ({onCompleted}:CreateCategoryProps) => {
       </DialogContent>
       <DialogActions>
         <>
-          <Button onClick={handleCloseADdDialog}>Close</Button>
+          <Button onClick={handleCloseAddDialog}>Close</Button>
           <Button variant="contained" onClick={handleSave}>
             Save
           </Button>

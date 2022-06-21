@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   TextField
@@ -14,13 +13,16 @@ import {Edit} from "react-feather";
 import {CategoryData} from "../../pages/categories";
 import {useState} from "react";
 
+export interface EditCategoryProps {
+  category: CategoryData,
+  onCompleted?: () => void
+}
 // TODO: handle loading and error
 
-export const EditCategory = ({category, onCompleted}: { category: CategoryData, onCompleted: () => void }) => {
+export const EditCategory = ({category, onCompleted}:EditCategoryProps) => {
   const [id, setId] = useState<string>(category.id || '')
   const [name, setName] = useState<string>(category.name || '')
   const [shopOrder, setShopOrder] = useState<number>(category.shopOrder || 0)
-  const [showEditDialog, setShowEditDialog] = useState< boolean>(false);
   const [open, setOpen] = useState(false);
 
   const [done, setDone] = useState<boolean>(false);
@@ -40,7 +42,9 @@ export const EditCategory = ({category, onCompleted}: { category: CategoryData, 
         name: name,
         shopOrder: shopOrder
       }),
-    }).then(_ => onCompleted && onCompleted());
+    }).then(_ => {
+      onCompleted && onCompleted()
+    });
   }
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +57,7 @@ export const EditCategory = ({category, onCompleted}: { category: CategoryData, 
   };
 
   const handleCloseEditDialog = () => {
-    setShowEditDialog(false);
+    setOpen(false);
   };
 
   return (
@@ -68,9 +72,8 @@ export const EditCategory = ({category, onCompleted}: { category: CategoryData, 
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
         >
-          <DialogTitle id="form-dialog-title">Category {name}</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit category {name}</DialogTitle>
           <DialogContent>
-            <DialogContentText>Edit Category</DialogContentText>
             <Box mt={2}>
               <TextField
                 autoFocus
@@ -87,7 +90,6 @@ export const EditCategory = ({category, onCompleted}: { category: CategoryData, 
               />
 
               <TextField
-                autoFocus
                 margin="dense"
                 id="shopOrder"
                 label="Shop order"
