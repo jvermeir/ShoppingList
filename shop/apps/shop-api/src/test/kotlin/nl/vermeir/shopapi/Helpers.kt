@@ -7,8 +7,6 @@ import com.github.kittinunf.fuel.httpPost
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.datetime.LocalDate
-import java.util.*
 
 const val baseUrl = "http://localhost:8080/api"
 
@@ -42,26 +40,3 @@ fun cleanUpDatabase() {
     .responseString()
   println(result)
 }
-
-fun createAnIngredient(categoryId: String): Ingredient =
-  Ingredient(name = UUID.randomUUID().toString(), categoryId = categoryId)
-
-fun createACategory(shopOrder: Int): Category = Category(name = UUID.randomUUID().toString(), shopOrder = shopOrder)
-fun createARecipe(favorite: Boolean): Recipe = Recipe(name = UUID.randomUUID().toString(), favorite = favorite)
-fun createAMenu(firstDay: LocalDate): Menu = Menu(firstDay = firstDay)
-
-fun createRecipeIngredient(): RecipeIngredient {
-  val c1 = save(createACategory(10), "category")
-  val r1 = save(createARecipe(true), path = "recipe")
-  val i1 = save(createAnIngredient(c1.id ?: throw Exception("category id should not be empty")), path = "ingredient")
-  return RecipeIngredient(
-    recipeId = r1.id ?: throw Exception("recipe id should not be empty"),
-    ingredientId = i1.id ?: throw Exception("ingredient id should not be empty")
-  )
-}
-
-fun createRecipeIngredient(recipeId: String?, ingredientId: String?): RecipeIngredient =
-  RecipeIngredient(
-    recipeId = recipeId ?: throw Exception("recipe id should not be empty"),
-    ingredientId = ingredientId ?: throw Exception("ingredient id should not be empty")
-  )

@@ -8,9 +8,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
-data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredient>);
+data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredient>)
 
 @RestController
 class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {

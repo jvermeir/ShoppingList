@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.function.Supplier
 
 @RestController
 class RecipeResource(val recipeService: RecipeService) {

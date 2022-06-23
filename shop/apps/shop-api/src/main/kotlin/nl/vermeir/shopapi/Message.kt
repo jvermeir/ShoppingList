@@ -28,10 +28,7 @@ class MessageService(val db: MessageRepository) {
 
   fun findMessages(): List<Message> = db.findMessages()
 
-  fun post(message: Message):Message {
-    val x = db.save(message)
-    return x
-  }
+  fun post(message: Message):Message = db.save(message)
 }
 
 @Table("MESSAGES")

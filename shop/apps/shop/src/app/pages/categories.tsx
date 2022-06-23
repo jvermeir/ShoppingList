@@ -14,15 +14,27 @@ import {useEffect, useState} from "react";
 import {Category} from "../components/category/category";
 import {AddCategory} from "../components/category/add-category";
 
-const CategoriesPage = () => {
+// TODO: test
+
+export interface CategoryData {
+  id: string;
+  name: string;
+  shopOrder: number;
+}
+
+export const CategoriesPage = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   function getCategories() {
+    setLoading(true);
+
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(categories => {
-        setCategories(categories)
-      });
+      .then(categories => {setCategories(categories)})
+      .catch(setError)
+      .finally(() => setLoading(false));
   }
 
   useEffect(() => {
@@ -33,12 +45,8 @@ const CategoriesPage = () => {
     getCategories();
   }
 
-  // TODO: fix this
-  const error = false;
-  const loading = false;
   return (
-    <>
-      <Container>
+    <Container>
         {!error && loading && <Loading/>}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
@@ -87,14 +95,8 @@ const CategoriesPage = () => {
           </>
         )}
       </Container>
-    </>
   );
 };
 
-export interface CategoryData {
-  id: string;
-  name: string;
-  shopOrder: number;
-}
-
+// TODO: why do we need export default in this case and not for AddCategory?
 export default CategoriesPage;

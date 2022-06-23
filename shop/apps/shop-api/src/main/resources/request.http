@@ -30,7 +30,7 @@ GET http://localhost:8080/api/menus
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"name": "gebak2333", "shopOrder": "30"}
+{"name": "w", "shopOrder": "30"}
 
 ###
 ### Post category, change shopOrder

@@ -3,8 +3,6 @@ import {Delete} from "react-feather";
 import {CategoryData} from "../../pages/categories";
 import {EditCategory} from "./edit-category";
 
-// TODO: handle loading and error
-
 export const Category = ({category, onCompleted}: { category: CategoryData, onCompleted: () => void }) => {
 
   const  handleDelete = () => {

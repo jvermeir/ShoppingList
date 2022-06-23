@@ -1,5 +1,6 @@
 package nl.vermeir.shopapi
 
+import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -45,6 +46,20 @@ class GlobalExceptionHandler {
       )
     }
     return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
+  }
+
+  @ExceptionHandler(DbActionExecutionException::class)
+  fun handleDbActionException(
+    exception: DbActionExecutionException,
+    webRequest: WebRequest
+  ): ResponseEntity<ErrorDetails> {
+    val errorDetails = exception.message?.let {
+      ErrorDetails(
+        Date(), it,
+        webRequest.getDescription(false)
+      )
+    }
+    return ResponseEntity(errorDetails, HttpStatus.CONFLICT)
   }
 
   @ExceptionHandler(java.lang.Exception::class)
