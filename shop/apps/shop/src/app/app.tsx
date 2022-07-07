@@ -1,5 +1,4 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import './theme/index.css';
 import CategoriesPage from "./pages/categories";
 import HelloPage from "./pages/hello";
 
