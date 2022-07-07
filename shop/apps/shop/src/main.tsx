@@ -1,12 +1,18 @@
 import * as ReactDOM from 'react-dom/client';
-
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 import App from './app/app';
+import responsiveTheme from "./theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <App/>
+  <ThemeProvider theme={responsiveTheme}>
+    <CssBaseline />
+    <App />
+  </ThemeProvider>,
 );
 
 /* TODO:

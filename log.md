@@ -2,6 +2,52 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220707
+
+I've started on a proper UI and it's been a bit of a struggle. First I thought to use SCSS because that's what I used for a training on CSS last year. Then I thought I'd be 
+mainly building forms and lists and maybe a framework would give me some guidance. We've been using [Material UI](https://mui.com/) for a customer to build a support site for their customer care department and 
+that seemed useful. In the sense that a lot of decisions are taken out of your hands which is a good thing at my current level of proficiency. 
+
+So I started with a maintenance page for managing categories. This is a simple enough table like structure showing all current categories. There would be a button to add a new 
+category and each category line would have a delete and edit icon. The general structure that worked for me is to start with a `categories.tsx` file in `apps/shop/src/app/pages`.
+This page loads the categories from the api and defines a table along with a button to add a category and some handlers to show
+a message while loading data or in case of an error. The lines in the table are handled by a 
+separate component. This avoids cluttering the categories.tsx file. So all details to render a category in the list are in  `apps/shop/src/app/components/category.tsx`. 
+Category.tsx is relatively simple. It shows one record in the category table. I've also added the logic to handle the delete function because it seems to small for its own file. 
+Edit and Add are in separate files as well. This bugs me still because there's a lot of overlap in the two files. 
+
+One piece of code that still gives me mixed feelings is this (from edit-category.tsx):
+
+```
+    submitApiRequest({id, name, shopOrder})
+      .then((response) => checkResponse(response))      
+      .then(() => cleanUp())
+      .then(() => onCompleted())
+      .catch(handleError)
+      .finally(() => setShowConfirmation(true));
+```
+
+It stores the updated category and makes sure errors are handled correctly. It's easy to read in my opinion, but if something fails it's
+harder to debug like I would do in Kotlin by setting break points.
+
+This was all fine, but then I wanted a responsive UI, just like Jonas Schmedtmann demonstrates so well in his CSS training. And that is where 
+I got lost in bleeding edge code and examples that are intended for the previous version of a framework or are incomplete because readers are supposed to have some more
+background than I have. Finally, I ended up copying parts of the [Material UI examples](https://github.com/mui/material-ui), and in particular the
+[React example](https://github.com/mui/material-ui/tree/master/examples/create-react-app-with-typescript). Copying this example to
+[Code sandbox](https://codesandbox.io/) facilitated experimentation. At least now the font size of the Categories header on my 
+page will respond to changes in screen size. Huray! 
+
+The `bleeding edge` part of my doubts comes from this fragment in package.json:
+
+```
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/material": "latest"
+```
+
+This is equivalent to depending on snapshot in the Java world, which would definitely raise some eyebrows. I'm hoping to improve
+this later when I better understand how it works. 
+
 ## 20220611
 
 I've replaced the integration tests that rely on a running server by tests using WebMvcTest. This is of course way friendlier for tests running on a build server. I've mocked the database using
@@ -110,7 +156,7 @@ public fun String.toLocalDate(): LocalDate = LocalDate.parse(this)
 
 I've standardized Category, Recipe, Ingredient and RecipeIngredient classes and removed code I don't need yet. Also, I've added tests for each class using its REST endpoints. 
 This means the tests are integration tests that require a running database (in memory for know) and application. This is not ideal, but on the other hand there isn't much code
-to test anyway. I'll investigate TestContainters to see if that might help somehow. Thought I don't yet see how that would work on a CI/CD server.
+to test anyway. I'll investigate TestContainers to see if that might help somehow. Thought I don't yet see how that would work on a CI/CD server.
 
 Then I've added Menu and MenuItem, which is when I landed in Date hell. I now have 3 different date implementations: 
 - a `kotlinx.datetime.LocalDate` for use in the Kotlin code
@@ -193,7 +239,7 @@ tasks.withType<Test> {
 }
 ```
 
-and the secret to get this to actually work is to add a `gradle.properties` file in the root of the Kotlin project. For now it contains a single line:
+and the secret to get this to actually work is to add a `gradle.properties` file in the root of the Kotlin project. For now, it contains a single line:
 
 ```
 kotlin-coroutines.version=1.6.0
@@ -201,7 +247,7 @@ kotlin-coroutines.version=1.6.0
 
 Note the version says `1.6.0` and not `1.6.21` like I would expect based on the Kotlin version.
 
-I've removed outdated tests and started on a integration level test that calls the api over http. Not too pretty, but given the limited business logic it sort of makes sense to me.
+I've removed outdated tests and started on an integration level test that calls the api over http. Not too pretty, but given the limited business logic it sort of makes sense to me.
 
 ## 20220519 
 
@@ -253,7 +299,7 @@ Classic, works just fine. But how can I do this in a more Kotlinish way? I thoug
           ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found"))
 ```
 
-If findById succeeds we know It's ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should impolement a Supplier. Here's my next attempts:
+If findById succeeds we know It's ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should implement a Supplier. Here's my next attempts:
 
 ```
       categoryDb
@@ -347,7 +393,7 @@ Or I could write a serializer? Or is this problem caused by reusing code that li
 All data classes now have a `@Serialization` annotation. This isn't necessary for Spring because it will automatically set `Content-Type: application/json`. 
 It is necessary if you want to use `httpPost().jsonBody(Json.encodeToString(data))` as shown above. 
 
-Other than that, it feels like some structure is evolving. As an experiment I grouped all `Category` related code in `Category.kt`. This helps me keeping track better than having a file per layer, but it's still early, so we'll see.  
+Other than that, it feels like some structure is evolving. As an experiment I grouped all `Category` related code in `Category.kt`. This helps me keep track better than having a file per layer, but it's still early, so we'll see.  
 
 The http client is fuel (https://github.com/kittinunf/Fuel) which works well enough. See `IngegrationTest.kt` for details.
 
@@ -380,7 +426,7 @@ class CategoryResource(val categoryService: CategoryService) {
     return ResponseEntity.ok(categoryService.findById(id).get());
   }
 ```
-Now `findById` may throw `NoSuchElementException`, so I've added a exception handler in `ErrorHandler.kt`.  
+Now `findById` may throw `NoSuchElementException`, so I've added an exception handler in `ErrorHandler.kt`.  
 
 ## 20220505 
 

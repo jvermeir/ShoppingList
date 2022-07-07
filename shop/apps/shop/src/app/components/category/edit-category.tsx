@@ -26,7 +26,6 @@ export interface EditCategoryRequest {
   shopOrder: number;
 }
 
-
 export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
   const [id, setId] = useState<string>(category.id || '')
   const [name, setName] = useState<string>(category.name || '')
