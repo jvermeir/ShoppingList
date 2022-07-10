@@ -2,9 +2,33 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220710
+
+Adding code to change and add ingredients, adds a new feature: `ingredient`s have a reference to a `category`, but I wouldn't want to show UUIDs, I want to display the name of the category instead.
+To fix that I introduced a new query in `Ingredient.kt`:
+
+```
+  @Query("SELECT i.id, i.name, i.category_id, c.name as category_name FROM ingredients i left outer join categories c on i.category_id = c.id")
+  fun ingredientsView(): List<IngredientView>
+```
+
+This is named `*View` because it's intention is to show data rather than manipulate data. So I added a data class to represent an enhanced ingredient and a query/endpoint to retrieve the list. 
+
+The code to manipulate ingredients looks a lot like the code to manipulate categories. In fact, all code in `/ingredient/` started out as a copy of `/category/`. This seems like a bit of a code smell, but 
+of course there are differences, like the lookup query to show a dropdown of possible category values when editing an ingredient. Now the idea of just generating this kind of code has settled in 
+my brain and a small voice keeps whispering how easy it was to create this kind of data entry code way-back-when I was still programming Oracle Forms. 
+
+There are still problems with this code. One example is that I need to pass the list of categories from the ingredients-page all the way to the add-ingredient pop-up. This seems like a waste:
+wouldn't it be easier to just store the category list in some kind of global cache? 
+
+And related to that cache idea: if the ingredients-page is opened and a category is added, the new category doesn't show up in the drop-down on the ingredients page. It would be nice to have a 
+subscription to changes such that categories are reloaded automatically.
+
+Finally, when using this UI on a laptop, it would be nice to filter the list of categories by typing instead of having to scroll down a list. This won't be a problem for categories but it will
+
 ## 20220707
 
-I've started on a proper UI and it's been a bit of a struggle. First I thought to use SCSS because that's what I used for a training on CSS last year. Then I thought I'd be 
+I've started on a proper UI, and it's been a bit of a struggle. First I thought to use SCSS because that's what I used for a training on CSS last year. Then I thought I'd be 
 mainly building forms and lists and maybe a framework would give me some guidance. We've been using [Material UI](https://mui.com/) for a customer to build a support site for their customer care department and 
 that seemed useful. In the sense that a lot of decisions are taken out of your hands which is a good thing at my current level of proficiency. 
 
