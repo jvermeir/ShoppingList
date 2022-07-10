@@ -12,11 +12,14 @@ import {
 } from "@mui/material";
 import {Edit} from "react-feather";
 import {IngredientData} from "../../pages/ingredients";
+import CategorySelector from "../category/category-selector";
+import {CategoryData} from "../../pages/categories";
 import React, {useState} from "react";
 import {HttpError} from "../error/error";
 
 export interface EditIngredientProps {
   ingredient: IngredientData,
+  categories: CategoryData[],
   onCompleted: () => void
 }
 
@@ -26,10 +29,11 @@ export interface EditIngredientRequest {
   categoryId: string;
 }
 
-export const EditIngredient = ({ingredient, onCompleted}: EditIngredientProps) => {
+export const EditIngredient = ({ingredient, categories, onCompleted}: EditIngredientProps) => {
   const [id, setId] = useState<string>(ingredient.id || '')
   const [name, setName] = useState<string>(ingredient.name || '')
   const [categoryId, setCategoryId] = useState<string>(ingredient.categoryId || '')
+  const [categoryName, setCategoryName] = useState<string>('')
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
@@ -72,8 +76,9 @@ export const EditIngredient = ({ingredient, onCompleted}: EditIngredientProps) =
     setName((event.target as HTMLInputElement).value);
   };
 
-  const handleCategoryId = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCategoryId((event.target as HTMLInputElement).value);
+  const handleCategoryId = (categoryId: string) => {
+    setCategoryId(categoryId);
+    setCategoryName(categories.filter((category:CategoryData) => category.id === categoryId)[0].id)
   };
 
   const handleCloseEditDialog = () => {
@@ -109,15 +114,10 @@ export const EditIngredient = ({ingredient, onCompleted}: EditIngredientProps) =
               value={name}
             />
 
-            <TextField
-              margin="dense"
-              id="categoryId"
-              label="Category"
-              type="text"
-              fullWidth
-              onChange={handleCategoryId}
-              value={categoryId}
-            />
+            <Box mt={3}>
+              <CategorySelector value={categoryName} options={categories} onChange={handleCategoryId}/>
+            </Box>
+
           </Box>
         </DialogContent>
         <DialogActions>

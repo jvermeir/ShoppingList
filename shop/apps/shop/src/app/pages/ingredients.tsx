@@ -104,7 +104,7 @@ export const IngredientsPage = () => {
                       })
                       .filter(ingredient => !!ingredient)
                       .map((ingredient) =>
-                        <Ingredient key={ingredient.id} ingredient={ingredient} onCompleted={refetch}/>
+                        <Ingredient key={ingredient.id} ingredient={ingredient} categories={categories} onCompleted={refetch}/>
                       )}
                   </TableBody>
                 </Table>

@@ -113,9 +113,11 @@ export const AddIngredient = ({onCompleted, categories}: AddIngredientProps) => 
               onChange={handleName}
               value={name}
             />
+
             <Box mt={3}>
               <CategorySelector value={categoryName} options={categories} onChange={handleCategoryId}/>
             </Box>
+
           </Box>
         </DialogContent>
         <DialogActions>

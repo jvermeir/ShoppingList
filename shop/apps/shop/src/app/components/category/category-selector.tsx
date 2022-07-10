@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {CategoryData} from "../../pages/categories";
@@ -29,7 +29,6 @@ export const CategorySelector = ({name, value, options, onChange}: CategorySelec
         value={localValue}
         label="Category"
         onChange={handleChange}
-        defaultOpen={true}
       >
         {options?.map(option => {
           return (
