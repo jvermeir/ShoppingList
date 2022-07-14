@@ -22,7 +22,8 @@
     "react-use": "^17.4.0",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@mui/material": "latest"
+    "@mui/material": "latest",
+    "@mui/icons-material": "latest"
   },
   "devDependencies": {
     "@nrwl/cli": "14.0.3",

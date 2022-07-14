@@ -18,8 +18,11 @@ import {AddIngredient} from "../components/ingredient/add-ingredient";
 // TODO????
 import fetch from "cross-fetch";
 import {CategoryData} from "./categories";
+import {Navigation} from "../components/navigation/navigation";
 
 // TODO: test
+// TODO: remove 'add ingredients' text on narrow displays
+// TODO: remove some vertical space in add/edit dialogs on mobile
 
 export interface IngredientData {
   id: string;
@@ -39,7 +42,9 @@ export const IngredientsPage = () => {
 
     fetch('/api/ingredients-view')
       .then((_) => _.json())
-      .then(ingredients => {setIngredients(ingredients)})
+      .then(ingredients => {
+        setIngredients(ingredients)
+      })
       .catch(setError)
       .finally(() => setLoading(false));
   }
@@ -49,7 +54,9 @@ export const IngredientsPage = () => {
 
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(categories => {setCategories(categories)})
+      .then(categories => {
+        setCategories(categories)
+      })
       .catch(setError)
       .finally(() => setLoading(false));
   }
@@ -64,7 +71,9 @@ export const IngredientsPage = () => {
   }
 
   return (
-    <Container>
+    <>
+      <Navigation/>
+      <Container>
         {!error && loading && <Loading/>}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
@@ -104,7 +113,8 @@ export const IngredientsPage = () => {
                       })
                       .filter(ingredient => !!ingredient)
                       .map((ingredient) =>
-                        <Ingredient key={ingredient.id} ingredient={ingredient} categories={categories} onCompleted={refetch}/>
+                        <Ingredient key={ingredient.id} ingredient={ingredient} categories={categories}
+                                    onCompleted={refetch}/>
                       )}
                   </TableBody>
                 </Table>
@@ -113,6 +123,7 @@ export const IngredientsPage = () => {
           </>
         )}
       </Container>
+    </>
   );
 };
 

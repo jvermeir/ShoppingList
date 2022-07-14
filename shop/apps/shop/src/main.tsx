@@ -1,7 +1,7 @@
 import * as ReactDOM from 'react-dom/client';
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import App from './app/app';
 import responsiveTheme from "./theme";
 

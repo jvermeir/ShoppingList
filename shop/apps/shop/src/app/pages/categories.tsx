@@ -17,6 +17,7 @@ import {AddCategory} from "../components/category/add-category";
 
 // TODO????
 import fetch from "cross-fetch";
+import {Navigation} from "../components/navigation/navigation";
 
 // TODO: test
 
@@ -36,7 +37,9 @@ export const CategoriesPage = () => {
 
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(categories => {setCategories(categories)})
+      .then(categories => {
+        setCategories(categories)
+      })
       .catch(setError)
       .finally(() => setLoading(false));
   }
@@ -50,7 +53,9 @@ export const CategoriesPage = () => {
   }
 
   return (
-    <Container>
+    <>
+      <Navigation/>
+      <Container>
         {!error && loading && <Loading/>}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
@@ -99,6 +104,7 @@ export const CategoriesPage = () => {
           </>
         )}
       </Container>
+    </>
   );
 };
 
