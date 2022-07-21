@@ -98,10 +98,11 @@ export const AddIngredient = ({onCompleted, categories}: AddIngredientProps) => 
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        sx={{mb: {xs: -3, md: 1}, mt: {xs: 1}}}
       >
         <DialogTitle sx={{display: {xs: 'none', md: 'block'}}} id="form-dialog-title">Add Ingredient</DialogTitle>
-        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 3}}}>
-          <Box mt={2}>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 0}}}>
+          <Box sx={{mb: {xs: 0, md: 1}}}>
             <TextField
               autoFocus
               margin="dense"
@@ -116,7 +117,7 @@ export const AddIngredient = ({onCompleted, categories}: AddIngredientProps) => 
               value={name}
             />
 
-            <Box mt={3}>
+            <Box>
               <CategorySelector value={categoryName} options={categories} onChange={handleCategoryId}/>
             </Box>
 

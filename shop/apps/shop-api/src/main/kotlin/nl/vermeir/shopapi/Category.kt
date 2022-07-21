@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
+// TODO: handle foreign key constraints when deleting categories
+
 @RestController
 class CategoryResource {
   @Autowired

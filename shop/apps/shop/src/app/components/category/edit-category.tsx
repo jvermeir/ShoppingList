@@ -95,9 +95,10 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        sx={{mb: {xs: -3, md: 1}, mt: {xs: 1}}}
       >
         <DialogTitle sx={{ display: { xs: 'none', md: 'block' } }} id="form-dialog-title">Edit category {name}</DialogTitle>
-        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 3}}}>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 0}}}>
           <Box sx={{mb: {xs: 0, md: 1}}}>
             <TextField
               autoFocus

@@ -96,10 +96,11 @@ export const EditIngredient = ({ingredient, categories, onCompleted}: EditIngred
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        sx={{mb: {xs: -3, md: 1}, mt: {xs: 1}}}
       >
-        <DialogTitle id="form-dialog-title">Edit ingredient '{name}'</DialogTitle>
-        <DialogContent>
-          <Box mt={2}>
+        <DialogTitle sx={{ display: { xs: 'none', md: 'block' } }} id="form-dialog-title">Edit ingredient '{name}'</DialogTitle>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 0}}}>
+          <Box sx={{mb: {xs: 0, md: 1}}}>
             <TextField
               autoFocus
               margin="dense"
@@ -114,7 +115,7 @@ export const EditIngredient = ({ingredient, categories, onCompleted}: EditIngred
               value={name}
             />
 
-            <Box mt={3}>
+            <Box>
               <CategorySelector value={categoryName} options={categories} onChange={handleCategoryId}/>
             </Box>
 
