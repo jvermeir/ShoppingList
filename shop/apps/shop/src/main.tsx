@@ -4,14 +4,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {ThemeProvider} from '@mui/material/styles';
 import App from './app/app';
 import responsiveTheme from "./theme";
+import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <ThemeProvider theme={responsiveTheme}>
-    <CssBaseline />
-    <App />
+    <CssBaseline/>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
   </ThemeProvider>,
 );
 

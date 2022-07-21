@@ -1,8 +1,8 @@
 import {useNavigate} from 'react-router-dom';
-import {User as UserIcon} from 'react-feather';
-import {AppBar, Box, Container, Divider, Menu, Toolbar} from '@mui/material';
+import {AppBar, Box, Container, Menu, Toolbar} from '@mui/material';
 import MuiMenuItem from '@mui/material/MenuItem';
 import {useState} from 'react';
+import DehazeIcon from '@mui/icons-material/Dehaze';
 
 export interface RouteDefinition {
   path: string;
@@ -13,7 +13,7 @@ export interface RouteDefinitions {
   [key: string]: RouteDefinition;
 }
 
-const routes: RouteDefinitions = {
+export const routes: RouteDefinitions = {
   ingredients: {
     path: '/ingredients',
     text: 'ingredients'
@@ -24,7 +24,6 @@ const routes: RouteDefinitions = {
   },
 };
 
-// TODO: icon
 // TODO: text when we've got enough space?
 
 export const Navigation = () => {
@@ -46,31 +45,25 @@ export const Navigation = () => {
     } else {
       navigate("/", {replace: true});
     }
+    // const x:RouteDefinitions = routes;
+    // x.???
   }
 
   return (
     <AppBar position="static">
       <Container>
-        <Toolbar style={{display: 'flex', justifyContent: 'center', padding: 0}}>
-
-          <div
-            style={{
-              marginLeft: 'auto',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Box mr={2}>
-              <UserIcon
+        <Toolbar style={{display: 'flex', justifyContent: 'left', padding: 0}}>
+           <Box mr={2}>
+              <DehazeIcon
                 onClick={handleClick}
-                aria-controls={open ? 'account-menu' : undefined}
+                aria-controls={open ? 'main-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
               />
             </Box>
             <Menu
               anchorEl={anchorEl}
-              id="account-menu"
+              id="main-menu"
               open={open}
               onClose={handleClose}
               onClick={handleClose}
@@ -103,8 +96,6 @@ export const Navigation = () => {
               transformOrigin={{horizontal: 'right', vertical: 'top'}}
               anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
-              <MuiMenuItem disabled={true}>Menu</MuiMenuItem>
-              <Divider/>
               <MuiMenuItem selected={true} onClick={() => handleNavigate("categories")}>
                 Categories
               </MuiMenuItem>
@@ -112,7 +103,6 @@ export const Navigation = () => {
                 Ingredients
               </MuiMenuItem>
             </Menu>
-          </div>
         </Toolbar>
       </Container>
     </AppBar>

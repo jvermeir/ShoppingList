@@ -1,30 +1,17 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import CategoriesPage from "./pages/categories";
 import HelloPage from "./pages/hello";
+import {Route, Routes} from "react-router";
+import CategoriesPage from "./pages/categories";
 import IngredientsPage from "./pages/ingredients";
-import {ReactElement} from "react";
 
-export interface RouteDefinition {
-  path: string;
-  element: () => ReactElement | null;
-}
+// TODO: how is this connected to routes in Navigation?
+
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HelloPage />}/>
-        <Route path="/categories" element={<CategoriesPage />}/>
-        <Route path="/ingredients" element={<IngredientsPage />}/>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HelloPage />} />
+      <Route path="/categories" element={<CategoriesPage />} />
+      <Route path="/ingredients" element={<IngredientsPage />} />
+    </Routes>
   );
 }
 export default App;
-
-// <BrowserRouter>
-//   <Routes>
-//     <Route path="/" element={<HelloPage />}/>
-//     <Route path="/categories" element={<CategoriesPage />}/>
-//     <Route path="/ingredients" element={<IngredientsPage />}/>
-//   </Routes>
-// </BrowserRouter>

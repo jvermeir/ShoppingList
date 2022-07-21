@@ -84,7 +84,9 @@ export const AddCategory = ({onCompleted}: AddCategoryProps) => {
   return (
     <>
       <Button variant="contained" sx={{float: 'right'}} onClick={() => setOpen(true)} startIcon={<Plus/>}>
-        Add Category
+        <Box sx={{display: {xs: 'none', sm: 'block'}}}>
+          Add Category
+        </Box>
       </Button>
 
       <Dialog
@@ -93,8 +95,8 @@ export const AddCategory = ({onCompleted}: AddCategoryProps) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <DialogTitle id="form-dialog-title">Add Category</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{display: {xs: 'none', md: 'block'}}} id="form-dialog-title">Add category {name}</DialogTitle>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 3}}}>
           <Box mt={2}>
             <TextField
               autoFocus

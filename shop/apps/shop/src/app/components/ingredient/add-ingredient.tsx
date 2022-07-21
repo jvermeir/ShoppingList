@@ -88,7 +88,9 @@ export const AddIngredient = ({onCompleted, categories}: AddIngredientProps) => 
   return (
     <>
       <Button variant="contained" sx={{float: 'right'}} onClick={() => setOpen(true)} startIcon={<Plus/>}>
-        Add Ingredient
+        <Box sx={{display: {xs: 'none', sm: 'block'}}}>
+          Add Ingredient
+        </Box>
       </Button>
 
       <Dialog
@@ -97,8 +99,8 @@ export const AddIngredient = ({onCompleted, categories}: AddIngredientProps) => 
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <DialogTitle id="form-dialog-title">Add Ingredient</DialogTitle>
-        <DialogContent>
+        <DialogTitle sx={{display: {xs: 'none', md: 'block'}}} id="form-dialog-title">Add Ingredient</DialogTitle>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 3}}}>
           <Box mt={2}>
             <TextField
               autoFocus

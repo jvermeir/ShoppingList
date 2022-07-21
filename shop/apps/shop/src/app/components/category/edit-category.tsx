@@ -14,6 +14,9 @@ import {Edit} from "react-feather";
 import {CategoryData} from "../../pages/categories";
 import React, {useState} from "react";
 import {HttpError} from "../error/error";
+import {blue} from "@mui/material/colors";
+
+// TODO: fix aria thingies
 
 export interface EditCategoryProps {
   category: CategoryData,
@@ -93,9 +96,9 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <DialogTitle id="form-dialog-title">Edit category {name}</DialogTitle>
-        <DialogContent>
-          <Box mt={2}>
+        <DialogTitle sx={{ display: { xs: 'none', md: 'block' } }} id="form-dialog-title">Edit category {name}</DialogTitle>
+        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 3}}}>
+          <Box sx={{mb: {xs: 0, md: 1}}}>
             <TextField
               autoFocus
               margin="dense"
@@ -117,7 +120,6 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
               type="number"
               fullWidth
               onChange={handleShopOrder}
-              value={shopOrder}
             />
           </Box>
         </DialogContent>

@@ -14,9 +14,9 @@ export const Ingredient = ({ingredient, categories, onCompleted}: { ingredient: 
 
   return (
     <TableRow key={ingredient.id} hover={true}>
-      <TableCell>{ingredient.name}</TableCell>
-      <TableCell>{ingredient.categoryName}</TableCell>
-      <TableCell>
+      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{ingredient.name}</TableCell>
+      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{ingredient.categoryName}</TableCell>
+      <TableCell sx={{padding: {xs:0, sm:2}}}>
         <EditIngredient ingredient={ingredient} categories={categories} onCompleted={onCompleted}/>
         <IconButton aria-label="delete" onClick={handleDelete}>
           <Delete size="18"/>

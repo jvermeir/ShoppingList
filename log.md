@@ -2,6 +2,29 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220715
+
+I wanted to have a menu in the top bar of the application. To implement this, I need a router, `BrowserRouter` from `react-router-dom` seems easy enough: 
+
+```
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+```
+
+and then I defined the main routing options like this in `App`:
+
+```
+    <Routes>
+      <Route path="/" element={<HelloPage />} />
+      <Route path="/categories" element={<CategoriesPage />} />
+      <Route path="/ingredients" element={<IngredientsPage />} />
+    </Routes>
+```
+
+So now we can navigate to categories and ingredients, but still need a menu with options to click on. I've made this with a `Navigation` component. Navigation defines
+an `<AppBar position="static">` with a nice icon to click on, a `Menu` and a list of `MuiMenuItem`s.
+
 ## 20220710
 
 Adding code to change and add ingredients, adds a new feature: `ingredient`s have a reference to a `category`, but I wouldn't want to show UUIDs, I want to display the name of the category instead.
