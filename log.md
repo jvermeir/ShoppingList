@@ -2,6 +2,49 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220726
+
+Getting this thing to work well on smaller displays reads like a summary of all the reasons I dislike UIs so much. I wanted to make things smaller, or at least, more compact, 
+on small displays. This should be possible with breakpoints and media queries, and it actually is. But making something that is usable turned out to be more difficult. 
+I'm still struggling with finding out where space is being added around components. One easy and useful trick is to just hide non essential data:
+
+```
+  <DialogTitle sx={{display: {xs: 'none', md: 'block'}}} id="form-dialog-title">Add category {name}</DialogTitle>
+```
+
+And gone is the title when adding a category of an ingredient. That was encouraging, but then I was left with a rather large swath of white space above the input box. I got rid of that
+by setting the top margin to 0 in the DialogContent section:
+
+```
+  <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 0}}}>
+```
+
+`{xs: -3, md: 1}` takes care of the space between the bottom input field and the buttons. There's probably a better way of doing this. 
+
+Then there's the smaller margins for the list of categories or ingredients. I wanted a more compact display on small devices and ended up with code like this:
+
+```
+      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{category.name}</TableCell>
+      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingRight: {xs:0, sm:2}, paddingBottom: {xs:0}}}>{category.shopOrder}</TableCell>
+      <TableCell sx={{padding: {xs:0, sm:2}}}>
+```
+
+Note all the duplication in the `TableCell`s, that can't be right either.  
+
+
+On a totally different subject, when committing these changes, git tells me it's going to do this:
+
+```
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	new file:   data/testdb.mv.db
+	new file:   file/data/testdb.mv.db
+	modified:   log.md
+	modified:   shop/apps/shop-api/data/testdb.mv.db
+```
+
+so now it seems like I've got 3 databases. Hmmmm.
+
 ## 20220715
 
 I wanted to have a menu in the top bar of the application. To implement this, I need a router, `BrowserRouter` from `react-router-dom` seems easy enough: 
@@ -47,7 +90,7 @@ wouldn't it be easier to just store the category list in some kind of global cac
 And related to that cache idea: if the ingredients-page is opened and a category is added, the new category doesn't show up in the drop-down on the ingredients page. It would be nice to have a 
 subscription to changes such that categories are reloaded automatically.
 
-Finally, when using this UI on a laptop, it would be nice to filter the list of categories by typing instead of having to scroll down a list. This won't be a problem for categories but it will
+Finally, when using this UI on a laptop, it would be nice to filter the list of categories by typing instead of having to scroll down a list. This won't be a problem for categories but it will be on desktop.
 
 ## 20220707
 
