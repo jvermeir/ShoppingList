@@ -1,6 +1,6 @@
 import {Box, Container, Grid, Typography,} from '@mui/material';
 import {Navigation} from "../components/navigation/navigation";
-import BasicCard from "../components/FancyCard/BasicCard";
+import BasicCard from "../components/navigation/basic-card";
 import * as React from "react";
 
 // TODO: test

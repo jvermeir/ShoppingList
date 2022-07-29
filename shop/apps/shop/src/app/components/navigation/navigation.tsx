@@ -45,8 +45,6 @@ export const Navigation = () => {
     } else {
       navigate("/", {replace: true});
     }
-    // const x:RouteDefinitions = routes;
-    // x.???
   }
 
   return (
@@ -96,6 +94,9 @@ export const Navigation = () => {
               transformOrigin={{horizontal: 'right', vertical: 'top'}}
               anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             >
+              <MuiMenuItem selected={true} onClick={() => handleNavigate("home")}>
+                Home
+              </MuiMenuItem>
               <MuiMenuItem selected={true} onClick={() => handleNavigate("categories")}>
                 Categories
               </MuiMenuItem>

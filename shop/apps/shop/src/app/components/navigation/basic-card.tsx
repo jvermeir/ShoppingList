@@ -28,7 +28,7 @@ export default function BasicCard(
       </Box>
       <CardMedia
         component="img"
-        sx={{width: 151}}
+        sx={{width: 151, height: 92}}
         image={image}
         alt={text}
       />
