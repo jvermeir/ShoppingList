@@ -2,11 +2,47 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20220731
+
+I managed to move the breakpoint controlled table cell properties to a component named `StyledTableCell`. This shrinks padding on the smallest displays. 
+It was harder to find than I would have thought, but this [breakpoints doc](https://mui.com/material-ui/customization/breakpoints/) was really helpful. 
+Up until the first example, i.e, because after the text describes custom breakpoints. I've applied styling to a specific class `TableCell`: `const StyledTableCell = styled(TableCell)( ...`
+
+```
+import {styled, TableCell} from "@mui/material";
+import theme from "../../theme";
+
+const StyledTableCell = styled(TableCell)({
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: 0,
+    paddingBottom: 0
+  },
+  [theme.breakpoints.up('sm')]: {
+    paddingTop: "1rem",
+    paddingBottom: "1rem"
+  },
+})
+```
+
+This applies 0 vertical padding on small displays. `theme` is defined like this (it isn't changed from earlier versions):
+
+```
+  const theme = createTheme();
+  const responsiveTheme = responsiveFontSizes(theme);
+```
+
+and `StyledTableCell` is now available like this: 
+
+```
+  <StyledTableCell>{category.name}</StyledTableCell>
+```
+
+
 ## 20220726
 
 Getting this thing to work well on smaller displays reads like a summary of all the reasons I dislike UIs so much. I wanted to make things smaller, or at least, more compact, 
 on small displays. This should be possible with breakpoints and media queries, and it actually is. But making something that is usable turned out to be more difficult. 
-I'm still struggling with finding out where space is being added around components. One easy and useful trick is to just hide non essential data:
+I'm still struggling with finding out where space is being added around components. One easy and useful trick is to just hide non-essential data:
 
 ```
   <DialogTitle sx={{display: {xs: 'none', md: 'block'}}} id="form-dialog-title">Add category {name}</DialogTitle>
@@ -24,13 +60,12 @@ by setting the top margin to 0 in the DialogContent section:
 Then there's the smaller margins for the list of categories or ingredients. I wanted a more compact display on small devices and ended up with code like this:
 
 ```
-      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{category.name}</TableCell>
-      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingRight: {xs:0, sm:2}, paddingBottom: {xs:0}}}>{category.shopOrder}</TableCell>
-      <TableCell sx={{padding: {xs:0, sm:2}}}>
+  <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{category.name}</TableCell>
+  <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingRight: {xs:0, sm:2}, paddingBottom: {xs:0}}}>{category.shopOrder}</TableCell>
+  <TableCell sx={{padding: {xs:0, sm:2}}}>
 ```
 
 Note all the duplication in the `TableCell`s, that can't be right either.  
-
 
 On a totally different subject, when committing these changes, git tells me it's going to do this:
 
@@ -58,11 +93,11 @@ I wanted to have a menu in the top bar of the application. To implement this, I 
 and then I defined the main routing options like this in `App`:
 
 ```
-    <Routes>
-      <Route path="/" element={<HelloPage />} />
-      <Route path="/categories" element={<CategoriesPage />} />
-      <Route path="/ingredients" element={<IngredientsPage />} />
-    </Routes>
+  <Routes>
+    <Route path="/" element={<HelloPage />} />
+    <Route path="/categories" element={<CategoriesPage />} />
+    <Route path="/ingredients" element={<IngredientsPage />} />
+  </Routes>
 ```
 
 So now we can navigate to categories and ingredients, but still need a menu with options to click on. I've made this with a `Navigation` component. Navigation defines
@@ -130,9 +165,9 @@ page will respond to changes in screen size. Huray!
 The `bleeding edge` part of my doubts comes from this fragment in package.json:
 
 ```
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
-    "@mui/material": "latest"
+  "@emotion/react": "latest",
+  "@emotion/styled": "latest",
+  "@mui/material": "latest"
 ```
 
 This is equivalent to depending on snapshot in the Java world, which would definitely raise some eyebrows. I'm hoping to improve
@@ -377,32 +412,32 @@ saying `For now, I gave up on foreign keys and will just put the logic in Kotlin
 One solution would look like this:
 
 ```
-      val category = categoryDb.findById(it.categoryId)
-      if (category == null)
-        throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found")
+  val category = categoryDb.findById(it.categoryId)
+  if (category == null)
+    throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found")
 ```
 
 Classic, works just fine. But how can I do this in a more Kotlinish way? I thought something like this should work:
 
 ```
-      categoryDb.findById(it.categoryId).orElseThrow(
-          ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found"))
+  categoryDb.findById(it.categoryId).orElseThrow(
+      ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found"))
 ```
 
 If findById succeeds we know It's ok to continue, if not we give up by throwing an exception. Now the compiler complains that I should implement a Supplier. Here's my next attempts:
 
 ```
-      categoryDb
-        .findById(it.categoryId)
-        .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+  categoryDb
+    .findById(it.categoryId)
+    .orElseThrow(Supplier { throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
 ```
 
 This is ok, but can be improved (as suggested by IntelliJ), because the `Supplier` classname is redundant. The final version looks like this:
 
 ```
-      categoryDb
-        .findById(it.categoryId)
-        .orElseThrow({ throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
+   categoryDb
+     .findById(it.categoryId)
+     .orElseThrow({ throw ResourceNotFoundException("category with id ${it.categoryId} or name ${it.categoryName} not found") })
 ```
 
 
@@ -527,17 +562,17 @@ the aspect thingy to handle exceptions, but after trying it out it does make sen
 One aspect where Java and Spring come close to the Kotlin implementation is illustrated by the service implementation. 
 
 ```
-    @Override
-    public PostDto getPostById(long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
-        return mapToDTO(post);
-    }
+  @Override
+  public PostDto getPostById(long id) {
+      Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
+      return mapToDTO(post);
+  }
 ```    
 becomes 
 
 ```
-    fun getCategoryByName(name: String):Category =
-        db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
+  fun getCategoryByName(name: String):Category =
+      db.findByName(name) ?: throw ResourceNotFoundException("Category '${name}' not found")
 ```
 in Kotlin. If the record isn't found in the database (`db.findByName(name)` returns null), the `?:` operator makes sure the exception is thrown. 
 Much like `.orElseThrow(()...` in the Java version. 

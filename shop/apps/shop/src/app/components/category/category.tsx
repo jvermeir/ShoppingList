@@ -1,26 +1,32 @@
-import {IconButton, TableCell, TableRow} from "@mui/material";
-import {Delete} from "react-feather";
-import {CategoryData} from "../../pages/categories";
-import {EditCategory} from "./edit-category";
+import { IconButton, TableRow } from '@mui/material';
+import { Delete } from 'react-feather';
+import { CategoryData } from '../../pages/categories';
+import { EditCategory } from './edit-category';
+import StyledTableCell from '../styled-components/SyledTableCell';
 
-export const Category = ({category, onCompleted}: { category: CategoryData, onCompleted: () => void }) => {
-
-  const  handleDelete = () => {
+export const Category = ({
+  category,
+  onCompleted,
+}: {
+  category: CategoryData;
+  onCompleted: () => void;
+}) => {
+  const handleDelete = () => {
     fetch(`/api/category/${category.id}`, {
       method: 'DELETE',
-    }).then(_ => onCompleted && onCompleted())
-  }
+    }).then((_) => onCompleted && onCompleted());
+  };
 
   return (
     <TableRow key={category.id} hover={true}>
-      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingBottom: {xs:0, sm:2}}}>{category.name}</TableCell>
-      <TableCell sx={{paddingTop: {xs:0, sm:2}, paddingRight: {xs:0, sm:2}, paddingBottom: {xs:0}}}>{category.shopOrder}</TableCell>
-      <TableCell sx={{padding: {xs:0, sm:2}}}>
-        <EditCategory category={category} onCompleted={onCompleted}/>
+      <StyledTableCell>{category.name}</StyledTableCell>
+      <StyledTableCell>{category.shopOrder}</StyledTableCell>
+      <StyledTableCell>
+        <EditCategory category={category} onCompleted={onCompleted} />
         <IconButton aria-label="delete" onClick={handleDelete}>
-          <Delete size="18"/>
+          <Delete size="18" />
         </IconButton>
-      </TableCell>
+      </StyledTableCell>
     </TableRow>
   );
-}
+};

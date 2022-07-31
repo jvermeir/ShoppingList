@@ -8,19 +8,18 @@ import {
   DialogTitle,
   IconButton,
   Snackbar,
-  TextField
-} from "@mui/material";
-import {Edit} from "react-feather";
-import {CategoryData} from "../../pages/categories";
-import React, {useState} from "react";
-import {HttpError} from "../error/error";
-import {blue} from "@mui/material/colors";
+  TextField,
+} from '@mui/material';
+import { Edit } from 'react-feather';
+import { CategoryData } from '../../pages/categories';
+import React, { useState } from 'react';
+import { HttpError } from '../error/error';
 
 // TODO: fix aria thingies
 
 export interface EditCategoryProps {
-  category: CategoryData,
-  onCompleted: () => void
+  category: CategoryData;
+  onCompleted: () => void;
 }
 
 export interface EditCategoryRequest {
@@ -29,10 +28,10 @@ export interface EditCategoryRequest {
   shopOrder: number;
 }
 
-export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
-  const [id, setId] = useState<string>(category.id || '')
-  const [name, setName] = useState<string>(category.name || '')
-  const [shopOrder, setShopOrder] = useState<number>(category.shopOrder || 0)
+export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
+  const [id, setId] = useState<string>(category.id || '');
+  const [name, setName] = useState<string>(category.name || '');
+  const [shopOrder, setShopOrder] = useState<number>(category.shopOrder || 0);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
@@ -41,35 +40,38 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
     return fetch('/api/category', {
       method: 'POST',
       headers: {
-        "Content-type": "application/json; charset=UTF-8"
+        'Content-type': 'application/json; charset=UTF-8',
       },
       body: JSON.stringify(req),
     });
   };
 
   const handleError = (error: HttpError) =>
-    error.code === 409 ? setError('Duplicate category name') : setError(`${error.code}: ${error.message}`);
+    error.code === 409
+      ? setError('Duplicate category name')
+      : setError(`${error.code}: ${error.message}`);
 
   const checkResponse = (response: Response) => {
     if (!response.ok) {
       throw new HttpError(response.status, response.statusText);
     }
-  }
+  };
 
   const cleanUp = () => {
     setOpen(false);
-  }
+  };
 
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({id, name, shopOrder})
-      .then((response) => checkResponse(response))      .then(() => cleanUp())
+    submitApiRequest({ id, name, shopOrder })
+      .then((response) => checkResponse(response))
+      .then(() => cleanUp())
       .then(() => cleanUp())
       .then(() => onCompleted())
       .catch(handleError)
       .finally(() => setShowConfirmation(true));
-  }
+  };
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName((event.target as HTMLInputElement).value);
@@ -87,7 +89,7 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
   return (
     <>
       <IconButton aria-label="edit" onClick={() => setOpen(true)}>
-        <Edit size="18"/>
+        <Edit size="18" />
       </IconButton>
 
       <Dialog
@@ -95,11 +97,16 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        sx={{mb: {xs: -3, md: 1}, mt: {xs: 1}}}
+        sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 1 } }}
       >
-        <DialogTitle sx={{ display: { xs: 'none', md: 'block' } }} id="form-dialog-title">Edit category {name}</DialogTitle>
-        <DialogContent sx={{mb: {xs: -3, md: 1}, mt: {xs: 0}}}>
-          <Box sx={{mb: {xs: 0, md: 1}}}>
+        <DialogTitle
+          sx={{ display: { xs: 'none', md: 'block' } }}
+          id="form-dialog-title"
+        >
+          Edit category {name}
+        </DialogTitle>
+        <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
+          <Box sx={{ mb: { xs: 0, md: 1 } }}>
             <TextField
               autoFocus
               margin="dense"
@@ -125,10 +132,12 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
           </Box>
         </DialogContent>
         <DialogActions>
-            <>
-              <Button onClick={handleCloseEditDialog}>Close</Button>
-              <Button variant="contained" onClick={handleSave}>Save</Button>
-            </>
+          <>
+            <Button onClick={handleCloseEditDialog}>Close</Button>
+            <Button variant="contained" onClick={handleSave}>
+              Save
+            </Button>
+          </>
         </DialogActions>
       </Dialog>
 
@@ -137,8 +146,10 @@ export const EditCategory = ({category, onCompleted}: EditCategoryProps) => {
         autoHideDuration={4000}
         onClose={() => setShowConfirmation(false)}
       >
-        <Alert severity={error ? 'error' : 'success'}>{error ? error : 'Done'}</Alert>
+        <Alert severity={error ? 'error' : 'success'}>
+          {error ? error : 'Done'}
+        </Alert>
       </Snackbar>
     </>
   );
-}
+};

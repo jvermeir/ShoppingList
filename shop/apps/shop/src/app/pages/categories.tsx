@@ -10,14 +10,14 @@ import {
   Typography,
 } from '@mui/material';
 
-import {Loading} from '../components/loading/loading';
-import {useEffect, useState} from "react";
-import {Category} from "../components/category/category";
-import {AddCategory} from "../components/category/add-category";
+import { Loading } from '../components/loading/loading';
+import { useEffect, useState } from 'react';
+import { Category } from '../components/category/category';
+import { AddCategory } from '../components/category/add-category';
 
 // TODO????
-import fetch from "cross-fetch";
-import {Navigation} from "../components/navigation/navigation";
+import fetch from 'cross-fetch';
+import { Navigation } from '../components/navigation/navigation';
 
 // TODO: test
 
@@ -37,8 +37,8 @@ export const CategoriesPage = () => {
 
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(categories => {
-        setCategories(categories)
+      .then((categories) => {
+        setCategories(categories);
       })
       .catch(setError)
       .finally(() => setLoading(false));
@@ -54,9 +54,9 @@ export const CategoriesPage = () => {
 
   return (
     <>
-      <Navigation/>
+      <Navigation />
       <Container>
-        {!error && loading && <Loading/>}
+        {!error && loading && <Loading />}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
             Error while loading categories.
@@ -66,12 +66,10 @@ export const CategoriesPage = () => {
           <>
             <Typography color="textPrimary" variant="h2" mt={6} mb={2}>
               Categories
-              <AddCategory onCompleted={refetch}/>
+              <AddCategory onCompleted={refetch} />
             </Typography>
             {(!categories || categories?.length === 0) && (
-              <Typography color="textPrimary">
-                No categories, yet.
-              </Typography>
+              <Typography color="textPrimary">No categories, yet.</Typography>
             )}
             {categories && categories.length > 0 && (
               <TableContainer component={Paper}>
@@ -84,19 +82,28 @@ export const CategoriesPage = () => {
                       <TableCell>
                         <b>Shop order</b>
                       </TableCell>
-                      <TableCell/>
+                      <TableCell />
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {categories
                       .sort((a, b) => {
-                        if (a?.shopOrder === b?.shopOrder || !a?.shopOrder || !b?.shopOrder) return 0;
+                        if (
+                          a?.shopOrder === b?.shopOrder ||
+                          !a?.shopOrder ||
+                          !b?.shopOrder
+                        )
+                          return 0;
                         return a.shopOrder < b.shopOrder ? -1 : 1;
                       })
-                      .filter(category => !!category)
-                      .map((category) =>
-                        <Category key={category.id} category={category} onCompleted={refetch}/>
-                      )}
+                      .filter((category) => !!category)
+                      .map((category) => (
+                        <Category
+                          key={category.id}
+                          category={category}
+                          onCompleted={refetch}
+                        />
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>

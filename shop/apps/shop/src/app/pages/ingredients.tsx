@@ -10,19 +10,17 @@ import {
   Typography,
 } from '@mui/material';
 
-import {Loading} from '../components/loading/loading';
-import {useEffect, useState} from "react";
-import {Ingredient} from "../components/ingredient/ingredient";
-import {AddIngredient} from "../components/ingredient/add-ingredient";
+import { Loading } from '../components/loading/loading';
+import { useEffect, useState } from 'react';
+import { Ingredient } from '../components/ingredient/ingredient';
+import { AddIngredient } from '../components/ingredient/add-ingredient';
 
 // TODO????
-import fetch from "cross-fetch";
-import {CategoryData} from "./categories";
-import {Navigation} from "../components/navigation/navigation";
+import fetch from 'cross-fetch';
+import { CategoryData } from './categories';
+import { Navigation } from '../components/navigation/navigation';
 
 // TODO: test
-// TODO: remove 'add ingredients' text on narrow displays
-// TODO: remove some vertical space in add/edit dialogs on mobile
 
 export interface IngredientData {
   id: string;
@@ -42,8 +40,8 @@ export const IngredientsPage = () => {
 
     fetch('/api/ingredients-view')
       .then((_) => _.json())
-      .then(ingredients => {
-        setIngredients(ingredients)
+      .then((ingredients) => {
+        setIngredients(ingredients);
       })
       .catch(setError)
       .finally(() => setLoading(false));
@@ -54,8 +52,8 @@ export const IngredientsPage = () => {
 
     fetch('/api/categories')
       .then((_) => _.json())
-      .then(categories => {
-        setCategories(categories)
+      .then((categories) => {
+        setCategories(categories);
       })
       .catch(setError)
       .finally(() => setLoading(false));
@@ -72,9 +70,9 @@ export const IngredientsPage = () => {
 
   return (
     <>
-      <Navigation/>
+      <Navigation />
       <Container>
-        {!error && loading && <Loading/>}
+        {!error && loading && <Loading />}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
             Error while loading ingredients.
@@ -84,12 +82,10 @@ export const IngredientsPage = () => {
           <>
             <Typography color="textPrimary" variant="h2" mt={6} mb={2}>
               Ingredients
-              <AddIngredient onCompleted={refetch} categories={categories}/>
+              <AddIngredient onCompleted={refetch} categories={categories} />
             </Typography>
             {(!ingredients || ingredients?.length === 0) && (
-              <Typography color="textPrimary">
-                No ingredients, yet.
-              </Typography>
+              <Typography color="textPrimary">No ingredients, yet.</Typography>
             )}
             {ingredients && ingredients.length > 0 && (
               <TableContainer component={Paper}>
@@ -102,20 +98,25 @@ export const IngredientsPage = () => {
                       <TableCell>
                         <b>Category</b>
                       </TableCell>
-                      <TableCell/>
+                      <TableCell />
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {ingredients
                       .sort((a, b) => {
-                        if (a?.name === b?.name || !a?.name || !b?.name) return 0;
+                        if (a?.name === b?.name || !a?.name || !b?.name)
+                          return 0;
                         return a.name < b.name ? -1 : 1;
                       })
-                      .filter(ingredient => !!ingredient)
-                      .map((ingredient) =>
-                        <Ingredient key={ingredient.id} ingredient={ingredient} categories={categories}
-                                    onCompleted={refetch}/>
-                      )}
+                      .filter((ingredient) => !!ingredient)
+                      .map((ingredient) => (
+                        <Ingredient
+                          key={ingredient.id}
+                          ingredient={ingredient}
+                          categories={categories}
+                          onCompleted={refetch}
+                        />
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
