@@ -2,7 +2,7 @@ import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
 import { CategoryData } from '../../pages/categories';
 import { EditCategory } from './edit-category';
-import StyledTableCell from '../styled-components/SyledTableCell';
+import StyledTableCell from '../styled-components/StyledTableCell';
 
 export const Category = ({
   category,

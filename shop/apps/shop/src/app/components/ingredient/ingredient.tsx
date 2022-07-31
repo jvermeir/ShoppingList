@@ -3,7 +3,7 @@ import { Delete } from 'react-feather';
 import { IngredientData } from '../../pages/ingredients';
 import { EditIngredient } from './edit-ingredient';
 import { CategoryData } from '../../pages/categories';
-import StyledTableCell from '../styled-components/SyledTableCell';
+import StyledTableCell from '../styled-components/StyledTableCell';
 
 export const Ingredient = ({
   ingredient,
