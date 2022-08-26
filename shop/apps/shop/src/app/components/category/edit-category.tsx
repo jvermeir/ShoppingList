@@ -29,7 +29,7 @@ export interface EditCategoryRequest {
 }
 
 export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
-  const [id, setId] = useState<string>(category.id || '');
+  const [id] = useState<string>(category.id || '');
   const [name, setName] = useState<string>(category.name || '');
   const [shopOrder, setShopOrder] = useState<number>(category.shopOrder || 0);
   const [open, setOpen] = useState(false);
@@ -66,7 +66,6 @@ export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
 
     submitApiRequest({ id, name, shopOrder })
       .then((response) => checkResponse(response))
-      .then(() => cleanUp())
       .then(() => cleanUp())
       .then(() => onCompleted())
       .catch(handleError)

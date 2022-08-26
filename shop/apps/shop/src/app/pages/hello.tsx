@@ -5,12 +5,6 @@ import * as React from 'react';
 
 // TODO: test
 
-export interface CategoryData {
-  id: string;
-  name: string;
-  shopOrder: number;
-}
-
 export const HelloPage = () => {
   return (
     <>

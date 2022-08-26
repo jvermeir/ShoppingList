@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +18,6 @@ export default function BasicCard({
   link: string;
   image: string;
 }) {
-  const theme = useTheme();
   const navigate = useNavigate();
 
   return (

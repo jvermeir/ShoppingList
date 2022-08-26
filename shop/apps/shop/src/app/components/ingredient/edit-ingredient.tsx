@@ -34,7 +34,7 @@ export const EditIngredient = ({
   categories,
   onCompleted,
 }: EditIngredientProps) => {
-  const [id, setId] = useState<string>(ingredient.id || '');
+  const [id] = useState<string>(ingredient.id || '');
   const [name, setName] = useState<string>(ingredient.name || '');
   const [categoryId, setCategoryId] = useState<string>(
     ingredient.categoryId || ''
