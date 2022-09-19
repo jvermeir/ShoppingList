@@ -1,0 +1,99 @@
+[
+  {
+    "table": "menus",
+    "columns": [
+      {
+        "name": "first_day",
+        "type": "DATE"
+      }
+    ]
+  },
+  {
+    "table": "menu_items",
+    "columns": [
+      {
+        "name": "theDay",
+        "type": "DATE"
+      },
+      {
+        "name": "recipe_id",
+        "ref": "recipes"
+      }
+    ]
+  },
+  {
+    "table": "categories",
+    "columns": [
+      {
+        "name": "name",
+        "type": "VARCHAR",
+        "constraint": "NOT NULL UNIQUE"
+      },
+      {
+        "name": "shop_order",
+        "type": "NUMBER(10)",
+        "constraint": "NOT NULL"
+      }
+    ]
+  },
+  {
+    "table": "ingredients",
+    "columns": [
+      {
+        "name": "name",
+        "type": "VARCHAR",
+        "constraint": "NOT NULL"
+      },
+      {
+        "name": "category_id",
+        "ref": "categories"
+      }
+    ]
+  },
+  {
+    "table": "recipes",
+    "columns": [
+      {
+        "name": "name",
+        "type": "VARCHAR",
+        "constraint": "NOT NULL"
+      },
+      {
+        "name": "favorite",
+        "type": "BOOLEAN",
+        "constraint": "NOT NULL"
+      }
+    ]
+  },
+  {
+    "table": "recipe_ingredients",
+    "columns": [
+      {
+        "name": "id",
+        "key": true
+      },
+      {
+        "name": "recipe_id",
+        "ref": "recipes"
+      },
+      {
+        "name": "ingredient_id",
+        "ref": "ingredients"
+      }
+    ]
+  },
+  {
+    "table": "messages",
+    "columns": [
+      {
+        "name": "text",
+        "type": "VARCHAR",
+        "constraint": "NOT NULL"
+      },
+      {
+        "name": "first_day",
+        "type": "DATE"
+      }
+    ]
+  }
+]
