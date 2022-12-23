@@ -12,3 +12,4 @@ ShoppingList.iml
 .scala_dependencies
 *jar
 node_modules
+__pycache__
