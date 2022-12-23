@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "outDir": "/tmp",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",

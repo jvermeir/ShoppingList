@@ -2,6 +2,19 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+
+
+## 20220920
+
+Add a library using a generator
+
+```
+npm install @nrwl/nx-plugin@14.0.3
+nx generate @nrwl/nx-plugin:generator my-generator --project=my-plugin
+nx g @nrwl/nx-plugin:plugin my-plugin
+nx generate @shop/my-plugin:my-generator mylib
+```
+
 ## 20220731
 
 I managed to move the breakpoint controlled table cell properties to a component named `StyledTableCell`. This shrinks padding on the smallest displays. 
