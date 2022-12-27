@@ -1,4 +1,4 @@
-# Create tables and test queries
+# Create tables and test queries for DynamoDB experiments
 
 ## Create table
 
