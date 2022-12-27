@@ -32,9 +32,7 @@ dependencies {
   testImplementation("io.kotest:kotest-framework-engine:5.3.0")
   testImplementation ("io.kotest:kotest-assertions-core:5.3.0")
   testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-  implementation("aws.sdk.kotlin:s3:0.17.5-beta")
   testImplementation ("com.ninja-squad:springmockk:3.1.1")
-  testImplementation(kotlin("test"))
 }
 
 tasks.withType<KotlinCompile> {
@@ -53,5 +51,3 @@ tasks.withType<Test> {
   }
   maxParallelForks = 1
 }
-
-application.mainClass.set("nl.vermeir.shopapi.DynamoTest")
