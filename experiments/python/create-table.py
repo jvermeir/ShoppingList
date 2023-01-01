@@ -2,23 +2,19 @@
 # Re-create table for use in tests
 #
 
-import boto3
+from util import log, resource
 
-from util import log
-
-dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000/')
-# dynamodb = boto3.resource('dynamodb')
 table_name = 'shop'
 
 
 def delete_table():
     log(f'Deleting {table_name}')
     try:
-        table = dynamodb.Table(table_name)
+        table = resource.Table(table_name)
         table.delete()
         table.wait_until_not_exists()
     except:
-        log(f'assuming  {table_name} was deleted')
+        log(f'assuming {table_name} was deleted')
 
 
 def create_table():
@@ -28,7 +24,9 @@ def create_table():
           {'AttributeName': 'PK', 'AttributeType': 'S'},
           {'AttributeName': 'SK', 'AttributeType': 'S'},
           {'AttributeName': 'GSI1PK', 'AttributeType': 'S'},
-          {'AttributeName': 'GSI1SK', 'AttributeType': 'S'}
+          {'AttributeName': 'GSI1SK', 'AttributeType': 'S'},
+          {'AttributeName': 'GSI2PK', 'AttributeType': 'S'},
+          {'AttributeName': 'GSI2SK', 'AttributeType': 'S'}
         ],
         'KeySchema': [
           {'AttributeName': 'PK', 'KeyType': 'HASH'},
@@ -42,11 +40,19 @@ def create_table():
               {'AttributeName': 'GSI1SK', 'KeyType': 'RANGE'}
             ],
             'Projection': {'ProjectionType': 'ALL'}
+          },
+          {
+            'IndexName': 'GSI2',
+            'KeySchema': [
+              {'AttributeName': 'GSI2PK', 'KeyType': 'HASH'},
+              {'AttributeName': 'GSI2SK', 'KeyType': 'RANGE'}
+            ],
+            'Projection': {'ProjectionType': 'ALL'}
           }
         ],
         'BillingMode': 'PAY_PER_REQUEST',
     }
-    table = dynamodb.create_table(**params)
+    table = resource.create_table(**params)
     log(f"Creating {table_name}")
     table.wait_until_exists()
     return table
