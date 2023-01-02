@@ -190,4 +190,11 @@ What I don't like about this approach is that it's based on convention. PK needs
   'name': {'S': 'tomatoes'},
 ```
 
-So, `tomatoes` in name is part of the PK ans SK values.  
+So, `tomatoes` in name is part of the PK ans SK values.
+
+## Performance test
+
+I had a test named `insert-a-lot-of-data.py` which inserts a large number of categories and ingredients and then 
+tries to retrieve one by PK/SK. The idea was to find out if this is fast. The test is not very useful, because 
+Dynamo will not allow queries without using a key. The test was iffy anyway because the real infrastructure for Dynamo 
+is not comparable to a local Docker based setup.

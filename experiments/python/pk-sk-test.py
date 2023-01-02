@@ -1,5 +1,6 @@
 #
 # See what happens if we try to insert records with the same PK but a different SK.
+# This works because PK is a Partition key. It's part of the primary key, together with SK.
 #
 
 from util import log, resource, client, logJson

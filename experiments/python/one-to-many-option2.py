@@ -1,6 +1,9 @@
 #
 # Insert some test data
-# Then query by PK
+# Then query by PK.
+# Using this setup we can't query all category data in one go by ingredient name.
+# We can query the secondary record by ingredient name, but then we need a second query to get the category data.
+# The examle in one-to-many-option1.py does allow queries by ingredient name.
 #
 
 from util import log, client, logJson

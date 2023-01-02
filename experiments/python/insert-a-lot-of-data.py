@@ -4,6 +4,10 @@
 # purpose of this test they get a sequence number. The test will create thousands, so we can
 # try to retrieve a single category or ingredient from a large set.
 #
+# The test is not very useful, because
+# Dynamo will not allow queries without using a key. The test was iffy anyway because the real infrastructure for Dynamo
+# is not comparable to a local Docker based setup.
+#
 
 from util import log, resource, client, logJson
 
@@ -16,20 +20,6 @@ def log_progress():
     count += 1
     if count % 1000 == 0:
         log('count: {i}'.format(i=count))
-
-
-def test(id):
-    log(id)
-    table = resource.Table(table_name)
-    result = table.put_item(
-        TableName=table_name,
-        Item={
-            'PK': 'category#{id}'.format(id=id),
-            'SK': 'category#{id}x'.format(id=id)
-        },
-        ConditionExpression='attribute_not_exists(PK)'
-    )
-    logJson(str(result))
 
 
 def insert_data(number_of_categories, number_of_ingredients):
@@ -46,8 +36,7 @@ def insert_data(number_of_categories, number_of_ingredients):
                     "category_id": category_id,
                     "name": "category{category_id}".format(category_id=category_id),
                     "shopOrder": category_id
-                },
-                ConditionExpression='attribute_not_exists(PK)'
+                }
             )
 
             for ingredient in range(0, number_of_ingredients):
@@ -70,13 +59,12 @@ def query(id):
         TableName=table_name,
         KeyConditionExpression="#PK = :PK",
         ExpressionAttributeNames={'#PK': 'PK'},
-        ExpressionAttributeValues={':PK': {'S': 'category#{id}'.format(id=id)}}
+        ExpressionAttributeValues={':PK': {'S': 'CATEGORY#{id}'.format(id=id)}}
     )
     logJson(str(items['Items']))
 
+
 if __name__ == '__main__':
-    test('1')
-    query('1')
-    test('2')
-    query('2')
     # insert_data(200, 500)
+    query('1')
+    query('2')
