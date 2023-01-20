@@ -11,12 +11,63 @@ import aws.smithy.kotlin.runtime.http.Url
 import aws.smithy.kotlin.runtime.util.net.Host
 
 suspend fun main(args: Array<String>) {
+//        dropTable("shop", ddb)
     dynamoDbClient.use { ddb ->
-        describeTable("shop", ddb)
-        dropTable("shop", ddb)
-        createTable("shop", "key", ddb)
+//        createTable("shop", "key", ddb)
+//        describeTable("shop", ddb)
+//        scanTable("shop", ddb)
+//        listAllTables(ddb)
     }
+    scanShop()
 }
+
+suspend fun listAllTables(ddb: DynamoDbClient) {
+    println("listAllTables")
+    val response = ddb.listTables(ListTablesRequest {})
+    response.tableNames?.forEach { tableName ->
+        println("Table name is $tableName")
+    }
+    println("listAllTables - done")
+}
+
+suspend fun scanShop() {
+
+    println("scan shop")
+    val request = ScanRequest {
+        tableName = "shop"
+    }
+
+    DynamoDbClient {
+        region = "eu-central-1"
+        endpointUrl = Url(
+            Protocol.HTTP, Host.parse("localhost"), 8000
+        )
+    }.use { ddb ->
+        val response = ddb.scan(request)
+        response.items?.forEach { item ->
+            println("Item is $item")
+        }
+    }
+    println("scan shop - done")
+}
+
+suspend fun scanTable(tableNameVal: String, ddb: DynamoDbClient) {
+    println("scanTable: $tableNameVal")
+    val request = ScanRequest {
+        tableName = tableNameVal
+    }
+
+
+    val response = ddb.scan(request)
+    response.items?.forEach { item ->
+        item.keys.forEach { key ->
+            println("The key name is $key\n")
+            println("The value is ${item[key]}")
+        }
+    }
+    println("scanTable - done")
+}
+
 
 private const val theRegion = "eu-central-1"
 private val dynamoDbClient = DynamoDbClient {
@@ -48,9 +99,9 @@ suspend fun describeTable(tableNameParam: String, ddb: DynamoDbClient) {
     val describeRequest = DescribeTableRequest { tableName = tableNameParam }
     try {
         val response = ddb.describeTable(describeRequest)
-        println("$tableNameParam exists")
         println(response)
     } catch (e: ResourceNotFoundException) {
+        println(e)
         println("$tableNameParam not found")
     }
 }

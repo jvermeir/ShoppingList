@@ -52,6 +52,7 @@ def create_table():
         ],
         'BillingMode': 'PAY_PER_REQUEST',
     }
+
     table = resource.create_table(**params)
     log(f"Creating {table_name}")
     table.wait_until_exists()

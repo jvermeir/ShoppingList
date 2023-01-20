@@ -10,7 +10,7 @@ def logJson(s):
     parsed = json.loads(s)
     log(json.dumps(parsed, indent=4))
 
-client = boto3.client('dynamodb', endpoint_url='http://localhost:8000/')
-resource = boto3.resource('dynamodb', endpoint_url='http://localhost:8000/')
+client = boto3.client('dynamodb', endpoint_url='http://localhost:8000/', region_name='eu-central-1')
+resource = boto3.resource('dynamodb', endpoint_url='http://localhost:8000/', region_name='eu-central-1')
 # resource = boto3.resource('dynamodb')
 # client = boto3.client('dynamodb')
