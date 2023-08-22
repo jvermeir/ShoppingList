@@ -1,42 +1,66 @@
 package com.example.routes
 
-import com.example.models.orderStorage
+import com.example.models.*
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.listOrdersRoute() {
-    get("/order") {
-        if (orderStorage.isNotEmpty()) {
-            call.respond(orderStorage)
+fun Route.orderRoute(orderStorage: Store<Order, OrderItem>) {
+    route("/order") {
+        get {
+            if (orderStorage.isNotEmpty()) {
+                call.respond(orderStorage.list())
+            }
         }
-    }
-}
+        get("{id?}") {
+            println("getOrderRoute()")
 
-fun Route.getOrderRoute() {
-    get("/order/{id?}") {
-        println("getOrderRoute()")
+            val id = call.parameters["id"] ?: return@get call.respondText(
+                "Bad Request",
+                status = HttpStatusCode.BadRequest
+            )
+            println("id: $id")
+            val order = orderStorage.find(id) ?: return@get call.respondText(
+                "Not Found",
+                status = HttpStatusCode.NotFound
+            )
+            println("order: $order")
+            call.respond(order)
+        }
+        get("{id?}/total") {
+            val id = call.parameters["id"] ?: return@get call.respondText(
+                "Bad Request",
+                status = HttpStatusCode.BadRequest
+            )
+            val order = orderStorage.find(id) ?: return@get call.respondText(
+                "Not Found",
+                status = HttpStatusCode.NotFound
+            )
+            val total = order.contents.sumOf { it.price * it.amount }
+            call.respond(total)
+        }
+        post {
+            val order = call.receive<Order>()
+            orderStorage.insert(order)
+            println("order: $order stored")
+            call.respondText("Order stored correctly", status = HttpStatusCode.Created)
+        }
+        put {
+            val order = call.receive<Order>()
+            orderStorage.update(order)
+            println("order: $order stored")
+            call.respondText("Order updated correctly", status = HttpStatusCode.OK)
+        }
+        delete("{id?}") {
+            val id = call.parameters["id"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
+            if (orderStorage.delete(id)) {
+                call.respondText("Order removed correctly", status = HttpStatusCode.Accepted)
+            } else {
+                call.respondText("Not Found", status = HttpStatusCode.NotFound)
+            }
+        }
 
-        val id = call.parameters["id"] ?: return@get call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
-        println("id: $id")
-        val order = orderStorage.find { it.number == id } ?: return@get call.respondText(
-            "Not Found",
-            status = HttpStatusCode.NotFound
-        )
-        println("order: $order")
-        call.respond(order)
-    }
-}
-
-fun Route.totalizeOrderRoute() {
-    get("/order/{id?}/total") {
-        val id = call.parameters["id"] ?: return@get call.respondText("Bad Request", status = HttpStatusCode.BadRequest)
-        val order = orderStorage.find { it.number == id } ?: return@get call.respondText(
-            "Not Found",
-            status = HttpStatusCode.NotFound
-        )
-        val total = order.contents.sumOf { it.price * it.amount }
-        call.respond(total)
     }
 }

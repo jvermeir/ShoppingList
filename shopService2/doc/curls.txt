@@ -1,0 +1,22 @@
+curl -X POST --location "http://127.0.0.1:8080/customer" \
+ -H "Content-Type: application/json" \
+ -d "{\"id\": \"300\",\"firstName\": \"Mary\", \"lastName\": \"Smith\", \"email\": \"mary.smith@company.com\"}"
+
+curl -X PUT --location "http://127.0.0.1:8080/customer" \
+ -H "Content-Type: application/json" \
+ -d "{\"id\": \"300\",\"firstName\": \"Mary\", \"lastName\": \"Smith\", \"email\": \"mary.smith@company.commm\"}" -v
+
+curl  --location "http://127.0.0.1:8080/customer"
+
+curl  --location "http://127.0.0.1:8080/customer/300"
+
+curl -X DELETE "http://127.0.0.1:8080/customer/300"
+
+-----------
+curl -X POST -v --location "http://127.0.0.1:8080/order" \
+ -H "Content-Type: application/json" \
+ -d "{\"id\":\"order1\",\"contents\":[{\"id\":\"1.1\",\"item\":\"test\",\"amount\":1,\"price\":1.1}]}"
+
+curl -v --location "http://127.0.0.1:8080/order/order1"
+
+curl -v -X DELETE "http://127.0.0.1:8080/order/order1"

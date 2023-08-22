@@ -3,56 +3,55 @@ package com.example.models
 import com.example.databaseConnectionFactory
 import kotlinx.serialization.Serializable
 import mu.KotlinLogging
-import java.sql.ResultSet
-
 
 @Serializable
 data class Customer(val id: String, val firstName: String, val lastName: String, val email: String)
 
-interface CustomerStore {
-    fun insert(customer: Customer)
-
-    fun delete(id: String): Boolean
-
-    fun update(customer: Customer): Boolean
-
-    fun find(id: String): Customer?
-
-    fun isNotEmpty(): Boolean
-
-    fun list(): List<Customer>
-}
-
-object CustomerStoreSQL : CustomerStore {
+object CustomerStoreSQL : Store<Customer, String> {
     private val logger = KotlinLogging.logger {}
 
     private val connection = databaseConnectionFactory.connect()
-    override fun insert(customer: Customer) {
-        logger.info { "insert customer: $customer" }
-        val result = connection.createStatement()
-            .execute("insert into customer (ID, FIRSTNAME, LASTNAME, EMAIL) values ('${customer.id}', '${customer.firstName}', '${customer.lastName}', '${customer.email}')")
-        logger.info { "insert customer withi id ${customer.id}: $result" }
+    override fun insert(value: Customer): Boolean {
+        logger.info { "insert customer: $value" }
+        val insertCustomerStatement = connection.prepareStatement(
+            "insert into customers (ID, FIRSTNAME, LASTNAME, EMAIL) values (?, ?, ?, ?)")
+        insertCustomerStatement.setString(1, value.id)
+        insertCustomerStatement.setString(2, value.firstName)
+        insertCustomerStatement.setString(3, value.lastName)
+        insertCustomerStatement.setString(4, value.email)
+        val result = insertCustomerStatement.executeUpdate()
+        logger.info { "insert: $result" }
+        return result == 1
     }
 
     override fun delete(id: String): Boolean {
         logger.info { "delete customer with id: $id" }
-        val result = connection.createStatement()
-            .execute("delete from customer where id = '$id'")
+        val deleteCustomerStatement = connection.prepareStatement("delete from customers where id = ?")
+        deleteCustomerStatement.setString(1, id)
+        val result = deleteCustomerStatement.executeUpdate()
         logger.info { "delete: $result" }
-        return result
+        return result == 1
     }
 
-    override fun update(customer: Customer): Boolean {
-        logger.info { "update customer: $customer" }
-        val result = connection.createStatement()
-            .execute("update customer set FIRSTNAME = '${customer.firstName}', LASTNAME = '${customer.lastName}', EMAIL = '${customer.email}' where id = '${customer.id}'")
-        logger.info { "update customer $customer.id: $result" }
-        return result
+    override fun update(value: Customer): Boolean {
+        logger.info { "update customer: $value" }
+        val updateCustomerStatement = connection.prepareStatement(
+            "update customers set FIRSTNAME = ?, LASTNAME = ?, EMAIL = ? where ID = ?"
+        )
+        updateCustomerStatement.setString(1, value.firstName)
+        updateCustomerStatement.setString(2, value.lastName)
+        updateCustomerStatement.setString(3, value.email)
+        updateCustomerStatement.setString(4, value.id)
+        val result = updateCustomerStatement.executeUpdate()
+        logger.info { "update: $result" }
+        return result == 1
     }
 
     override fun find(id: String): Customer? {
         logger.info { "find customer with id: $id" }
-        val result: ResultSet = connection.createStatement().executeQuery("select * from customer where id = '$id'")
+        val findCustomerStatement = connection.prepareStatement("select * from customers where id = ?")
+        findCustomerStatement.setString(1, id)
+        val result = findCustomerStatement.executeQuery()
         val customer = result.takeIf { it.next() }?.let {
             Customer(
                 it.getString("id"),
@@ -61,7 +60,7 @@ object CustomerStoreSQL : CustomerStore {
                 it.getString("email")
             )
         }
-        logger.info { "find customer with id: $customer" }
+        logger.info { "found customer with id: $customer" }
         return customer
     }
 
@@ -69,19 +68,23 @@ object CustomerStoreSQL : CustomerStore {
 
     override fun list(): List<Customer> {
         logger.info { "list customers" }
-        val result = connection.createStatement().executeQuery("select * from customer")
+        val customers = connection.createStatement().executeQuery("select * from customers")
         val list = mutableListOf<Customer>()
-        while (result.next()) {
+        while (customers.next()) {
             list.add(
                 Customer(
-                    result.getString("id"),
-                    result.getString("firstName"),
-                    result.getString("lastName"),
-                    result.getString("email")
+                    customers.getString("id"),
+                    customers.getString("firstName"),
+                    customers.getString("lastName"),
+                    customers.getString("email")
                 )
             )
         }
         logger.info { "found ${list.size} customers, first: ${list.first()}" }
         return list
+    }
+
+    override fun findDetails(id: String): List<String> {
+        return emptyList()
     }
 }

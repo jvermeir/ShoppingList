@@ -1,72 +1,66 @@
 package com.example
 
 import com.example.models.Customer
-import com.example.models.CustomerStore
+import com.example.models.Order
+import com.example.models.OrderItem
+import com.example.models.Store
 import com.example.routes.customerRouting
-import com.example.routes.getOrderRoute
-import com.example.routes.listOrdersRoute
-import com.example.routes.totalizeOrderRoute
+import com.example.routes.orderRoute
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-object testCustomerStore : CustomerStore {
+fun Application.module() {
+    customerStore = TestCustomerStore
+    orderStore = TestOrderStore
+
+    routing {
+        customerRouting(customerStore)
+        orderRoute(orderStore)
+    }
+
+    install(ContentNegotiation) { json() }
+}
+
+object TestCustomerStore : Store<Customer, String> {
     private val customerStorage = mutableListOf<Customer>()
     private val testCustomer = Customer("test", "test", "test", "test")
-    override fun insert(customer: Customer) {
-        println("v2")
-        customerStorage.add(customer)
-    }
+    override fun insert(value: Customer): Boolean = customerStorage.add(value)
+    override fun delete(id: String): Boolean = customerStorage.removeIf { it.id == id }
+    override fun update(value: Customer): Boolean = customerStorage.add(value)
+    override fun find(id: String): Customer = testCustomer
+    override fun findDetails(id: String): List<String> = emptyList()
+    override fun isNotEmpty(): Boolean = customerStorage.isNotEmpty()
+    override fun list(): List<Customer> = customerStorage
+}
 
-    override fun delete(id: String): Boolean {
-        println("v2")
-        return customerStorage.removeIf { it.id == id }
-    }
+object TestOrderStore : Store<Order, OrderItem> {
+    private val orderStorage = mutableListOf<Order>()
+    private val testOrder = Order("order1", listOf(OrderItem( "1.1", "test",1, 1.1)))
+    override fun insert(value: Order): Boolean = orderStorage.add(value)
+    override fun delete(id: String): Boolean = orderStorage.removeIf { it.id == id }
+    override fun update(value: Order): Boolean = orderStorage.add(value)
+    override fun find(id: String): Order? = testOrder
+    override fun findDetails(id: String): List<OrderItem> = emptyList()
 
-    override fun update(customer: Customer): Boolean {
-        println("v2")
-        customerStorage.add(customer)
-        return true
-    }
-
-    override fun find(id: String): Customer? {
-        return testCustomer
-    }
-
-    override fun isNotEmpty(): Boolean {
-        println("v2")
-        return customerStorage.isNotEmpty()
-    }
-
-    override fun list(): List<Customer> {
-        println("v2")
-        return customerStorage
-    }
+    override fun isNotEmpty(): Boolean = orderStorage.isNotEmpty()
+    override fun list(): List<Order> = orderStorage
 }
 
 class OrderRouteTests {
 
     @Test
     fun testGetOrder() = testApplication {
-        routing {
-            customerRouting(testCustomerStore)
-            listOrdersRoute()
-            getOrderRoute()
-            totalizeOrderRoute()
-        }
-
-        install(ContentNegotiation) {
-            json()
-        }
-
         val response = client.get("/order/2020-04-06-01")
         assertEquals(
-            """{"number":"2020-04-06-01","contents":[{"item":"Ham Sandwich","amount":2,"price":5.5},{"item":"Water","amount":1,"price":1.5},{"item":"Beer","amount":3,"price":2.3},{"item":"Cheesecake","amount":1,"price":3.75}]}""",
+            """{"id":"order1","contents":[{"id":"1.1","item":"test","amount":1,"price":1.1}]}""",
             response.bodyAsText()
         )
         assertEquals(HttpStatusCode.OK, response.status)
@@ -74,19 +68,9 @@ class OrderRouteTests {
 
     @Test
     fun testOrderTotal() = testApplication {
-        routing {
-            customerRouting(testCustomerStore)
-            listOrdersRoute()
-            getOrderRoute()
-            totalizeOrderRoute()
-        }
-
-        install(ContentNegotiation) {
-            json()
-        }
         val response = client.get("/order/2020-04-06-01/total")
         assertEquals(
-            """23.15""", response.bodyAsText()
+            """1.1""", response.bodyAsText()
         )
         assertEquals(HttpStatusCode.OK, response.status)
     }
@@ -96,19 +80,8 @@ class CustomerRouteTests {
 
     @Test
     fun testGetCustomer() = testApplication {
-        routing {
-            customerRouting(testCustomerStore)
-            listOrdersRoute()
-            getOrderRoute()
-            totalizeOrderRoute()
-        }
-        install(ContentNegotiation) {
-            json()
-        }
-
         val response = client.get("/customer/test")
         assertEquals("""{"id":"test","firstName":"test","lastName":"test","email":"test"}""", response.bodyAsText())
         assertEquals(HttpStatusCode.OK, response.status)
     }
-
 }

@@ -21,13 +21,17 @@ class DatabaseConnectionFactoryImpl(dbConfig: DatabaseConfig) : DatabaseFactory 
         config.username = dbConfig.user
         config.password = dbConfig.password
         config.maximumPoolSize = 10
-        config.isAutoCommit = false
+        config.isAutoCommit = true
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
 
         config.validate()
         hikariDataSource = HikariDataSource(config)
     }
-
+/*
+ public Server h2Server() throws SQLException {
+        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
+    }
+ */
     override fun close() {
         // not necessary
     }

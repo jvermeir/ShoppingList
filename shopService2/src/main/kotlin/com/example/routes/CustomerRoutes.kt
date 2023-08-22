@@ -1,17 +1,14 @@
 package com.example.routes
 
 import com.example.models.Customer
-import com.example.models.CustomerStore
+import com.example.models.Store
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.json.Json
 
-fun Route.customerRouting(customerStorage: CustomerStore) {
+fun Route.customerRouting(customerStorage: Store<Customer, String>) {
     route("/customer") {
         get {
             call.respond(customerStorage.list())
