@@ -2,6 +2,9 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20230804
+
+Update to jdk 17: `sdk install java 17.0.8-tem`
 
 
 ## 20220920
