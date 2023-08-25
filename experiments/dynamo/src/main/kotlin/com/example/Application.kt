@@ -1,14 +1,18 @@
 package com.example
 
+import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import com.example.database.DatabaseConnectionFactoryImpl
 import com.example.database.DummyDatabaseConnectionFactoryImpl
 import com.example.models.dynamo.CustomerStoreDynamo
-import com.example.models.dynamo.OrderStoreDynamo
+import com.example.models.dynamoSingleTable.OrderStoreDynamo
+import com.example.models.dynamoSingleTable.createCustomerTable
+import com.example.models.dynamoSingleTable.waitForTableReady
 import com.example.models.sql.CustomerStoreSQL
 import com.example.models.sql.OrderStoreSQL
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSerialization
 import io.ktor.server.application.*
+import kotlinx.coroutines.runBlocking
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -16,7 +20,9 @@ fun Application.module() {
     println(">>>>>>>>>>>>>>Application")
     val databaseType = environment.config.propertyOrNull("ktor.databaseType")?.getString()
     if (databaseType == "dynamo") {
-        dynamoDatabase(this.environment)
+        runBlocking {
+            dynamoDatabase()
+        }
     } else {
         h2Database(this.environment)
     }
@@ -25,14 +31,22 @@ fun Application.module() {
     configureSerialization()
 }
 
-fun dynamoDatabase(environment:ApplicationEnvironment) {
+suspend fun dynamoDatabase() {
     // TODO: fix paramlist
-    databaseConnectionFactory = DummyDatabaseConnectionFactoryImpl(DatabaseConfig("","","",""))
+    databaseConnectionFactory = DummyDatabaseConnectionFactoryImpl(DatabaseConfig("", "", "", ""))
+
+
+    val client = DynamoDbClient { region = "us-east-2" }
+    val tableName = "customer"
+
+    createCustomerTable(client, tableName)
+    client.waitForTableReady(tableName)
+
     customerStore = CustomerStoreDynamo
     orderStore = OrderStoreDynamo
 }
 
-fun h2Database(environment:ApplicationEnvironment) {
+fun h2Database(environment: ApplicationEnvironment) {
     val database = environment.config.config("ktor.database")
     val databaseConfig = DatabaseConfig(
         database.property("driverClass").getString(),

@@ -1,9 +1,9 @@
 package com.example
 
 import com.example.database.DatabaseFactory
-import com.example.models.sql.Customer
-import com.example.models.sql.Order
-import com.example.models.sql.OrderItem
+import com.example.models.Customer
+import com.example.models.Order
+import com.example.models.OrderItem
 import com.example.models.Store
 
 data class DatabaseConfig(

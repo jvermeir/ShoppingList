@@ -1,4 +1,4 @@
-package com.example.models.dynamo
+package com.example.models.dynamoSingleTable
 
 import aws.sdk.kotlin.runtime.AwsServiceException
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient

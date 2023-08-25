@@ -1,13 +1,31 @@
-package com.example.models.dynamo
+package com.example.models.dynamoSingleTable
+
+/*
+ I'd like to be able to do this
+ keyConditionExpression = "#PK = :pk and #SK = :sk"
+ but this is not supported in the Kotlin library (it works in Python)
+ 
+ The alternative in models.dynamo.Customer uses a table per concept instead of a single table 
+*/
+
 
 import aws.sdk.kotlin.services.dynamodb.DynamoDbClient
 import aws.sdk.kotlin.services.dynamodb.model.*
 import com.example.models.Customer
 import com.example.models.Store
 
+fun getCustomerPK(id: String): String {
+    return "CUSTOMER#${id}"
+}
+
+fun getCustomerSK(id: String): String {
+    return getCustomerPK(id)
+}
+
 fun customerAsAttributeValue(customer: Customer): Map<String, AttributeValue.S> {
     return mapOf(
-        "id" to AttributeValue.S(customer.id),
+        "PK" to AttributeValue.S(getCustomerPK(customer.id)),
+        "SK" to AttributeValue.S(getCustomerSK(customer.id)),
         "firstName" to AttributeValue.S(customer.firstName),
         "lastName" to AttributeValue.S(customer.lastName),
         "email" to AttributeValue.S(customer.email),
@@ -32,14 +50,18 @@ fun customerFromAttributeValues(item: Map<String, AttributeValue>): Customer {
 }
 
 suspend fun DynamoDbClient.findCustomerById(name: String, id: String): Customer {
+    val pk = getCustomerPK(id)
+    val sk = getCustomerSK(id)
     val req = QueryRequest {
         tableName = name
-        keyConditionExpression = "#ID = :id"
+        keyConditionExpression = "#PK = :pk and #SK = :sk"
         expressionAttributeNames = mapOf(
-            "#ID" to "id",
+            "#PK" to "PK",
+            "#SK" to "SK",
         )
         expressionAttributeValues = mapOf(
-            ":id" to AttributeValue.S(id),
+            ":pk" to AttributeValue.S(pk),
+            ":sk" to AttributeValue.S(sk),
         )
     }
     try {
@@ -52,7 +74,7 @@ suspend fun DynamoDbClient.findCustomerById(name: String, id: String): Customer 
 }
 
 suspend fun DynamoDbClient.delete(name: String, id: String): Customer {
-    val keyToDelete = mapOf("id" to AttributeValue.S(id))
+    val keyToDelete = mapOf("PK" to AttributeValue.S(id), "SK" to AttributeValue.S(id))
     val req = DeleteItemRequest {
         tableName = name
         key = keyToDelete
@@ -64,16 +86,15 @@ suspend fun DynamoDbClient.delete(name: String, id: String): Customer {
 }
 
 suspend fun DynamoDbClient.update(name: String, customer: Customer): Customer {
-    val keyToUpdate = mapOf("id" to AttributeValue.S(customer.id))
+    val keyToUpdate = mapOf("PK" to AttributeValue.S(customer.id), "SK" to AttributeValue.S(customer.id))
     val values = customerAsAttributeValue(customer)
     val updatedValues = mutableMapOf<String, AttributeValueUpdate>()
-    values.filter { it.key != "id" }
-        .forEach {
-            updatedValues[it.key] = AttributeValueUpdate {
-                value = it.value
-                action = AttributeAction.Put
-            }
+    values.forEach {
+        updatedValues[it.key] = AttributeValueUpdate {
+            value = it.value
+            action = AttributeAction.Put
         }
+    }
     val request = UpdateItemRequest {
         tableName = name
         key = keyToUpdate
@@ -85,7 +106,9 @@ suspend fun DynamoDbClient.update(name: String, customer: Customer): Customer {
 }
 
 suspend fun DynamoDbClient.listCustomers(name: String): List<Customer> {
-    val request = ScanRequest { tableName = name }
+    val request = ScanRequest {
+        tableName = name
+    }
     return scan(request).items?.map { customerFromAttributeValues(it) } ?: emptyList()
 }
 
@@ -95,13 +118,13 @@ object CustomerStoreDynamo : Store<Customer, String> {
 
     override suspend fun insert(value: Customer): Boolean {
         val insertedCustomer = client.saveCustomer(TABLE_NAME, value)
-        // TODO: find a better solution
+        // : find a better solution
         return insertedCustomer.id != ""
     }
 
     override suspend fun delete(id: String): Boolean {
         val deletedCustomer = client.delete(TABLE_NAME, id)
-        // TODO: find a better solution
+        // : find a better solution
         return deletedCustomer.id != ""
     }
 
@@ -123,7 +146,7 @@ object CustomerStoreDynamo : Store<Customer, String> {
 
     override suspend fun update(value: Customer): Boolean {
         val updateCustomer = client.update(TABLE_NAME, value)
-        // TODO: find a better solution
+        // : find a better solution
         return updateCustomer.id != ""
     }
 }

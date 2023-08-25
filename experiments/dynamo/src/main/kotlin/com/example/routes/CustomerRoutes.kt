@@ -1,6 +1,6 @@
 package com.example.routes
 
-import com.example.models.sql.Customer
+import com.example.models.Customer
 import com.example.models.Store
 import io.ktor.http.*
 import io.ktor.server.application.*

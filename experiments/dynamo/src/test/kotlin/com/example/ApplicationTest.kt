@@ -1,8 +1,8 @@
 package com.example
 
-import com.example.models.sql.Customer
-import com.example.models.sql.Order
-import com.example.models.sql.OrderItem
+import com.example.models.Customer
+import com.example.models.Order
+import com.example.models.OrderItem
 import com.example.models.Store
 import com.example.routes.customerRouting
 import com.example.routes.orderRoute
