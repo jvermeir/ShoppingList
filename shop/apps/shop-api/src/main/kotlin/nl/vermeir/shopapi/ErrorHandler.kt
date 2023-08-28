@@ -1,5 +1,7 @@
 package nl.vermeir.shopapi
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.context.request.WebRequest
 import java.util.*
-import kotlin.NoSuchElementException
 
 // inspired by https://www.javaguides.net/2021/10/spring-boot-exception-handling-example.html
 
@@ -19,6 +20,7 @@ class ResourceNotFoundException(message: String) : RuntimeException(message)
 
 @ControllerAdvice
 class GlobalExceptionHandler {
+  var logger: Logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
   @ExceptionHandler(ResourceNotFoundException::class)
   fun handleResourceNotFoundException(
@@ -29,8 +31,9 @@ class GlobalExceptionHandler {
       ErrorDetails(
         Date(), it,
         webRequest.getDescription(false)
-    )
+      )
     }
+    logger.info(errorDetails.toString())
     return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
   }
 
@@ -45,6 +48,7 @@ class GlobalExceptionHandler {
         webRequest.getDescription(false)
       )
     }
+    logger.info(errorDetails.toString())
     return ResponseEntity(errorDetails, HttpStatus.NOT_FOUND)
   }
 
@@ -59,6 +63,7 @@ class GlobalExceptionHandler {
         webRequest.getDescription(false)
       )
     }
+    logger.info(errorDetails.toString())
     return ResponseEntity(errorDetails, HttpStatus.CONFLICT)
   }
 
@@ -71,7 +76,7 @@ class GlobalExceptionHandler {
       Date(), exception.message!!,
       webRequest.getDescription(false)
     )
-    println(errorDetails)
+    logger.info(errorDetails.toString())
     return ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR)
   }
 }

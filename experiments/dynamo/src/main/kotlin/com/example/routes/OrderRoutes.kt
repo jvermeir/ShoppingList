@@ -1,12 +1,15 @@
 package com.example.routes
 
-import com.example.models.*
+import com.example.models.Order
+import com.example.models.OrderItem
+import com.example.models.Store
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
+// TODO: use logger instead of println
 fun Route.orderRoute(orderStorage: Store<Order, OrderItem>) {
     route("/order") {
         get {

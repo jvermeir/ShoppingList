@@ -33,13 +33,17 @@ class CategoryResource {
 
   @PostMapping("/category")
   fun post(@RequestBody category: Category) = ResponseEntity(categoryService.save(category), HttpStatus.CREATED)
+
+  @PutMapping("/category")
+  fun put(@RequestBody category: Category) = ResponseEntity(categoryService.save(category), HttpStatus.CREATED)
 }
 
 @Service
 class CategoryService(val db: CategoryRepository) {
   fun find(): List<Category> = db.findAll().toList()
 
-  fun findById(id: String): Category = db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
+  fun findById(id: String): Category =
+    db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
 
   fun findByName(name: String): Category =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Category '${name}' not found") }
