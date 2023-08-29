@@ -2,8 +2,13 @@
 
 REST interface to store and retrieve data related to recipes, menus and shopping lists.
 
-## Samples
+## Test curls
 
+see [request.http](.//src/main/resources/request.http)
+
+or use
+
+```
 curl -v --location localhost:8080/api/categories
 curl -v --location localhost:8080/api/category/2cf577fa-9c96-4aa7-8b63-ea79c3723adc
 
@@ -19,3 +24,4 @@ curl -v -X DELETE --location "http://127.0.0.1:8080/api/category/eb71ce92-2058-4
 curl -v -X PUT --location "http://127.0.0.1:8080/api/category" \
 -H "Content-Type: application/json" \
 -d "{\"id\": \"2cf577fa-9c96-4aa7-8b63-ea79c3723adc\",\"name\": \"groente\", \"shopOrder\": 2 }"
+```
