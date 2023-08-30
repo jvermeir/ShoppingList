@@ -1,12 +1,19 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val ktor_version: String by project
+val h2_version: String by project
+val javax_persistence_api_version: String by project
+val kotlinx_datetime_version: String by project
+val fuel_version: String by project
+val kotlinx_serialization_json_version: String by project
+val springmockk_version: String by project
+
 plugins {
   id("org.springframework.boot") version "2.6.7"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
-  kotlin("jvm") version "1.6.21"
-  kotlin("plugin.spring") version "1.6.21"
-  kotlin("plugin.serialization") version "1.6.21"
-  id("io.kotest") version "0.3.9"
+  kotlin("jvm") version "1.9.10"
+  kotlin("plugin.spring") version "1.9.10"
+  kotlin("plugin.serialization") version "1.9.10"
 }
 
 group = "nl.vermeir"
@@ -23,16 +30,13 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
-  implementation("com.github.kittinunf.fuel:fuel:2.3.1")
-  implementation ("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
-  implementation("javax.persistence:javax.persistence-api:2.2")
-  runtimeOnly("com.h2database:h2:2.1.210")
+  implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json_version")
+  implementation("com.github.kittinunf.fuel:fuel:$fuel_version")
+  implementation ("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
+  implementation("javax.persistence:javax.persistence-api:$javax_persistence_api_version")
+  runtimeOnly("com.h2database:h2:$h2_version")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
-  testImplementation("io.kotest:kotest-framework-engine:5.3.0")
-  testImplementation ("io.kotest:kotest-assertions-core:5.3.0")
-  testImplementation ("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-  testImplementation ("com.ninja-squad:springmockk:3.1.1")
+  testImplementation ("com.ninja-squad:springmockk:$springmockk_version")
 }
 
 tasks.withType<KotlinCompile> {
