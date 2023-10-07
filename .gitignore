@@ -1,3 +1,4 @@
+data/
 *trace.db
 *.iml
 .gradle
