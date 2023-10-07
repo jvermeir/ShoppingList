@@ -25,3 +25,15 @@ curl -v -X PUT --location "http://127.0.0.1:8080/api/category" \
 -H "Content-Type: application/json" \
 -d "{\"id\": \"2cf577fa-9c96-4aa7-8b63-ea79c3723adc\",\"name\": \"groente\", \"shopOrder\": 2 }"
 ```
+
+```
+curl -v -X POST --location "http://127.0.0.1:8080/api/converters/testCategoryDatabase.csv" \
+-H "Content-Type: application/json" \
+-d "{}"
+```
+
+```
+curl -v -X POST --location "http://127.0.0.1:8080/api/cleanup" \
+-H "Content-Type: application/json" \
+-d "{}"
+```

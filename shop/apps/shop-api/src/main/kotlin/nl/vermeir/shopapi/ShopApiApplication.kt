@@ -17,12 +17,12 @@ fun main(args: Array<String>) {
 
 @RestController
 class ManagementResource(
-  val categoryService: CategoryService,
+    val categoryService: CategoryService,
   val ingredientService: IngredientService,
   val recipeService: RecipeService,
   val recipeIngredientService: RecipeIngredientService,
   val messageService: MessageService,
-  val menuService: MenuService
+  val menuService: MenuService,
 ) {
   @PostMapping("/cleanup")
   fun post() {

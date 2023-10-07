@@ -37,6 +37,9 @@ class RecipeService(val db: RecipeRepository) {
   fun save(recipe: Recipe): Recipe = db.save(recipe)
 
   fun deleteAll() = db.deleteAll()
+  fun convert() {
+    TODO("Not yet implemented")
+  }
 }
 
 @Table("RECIPES")

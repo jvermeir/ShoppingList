@@ -10,8 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.data.annotation.Id
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
@@ -41,6 +40,16 @@ class CategoryTest {
       .andExpect(jsonPath("$.name").value(category1.name))
       .andExpect(jsonPath("$.id").value(category1.id))
       .andExpect(jsonPath("$.shopOrder").value(category1.shopOrder))
+  }
+
+  @Test
+  fun `a category can be deleted by id`() {
+    every { categoryRepository.deleteById("1") } returns Unit
+
+    mockMvc.perform(
+      delete("/category/1")
+    ).andExpect(status().isOk)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
   }
 
   @Test

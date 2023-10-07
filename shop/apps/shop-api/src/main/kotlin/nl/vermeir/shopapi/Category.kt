@@ -56,7 +56,7 @@ class CategoryService(val db: CategoryRepository) {
 }
 
 @Table("CATEGORIES")
-data class Category(@Id val id: String?, val name: String, val shopOrder: Int)
+data class Category(@Id val id: String? = null, val name: String, val shopOrder: Int)
 
 interface CategoryRepository : CrudRepository<Category, String> {
   @Query("SELECT * FROM categories WHERE name = :name")

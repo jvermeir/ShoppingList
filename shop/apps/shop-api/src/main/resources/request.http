@@ -134,7 +134,7 @@ Content-Type: application/json
 
 {
   "recipeId": "cc732e65-5641-4b66-a879-e75303c45743",
-  "ingredientId": dff1801f-926b-4105-bc69-dafd1f755b64"
+  "ingredientId": "dff1801f-926b-4105-bc69-dafd1f755b64"
 }
 
 ###
@@ -190,11 +190,6 @@ POST http://localhost:8080/api/cleanup
 POST http://localhost:8080/api/message
 Content-Type: application/json
 
-{
-  "text": "Hello!",
-  "first_day": "2022-01-01T01:01:01"
-}
-
-###
-### Get 'hello'
-GET http://localhost:8080/api/messages
+### Post 'convert"
+POST http://localhost:8080/api/converters/testCategoryDatabase.csv
+Content-Type: application/json

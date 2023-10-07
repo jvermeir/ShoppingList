@@ -90,4 +90,12 @@ class RecipeTest {
       .andExpect(jsonPath("$.name").value(recipe1.name))
       .andExpect(jsonPath("$.favorite").value(recipe1.favorite))
   }
+
+  // TODO
+//  @Test
+//  fun `a cookbook can be converted to database records`() {
+//    mockMvc.perform(
+//      post("/convert")
+//    ).andExpect(status().isOk)
+//  }
 }
