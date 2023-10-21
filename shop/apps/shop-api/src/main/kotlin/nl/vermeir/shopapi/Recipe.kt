@@ -21,6 +21,9 @@ class RecipeResource(val recipeService: RecipeService) {
   @GetMapping("/recipe")
   fun findByName(@RequestParam(name="name") name: String) = ResponseEntity.ok(recipeService.findByName(name))
 
+  @GetMapping("/recipe-ingredients/{recipeName}")
+  fun getRecipeIngredients(@PathVariable(name="recipeName") recipeName: String) = ResponseEntity.ok(recipeService.getRecipeIngredients(recipeName))
+
   @PostMapping("/recipe")
   fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.save(recipe), HttpStatus.CREATED)
 }
@@ -34,18 +37,32 @@ class RecipeService(val db: RecipeRepository) {
   fun findByName(name: String): Recipe =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Recipe '${name}' not found")}
 
-  fun save(recipe: Recipe): Recipe = db.save(recipe)
+  fun save(recipe: Recipe): Recipe { val res = db.save(recipe)
+    println("res: ${res}")
+  return res
+  }
 
   fun deleteAll() = db.deleteAll()
-  fun convert() {
-    TODO("Not yet implemented")
-  }
+
+  fun getRecipeIngredients(recipeName: String): List<RecipeIngredientDetails> = db.listRecipeIngredients(recipeName)
 }
 
 @Table("RECIPES")
-data class Recipe(@Id val id: String?, val name: String, val favorite: Boolean)
+data class Recipe(@Id val id: String? = null, val name: String, val favorite: Boolean)
+
+data class RecipeIngredientDetails(val ingredientName: String, val ingredientId: String, val categoryName: String)
 
 interface RecipeRepository : CrudRepository<Recipe, String> {
   @Query(value = "SELECT * FROM recipes WHERE name = :name")
   fun findByName(name: String): Optional<Recipe>
+
+  @Query(value = """
+      select i.NAME as ingredient_name, i.id as ingredient_id, c.NAME as category_name
+      from recipe_ingredients ri, ingredients i, CATEGORIES c, recipes r
+      where ri.recipe_id = r.id
+      and r.name = :recipeName
+      and c.id = i.category_id
+      and ri.ingredient_id = i.id;
+  """)
+  fun listRecipeIngredients(recipeName: String): List<RecipeIngredientDetails>
 }

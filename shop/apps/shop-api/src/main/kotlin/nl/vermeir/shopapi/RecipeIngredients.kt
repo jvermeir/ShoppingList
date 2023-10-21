@@ -40,7 +40,7 @@ class RecipeIngredientService(val db: RecipeIngredientRepository) {
 }
 
 @Table("RECIPE_INGREDIENTS")
-data class RecipeIngredient(@Id val id: String?, val recipeId: String, val ingredientId: String)
+data class RecipeIngredient(@Id val id: String? = null, val recipeId: String, val ingredientId: String)
 
 interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, String> {
   @Query("SELECT * FROM recipe_ingredients WHERE recipe_id = :recipeId")

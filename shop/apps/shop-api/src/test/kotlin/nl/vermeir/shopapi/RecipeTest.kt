@@ -79,7 +79,7 @@ class RecipeTest {
   }
 
   @Test
-  fun `a recipe should be returned by findByFirstDay`() {
+  fun `a recipe should be returned by findByName`() {
     every { recipeRepository.findByName(recipe1.name) } returns Optional.of(recipe1)
 
     mockMvc.perform(
@@ -90,12 +90,4 @@ class RecipeTest {
       .andExpect(jsonPath("$.name").value(recipe1.name))
       .andExpect(jsonPath("$.favorite").value(recipe1.favorite))
   }
-
-  // TODO
-//  @Test
-//  fun `a cookbook can be converted to database records`() {
-//    mockMvc.perform(
-//      post("/convert")
-//    ).andExpect(status().isOk)
-//  }
 }

@@ -36,6 +36,13 @@ class IngredientResource(val ingredientService: IngredientService) {
   fun post(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.CREATED)
 }
 
+inline fun <T> nullable(f: () -> T): T? = try {
+  f()
+} catch (e: Error) {
+  throw e
+} catch (e: Throwable) {
+  null
+}
 @Service
 class IngredientService(val db: IngredientRepository) {
   fun list(): List<Ingredient> = db.findAll().toList()
@@ -44,8 +51,9 @@ class IngredientService(val db: IngredientRepository) {
 
   fun findById(id: String): Ingredient = db.findById(id).orElseThrow { ResourceNotFoundException("Ingredient '${id}' not found") }
 
-  fun findByName(name: String): Ingredient =
+  fun findByName(name: String): Ingredient? = nullable {
     db.findByName(name).orElseThrow { ResourceNotFoundException("Ingredient '${name}' not found") }
+  }
 
   fun save(ingredient: Ingredient):Ingredient = db.save(ingredient)
 
@@ -55,9 +63,9 @@ class IngredientService(val db: IngredientRepository) {
 }
 
 @Table("INGREDIENTS")
-data class Ingredient(@Id val id: String?, val name: String, val categoryId: String)
+data class Ingredient(@Id val id: String? = null, val name: String, val categoryId: String)
 
-data class IngredientView(@Id val id: String, val name: String, val categoryId: String?, val categoryName: String?)
+data class IngredientView(@Id val id: String? = null, val name: String, val categoryId: String?, val categoryName: String?)
 
 interface IngredientRepository : CrudRepository<Ingredient, String> {
   @Query("SELECT * FROM ingredients WHERE name = :name")

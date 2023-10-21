@@ -10,7 +10,11 @@ or use
 
 ```
 curl -v --location localhost:8080/api/categories
+curl -v --location localhost:8080/api/recipes
 curl -v --location localhost:8080/api/category/2cf577fa-9c96-4aa7-8b63-ea79c3723adc
+curl -v --location 'localhost:8080/api/category?name=groenteman'
+curl -v --location 'localhost:8080/api/recipe?name=Risotto%20met%20winterpeen%20en%20paddenstoelspekjes'
+curl -v --location 'localhost:8080/api/recipe-ingredient?recipeId=07d9e9a7-23b4-4fcd-acd0-f1960365166f'
 
 # Note, id is generated if left empty, this will trigger an insert
 # if id is specified, an update is assumed by the save method in the database access layer
@@ -27,7 +31,13 @@ curl -v -X PUT --location "http://127.0.0.1:8080/api/category" \
 ```
 
 ```
-curl -v -X POST --location "http://127.0.0.1:8080/api/converters/testCategoryDatabase.csv" \
+curl -v -X POST --location "http://127.0.0.1:8080/api/converters/categories/categoryDatabase_v2.csv" \
+-H "Content-Type: application/json" \
+-d "{}"
+```
+
+```
+curl -v -X POST --location "http://127.0.0.1:8080/api/converters/cookbook/cookbook_v2.txt" \
 -H "Content-Type: application/json" \
 -d "{}"
 ```
@@ -36,4 +46,16 @@ curl -v -X POST --location "http://127.0.0.1:8080/api/converters/testCategoryDat
 curl -v -X POST --location "http://127.0.0.1:8080/api/cleanup" \
 -H "Content-Type: application/json" \
 -d "{}"
+```
+
+curl -v --location "http://localhost:8080/api/recipe-ingredients/Pompoensoep'
+
+```
+SELECT * FROM recipes WHERE name = 'Pompoensoep';
+
+select i.NAME, i.id, c.NAME from recipe_ingredients ri, ingredients i, CATEGORIES c, recipes r
+where ri.recipe_id = r.id
+and r.name = 'Pompoensoep'
+and c.id = i.category_id
+and ri.ingredient_id = i.id;
 ```
