@@ -28,6 +28,16 @@ curl -v -X DELETE --location "http://127.0.0.1:8080/api/category/eb71ce92-2058-4
 curl -v -X PUT --location "http://127.0.0.1:8080/api/category" \
 -H "Content-Type: application/json" \
 -d "{\"id\": \"2cf577fa-9c96-4aa7-8b63-ea79c3723adc\",\"name\": \"groente\", \"shopOrder\": 2 }"
+
+curl -v -X POST --location "http://127.0.0.1:8080/api/menu" \
+-H "Content-Type: application/json" \
+-d "{\"firstDay\": \"2023-10-21\"}"
+
+curl -v -X POST --location "http://127.0.0.1:8080/api/menu-item" \
+-H "Content-Type: application/json" \
+-d "{\"menuId\": \"c1ec3773-2f04-4e0a-be14-fa287969a9fa\", \"recipeId\": \"dbf0b2ac-70c5-4af9-866b-f8dfa5b9082e\", \"theDay\":\"2023-10-21\"}"
+
+
 ```
 
 ```

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
 
+// TODO: get menu with details
+// TODO: get ingredients for a menu
+
 @RestController
 class MenuResource(val menuService: MenuService) {
   @GetMapping("/menus")
@@ -30,7 +33,7 @@ class MenuResource(val menuService: MenuService) {
     ResponseEntity.ok(menuService.findByFirstDay(firstDay))
 
   @PostMapping("/menu")
-  fun post(@RequestBody menu: Menu):ResponseEntity<Menu>  = ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
+  fun post(@RequestBody menu: Menu):ResponseEntity<Menu> = ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
 }
 
 @Service

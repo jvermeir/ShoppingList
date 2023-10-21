@@ -23,6 +23,7 @@ class ManagementResource(
   val recipeIngredientService: RecipeIngredientService,
   val messageService: MessageService,
   val menuService: MenuService,
+  val menuItemService: MenuItemService
 ) {
   @PostMapping("/cleanup")
   fun post() {
@@ -32,6 +33,7 @@ class ManagementResource(
     recipeIngredientService.deleteAll()
     messageService.deleteAll()
     menuService.deleteAll()
+    menuItemService.deleteAll()
   }
 }
 

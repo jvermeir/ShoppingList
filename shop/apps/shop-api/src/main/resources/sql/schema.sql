@@ -7,8 +7,9 @@ CREATE TABLE IF NOT EXISTS menus
 CREATE TABLE IF NOT EXISTS menu_items
 (
   id         VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
-  theDay     DATE,
-  recipe_id  VARCHAR(60)
+  the_day     DATE NOT NULL,
+  recipe_id  VARCHAR(60) NOT NULL,
+  menu_id    VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS categories
