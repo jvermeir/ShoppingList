@@ -2,8 +2,6 @@ package nl.vermeir.shopapi
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
@@ -13,7 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @RestController
 class MenuItemResource(val menuItemService: MenuItemService) {
@@ -36,6 +34,8 @@ class MenuItemService(val db: MenuItemRepository) {
 
   fun findById(id: String):MenuItem = db.findById(id).orElseThrow { ResourceNotFoundException("MenuItem '${id}' not found") }
 
+  fun findByMenuId(menuId: String):List<MenuItem> = db.findByMenuId(menuId)
+
   fun findByDay(day: LocalDate):List<MenuItem> = db.findByDay(day)
 
   fun save(menuItem: MenuItem) = db.save(menuItem)
@@ -52,4 +52,7 @@ data class MenuItem(@Id val id: String? = null, val menuId: String, val recipeId
 interface MenuItemRepository : CrudRepository<MenuItem, String> {
   @Query("SELECT * FROM menu_items WHERE the_day = :theDay")
   fun findByDay(theDay: LocalDate): List<MenuItem>
+
+  @Query("SELECT * FROM menu_items WHERE menu_id = :menuId")
+  fun findByMenuId(menuId: String): List<MenuItem>
 }

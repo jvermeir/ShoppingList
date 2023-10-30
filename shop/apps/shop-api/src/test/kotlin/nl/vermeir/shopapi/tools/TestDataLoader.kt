@@ -1,8 +1,3 @@
-import com.github.kittinunf.fuel.core.extensions.jsonBody
-import com.github.kittinunf.fuel.httpPost
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import nl.vermeir.shopapi.*
 
 fun main(args: Array<String>) {

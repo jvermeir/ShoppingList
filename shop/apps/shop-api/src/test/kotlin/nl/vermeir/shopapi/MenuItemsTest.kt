@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -14,12 +15,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
-import kotlinx.datetime.toLocalDate
 
-@kotlinx.serialization.Serializable
-data class MenuItem(@Id val id: String? = null, val menuId: String, val recipeId: String, val theDay: LocalDate)
+//@kotlinx.serialization.Serializable
+//data class MenuItem(@Id val id: String? = null, val menuId: String, val recipeId: String, val theDay: LocalDate)
 
 @WebMvcTest(value = [MenuItemResource::class, MenuItemService::class])
 class MenuItemTest {
@@ -29,7 +27,7 @@ class MenuItemTest {
   @MockkBean
   lateinit var menuItemRepository: MenuItemRepository
 
-  private val march10th = "2022-03-10".toLocalDate()
+  private val march10th = LocalDate(2022,3,10)
 
   private val recipe1 = Recipe(id = "1", name = "recipe1", favorite = false)
   private val menu1 = Menu(id = "1", firstDay = march10th)
@@ -72,7 +70,7 @@ class MenuItemTest {
 
   @Test
   fun `a menu should be returned by findByDay`() {
-    every { menuItemRepository.findByDay(march10th.toJavaLocalDate()) } returns listOf(menuItem1)
+    every { menuItemRepository.findByDay(march10th) } returns listOf(menuItem1)
 
     mockMvc.perform(
       get("/menu-item").param("day", march10th.toString())

@@ -60,6 +60,7 @@ class ConverterTest {
   @Test
   fun `recipies can be loaded from a data file`() {
     every { categoryRepository.findByName(inputCategory1.name) } returns Optional.of(category1)
+    every { ingredientRepository.findByName(ingredient1.name) } returns Optional.of(ingredient1)
     every { recipeRepository.save(inputRecipe1) } returns recipe1
     every { ingredientRepository.save(inputIngredient1) } returns ingredient1
     every { recipeIngredientRepository.save(inputRecipeIngredient1) } returns recipeIngredient1

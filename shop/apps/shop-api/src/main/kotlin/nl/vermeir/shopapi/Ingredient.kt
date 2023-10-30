@@ -51,9 +51,8 @@ class IngredientService(val db: IngredientRepository) {
 
   fun findById(id: String): Ingredient = db.findById(id).orElseThrow { ResourceNotFoundException("Ingredient '${id}' not found") }
 
-  fun findByName(name: String): Ingredient? = nullable {
+  fun findByName(name: String): Ingredient? =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Ingredient '${name}' not found") }
-  }
 
   fun save(ingredient: Ingredient):Ingredient = db.save(ingredient)
 
