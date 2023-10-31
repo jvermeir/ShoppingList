@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 @RestController
 class MenuItemResource(val menuItemService: MenuItemService) {
@@ -22,7 +22,7 @@ class MenuItemResource(val menuItemService: MenuItemService) {
   fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(menuItemService.findById(id))
 
   @GetMapping("/menu-item")
-  fun findByDay(@RequestParam(name="day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) day: LocalDate) = ResponseEntity.ok(menuItemService.findByDay(day))
+  fun findByDay(@RequestParam(name="day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) day: Datum) = ResponseEntity.ok(menuItemService.findByDay(day))
 
   @PostMapping("/menu-item")
   fun post(@RequestBody menuItem: MenuItem) = ResponseEntity(menuItemService.save(menuItem), HttpStatus.CREATED)
@@ -36,7 +36,7 @@ class MenuItemService(val db: MenuItemRepository) {
 
   fun findByMenuId(menuId: String):List<MenuItem> = db.findByMenuId(menuId)
 
-  fun findByDay(day: LocalDate):List<MenuItem> = db.findByDay(day)
+  fun findByDay(day: Datum):List<MenuItem> = db.findByDay(day.date)
 
   fun save(menuItem: MenuItem) = db.save(menuItem)
 

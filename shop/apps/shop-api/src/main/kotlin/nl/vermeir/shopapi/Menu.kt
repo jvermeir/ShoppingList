@@ -1,31 +1,22 @@
 package nl.vermeir.shopapi
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import kotlinx.serialization.Serializable
+import nl.vermeir.shopapi.data.*
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.query.Param
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import kotlinx.datetime.LocalDate
-import nl.vermeir.shopapi.data.*
-import org.springframework.data.repository.query.Param
+import java.time.LocalDate
 import java.util.*
 
-// TODO: get menu with details
-// TODO: get ingredients for a menu
-
-//class Datum(
-//  @DateTimeFormat(pattern = "yyyy-MM-dd")
-//  var date: LocalDate? = null
-//)
 @RestController
 class MenuResource(val menuService: MenuService) {
   @GetMapping("/menus")
@@ -33,19 +24,13 @@ class MenuResource(val menuService: MenuService) {
 
   @GetMapping("/menu/{id}")
   fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(menuService.findById(id))
-//@DateTimeFormat(pattern = "yyyy-MM-dd")
-//  fun findByFirstDay(@PathVariable(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) {
 
-
-  //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) =
   @GetMapping("/menu/firstDay/{firstDay}")
-  fun findByFirstDay(@PathVariable(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) {
-    print("firstDay: $firstDay")
+  fun findByFirstDay(@PathVariable(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: Datum) =
     ResponseEntity.ok(menuService.findByFirstDay(firstDay))
-  }
 
   @GetMapping("/menu/details/firstDay/{firstDay}")
-  fun getMenuDetailsByFirstDay(@PathVariable(name = "firstDay") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: LocalDate) =
+  fun getMenuDetailsByFirstDay(@PathVariable(name = "firstDay")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) firstDay: Datum) =
     ResponseEntity.ok(menuService.menuDetailsByFirstDay(firstDay))
 
   @PostMapping("/menu")
@@ -70,18 +55,16 @@ class MenuService(
   fun findById(id: String): Menu =
     menuRepository.findById(id).orElseThrow { ResourceNotFoundException("Menu '${id}' not found") }
 
-  fun findByFirstDay(firstDay: LocalDate): List<MenuItem> {
-    val menu = menuRepository.findByFirstDay(firstDay)
-      .orElseThrow { ResourceNotFoundException("Menu for '${firstDay}' not found") }
-    val menuItems = menuItemService.findByMenuId(menu.id.orEmpty())
-    return menuItems
+  fun findByFirstDay(firstDay: Datum ): List<MenuItem> {
+    val menu = menuRepository.findByFirstDay(firstDay.date)
+      .orElseThrow { ResourceNotFoundException("Menu for '${firstDay.date}' not found") }
+    return menuItemService.findByMenuId(menu.id.orEmpty())
   }
 
-  fun menuDetailsByFirstDay(firstDay: LocalDate): OutputMenu {
-    val menu = menuRepository.findByFirstDay(firstDay)
+  fun menuDetailsByFirstDay(firstDay: Datum): OutputMenu {
+    val menu = menuRepository.findByFirstDay(firstDay.date)
       .orElseThrow { ResourceNotFoundException("Menu for '${firstDay}' not found") }
     val menuItems = menuItemService.findByMenuId(menu.id.orEmpty())
-
 
     val outputMenuItems = menuItems.map { menuItem ->
       val recipe = recipeService.findById(menuItem.recipeId)
@@ -109,23 +92,6 @@ class MenuService(
   fun deleteAll() = menuRepository.deleteAll()
 }
 
-object DateConversions {
-  object Serializer : JsonSerializer<LocalDate>() {
-    override fun serialize(value: LocalDate, gen: JsonGenerator, serializers: SerializerProvider) {
-      with(gen) {
-        writeString(value.toString())
-      }
-    }
-  }
-
-  object Deserializer : JsonDeserializer<LocalDate>() {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): LocalDate {
-      val node = p.readValueAsTree<JsonNode>()
-      return LocalDate.parse(node.textValue())
-    }
-  }
-}
-
 @Table("MENUS")
 data class Menu(
   @Id val id: String?,
@@ -135,6 +101,5 @@ data class Menu(
 )
 
 interface MenuRepository : CrudRepository<Menu, String> {
-  @Query("SELECT * FROM menus WHERE first_day  = :firstDay")
-  fun findByFirstDay(@Param("first_day") firstDay: LocalDate): Optional<Menu>
-}
+  @Query("SELECT * FROM menus WHERE first_day  = :first_day")
+  fun findByFirstDay(first_day: LocalDate): Optional<Menu>}

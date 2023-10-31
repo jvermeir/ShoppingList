@@ -2,22 +2,18 @@ package nl.vermeir.shopapi
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.data.annotation.Id
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-
-//@kotlinx.serialization.Serializable
-//data class MenuItem(@Id val id: String? = null, val menuId: String, val recipeId: String, val theDay: LocalDate)
 
 @WebMvcTest(value = [MenuItemResource::class, MenuItemService::class])
 class MenuItemTest {
@@ -27,7 +23,7 @@ class MenuItemTest {
   @MockkBean
   lateinit var menuItemRepository: MenuItemRepository
 
-  private val march10th = LocalDate(2022,3,10)
+  private val march10th = LocalDate.parse("2022-03-10")
 
   private val recipe1 = Recipe(id = "1", name = "recipe1", favorite = false)
   private val menu1 = Menu(id = "1", firstDay = march10th)
@@ -36,7 +32,8 @@ class MenuItemTest {
   @Test
   fun `a menuItem without id and all properties set is saved correctly and can be loaded`() {
     every { menuItemRepository.save(menuItem1) } returns menuItem1
-
+    println("hello world")
+println(Json.encodeToString(menuItem1))
     mockMvc.perform(
       post("/menu-item").content(
         Json.encodeToString(menuItem1)
@@ -70,7 +67,7 @@ class MenuItemTest {
 
   @Test
   fun `a menu should be returned by findByDay`() {
-    every { menuItemRepository.findByDay(march10th) } returns listOf(menuItem1)
+    every { menuItemRepository.findByDay(Datum(march10th).date) } returns listOf(menuItem1)
 
     mockMvc.perform(
       get("/menu-item").param("day", march10th.toString())
