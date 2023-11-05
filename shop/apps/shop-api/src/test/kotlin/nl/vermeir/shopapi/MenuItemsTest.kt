@@ -27,13 +27,13 @@ class MenuItemTest {
 
   private val recipe1 = Recipe(id = "1", name = "recipe1", favorite = false)
   private val menu1 = Menu(id = "1", firstDay = march10th)
-  private val menuItem1 = MenuItem(id = "1", menuId = menu1.id.orEmpty(), recipeId = recipe1.id.orEmpty(), theDay = march10th)
+  private val menuItem1 =
+    MenuItem(id = "1", menuId = menu1.id.orEmpty(), recipeId = recipe1.id.orEmpty(), theDay = march10th)
 
   @Test
   fun `a menuItem without id and all properties set is saved correctly and can be loaded`() {
     every { menuItemRepository.save(menuItem1) } returns menuItem1
-    println("hello world")
-println(Json.encodeToString(menuItem1))
+
     mockMvc.perform(
       post("/menu-item").content(
         Json.encodeToString(menuItem1)
@@ -67,7 +67,7 @@ println(Json.encodeToString(menuItem1))
 
   @Test
   fun `a menu should be returned by findByDay`() {
-    every { menuItemRepository.findByDay(Datum(march10th).date) } returns listOf(menuItem1)
+    every { menuItemRepository.findByDay(march10th) } returns listOf(menuItem1)
 
     mockMvc.perform(
       get("/menu-item").param("day", march10th.toString())

@@ -3,7 +3,6 @@ package nl.vermeir.shopapi
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
@@ -59,7 +58,6 @@ class MenuTest {
   @Test
   fun `a menu without id and all properties set is saved correctly and can be loaded`() {
     every { menuRepository.save(menu1) } returns menu1
-
     mockMvc.perform(
       post("/menu").content(
         Json.encodeToString(menu1)
@@ -105,33 +103,31 @@ class MenuTest {
 
   @Test
   fun `a menu should be returned by findByFirstDay`() {
-    every { menuRepository.findByFirstDay(march10th.toJavaLocalDate()) } returns Optional.of(menu1)
+    every { menuRepository.findByFirstDay(march10th) } returns Optional.of(menu1)
     every { menuItemRepository.findByMenuId(menuItem1.id.orEmpty()) } returns listOf(menuItem1)
 
     mockMvc.perform(
       get("/menu/firstDay/${march10th}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$[0].id").value(menuItem1.id))
-      .andExpect(jsonPath("$[0].menuId").value(menuItem1.menuId))
-      .andExpect(jsonPath("$[0].theDay").value(menuItem1.theDay.toString()))
-      .andExpect(jsonPath("$[0].recipeId").value(menuItem1.recipeId))
+      .andExpect(jsonPath("$.id").value(menu1.id))
+      .andExpect(jsonPath("$.firstDay").value(menu1.firstDay.toString()))
   }
 
-//  @Test
-//  fun `TODO a menu and all details should be returned by `() {
-//    every { menuRepository.findByFirstDay(march10th.toJavaLocalDate()) } returns Optional.of(menu1)
-//    every { menuItemRepository.findByMenuId(menuItem1.id.orEmpty()) } returns listOf(menuItem1)
-//    every { recipeRepository.findById(menuItem1.recipeId) } returns Optional.of(recipe1)
-//    every { recipeRepository.listRecipeIngredients(recipe1.name) } returns listOf(recipeIngredient1)
-//    every { categoryRepository.findByName(category1.name) } returns Optional.of(category1)
-//
-//    mockMvc.perform(
-//      get("/menu/details/firstDay/${march10th}")
-//    ).andExpect(status().isOk)
-//      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-//      .andExpect(jsonPath("$.id").value(menu1.id))
-//      .andExpect(jsonPath("$.firstDay").value(menu1.firstDay.toString()))
-//  }
-}
+  @Test
+  fun `a menu and its details should be returned by menu details firstday`() {
+    every { menuRepository.findByFirstDay(march10th) } returns Optional.of(menu1)
+    every { menuItemRepository.findByMenuId(menuItem1.id.orEmpty()) } returns listOf(menuItem1)
+    every { recipeRepository.findById(recipe1.id.orEmpty()) } returns Optional.of(recipe1)
+    every { recipeRepository.listRecipeIngredients(recipe1.name) } returns listOf(recipeIngredient1)
+    every { ingredientRepository.findByName(recipeIngredient1.ingredientName) } returns Optional.of(ingredient1)
+    every { categoryRepository.findByName(recipeIngredient1.categoryName) } returns Optional.of(category1)
 
+    val d = march10th.toString()
+    mockMvc.perform(
+      get("/menu/details/firstDay/${d}")
+    ).andExpect(status().isOk)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(content().string("""{"id":"1","firstDay":"2022-03-10","menuItems":[{"id":"1","theDay":"2022-03-10","recipe":{"id":"1","name":"r1","favorite":true,"ingredients":[{"id":"1","name":"ing1","category":{"id":"1","name":"cat1","shopOrder":1}}]}}]}"""))
+  }
+}

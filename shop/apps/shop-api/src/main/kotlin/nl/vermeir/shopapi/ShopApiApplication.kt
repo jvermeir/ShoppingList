@@ -1,12 +1,17 @@
 package nl.vermeir.shopapi
 
+import kotlinx.datetime.LocalDate
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.convert.converter.Converter
+import org.springframework.format.FormatterRegistry
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.filter.CommonsRequestLoggingFilter
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 @SpringBootApplication
 class ShopApiApplication
@@ -21,7 +26,6 @@ class ManagementResource(
   val ingredientService: IngredientService,
   val recipeService: RecipeService,
   val recipeIngredientService: RecipeIngredientService,
-  val messageService: MessageService,
   val menuService: MenuService,
   val menuItemService: MenuItemService
 ) {
@@ -31,7 +35,6 @@ class ManagementResource(
     ingredientService.deleteAll()
     recipeService.deleteAll()
     recipeIngredientService.deleteAll()
-    messageService.deleteAll()
     menuService.deleteAll()
     menuItemService.deleteAll()
   }
@@ -50,3 +53,17 @@ class RequestLoggingFilterConfig {
     return filter
   }
 }
+
+class StringToDateConverter : Converter<String, LocalDate> {
+  override fun convert(source: String): LocalDate {
+    return LocalDate.parse(source)
+  }
+}
+
+@Configuration
+class WebConfig : WebMvcConfigurer {
+  override fun addFormatters(registry: FormatterRegistry) {
+    registry.addConverter(StringToDateConverter())
+  }
+}
+
