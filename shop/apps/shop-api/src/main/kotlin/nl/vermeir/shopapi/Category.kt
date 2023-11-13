@@ -1,9 +1,8 @@
 package nl.vermeir.shopapi
 
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.annotation.Id
-import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,10 +21,10 @@ class CategoryResource {
   fun list(): List<Category> = categoryService.find()
 
   @GetMapping("/category/{id}")
-  fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.findById(id))
+  fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(categoryService.findById(id))
 
   @DeleteMapping("/category/{id}")
-  fun delete(@PathVariable(name = "id") id: String) = ResponseEntity.ok(categoryService.delete(id))
+  fun delete(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(categoryService.delete(id))
 
   @GetMapping("/category")
   fun findByName(@RequestParam(name = "name") name: String) =
@@ -42,8 +41,8 @@ class CategoryResource {
 class CategoryService(val db: CategoryRepository) {
   fun find(): List<Category> = db.findAll().toList()
 
-  fun findById(id: String): Category =
-    db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
+  fun findById(id: UUID): Category =
+    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
 
   fun findByName(name: String): Category =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Category '${name}' not found") }
@@ -52,13 +51,20 @@ class CategoryService(val db: CategoryRepository) {
 
   fun deleteAll() = db.deleteAll()
 
-  fun delete(id: String) = db.deleteById(id)
+  fun delete(id: UUID) = db.deleteById(id.toString())
+
+//  fun toOutputCategory(category: Category): OutputCategory {
+//    return OutputCategory(category.id.orEmpty(), category.name, category.shopOrder)
+//  }
 }
 
-@Table("CATEGORIES")
-data class Category(@Id val id: String? = null, val name: String, val shopOrder: Int)
+@Entity(name = "CATEGORIES")
+class Category(
+  @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
+  var name: String,
+  var shopOrder: Int
+)
 
 interface CategoryRepository : CrudRepository<Category, String> {
-  @Query("SELECT * FROM categories WHERE name = :name")
   fun findByName(name: String): Optional<Category>
 }

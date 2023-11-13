@@ -3,7 +3,7 @@ package nl.vermeir.shopapi
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.*
-import kotlinx.datetime.LocalDate
+import java.time.LocalDate
 
 object DateConversions {
   object Serializer : JsonSerializer<LocalDate>() {

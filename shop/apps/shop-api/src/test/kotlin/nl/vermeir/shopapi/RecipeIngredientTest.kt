@@ -7,16 +7,12 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.data.annotation.Id
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-
-@kotlinx.serialization.Serializable
-data class RecipeIngredient(@Id val id: String? = null, val recipeId: String, val ingredientId: String)
 
 @WebMvcTest(value = [RecipeIngredientResource::class, RecipeIngredientService::class])
 class RecipeIngredientTest {
@@ -26,7 +22,8 @@ class RecipeIngredientTest {
   @MockkBean
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
-  private val recipeIngredient1 = RecipeIngredient(id = "1", recipeId = "recipe1", ingredientId = "ingredient1")
+  private val recipeIngredient1 =
+    RecipeIngredient(id = UUID.randomUUID(), recipeId = UUID.randomUUID(), ingredientId = UUID.randomUUID())
 
   @Test
   fun `a recipe-ingredient without id and all properties set is saved correctly and can be loaded`() {
@@ -38,17 +35,17 @@ class RecipeIngredientTest {
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(recipeIngredient1.id))
-      .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId))
-      .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId))
+      .andExpect(jsonPath("$.id").value(recipeIngredient1.id.toString()))
+      .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId.toString()))
+      .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId.toString()))
   }
 
   @Test
   fun `GET recipe-ingredient should return 404 when recipe not found by id`() {
-    every { recipeIngredientRepository.findById("1") } returns Optional.empty()
+    every { recipeIngredientRepository.findById(recipeIngredient1.id.toString()) } returns Optional.empty()
 
     mockMvc.perform(
-      get("/recipe-ingredient/1")
+      get("/recipe-ingredient/${recipeIngredient1.id}")
     ).andExpect(status().isNotFound)
   }
 
@@ -60,22 +57,22 @@ class RecipeIngredientTest {
       get("/recipe-ingredients").contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id))
-      .andExpect(jsonPath("$.[0].recipeId").value(recipeIngredient1.recipeId))
-      .andExpect(jsonPath("$.[0].ingredientId").value(recipeIngredient1.ingredientId))
+      .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id.toString()))
+      .andExpect(jsonPath("$.[0].recipeId").value(recipeIngredient1.recipeId.toString()))
+      .andExpect(jsonPath("$.[0].ingredientId").value(recipeIngredient1.ingredientId.toString()))
   }
 
   @Test
   fun `a recipe should be returned by findById`() {
-    every { recipeIngredientRepository.findById("1") } returns Optional.of(recipeIngredient1)
+    every { recipeIngredientRepository.findById(recipeIngredient1.id.toString()) } returns Optional.of(recipeIngredient1)
 
     mockMvc.perform(
-      get("/recipe-ingredient/1")
+      get("/recipe-ingredient/${recipeIngredient1.id}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(recipeIngredient1.id))
-      .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId))
-      .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId))
+      .andExpect(jsonPath("$.id").value(recipeIngredient1.id.toString()))
+      .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId.toString()))
+      .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId.toString()))
   }
 
   @Test
@@ -83,11 +80,11 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.findByRecipeId(recipeIngredient1.recipeId) } returns listOf(recipeIngredient1)
 
     mockMvc.perform(
-      get("/recipe-ingredient").param("recipeId", recipeIngredient1.recipeId)
+      get("/recipe-ingredient").param("recipeId", recipeIngredient1.recipeId.toString())
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id))
-      .andExpect(jsonPath("$.[0].recipeId").value(recipeIngredient1.recipeId))
-      .andExpect(jsonPath("$.[0].ingredientId").value(recipeIngredient1.ingredientId))
+      .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id.toString()))
+      .andExpect(jsonPath("$.[0].recipeId").value(recipeIngredient1.recipeId.toString()))
+      .andExpect(jsonPath("$.[0].ingredientId").value(recipeIngredient1.ingredientId.toString()))
   }
 }

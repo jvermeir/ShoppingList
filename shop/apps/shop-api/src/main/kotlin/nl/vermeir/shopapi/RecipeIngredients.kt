@@ -1,15 +1,13 @@
 package nl.vermeir.shopapi
 
-import org.springframework.data.annotation.Id
-import org.springframework.data.jdbc.repository.query.Query
-import org.springframework.data.relational.core.mapping.Table
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-
-data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredient>)
+import java.util.*
 
 @RestController
 class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {
@@ -17,32 +15,38 @@ class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientServ
   fun list() = recipeIngredientService.list()
 
   @GetMapping("/recipe-ingredient/{id}")
-  fun findById(@PathVariable(name = "id") id: String) = ResponseEntity.ok(recipeIngredientService.findById(id))
+  fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(recipeIngredientService.findById(id))
 
   @GetMapping("/recipe-ingredient")
-  fun findByRecipeId(@RequestParam(name="recipeId") recipeId: String) = ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
+  fun findByRecipeId(@RequestParam(name = "recipeId") recipeId: UUID) =
+    ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
 
   @PostMapping("/recipe-ingredient")
-  fun post(@RequestBody recipeIngredient: RecipeIngredient) = ResponseEntity(recipeIngredientService.save(recipeIngredient),  HttpStatus.CREATED)
+  fun post(@RequestBody recipeIngredient: RecipeIngredient) =
+    ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.CREATED)
 }
 
 @Service
 class RecipeIngredientService(val db: RecipeIngredientRepository) {
   fun list(): List<RecipeIngredient> = db.findAll().toList()
 
-  fun findById(id: String):RecipeIngredient = db.findById(id).orElseThrow { ResourceNotFoundException("RecipeIngredient '${id}' not found") }
+  fun findById(id: UUID): RecipeIngredient =
+    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("RecipeIngredient '${id}' not found") }
 
-  fun findByRecipeId(id: String):List<RecipeIngredient> = db.findByRecipeId(id)
+  fun findByRecipeId(id: UUID): List<RecipeIngredient> = db.findByRecipeId(id)
 
   fun save(recipeIngredient: RecipeIngredient) = db.save(recipeIngredient)
 
   fun deleteAll() = db.deleteAll()
 }
 
-@Table("RECIPE_INGREDIENTS")
-data class RecipeIngredient(@Id val id: String? = null, val recipeId: String, val ingredientId: String)
+@Entity(name = "RECIPE_INGREDIENTS")
+data class RecipeIngredient(
+  @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
+  var recipeId: UUID,
+  var ingredientId: UUID
+)
 
 interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, String> {
-  @Query("SELECT * FROM recipe_ingredients WHERE recipe_id = :recipeId")
-  fun findByRecipeId(recipeId: String): List<RecipeIngredient>
+  fun findByRecipeId(recipeId: UUID): List<RecipeIngredient>
 }

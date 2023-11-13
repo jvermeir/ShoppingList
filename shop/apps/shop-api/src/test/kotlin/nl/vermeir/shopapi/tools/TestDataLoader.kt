@@ -1,4 +1,5 @@
 import nl.vermeir.shopapi.*
+import java.util.*
 
 fun main(args: Array<String>) {
   if (args.contains("debug")) logEnabled = true
@@ -7,7 +8,7 @@ fun main(args: Array<String>) {
   readTestData()
 }
 
-var recipe1: Recipe = Recipe("", "dummy", false)
+var recipe1: Recipe = Recipe(UUID.randomUUID(), "dummy", false)
 
 fun readTestData() {
   println(load<List<Category>>("categories"))
@@ -22,16 +23,28 @@ fun loadTestData() {
   val cat1 = save(Category(id = null, name = "cat1", shopOrder = 10), path = "category")
   println(cat1)
   val cat2 = save(Category(id = null, name = "cat2", shopOrder = 20), path = "category")
-  val ing1 = save(Ingredient(id = null, name = "cat1ing1", cat1.id.orEmpty()), path = "ingredient")
-  val ing2 = save(Ingredient(id = null, name = "cat1ing2", cat1.id.orEmpty()), path = "ingredient")
-  val ing3 = save(Ingredient(id = null, name = "cat2ing1", cat2.id.orEmpty()), path = "ingredient")
-  val ing4 = save(Ingredient(id = null, name = "cat2ing2", cat2.id.orEmpty()), path = "ingredient")
+  val ing1 = save(Ingredient(id = null, name = "cat1ing1", cat1.id ?: UUID.randomUUID()), path = "ingredient")
+  val ing2 = save(Ingredient(id = null, name = "cat1ing2", cat1.id ?: UUID.randomUUID()), path = "ingredient")
+  val ing3 = save(Ingredient(id = null, name = "cat2ing1", cat1.id ?: UUID.randomUUID()), path = "ingredient")
+  val ing4 = save(Ingredient(id = null, name = "cat2ing2", cat1.id ?: UUID.randomUUID()), path = "ingredient")
   recipe1 = save(Recipe(id = null, name = "recipe1", false), path = "recipe")
   val favoriteRecipe = save(Recipe(id = null, name = "favorite recipe", true), path = "recipe")
-  save(RecipeIngredient(id = null, recipe1.id.orEmpty(), ing1.id.orEmpty()), path = "recipe-ingredient")
-  save(RecipeIngredient(id = null, recipe1.id.orEmpty(), ing2.id.orEmpty()), path = "recipe-ingredient")
-  save(RecipeIngredient(id = null, favoriteRecipe.id.orEmpty(), ing3.id.orEmpty()), path = "recipe-ingredient")
-  save(RecipeIngredient(id = null, favoriteRecipe.id.orEmpty(), ing4.id.orEmpty()), path = "recipe-ingredient")
+  save(
+    RecipeIngredient(id = null, recipe1.id ?: UUID.randomUUID(), ing1.id ?: UUID.randomUUID()),
+    path = "recipe-ingredient"
+  )
+  save(
+    RecipeIngredient(id = null, recipe1.id ?: UUID.randomUUID(), ing2.id ?: UUID.randomUUID()),
+    path = "recipe-ingredient"
+  )
+  save(
+    RecipeIngredient(id = null, favoriteRecipe.id ?: UUID.randomUUID(), ing3.id ?: UUID.randomUUID()),
+    path = "recipe-ingredient"
+  )
+  save(
+    RecipeIngredient(id = null, favoriteRecipe.id ?: UUID.randomUUID(), ing4.id ?: UUID.randomUUID()),
+    path = "recipe-ingredient"
+  )
 //
 //  val recipeIngredients = RecipeIngredients(Recipe(id=null, name="r1", true), listOf(IngredientDetails(recipeIngredientId = null, ingredientId = null, "newIng1","${cat1.id}", categoryName = "${cat1.name}" )) )
 //  val encoded = Json.encodeToString(recipeIngredients)

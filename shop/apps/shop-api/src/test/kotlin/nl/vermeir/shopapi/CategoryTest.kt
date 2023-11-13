@@ -7,15 +7,11 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.data.annotation.Id
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
-
-@kotlinx.serialization.Serializable
-data class Category(@Id val id: String? = null, val name: String, val shopOrder: Int)
 
 @WebMvcTest(value = [CategoryResource::class, CategoryService::class])
 class CategoryTest {
@@ -25,7 +21,7 @@ class CategoryTest {
   @MockkBean
   lateinit var categoryRepository: CategoryRepository
 
-  private val category1 = Category("1", "cat1", 1)
+  private val category1 = Category(UUID.randomUUID(), "cat1", 1)
 
   @Test
   fun `a category without id and all properties set is saved correctly and can be loaded`() {
@@ -38,26 +34,26 @@ class CategoryTest {
     ).andExpect(status().isCreated)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.name").value(category1.name))
-      .andExpect(jsonPath("$.id").value(category1.id))
+      .andExpect(jsonPath("$.id").value(category1.id.toString()))
       .andExpect(jsonPath("$.shopOrder").value(category1.shopOrder))
   }
 
   @Test
   fun `a category can be deleted by id`() {
-    every { categoryRepository.deleteById("1") } returns Unit
+    every { categoryRepository.deleteById(category1.id.toString()) } returns Unit
 
     mockMvc.perform(
-      delete("/category/1")
+      delete("/category/${category1.id}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
   }
 
   @Test
   fun `GET category should return 404 when category not found by id`() {
-    every { categoryRepository.findById("1") } returns Optional.empty()
+    every { categoryRepository.findById(category1.id.toString()) } returns Optional.empty()
 
     mockMvc.perform(
-      get("/category/1")
+      get("/category/${category1.id}")
     ).andExpect(status().isNotFound)
   }
 
@@ -79,20 +75,20 @@ class CategoryTest {
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[0].name").value(category1.name))
-      .andExpect(jsonPath("$.[0].id").value(category1.id))
+      .andExpect(jsonPath("$.[0].id").value(category1.id.toString()))
       .andExpect(jsonPath("$.[0].shopOrder").value(category1.shopOrder))
   }
 
   @Test
   fun `a category should be returned by findById`() {
-    every { categoryRepository.findById("1") } returns Optional.of(category1)
+    every { categoryRepository.findById(category1.id.toString()) } returns Optional.of(category1)
 
     mockMvc.perform(
-      get("/category/1")
+      get("/category/${category1.id}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.name").value(category1.name))
-      .andExpect(jsonPath("$.id").value(category1.id))
+      .andExpect(jsonPath("$.id").value(category1.id.toString()))
       .andExpect(jsonPath("$.shopOrder").value(category1.shopOrder))
   }
 
@@ -105,7 +101,15 @@ class CategoryTest {
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.name").value(category1.name))
-      .andExpect(jsonPath("$.id").value(category1.id))
+      .andExpect(jsonPath("$.id").value(category1.id.toString()))
       .andExpect(jsonPath("$.shopOrder").value(category1.shopOrder))
   }
+
+//  @Test
+//  fun `a category object can be transformed to a OutputCategory object`() {
+//    val category = Category("1", "cat1", 1)
+//    val outputCategory = categoryService.toOutputCategory(category)
+//    val expectedOutputCategory = OutputCategory("1", "cat1", 1)
+//    assert(outputCategory == expectedOutputCategory)
+//  }
 }

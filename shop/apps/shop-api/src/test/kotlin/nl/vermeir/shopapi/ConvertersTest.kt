@@ -33,15 +33,24 @@ class ConverterTest {
   private val inputCategory1 = Category(name = "cat1", shopOrder = 1)
   private val inputCategory2 = Category(name = "cat2", shopOrder = 2)
   private val inputCategory3 = Category(name = "cat3", shopOrder = 3)
-  private val category1 = Category(id ="1", name = inputCategory1.name, shopOrder = inputCategory1.shopOrder)
-  private val category2 = Category(id="2", name = inputCategory2.name, shopOrder = inputCategory2.shopOrder)
-  private val category3 = Category(id="3", name = inputCategory3.name, shopOrder = inputCategory3.shopOrder)
+  private val category1 =
+    Category(id = UUID.randomUUID(), name = inputCategory1.name, shopOrder = inputCategory1.shopOrder)
+  private val category2 =
+    Category(id = UUID.randomUUID(), name = inputCategory2.name, shopOrder = inputCategory2.shopOrder)
+  private val category3 =
+    Category(id = UUID.randomUUID(), name = inputCategory3.name, shopOrder = inputCategory3.shopOrder)
   private val inputRecipe1 = Recipe(name = "recipe1", favorite = false)
-  private val recipe1 = Recipe(id = "recipe1", name = inputRecipe1.name, favorite = inputRecipe1.favorite)
+  private val recipe1 = Recipe(id = UUID.randomUUID(), name = inputRecipe1.name, favorite = inputRecipe1.favorite)
   private val inputIngredient1 = Ingredient(name = "ingredient1", categoryId = category1.id!!)
-  private val ingredient1 = Ingredient(id = "ingredient1", name = inputIngredient1.name, categoryId = category1.id!!)
-  private val inputRecipeIngredient1 = RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!)
-  private val recipeIngredient1 = RecipeIngredient(id = "recipeIngredient1", recipeId = inputRecipeIngredient1.recipeId, ingredientId = inputRecipeIngredient1.ingredientId)
+  private val ingredient1 =
+    Ingredient(id = UUID.randomUUID(), name = inputIngredient1.name, categoryId = category1.id!!)
+  private val inputRecipeIngredient1 =
+    RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!)
+  private val recipeIngredient1 = RecipeIngredient(
+    id = UUID.randomUUID(),
+    recipeId = inputRecipeIngredient1.recipeId,
+    ingredientId = inputRecipeIngredient1.ingredientId
+  )
 
   @Test
   fun `categories can be loaded from a data file`() {

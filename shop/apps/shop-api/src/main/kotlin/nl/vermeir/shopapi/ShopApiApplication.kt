@@ -1,6 +1,5 @@
 package nl.vermeir.shopapi
 
-import kotlinx.datetime.LocalDate
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.filter.CommonsRequestLoggingFilter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-
+import java.time.LocalDate
 
 @SpringBootApplication
 class ShopApiApplication
@@ -27,7 +26,7 @@ class ManagementResource(
   val recipeService: RecipeService,
   val recipeIngredientService: RecipeIngredientService,
   val menuService: MenuService,
-  val menuItemService: MenuItemService
+  val menuItemService: MenuItemService,
 ) {
   @PostMapping("/cleanup")
   fun post() {

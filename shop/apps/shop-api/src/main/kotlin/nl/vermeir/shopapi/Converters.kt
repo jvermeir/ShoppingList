@@ -5,8 +5,11 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RestController
 import java.nio.file.Path
+import java.util.*
 
 data class ConverterResult(val count: Int)
+
+data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredient>)
 
 @RestController
 class ConverterResource(
@@ -43,9 +46,9 @@ class ConverterResource(
     var count = 0
     var recipe: Recipe? = null
     file.readLines().forEach {
-        println("line $it")
+      println("line $it")
       val lineParts = it.split(":")
-      if (lineParts.size>1) {
+      if (lineParts.size > 1) {
         if (lineParts[0] == "naam") {
           recipe = recipeService.save(Recipe(name = lineParts[1], favorite = false))
           count++
@@ -56,7 +59,10 @@ class ConverterResource(
             Ingredient(name = lineParts[1], categoryId = category.id!!)
           )
           val recipeIngredientFromFile =
-            RecipeIngredient(recipeId = recipe?.id.orEmpty(), ingredientId = ingredient.id.orEmpty())
+            RecipeIngredient(
+              recipeId = recipe?.id ?: UUID.randomUUID(),
+              ingredientId = ingredient.id ?: UUID.randomUUID()
+            )
           recipeIngredientService.save(recipeIngredientFromFile)
         }
       }
