@@ -50,9 +50,24 @@ class MenuTest {
   private val march10th = LocalDate.parse("2022-03-10")
   private val menu1 = Menu(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), firstDay = march10th)
   private val inputMenu1 = Menu(firstDay = march10th)
-  private val recipe1 = Recipe(id = UUID.randomUUID(), name = "r1", favorite = true)
+  private val category1 =
+    Category(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "cat1", shopOrder = 1)
+  private val ingredient1 =
+    Ingredient(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "ing1", categoryId = category1.id!!)
+  private val recipe1 =
+    Recipe(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "r1", favorite = true)
+  private val recipeIngredient1 = RecipeIngredient(
+    id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"),
+    recipeId = recipe1.id!!,
+    ingredientId = ingredient1.id!!
+  )
   private val menuItem1 =
-    MenuItem(id = UUID.randomUUID(), menuId = menu1.id!!, recipeId = recipe1.id!!, theDay = march10th)
+    MenuItem(
+      id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"),
+      menuId = menu1.id!!,
+      recipeId = recipe1.id!!,
+      theDay = march10th
+    )
 
   @Test
   fun `a menu without id and all properties set is saved correctly and can be loaded`() {
@@ -113,24 +128,20 @@ class MenuTest {
       .andExpect(jsonPath("$.firstDay").value(menu1.firstDay.toString()))
   }
 
-  // TODO: this fails with message 'Cannot access class 'nl.vermeir.shopapi.Menu'. Check your module classpath for missing or conflicting dependencies'
-  // only 'invalidate cache and restart' helps
-//  @Test
-//  fun `a menu and its details should be returned by menu details firstday`() {
-////    every { menuRepository.findByFirstDay(march10th) } returns menu1
-//    every { menuItemRepository.findByMenuId(menu1.id ?: UUID.randomUUID()) } returns listOf(menuItem1)
-////    every { recipeRepository.findById(recipe1.id.toString()) } returns Optional.of(recipe1)
-////    every { recipeIngredientRepository.findByRecipeId(recipe1.id ?: UUID.randomUUID()) } returns listOf(
-////      recipeIngredient1
-////    )
-////    every { ingredientRepository.findById(recipeIngredient1.ingredientId.toString()) } returns Optional.of(ingredient1)
-////    every { categoryRepository.findByName(category1.name) } returns Optional.of(category1)
-////
-//    val d = march10th.toString()
-//    mockMvc.perform(
-//      get("/menu/details/firstDay/${d}")
-//    ).andExpect(status().isOk)
-////      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-////      .andExpect(content().string("""{"id":"1","firstDay":"2022-03-10","menuItems":[{"id":"1","theDay":"2022-03-10","recipe":{"id":"1","name":"r1","favorite":true,"ingredients":[{"id":"1","name":"ing1","category":{"id":"1","name":"cat1","shopOrder":1}}]}}]}"""))
-//  }
+  @Test
+  fun `a menu and its details should be returned by menu details firstday`() {
+    every { categoryRepository.findById(category1.id!!) } returns Optional.of(category1)
+    every { ingredientRepository.findById(ingredient1.id!!) } returns Optional.of(ingredient1)
+    every { recipeRepository.findById(recipe1.id!!) } returns Optional.of(recipe1)
+    every { recipeIngredientRepository.findByRecipeId(recipe1.id!!) } returns listOf(recipeIngredient1)
+    every { menuItemRepository.findByMenuId(menu1.id!!) } returns listOf(menuItem1)
+    every { menuRepository.findByFirstDay(march10th) } returns menu1
+
+    val d = march10th.toString()
+    mockMvc.perform(
+      get("/menu/details/firstDay/${d}")
+    ).andExpect(status().isOk)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(content().string("""{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","firstDay":"2022-03-10","menuItems":[{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","theDay":"2022-03-10","recipe":{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"r1","favorite":true,"ingredients":[{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"ing1","category":{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"cat1","shopOrder":1}}]}}]}"""))
+  }
 }
