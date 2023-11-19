@@ -6,6 +6,11 @@ val fuel_version: String by project
 val kotlinx_serialization_json_version: String by project
 val springmockk_version: String by project
 
+springBoot {
+  mainClass.set("nl.vermeir.shopapi.ShopApiApplicationKt")
+}
+
+
 plugins {
   id("org.springframework.boot") version "3.1.5"
   id("io.spring.dependency-management") version "1.1.3"

@@ -66,7 +66,7 @@ class CategoryService(val db: CategoryRepository) {
 @Entity(name = "CATEGORIES")
 @Serializable
 data class Category(
-  @Serializable(with = UUIDSerializer::class)
+  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
   @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
   var name: String,
   var shopOrder: Int
