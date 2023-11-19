@@ -31,7 +31,7 @@ curl -v -X POST --location "http://127.0.0.1:8080/api/menu" \
 
 curl -v -X POST --location "http://127.0.0.1:8080/api/menu-item" \
 -H "Content-Type: application/json" \
--d "{\"menuId\": \"c1ec3773-2f04-4e0a-be14-fa287969a9fa\", \"recipeId\": \"dbf0b2ac-70c5-4af9-866b-f8dfa5b9082e\", \"theDay\":\"2023-10-21\"}"
+-d "{\"menuId\": \"5edbfdc0-4ccf-4809-bb61-310db12420f8\", \"recipeId\": \"76f1ca57-b135-4a02-b949-bdbe797c46d4\", \"theDay\":\"2023-10-21\"}"
 
 curl -v -X POST --location "http://127.0.0.1:8080/api/menu-item" \
 -H "Content-Type: application/json" \
@@ -64,6 +64,7 @@ curl -v -X POST --location "http://127.0.0.1:8080/api/cleanup" \
 curl -v --location "http://localhost:8080/api/recipe-ingredients/Pompoensoep'
 
 curl -v --location 'localhost:8080/api/ingredient?name=flammmkuchendeeg'
+
 ```
 SELECT * FROM recipes WHERE name = 'Pompoensoep';
 

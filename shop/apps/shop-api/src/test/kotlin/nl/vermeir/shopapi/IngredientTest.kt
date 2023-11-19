@@ -4,6 +4,8 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import nl.vermeir.shopapi.data.OutputCategory
+import nl.vermeir.shopapi.data.OutputIngredient
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -14,29 +16,33 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
-@WebMvcTest(value = [IngredientResource::class, IngredientService::class])
+@WebMvcTest(value = [IngredientResource::class, IngredientService::class, CategoryService::class, CategoryRepository::class])
 class IngredientTest {
   @Autowired
   lateinit var mockMvc: MockMvc
+
+  @Autowired
+  lateinit var ingredientService: IngredientService
+
+  @Autowired
+  lateinit var categoryService: CategoryService
 
   @MockkBean
   lateinit var ingredientRepository: IngredientRepository
 
   @MockkBean
-  lateinit var categoryService: CategoryService
-
-  @Autowired
-  lateinit var ingredientService: IngredientService
+  lateinit var categoryRepository: CategoryRepository
 
   private val ingredient1 = Ingredient(id = UUID.randomUUID(), name = "name1", categoryId = UUID.randomUUID())
+  private val inputIngredient1 = Ingredient(name = "name1", categoryId = UUID.randomUUID())
 
   @Test
   fun `a ingredient without id and all properties set is saved correctly and can be loaded`() {
-    every { ingredientRepository.save(ingredient1) } returns ingredient1
+    every { ingredientRepository.save(inputIngredient1) } returns ingredient1
 
     mockMvc.perform(
       post("/ingredient").content(
-        Json.encodeToString(ingredient1)
+        Json.encodeToString(inputIngredient1)
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -47,7 +53,7 @@ class IngredientTest {
 
   @Test
   fun `GET ingredient should return 404 when ingredient not found by id`() {
-    every { ingredientRepository.findById(ingredient1.id.toString()) } returns Optional.empty()
+    every { ingredientRepository.findById(ingredient1.id!!) } returns Optional.empty()
 
     mockMvc.perform(
       get("/ingredient/${ingredient1.id}")
@@ -78,7 +84,7 @@ class IngredientTest {
 
   @Test
   fun `a ingredient should be returned by findById`() {
-    every { ingredientRepository.findById(ingredient1.id.toString()) } returns Optional.of(ingredient1)
+    every { ingredientRepository.findById(ingredient1.id!!) } returns Optional.of(ingredient1)
 
     mockMvc.perform(
       get("/ingredient/${ingredient1.id}")
@@ -102,19 +108,20 @@ class IngredientTest {
       .andExpect(jsonPath("$.categoryId").value(ingredient1.categoryId.toString()))
   }
 
-//  @Test
-//  fun `a ingredient object can be transformed to a OutputIngredient object`() {
-//    val category = Category("1", "cat1", 1)
-//    val ingredient = Ingredient("1", "ing1", "1")
-//    val expectedOutputCategory = OutputCategory("1", "cat1", 1)
-//
-//    every { categoryService.findById("1") } returns category
-//    every { categoryService.toOutputCategory(category) } returns expectedOutputCategory
-//    every { ingredientRepository.findById("1") } returns Optional.of(ingredient)
-//
-//    val outputIngredient = ingredientService.toOutputIngredient(ingredient)
-//
-//    val expectedOutputIngredient = OutputIngredient("1", "ing1", expectedOutputCategory)
-//    assert(outputIngredient == expectedOutputIngredient)
-//  }
+  @Test
+  fun `a ingredient object can be transformed to a OutputIngredient object`() {
+    val categoryId = UUID.randomUUID()
+    val ingredientId = UUID.randomUUID()
+    val category = Category(categoryId, "cat1", 1)
+    val ingredient = Ingredient(ingredientId, "ing1", categoryId)
+    val expectedOutputCategory = OutputCategory(categoryId.toString(), "cat1", 1)
+
+    every { categoryRepository.findById(categoryId) } returns Optional.of(category)
+    every { ingredientRepository.findById(ingredient.id!!) } returns Optional.of(ingredient)
+
+    val outputIngredient = ingredientService.toOutputIngredient(ingredient)
+
+    val expectedOutputIngredient = OutputIngredient(ingredientId.toString(), "ing1", expectedOutputCategory)
+    assert(outputIngredient == expectedOutputIngredient)
+  }
 }

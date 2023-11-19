@@ -2,6 +2,9 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import kotlinx.serialization.Serializable
+import nl.vermeir.shopapi.data.OutputMenu
+import nl.vermeir.shopapi.data.OutputMenuItem
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus
@@ -27,15 +30,17 @@ class MenuResource(val menuService: MenuService) {
   fun getMenuDetailsByFirstDay(@PathVariable(name = "firstDay") firstDay: LocalDate) =
     ResponseEntity.ok(menuService.menuDetailsByFirstDay(firstDay))
 
+  //nl.vermeir.shopapi.MyMenu@620f7a39
   @PostMapping("/menu")
-  fun post(@RequestBody menu: Menu): ResponseEntity<Menu> = ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
+  fun post(@RequestBody menu: Menu): ResponseEntity<Menu> {
+    return ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
+  }
 }
 
 @Service
 class MenuService(
   val menuItemService: MenuItemService,
   val recipeService: RecipeService,
-  val categoryService: CategoryService,
   val menuRepository: MenuRepository,
 ) {
   fun find(): List<Menu> {
@@ -43,40 +48,24 @@ class MenuService(
   }
 
   fun findById(id: UUID): Menu =
-    menuRepository.findById(id.toString()).orElseThrow { ResourceNotFoundException("Menu '${id}' not found") }
+    menuRepository.findById(id).orElseThrow { ResourceNotFoundException("Menu '${id}' not found") }
 
-  // TODO: why can't i say orElseThrow?
   fun findByFirstDay(firstDay: LocalDate): Menu {
     val menu = menuRepository.findByFirstDay(firstDay)
-    return Menu(menu?.id, LocalDate.parse(menu?.firstDay.toString()))
+    return Menu(menu?.id, menu?.firstDay ?: throw ResourceNotFoundException("Menu for '${firstDay}' not found"))
   }
-//      .orElseThrow { ResourceNotFoundException("Menu for '${firstDay}' not found") }
 
-  fun menuDetailsByFirstDay(firstDay: LocalDate): String {
-    return "todo"
+  fun menuDetailsByFirstDay(firstDay: LocalDate): OutputMenu {
+    val menu = findByFirstDay(firstDay)
+    val menuItems = menuItemService.findByMenuId(menu.id ?: throw ResourceNotFoundException("Menu '${menu}' not found"))
+
+    val outputMenuItems = menuItems.map { menuItem ->
+      val recipe = recipeService.findById(menuItem.recipeId)
+      val outputRecipe = recipeService.toOutputRecipe(recipe)
+      OutputMenuItem(menuItem.id.toString(), menuItem.theDay, outputRecipe)
+    }
+    return OutputMenu(menu.id.toString(), firstDay, outputMenuItems)
   }
-//    val menu = findByFirstDay(firstDay)
-//    val menuItems = menuItemService.findByMenuId(menu.id.orEmpty())
-//
-//    val outputMenuItems = menuItems.map { menuItem ->
-//      val recipe = recipeService.findById(menuItem.recipeId)
-//
-//      val ingredients = recipeService.getRecipeIngredients(recipe.name)
-//      val outputIngredients = ingredients.map { ingredient ->
-//        val category = categoryService.findByName(ingredient.categoryName)
-//        OutputIngredient(
-//          ingredient.ingredientId,
-//          ingredient.ingredientName,
-//          OutputCategory(category.id, category.name, category.shopOrder)
-//        )
-//      }
-//      val outputRecipe = OutputRecipe(recipe.id, recipe.name, recipe.favorite, outputIngredients)
-//
-//      OutputMenuItem(menuItem.id, menuItem.theDay, outputRecipe)
-//    }
-//
-//    return OutputMenu(menu.id, firstDay, outputMenuItems)
-//  }
 
   fun save(menu: Menu): Menu = menuRepository.save(menu)
 
@@ -84,13 +73,15 @@ class MenuService(
 }
 
 @Entity(name = "MENUS")
-class Menu(
-  @jakarta.persistence.Id @GeneratedValue var id: UUID?,
+@Serializable
+data class Menu(
+  @jakarta.persistence.Id @GeneratedValue
+  @Serializable(with = UUIDSerializer::class)
+  var id: UUID? = null,
+  @Serializable(with = LocalDateSerializer::class)
   var firstDay: LocalDate
 )
 
-interface MenuRepository : CrudRepository<Menu, String> {
+interface MenuRepository : CrudRepository<Menu, UUID> {
   fun findByFirstDay(@Param("firstDay") firstDay: LocalDate): Menu?
 }
-
-// val yyyyyMMddFormatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")

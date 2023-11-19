@@ -2,6 +2,8 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import kotlinx.serialization.Serializable
+import nl.vermeir.shopapi.data.OutputIngredient
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,15 +33,6 @@ class IngredientResource(val ingredientService: IngredientService) {
   fun post(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.CREATED)
 }
 
-// TODO: ?
-inline fun <T> nullable(f: () -> T): T? = try {
-  f()
-} catch (e: Error) {
-  throw e
-} catch (e: Throwable) {
-  null
-}
-
 @Service
 class IngredientService(val db: IngredientRepository, val categoryService: CategoryService) {
   fun list(): List<Ingredient> = db.findAll().toList()
@@ -47,7 +40,7 @@ class IngredientService(val db: IngredientRepository, val categoryService: Categ
 //  fun listIngredientsView(): List<IngredientView> = db.ingredientsView()
 
   fun findById(id: UUID): Ingredient =
-    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("Ingredient '${id}' not found") }
+    db.findById(id).orElseThrow { ResourceNotFoundException("Ingredient '${id}' not found") }
 
   fun findByName(name: String): Ingredient? =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Ingredient '${name}' not found") }
@@ -56,22 +49,26 @@ class IngredientService(val db: IngredientRepository, val categoryService: Categ
 
   fun deleteAll() = db.deleteAll()
 
-  fun delete(id: UUID) = db.deleteById(id.toString())
+  fun delete(id: UUID) = db.deleteById(id)
 
-//  fun toOutputIngredient(ingredient: Ingredient): OutputIngredient {
-//    val outputCategory = categoryService.toOutputCategory(categoryService.findById(ingredient.categoryId))
-//    return OutputIngredient(ingredient.id.orEmpty(), ingredient.name, outputCategory)
-//  }
+  fun toOutputIngredient(ingredient: Ingredient): OutputIngredient {
+    val outputCategory = categoryService.toOutputCategory(categoryService.findById(ingredient.categoryId))
+    return OutputIngredient(ingredient.id.toString(), ingredient.name, outputCategory)
+  }
 }
 
 @Entity(name = "INGREDIENTS")
-class Ingredient(
-  @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
+@Serializable
+data class Ingredient(
+  @Serializable(with = UUIDSerializer::class)
+  @jakarta.persistence.Id @GeneratedValue
+  var id: UUID? = null,
   var name: String,
+  @Serializable(with = UUIDSerializer::class)
   var categoryId: UUID
 )
 
-interface IngredientRepository : CrudRepository<Ingredient, String> {
+interface IngredientRepository : CrudRepository<Ingredient, UUID> {
   fun findByName(name: String): Optional<Ingredient>
 
 //  @Query("SELECT i.id, i.name, i.categoryId, c.name as categoryName FROM ingredients i left outer join categories c on i.categoryId = c.id ")

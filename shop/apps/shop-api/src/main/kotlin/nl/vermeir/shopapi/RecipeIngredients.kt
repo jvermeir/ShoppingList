@@ -2,6 +2,7 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import kotlinx.serialization.Serializable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -31,7 +32,7 @@ class RecipeIngredientService(val db: RecipeIngredientRepository) {
   fun list(): List<RecipeIngredient> = db.findAll().toList()
 
   fun findById(id: UUID): RecipeIngredient =
-    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("RecipeIngredient '${id}' not found") }
+    db.findById(id).orElseThrow { ResourceNotFoundException("RecipeIngredient '${id}' not found") }
 
   fun findByRecipeId(id: UUID): List<RecipeIngredient> = db.findByRecipeId(id)
 
@@ -41,12 +42,17 @@ class RecipeIngredientService(val db: RecipeIngredientRepository) {
 }
 
 @Entity(name = "RECIPE_INGREDIENTS")
+@Serializable
 data class RecipeIngredient(
-  @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
+  @jakarta.persistence.Id @GeneratedValue
+  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
+  var id: UUID? = null,
+  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
   var recipeId: UUID,
+  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
   var ingredientId: UUID
 )
 
-interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, String> {
+interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, UUID> {
   fun findByRecipeId(recipeId: UUID): List<RecipeIngredient>
 }

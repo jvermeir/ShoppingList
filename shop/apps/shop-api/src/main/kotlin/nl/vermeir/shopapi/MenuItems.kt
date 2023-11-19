@@ -2,6 +2,7 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import kotlinx.serialization.Serializable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -30,9 +31,9 @@ class MenuItemService(val db: MenuItemRepository) {
   fun list(): List<MenuItem> = db.findAll().toList()
 
   fun findById(id: UUID): MenuItem =
-    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("MenuItem '${id}' not found") }
+    db.findById(id).orElseThrow { ResourceNotFoundException("MenuItem '${id}' not found") }
 
-//  fun findByMenuId(menuId: String): List<MenuItem> = db.findByMenuId(menuId)
+  fun findByMenuId(menuId: UUID): List<MenuItem> = db.findByMenuId(menuId)
 
   fun findByDay(day: LocalDate): List<MenuItem> = db.findByTheDay(day)
 
@@ -42,14 +43,20 @@ class MenuItemService(val db: MenuItemRepository) {
 }
 
 @Entity(name = "MENU_ITEMS")
+@Serializable
 data class MenuItem(
-  @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
+  @jakarta.persistence.Id @GeneratedValue
+  @Serializable(with = UUIDSerializer::class)
+  var id: UUID? = null,
+  @Serializable(with = UUIDSerializer::class)
   var menuId: UUID,
+  @Serializable(with = UUIDSerializer::class)
   var recipeId: UUID,
+  @Serializable(with = LocalDateSerializer::class)
   var theDay: LocalDate
 )
 
-interface MenuItemRepository : CrudRepository<MenuItem, String> {
+interface MenuItemRepository : CrudRepository<MenuItem, UUID> {
   fun findByTheDay(theDay: LocalDate): List<MenuItem>
 
   fun findByMenuId(menuId: UUID): List<MenuItem>

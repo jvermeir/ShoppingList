@@ -2,6 +2,8 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import kotlinx.serialization.Serializable
+import nl.vermeir.shopapi.data.OutputCategory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
@@ -42,29 +44,34 @@ class CategoryService(val db: CategoryRepository) {
   fun find(): List<Category> = db.findAll().toList()
 
   fun findById(id: UUID): Category =
-    db.findById(id.toString()).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
+    db.findById(id).orElseThrow { ResourceNotFoundException("Category '${id}' not found") }
 
   fun findByName(name: String): Category =
     db.findByName(name).orElseThrow { ResourceNotFoundException("Category '${name}' not found") }
 
-  fun save(category: Category): Category = db.save(category)
+  fun save(category: Category): Category {
+    println("category: ${category}")
+    return db.save(category)
+  }
 
   fun deleteAll() = db.deleteAll()
 
-  fun delete(id: UUID) = db.deleteById(id.toString())
+  fun delete(id: UUID) = db.deleteById(id)
 
-//  fun toOutputCategory(category: Category): OutputCategory {
-//    return OutputCategory(category.id.orEmpty(), category.name, category.shopOrder)
-//  }
+  fun toOutputCategory(category: Category): OutputCategory {
+    return OutputCategory(category.id.toString(), category.name, category.shopOrder)
+  }
 }
 
 @Entity(name = "CATEGORIES")
-class Category(
+@Serializable
+data class Category(
+  @Serializable(with = UUIDSerializer::class)
   @jakarta.persistence.Id @GeneratedValue var id: UUID? = null,
   var name: String,
   var shopOrder: Int
 )
 
-interface CategoryRepository : CrudRepository<Category, String> {
+interface CategoryRepository : CrudRepository<Category, UUID> {
   fun findByName(name: String): Optional<Category>
 }

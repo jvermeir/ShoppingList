@@ -55,13 +55,17 @@ class ConverterResource(
         } else {
           println("category ${lineParts[0]}")
           val category: Category = categoryService.findByName(lineParts[0])
-          val ingredient = ingredientService.findByName(lineParts[1]) ?: ingredientService.save(
-            Ingredient(name = lineParts[1], categoryId = category.id!!)
-          )
+          val ingredient = try {
+            ingredientService.findByName(lineParts[1])
+          } catch (e: ResourceNotFoundException) {
+            ingredientService.save(
+              Ingredient(name = lineParts[1], categoryId = category.id!!)
+            )
+          }
           val recipeIngredientFromFile =
             RecipeIngredient(
               recipeId = recipe?.id ?: UUID.randomUUID(),
-              ingredientId = ingredient.id ?: UUID.randomUUID()
+              ingredientId = ingredient?.id ?: UUID.randomUUID()
             )
           recipeIngredientService.save(recipeIngredientFromFile)
         }

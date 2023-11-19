@@ -22,16 +22,21 @@ class RecipeIngredientTest {
   @MockkBean
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
-  private val recipeIngredient1 =
-    RecipeIngredient(id = UUID.randomUUID(), recipeId = UUID.randomUUID(), ingredientId = UUID.randomUUID())
+  private val inputRecipeIngredient1 =
+    RecipeIngredient(recipeId = UUID.randomUUID(), ingredientId = UUID.randomUUID())
+  private val recipeIngredient1 = RecipeIngredient(
+    id = UUID.randomUUID(),
+    inputRecipeIngredient1.recipeId,
+    inputRecipeIngredient1.ingredientId
+  )
 
   @Test
   fun `a recipe-ingredient without id and all properties set is saved correctly and can be loaded`() {
-    every { recipeIngredientRepository.save(recipeIngredient1) } returns recipeIngredient1
+    every { recipeIngredientRepository.save(inputRecipeIngredient1) } returns recipeIngredient1
 
     mockMvc.perform(
       post("/recipe-ingredient").content(
-        Json.encodeToString(recipeIngredient1)
+        Json.encodeToString(inputRecipeIngredient1)
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -42,7 +47,7 @@ class RecipeIngredientTest {
 
   @Test
   fun `GET recipe-ingredient should return 404 when recipe not found by id`() {
-    every { recipeIngredientRepository.findById(recipeIngredient1.id.toString()) } returns Optional.empty()
+    every { recipeIngredientRepository.findById(recipeIngredient1.id!!) } returns Optional.empty()
 
     mockMvc.perform(
       get("/recipe-ingredient/${recipeIngredient1.id}")
@@ -64,7 +69,7 @@ class RecipeIngredientTest {
 
   @Test
   fun `a recipe should be returned by findById`() {
-    every { recipeIngredientRepository.findById(recipeIngredient1.id.toString()) } returns Optional.of(recipeIngredient1)
+    every { recipeIngredientRepository.findById(recipeIngredient1.id!!) } returns Optional.of(recipeIngredient1)
 
     mockMvc.perform(
       get("/recipe-ingredient/${recipeIngredient1.id}")

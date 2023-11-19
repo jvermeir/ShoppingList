@@ -51,7 +51,7 @@ class MenuItemTest {
 
   @Test
   fun `GET menu-item should return 404 when menu-item not found by id`() {
-    every { menuItemRepository.findById(menuItem1.id.toString()) } returns Optional.empty()
+    every { menuItemRepository.findById(menuItem1.id!!) } returns Optional.empty()
 
     mockMvc.perform(
       get("/menu-item/${menuItem1.id}")
