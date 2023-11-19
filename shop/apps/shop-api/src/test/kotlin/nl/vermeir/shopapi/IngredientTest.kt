@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
-@WebMvcTest(value = [IngredientResource::class, IngredientService::class, CategoryService::class, CategoryRepository::class])
+@WebMvcTest(value = [IngredientResource::class, IngredientService::class, CategoryService::class])
 class IngredientTest {
   @Autowired
   lateinit var mockMvc: MockMvc

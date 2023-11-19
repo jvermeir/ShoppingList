@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import java.util.*
 
-@WebMvcTest(value = [CategoryResource::class, CategoryService::class, CategoryRepository::class])
+@WebMvcTest(value = [CategoryResource::class, CategoryService::class])
 class CategoryTest {
   @Autowired
   lateinit var mockMvc: MockMvc

@@ -17,10 +17,8 @@ import java.util.*
 
 @WebMvcTest(
   value = [
-    MenuResource::class, MenuService::class,
-    MenuItemService::class, RecipeService::class, IngredientService::class, CategoryService::class,
-    CategoryRepository::class, IngredientRepository::class, MenuItemRepository::class, RecipeRepository::class,
-    RecipeIngredientService::class
+    MenuResource::class,
+    MenuService::class, MenuItemService::class, RecipeService::class, IngredientService::class, CategoryService::class, RecipeIngredientService::class
   ]
 )
 
@@ -34,7 +32,6 @@ class MenuTest {
   @MockkBean
   lateinit var menuItemRepository: MenuItemRepository
 
-  // NOTE: we need these mocks because they are used by code that is called from the menuDetailsByFirstDay method
   @MockkBean
   lateinit var categoryRepository: CategoryRepository
 
