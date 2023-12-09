@@ -1,0 +1,25 @@
+{
+  "id": "74cb594f-a990-4297-b6e3-e94436f25591",
+  "firstDay": "2023-12-01",
+  "items": {
+    "Category(id=6501bae0-94a4-4afd-96e8-44fdc1a1e55f, name=category1, shopOrder=1)": [
+      {
+        "id": "e9724c77-018e-43a8-9113-bffe7ac10b97",
+        "name": "ingredient1",
+        "categoryId": "6501bae0-94a4-4afd-96e8-44fdc1a1e55f"
+      },
+      {
+        "id": "e9724c77-018e-43a8-9113-bffe7ac10b97",
+        "name": "ingredient1",
+        "categoryId": "6501bae0-94a4-4afd-96e8-44fdc1a1e55f"
+      }
+    ],
+    "Category(id=c06979b8-08b9-419c-a2e7-ca4c07e68ac1, name=category2, shopOrder=2)": [
+      {
+        "id": "7973574b-5ef1-4510-bf55-32c3e5da975d",
+        "name": "ingredient2",
+        "categoryId": "c06979b8-08b9-419c-a2e7-ca4c07e68ac1"
+      }
+    ]
+  }
+}

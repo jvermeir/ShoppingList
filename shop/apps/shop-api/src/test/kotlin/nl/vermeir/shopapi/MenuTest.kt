@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.time.LocalDate
 import java.util.*
 
 @WebMvcTest(
@@ -43,28 +42,6 @@ class MenuTest {
 
   @MockkBean
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
-
-  private val march10th = LocalDate.parse("2022-03-10")
-  private val menu1 = Menu(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), firstDay = march10th)
-  private val inputMenu1 = Menu(firstDay = march10th)
-  private val category1 =
-    Category(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "cat1", shopOrder = 1)
-  private val ingredient1 =
-    Ingredient(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "ing1", categoryId = category1.id!!)
-  private val recipe1 =
-    Recipe(id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"), name = "r1", favorite = true)
-  private val recipeIngredient1 = RecipeIngredient(
-    id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"),
-    recipeId = recipe1.id!!,
-    ingredientId = ingredient1.id!!
-  )
-  private val menuItem1 =
-    MenuItem(
-      id = UUID.fromString("0797c413-45d7-412a-a4da-7ccd90ded9ee"),
-      menuId = menu1.id!!,
-      recipeId = recipe1.id!!,
-      theDay = march10th
-    )
 
   @Test
   fun `a menu without id and all properties set is saved correctly and can be loaded`() {

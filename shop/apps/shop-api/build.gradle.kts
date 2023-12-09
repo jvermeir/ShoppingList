@@ -5,6 +5,7 @@ val javax_persistence_api_version: String by project
 val fuel_version: String by project
 val kotlinx_serialization_json_version: String by project
 val springmockk_version: String by project
+val ktor_version: String by project
 
 springBoot {
   mainClass.set("nl.vermeir.shopapi.ShopApiApplicationKt")
@@ -52,6 +53,11 @@ dependencies {
   testImplementation("com.ninja-squad:springmockk:$springmockk_version")
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json_version")
   implementation("com.github.kittinunf.fuel:fuel:$fuel_version")
+
+  implementation("io.ktor:ktor-client-core:$ktor_version")
+  implementation("io.ktor:ktor-client-cio:$ktor_version")
+  implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+  implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 }
 
 tasks.withType<KotlinCompile> {

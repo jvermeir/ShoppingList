@@ -65,7 +65,9 @@ class ConverterResource(
           val recipeIngredientFromFile =
             RecipeIngredient(
               recipeId = recipe?.id ?: UUID.randomUUID(),
-              ingredientId = ingredient?.id ?: UUID.randomUUID()
+              ingredientId = ingredient?.id ?: UUID.randomUUID(),
+              unit = "kg",
+              amount = 1.0f
             )
           recipeIngredientService.save(recipeIngredientFromFile)
         }

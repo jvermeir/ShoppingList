@@ -12,17 +12,17 @@ import java.util.*
 
 @RestController
 class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {
-  @GetMapping("/recipe-ingredients")
+  @GetMapping("/recipeingredients")
   fun list() = recipeIngredientService.list()
 
-  @GetMapping("/recipe-ingredient/{id}")
+  @GetMapping("/recipeingredient/{id}")
   fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(recipeIngredientService.findById(id))
 
-  @GetMapping("/recipe-ingredient")
+  @GetMapping("/recipeingredient")
   fun findByRecipeId(@RequestParam(name = "recipeId") recipeId: UUID) =
     ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
 
-  @PostMapping("/recipe-ingredient")
+  @PostMapping("/recipeingredient")
   fun post(@RequestBody recipeIngredient: RecipeIngredient) =
     ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.CREATED)
 }
@@ -50,8 +50,11 @@ data class RecipeIngredient(
   @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
   var recipeId: UUID,
   @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
-  var ingredientId: UUID
-)
+  var ingredientId: UUID,
+  var amount: Float?,
+  var unit: String?
+) {
+}
 
 interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, UUID> {
   fun findByRecipeId(recipeId: UUID): List<RecipeIngredient>

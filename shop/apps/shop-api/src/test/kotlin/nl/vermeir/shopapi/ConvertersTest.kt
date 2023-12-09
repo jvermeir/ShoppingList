@@ -45,11 +45,12 @@ class ConverterTest {
   private val ingredient1 =
     Ingredient(id = UUID.randomUUID(), name = inputIngredient1.name, categoryId = category1.id!!)
   private val inputRecipeIngredient1 =
-    RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!)
+    RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!, amount = 1.0f, unit = "kg")
   private val recipeIngredient1 = RecipeIngredient(
     id = UUID.randomUUID(),
     recipeId = inputRecipeIngredient1.recipeId,
-    ingredientId = inputRecipeIngredient1.ingredientId
+    ingredientId = inputRecipeIngredient1.ingredientId,
+    amount = 1.0f, unit = "kg"
   )
 
   @Test
@@ -74,7 +75,6 @@ class ConverterTest {
     every { ingredientRepository.save(inputIngredient1) } returns ingredient1
     every { recipeIngredientRepository.save(inputRecipeIngredient1) } returns recipeIngredient1
 
-    val x = categoryRepository.findByName(inputCategory1.name)
     mockMvc.perform(
       post("/converters/cookbook/cookbook.csv")
         .contentType(MediaType.APPLICATION_JSON)

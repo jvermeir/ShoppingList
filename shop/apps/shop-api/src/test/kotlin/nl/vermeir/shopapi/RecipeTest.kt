@@ -116,7 +116,7 @@ class RecipeTest {
     val category = Category(categoryId, "cat1", 1)
     val ingredient = Ingredient(ingredientId, "ing1", categoryId)
     val recipe = Recipe(recipeId, "rec1", true)
-    val recipeIngredient = RecipeIngredient(recipeIngredientId, recipeId, ingredientId)
+    val recipeIngredient = RecipeIngredient(recipeIngredientId, recipeId, ingredientId, 1.0f, "kg")
 
     val outputIngredient = OutputIngredient(
       ingredientId.toString(),

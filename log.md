@@ -2,6 +2,58 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+
+## 20231202
+
+https://kotlinlang.org/docs/inline-functions.html
+
+```
+Using higher-order functions imposes certain runtime penalties: each function is an object, and it captures a closure. A closure is a scope of variables that can be accessed in the body of the function. Memory allocations (both for function objects and classes) and virtual calls introduce runtime overhead.
+```
+
+https://www.baeldung.com/kotlin/reified-functions
+
+reified functions. declare a type parameter of a generic function reified so that type information is
+available at run time.
+this needs inlining because then for every instance of the code the type is known at compile time and
+we can get rid of noisy type declarations. this is explained well in the baeldung blog. 
+
+so we can replace copies of 
+
+```kotlin
+suspend fun addCategory(category: Category, client: HttpClient): Category {
+  val response: HttpResponse = client.post("$BASE_URL/category") {
+    contentType(ContentType.Application.Json)
+    setBody(category)
+  }
+  if (response.status != HttpStatusCode.Created) {
+    throw Exception("Failed to add $category")
+  }
+  return response.body()
+}
+```
+one for each type (Category, Ingredient, ...)
+
+with a single function:
+
+```kotlin
+suspend inline fun <reified T> addIt(it: T, client: HttpClient): T {
+  val typeName = T::class.simpleName?.lowercase()
+
+  val response: HttpResponse = client.post("$BASE_URL/$typeName") {
+    contentType(ContentType.Application.Json)
+    setBody(it)
+  }
+  if (response.status != HttpStatusCode.Created) {
+    throw Exception("Failed to add $it of type ${T::class}")
+  }
+  return response.body<T>()
+}
+```
+
+but if we can do this to call the http service, why do we need all the `RestController`s and `Service`s in 
+the shopapi package? 
+
 ## 20230804
 
 Update to jdk 17: `sdk install java 17.0.8-tem`

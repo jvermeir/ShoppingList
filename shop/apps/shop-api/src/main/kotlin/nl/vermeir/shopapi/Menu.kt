@@ -30,7 +30,6 @@ class MenuResource(val menuService: MenuService) {
   fun getMenuDetailsByFirstDay(@PathVariable(name = "firstDay") firstDay: LocalDate) =
     ResponseEntity.ok(menuService.menuDetailsByFirstDay(firstDay))
 
-  //nl.vermeir.shopapi.MyMenu@620f7a39
   @PostMapping("/menu")
   fun post(@RequestBody menu: Menu): ResponseEntity<Menu> {
     return ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
