@@ -108,10 +108,10 @@ class RecipeTest {
 
   @Test
   fun `a recipe object can be transformed to a OutputRecipe object`() {
-    val categoryId = UUID.randomUUID()
-    val ingredientId = UUID.randomUUID()
-    val recipeId = UUID.randomUUID()
-    val recipeIngredientId = UUID.randomUUID()
+    val categoryId = UUID.fromString(theId)
+    val ingredientId = UUID.fromString(theId)
+    val recipeId = UUID.fromString(theId)
+    val recipeIngredientId = UUID.fromString(theId)
 
     val category = Category(categoryId, "cat1", 1)
     val ingredient = Ingredient(ingredientId, "ing1", categoryId)
@@ -121,9 +121,17 @@ class RecipeTest {
     val outputIngredient = OutputIngredient(
       ingredientId.toString(),
       "ing1",
-      OutputCategory(category.id.toString(), category.name, category.shopOrder)
+      OutputCategory(category.id.toString(), category.name, category.shopOrder),
+      unit = recipeIngredient.unit ?: "kg",
+      amount = recipeIngredient.amount ?: 0.0f
     )
-    every { ingredientService.toOutputIngredient(ingredient) } returns outputIngredient
+    every {
+      ingredientService.toOutputIngredient(
+        ingredient,
+        unit = recipeIngredient.unit ?: "kg",
+        amount = recipeIngredient.amount ?: 1.0f
+      )
+    } returns outputIngredient
     every { ingredientService.findById(ingredientId) } returns ingredient
     every { recipeIngredientService.findByRecipeId(recipeId) } returns listOf(recipeIngredient)
 

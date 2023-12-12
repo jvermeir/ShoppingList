@@ -53,7 +53,7 @@ class RecipeService(
   fun toOutputRecipe(recipe: Recipe): OutputRecipe {
     val recipeIngredients = recipeIngredientService.findByRecipeId(recipe.id!!)
     val outputIngredients = recipeIngredients.map {
-      ingredientService.toOutputIngredient(ingredientService.findById(it.ingredientId))
+      ingredientService.toOutputIngredient(ingredientService.findById(it.ingredientId), it.unit ?: "", it.amount ?: 0f)
     }
     return OutputRecipe(recipe.id.toString(), recipe.name, recipe.favorite, outputIngredients)
   }

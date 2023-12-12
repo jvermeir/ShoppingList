@@ -54,6 +54,7 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_json_version")
   implementation("com.github.kittinunf.fuel:fuel:$fuel_version")
 
+  implementation("com.google.code.gson:gson:2.10.1")
   implementation("io.ktor:ktor-client-core:$ktor_version")
   implementation("io.ktor:ktor-client-cio:$ktor_version")
   implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")

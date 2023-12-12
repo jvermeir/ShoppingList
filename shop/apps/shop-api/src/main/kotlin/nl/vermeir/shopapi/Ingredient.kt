@@ -51,9 +51,9 @@ class IngredientService(val db: IngredientRepository, val categoryService: Categ
 
   fun delete(id: UUID) = db.deleteById(id)
 
-  fun toOutputIngredient(ingredient: Ingredient): OutputIngredient {
+  fun toOutputIngredient(ingredient: Ingredient, unit: String, amount: Float): OutputIngredient {
     val outputCategory = categoryService.toOutputCategory(categoryService.findById(ingredient.categoryId))
-    return OutputIngredient(ingredient.id.toString(), ingredient.name, outputCategory)
+    return OutputIngredient(ingredient.id.toString(), ingredient.name, outputCategory, unit, amount)
   }
 }
 

@@ -116,6 +116,6 @@ class MenuTest {
       get("/menu/details/firstDay/${d}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(content().string("""{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","firstDay":"2022-03-10","menuItems":[{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","theDay":"2022-03-10","recipe":{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"r1","favorite":true,"ingredients":[{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"ing1","category":{"id":"0797c413-45d7-412a-a4da-7ccd90ded9ee","name":"cat1","shopOrder":1}}]}}]}"""))
+      .andExpect(content().string("""{"id":"$theId","firstDay":"2022-03-10","menuItems":[{"id":"$theId","theDay":"2022-03-10","recipe":{"id":"$theId","name":"r1","favorite":true,"ingredients":[{"id":"$theId","name":"ing1","category":{"id":"$theId","name":"cat1","shopOrder":1},"unit":"kg","amount":1.0}]}}]}"""))
   }
 }

@@ -119,9 +119,10 @@ class IngredientTest {
     every { categoryRepository.findById(categoryId) } returns Optional.of(category)
     every { ingredientRepository.findById(ingredient.id!!) } returns Optional.of(ingredient)
 
-    val outputIngredient = ingredientService.toOutputIngredient(ingredient)
+    val outputIngredient = ingredientService.toOutputIngredient(ingredient, unit = "kg", amount = 1f)
 
-    val expectedOutputIngredient = OutputIngredient(ingredientId.toString(), "ing1", expectedOutputCategory)
+    val expectedOutputIngredient =
+      OutputIngredient(ingredientId.toString(), "ing1", expectedOutputCategory, unit = "kg", amount = 1f)
     assert(outputIngredient == expectedOutputIngredient)
   }
 }

@@ -35,7 +35,9 @@ CREATE TABLE IF NOT EXISTS "recipes"
 
 CREATE TABLE IF NOT EXISTS "recipe_ingredients"
 (
-  "id"            VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
+  "id"            VARCHAR(60)          DEFAULT RANDOM_UUID() PRIMARY KEY,
   "recipe_id"     VARCHAR(60) NOT NULL,
-  "ingredient_id" VARCHAR(60) NOT NULL
+  "ingredient_id" VARCHAR(60) NOT NULL,
+  "amount"        NUMBER(10)  NOT NULL DEFAULT 0,
+  "unit"          VARCHAR(60) NOT NULL DEFAULT 'kg'
 );
