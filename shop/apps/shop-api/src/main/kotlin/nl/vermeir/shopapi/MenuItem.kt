@@ -13,16 +13,16 @@ import java.util.*
 
 @RestController
 class MenuItemResource(val menuItemService: MenuItemService) {
-  @GetMapping("/menuitems")
+  @GetMapping("/menuItems")
   fun list() = menuItemService.list()
 
-  @GetMapping("/menuitem/{id}")
+  @GetMapping("/menuItem/{id}")
   fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(menuItemService.findById(id))
 
-  @GetMapping("/menuitem")
+  @GetMapping("/menuItem")
   fun findByDay(@RequestParam(name = "day") day: LocalDate) = ResponseEntity.ok(menuItemService.findByDay(day))
 
-  @PostMapping("/menuitem")
+  @PostMapping("/menuItem")
   fun post(@RequestBody menuItem: MenuItem) = ResponseEntity(menuItemService.save(menuItem), HttpStatus.CREATED)
 }
 

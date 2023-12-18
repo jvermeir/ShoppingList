@@ -40,7 +40,7 @@ class MenuItemTest {
     every { menuItemRepository.save(menuItem1) } returns menuItem1
 
     mockMvc.perform(
-      post("/menuitem").content(
+      post("/menuItem").content(
         Json.encodeToString(menuItem1)
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
@@ -54,16 +54,16 @@ class MenuItemTest {
     every { menuItemRepository.findById(menuItem1.id!!) } returns Optional.empty()
 
     mockMvc.perform(
-      get("/menuitem/${menuItem1.id}")
+      get("/menuItem/${menuItem1.id}")
     ).andExpect(status().isNotFound)
   }
 
   @Test
-  fun `a list of menuitems should be returned`() {
+  fun `a list of menuItems should be returned`() {
     every { menuItemRepository.findAll() } returns listOf(menuItem1)
 
     mockMvc.perform(
-      get("/menuitems").contentType(MediaType.APPLICATION_JSON)
+      get("/menuItems").contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[0].id").value(menuItem1.id.toString()))

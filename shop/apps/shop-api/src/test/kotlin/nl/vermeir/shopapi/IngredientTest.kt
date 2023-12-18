@@ -24,9 +24,6 @@ class IngredientTest {
   @Autowired
   lateinit var ingredientService: IngredientService
 
-  @Autowired
-  lateinit var categoryService: CategoryService
-
   @MockkBean
   lateinit var ingredientRepository: IngredientRepository
 

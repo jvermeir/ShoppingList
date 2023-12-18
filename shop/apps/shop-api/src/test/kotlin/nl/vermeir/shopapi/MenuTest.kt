@@ -103,7 +103,7 @@ class MenuTest {
   }
 
   @Test
-  fun `a menu and its details should be returned by menu details firstday`() {
+  fun `a menu and its details should be returned by menu details firstDay`() {
     every { categoryRepository.findById(category1.id!!) } returns Optional.of(category1)
     every { ingredientRepository.findById(ingredient1.id!!) } returns Optional.of(ingredient1)
     every { recipeRepository.findById(recipe1.id!!) } returns Optional.of(recipe1)

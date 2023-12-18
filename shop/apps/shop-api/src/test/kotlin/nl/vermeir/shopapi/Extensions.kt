@@ -1,3 +1,5 @@
+package nl.vermeir.shopapi
+
 import com.google.gson.*
 import java.lang.reflect.Type
 import java.time.LocalDate
