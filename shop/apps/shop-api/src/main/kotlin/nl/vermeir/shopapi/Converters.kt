@@ -59,7 +59,7 @@ class ConverterResource(
             ingredientService.findByName(lineParts[1])
           } catch (e: ResourceNotFoundException) {
             ingredientService.save(
-              Ingredient(name = lineParts[1], categoryId = category.id!!)
+              Ingredient(name = lineParts[1], categoryId = category.id!!, unit = "N/A")
             )
           }
           val recipeIngredientFromFile =

@@ -41,9 +41,9 @@ class ConverterTest {
     Category(id = UUID.randomUUID(), name = inputCategory3.name, shopOrder = inputCategory3.shopOrder)
   private val inputRecipe1 = Recipe(name = "recipe1", favorite = false)
   private val recipe1 = Recipe(id = UUID.randomUUID(), name = inputRecipe1.name, favorite = inputRecipe1.favorite)
-  private val inputIngredient1 = Ingredient(name = "ingredient1", categoryId = category1.id!!)
+  private val inputIngredient1 = Ingredient(name = "ingredient1", categoryId = category1.id!!, unit = "N/A")
   private val ingredient1 =
-    Ingredient(id = UUID.randomUUID(), name = inputIngredient1.name, categoryId = category1.id!!)
+    Ingredient(id = UUID.randomUUID(), name = inputIngredient1.name, categoryId = category1.id!!, unit = "N/A")
   private val inputRecipeIngredient1 =
     RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!, amount = 1.0f, unit = "kg")
   private val recipeIngredient1 = RecipeIngredient(

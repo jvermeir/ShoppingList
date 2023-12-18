@@ -44,8 +44,8 @@ suspend fun main() {
 
   val category1 = addIt(Category(name = "category1", shopOrder = 1), client)
   val category2 = addIt(Category(name = "category2", shopOrder = 2), client)
-  val ingredient1 = addIt(Ingredient(name = "ingredient1", categoryId = category1.id!!), client)
-  val ingredient2 = addIt(Ingredient(name = "ingredient2", categoryId = category2.id!!), client)
+  val ingredient1 = addIt(Ingredient(name = "ingredient1", categoryId = category1.id!!, unit = "kg"), client)
+  val ingredient2 = addIt(Ingredient(name = "ingredient2", categoryId = category2.id!!, unit = "kg"), client)
   val recipe1 = addIt(Recipe(name = "recipe1", favorite = true), client)
   val recipeIngredient1 = addIt(
     RecipeIngredient(recipeId = recipe1.id!!, ingredientId = ingredient1.id!!, amount = 1.0f, unit = "kg"),

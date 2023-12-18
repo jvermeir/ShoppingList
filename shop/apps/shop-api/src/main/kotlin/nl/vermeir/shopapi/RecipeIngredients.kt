@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientService) {
+class RecipeIngredientResource(
+  val recipeIngredientService: RecipeIngredientService,
+  val ingredientService: IngredientService
+) {
   @GetMapping("/recipeingredients")
   fun list() = recipeIngredientService.list()
 
@@ -23,8 +26,13 @@ class RecipeIngredientResource(val recipeIngredientService: RecipeIngredientServ
     ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
 
   @PostMapping("/recipeingredient")
-  fun post(@RequestBody recipeIngredient: RecipeIngredient) =
-    ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.CREATED)
+  fun post(@RequestBody recipeIngredient: RecipeIngredient): ResponseEntity<RecipeIngredient> {
+    if (recipeIngredient.unit == null) {
+      val ingredient = ingredientService.findById(recipeIngredient.ingredientId)
+      recipeIngredient.unit = ingredient.unit
+    }
+    return ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.CREATED)
+  }
 }
 
 @Service

@@ -16,9 +16,6 @@ class IngredientResource(val ingredientService: IngredientService) {
   @GetMapping("/ingredients")
   fun list(): List<Ingredient> = ingredientService.list()
 
-//  @GetMapping("/ingredients-view")
-//  fun listIngredientsView(): List<IngredientView> = ingredientService.listIngredientsView()
-
   @GetMapping("/ingredient/{id}")
   fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(ingredientService.findById(id))
 
@@ -36,8 +33,6 @@ class IngredientResource(val ingredientService: IngredientService) {
 @Service
 class IngredientService(val db: IngredientRepository, val categoryService: CategoryService) {
   fun list(): List<Ingredient> = db.findAll().toList()
-
-//  fun listIngredientsView(): List<IngredientView> = db.ingredientsView()
 
   fun findById(id: UUID): Ingredient =
     db.findById(id).orElseThrow { ResourceNotFoundException("Ingredient '${id}' not found") }
@@ -65,12 +60,10 @@ data class Ingredient(
   var id: UUID? = null,
   var name: String,
   @Serializable(with = UUIDSerializer::class)
-  var categoryId: UUID
+  var categoryId: UUID,
+  var unit: String
 )
 
 interface IngredientRepository : CrudRepository<Ingredient, UUID> {
   fun findByName(name: String): Optional<Ingredient>
-
-//  @Query("SELECT i.id, i.name, i.categoryId, c.name as categoryName FROM ingredients i left outer join categories c on i.categoryId = c.id ")
-//  fun ingredientsView(): List<IngredientView>
 }

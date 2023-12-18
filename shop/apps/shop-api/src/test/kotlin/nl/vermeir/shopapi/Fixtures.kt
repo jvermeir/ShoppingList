@@ -17,9 +17,9 @@ val category1 =
 val category2 =
   Category(id = UUID.fromString(anotherId), name = "cat2", shopOrder = 2)
 val ingredient1 =
-  Ingredient(id = UUID.fromString(theId), name = "ing1", categoryId = category1.id!!)
+  Ingredient(id = UUID.fromString(theId), name = "ing1", categoryId = category1.id!!, unit = "kg")
 val ingredient2 =
-  Ingredient(id = UUID.fromString(anotherId), name = "ing1", categoryId = category2.id!!)
+  Ingredient(id = UUID.fromString(anotherId), name = "ing1", categoryId = category2.id!!, unit = "kg")
 val recipe1 =
   Recipe(id = UUID.fromString(theId), name = "r1", favorite = true)
 val recipeIngredient1 = RecipeIngredient(
@@ -80,9 +80,9 @@ val c2Id = UUID.fromString("cb494d70-0002-45d4-ac66-9b84fe096fc6")
 val c2 = Category(id = c2Id, name = "cat2", shopOrder = 2)
 
 val i1Id = UUID.fromString("cb494d70-0003-45d4-ac66-9b84fe096fc6")
-val i1 = Ingredient(id = i1Id, name = "ing1", categoryId = c1.id!!)
+val i1 = Ingredient(id = i1Id, name = "ing1", categoryId = c1.id!!, unit = "kg")
 val i2Id = UUID.fromString("cb494d70-0004-45d4-ac66-9b84fe096fc6")
-val i2 = Ingredient(id = i2Id, name = "ing2", categoryId = c2.id!!)
+val i2 = Ingredient(id = i2Id, name = "ing2", categoryId = c2.id!!, unit = "kg")
 
 val r1Id = UUID.fromString("cb494d70-0005-45d4-ac66-9b84fe096fc6")
 val r1 = Recipe(id = r1Id, name = "r1", favorite = true)

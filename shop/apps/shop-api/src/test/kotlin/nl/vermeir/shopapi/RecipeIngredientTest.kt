@@ -22,6 +22,9 @@ class RecipeIngredientTest {
   @MockkBean
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
+  @MockkBean
+  lateinit var ingredientService: IngredientService
+
   private val inputRecipeIngredient1 =
     RecipeIngredient(recipeId = UUID.randomUUID(), ingredientId = UUID.randomUUID(), amount = 1.0f, unit = "kg")
   private val recipeIngredient1 = RecipeIngredient(
@@ -101,5 +104,24 @@ class RecipeIngredientTest {
       .andExpect(jsonPath("$.[0].ingredientId").value(recipeIngredient1.ingredientId.toString()))
       .andExpect(jsonPath("$.[0].amount").value(recipeIngredient1.amount))
       .andExpect(jsonPath("$.[0].unit").value(recipeIngredient1.unit))
+  }
+
+  @Test
+  fun `if unit is not present, it should be copied from the ingredient`() {
+    every { ingredientService.findById(recipeIngredient1.ingredientId) } returns ingredient1
+    every { recipeIngredientRepository.save(recipeIngredient1) } returns recipeIngredient1
+
+    mockMvc.perform(
+      post("/recipeingredient").content(
+        Json.encodeToString(recipeIngredient1.copy(unit = null))
+      ).contentType(MediaType.APPLICATION_JSON)
+    ).andExpect(status().isCreated)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.id").value(recipeIngredient1.id.toString()))
+      .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId.toString()))
+      .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId.toString()))
+      .andExpect(jsonPath("$.amount").value(recipeIngredient1.amount))
+      .andExpect(jsonPath("$.unit").value(ingredient1.unit))
+
   }
 }

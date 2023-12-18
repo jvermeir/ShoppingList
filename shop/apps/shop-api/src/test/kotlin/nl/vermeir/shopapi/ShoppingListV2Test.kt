@@ -43,39 +43,30 @@ class ShoppingListV2Test {
   @Autowired
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
-  @Autowired
-  lateinit var shoppingListRepository: ShoppingListRepository
-
-  @Autowired
-  lateinit var shoppingListCategoriesRepository: ShoppingListCategoriesRepository
-
-  @Autowired
-  lateinit var shoppingListIngredientRepository: ShoppingListIngredientRepository
-
   private val objectMap = mutableMapOf<String, Any>()
 
   fun <T> getFromMap(key: String): T {
-    return objectMap.get(key)!! as T
+    return objectMap[key]!! as T
   }
 
   @BeforeEach
   fun setup() {
     val cat1 = categoryRepository.save(Category(name = "cat1", shopOrder = 1))
-    objectMap.put("cat1", cat1)
+    objectMap["cat1"] = cat1
     val cat2 = categoryRepository.save(Category(name = "cat2", shopOrder = 2))
-    objectMap.put("cat2", cat2)
+    objectMap["cat2"] = cat2
 
-    val ing1 = ingredientRepository.save(Ingredient(name = "ing1", categoryId = cat1.id!!))
-    objectMap.put("ing1", ing1)
-    val ing2 = ingredientRepository.save(Ingredient(name = "ing2", categoryId = cat2.id!!))
-    objectMap.put("ing2", ing2)
-    val ing3 = ingredientRepository.save(Ingredient(name = "ing3", categoryId = cat2.id!!))
-    objectMap.put("ing3", ing3)
+    val ing1 = ingredientRepository.save(Ingredient(name = "ing1", categoryId = cat1.id!!, unit = "kg"))
+    objectMap["ing1"] = ing1
+    val ing2 = ingredientRepository.save(Ingredient(name = "ing2", categoryId = cat2.id!!, unit = "kg"))
+    objectMap["ing2"] = ing2
+    val ing3 = ingredientRepository.save(Ingredient(name = "ing3", categoryId = cat2.id!!, unit = "kg"))
+    objectMap["ing3"] = ing3
 
     val recipe1 = recipeRepository.save(Recipe(name = "recipe1", favorite = true))
-    objectMap.put("recipe1", recipe1)
+    objectMap["recipe1"] = recipe1
     val recipe2 = recipeRepository.save(Recipe(name = "recipe2", favorite = true))
-    objectMap.put("recipe2", recipe2)
+    objectMap["recipe2"] = recipe2
 
     val recipeIngredient1 = recipeIngredientRepository.save(
       RecipeIngredient(
@@ -85,7 +76,7 @@ class ShoppingListV2Test {
         unit = "kg"
       )
     )
-    objectMap.put("recipeIngredient1", recipeIngredient1)
+    objectMap["recipeIngredient1"] = recipeIngredient1
     val recipeIngredient2 = recipeIngredientRepository.save(
       RecipeIngredient(
         recipeId = recipe2.id!!,
@@ -94,7 +85,7 @@ class ShoppingListV2Test {
         unit = "kg"
       )
     )
-    objectMap.put("recipeIngredient2", recipeIngredient2)
+    objectMap["recipeIngredient2"] = recipeIngredient2
     val recipeIngredient3 = recipeIngredientRepository.save(
       RecipeIngredient(
         recipeId = recipe1.id!!,
@@ -103,15 +94,15 @@ class ShoppingListV2Test {
         unit = "kg"
       )
     )
-    objectMap.put("recipeIngredient3", recipeIngredient3)
+    objectMap["recipeIngredient3"] = recipeIngredient3
 
     val menu = menuRepository.save(Menu(firstDay = march10th))
-    objectMap.put("menu", menu)
+    objectMap["menu"] = menu
 
     val menuItem1 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe1.id!!, theDay = march10th))
-    objectMap.put("menuItem1", menuItem1)
+    objectMap["menuItem1"] = menuItem1
     val menuItem2 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe2.id!!, theDay = march11th))
-    objectMap.put("menuItem2", menuItem2)
+    objectMap["menuItem2"] = menuItem2
   }
 
   // TODO: these test are brittle because of the ordering of results

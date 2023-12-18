@@ -33,8 +33,9 @@ class IngredientTest {
   @MockkBean
   lateinit var categoryRepository: CategoryRepository
 
-  private val ingredient1 = Ingredient(id = UUID.randomUUID(), name = "name1", categoryId = UUID.randomUUID())
-  private val inputIngredient1 = Ingredient(name = "name1", categoryId = UUID.randomUUID())
+  private val ingredient1 =
+    Ingredient(id = UUID.randomUUID(), name = "name1", categoryId = UUID.randomUUID(), unit = "kg")
+  private val inputIngredient1 = Ingredient(name = "name1", categoryId = UUID.randomUUID(), unit = "kg")
 
   @Test
   fun `a ingredient without id and all properties set is saved correctly and can be loaded`() {
@@ -80,6 +81,7 @@ class IngredientTest {
       .andExpect(jsonPath("$.[0].name").value(ingredient1.name))
       .andExpect(jsonPath("$.[0].id").value(ingredient1.id.toString()))
       .andExpect(jsonPath("$.[0].categoryId").value(ingredient1.categoryId.toString()))
+      .andExpect(jsonPath("$.[0].unit").value(ingredient1.unit))
   }
 
   @Test
@@ -93,6 +95,7 @@ class IngredientTest {
       .andExpect(jsonPath("$.name").value(ingredient1.name))
       .andExpect(jsonPath("$.id").value(ingredient1.id.toString()))
       .andExpect(jsonPath("$.categoryId").value(ingredient1.categoryId.toString()))
+      .andExpect(jsonPath("$.unit").value(ingredient1.unit))
   }
 
   @Test
@@ -106,6 +109,7 @@ class IngredientTest {
       .andExpect(jsonPath("$.name").value(ingredient1.name))
       .andExpect(jsonPath("$.id").value(ingredient1.id.toString()))
       .andExpect(jsonPath("$.categoryId").value(ingredient1.categoryId.toString()))
+      .andExpect(jsonPath("$.unit").value(ingredient1.unit))
   }
 
   @Test
@@ -113,7 +117,7 @@ class IngredientTest {
     val categoryId = UUID.randomUUID()
     val ingredientId = UUID.randomUUID()
     val category = Category(categoryId, "cat1", 1)
-    val ingredient = Ingredient(ingredientId, "ing1", categoryId)
+    val ingredient = Ingredient(ingredientId, "ing1", categoryId, "kg")
     val expectedOutputCategory = OutputCategory(categoryId.toString(), "cat1", 1)
 
     every { categoryRepository.findById(categoryId) } returns Optional.of(category)
