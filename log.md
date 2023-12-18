@@ -2,6 +2,66 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20231218
+
+After struggling for a week with mocking the database in my tests, I decided to just use h2. 
+A clean database can be created for each test case. Using h2 this is fast enough. To create a clean database
+per test, add the following annotations to the test class:
+
+```kotlin
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@Sql("classpath:/sql/schema.sql")
+```
+
+With this annotations, `repository`s can be the real thing instead of mocks:
+
+```kotlin
+  @Autowired
+  lateinit var menuRepository: MenuRepository
+```
+
+`@Transactional` rolls back all changes made in each test. A `@BeforeEach` fills the database with a
+set of records that makes sense for most tests:
+
+```kotlin
+@BeforeEach
+  fun setup() {
+    val cat1 = categoryRepository.save(Category(name = "cat1", shopOrder = 1))
+    objectMap.put("cat1", cat1)
+    val cat2 = categoryRepository.save(Category(name = "cat2", shopOrder = 2))
+    objectMap.put("cat2", cat2)
+```
+
+In most cases this will not be enough and we'll have to call some REST endpoints in a row to execute the test:
+
+```kotlin
+  @Test
+  fun `the amount of an ingredient can be updated`() {
+    val shoppingList = mockMvc.perform(
+      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andReturn().response.contentAsString
+
+    val outputShoppingList = Json.decodeFromString<OutputShoppingList>(shoppingList)
+    val category0 = outputShoppingList.categories[0]
+    val ingredient0 = category0.ingredients[0]
+
+    mockMvc.perform(
+      MockMvcRequestBuilders.put("/shoppinglist/${outputShoppingList.id}/ingredient/${ingredient0.id}/amount/10")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.categories.length()").value(2))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(10f))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].name").value("ing2"))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(5f))
+  }
+```
+
+So, first the menu inserted by `@BeforeAll` is turned into a shoppinglist, then we update the amount of an 
+ingredient in the seconds `mockMvc` call. 
 
 ## 20231202
 
