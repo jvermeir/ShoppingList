@@ -40,7 +40,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.save(inputRecipeIngredient1) } returns recipeIngredient1
 
     mockMvc.perform(
-      post("/recipeingredient").content(
+      post("/recipeIngredient").content(
         Json.encodeToString(inputRecipeIngredient1)
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
@@ -57,7 +57,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.findById(recipeIngredient1.id!!) } returns Optional.empty()
 
     mockMvc.perform(
-      get("/recipeingredient/${recipeIngredient1.id}")
+      get("/recipeIngredient/${recipeIngredient1.id}")
     ).andExpect(status().isNotFound)
   }
 
@@ -66,7 +66,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.findAll() } returns listOf(recipeIngredient1)
 
     mockMvc.perform(
-      get("/recipeingredients").contentType(MediaType.APPLICATION_JSON)
+      get("/recipeIngredients").contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id.toString()))
@@ -81,7 +81,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.findById(recipeIngredient1.id!!) } returns Optional.of(recipeIngredient1)
 
     mockMvc.perform(
-      get("/recipeingredient/${recipeIngredient1.id}")
+      get("/recipeIngredient/${recipeIngredient1.id}")
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.id").value(recipeIngredient1.id.toString()))
@@ -96,7 +96,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.findByRecipeId(recipeIngredient1.recipeId) } returns listOf(recipeIngredient1)
 
     mockMvc.perform(
-      get("/recipeingredient").param("recipeId", recipeIngredient1.recipeId.toString())
+      get("/recipeIngredient").param("recipeId", recipeIngredient1.recipeId.toString())
     ).andExpect(status().isOk)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.[0].id").value(recipeIngredient1.id.toString()))
@@ -112,7 +112,7 @@ class RecipeIngredientTest {
     every { recipeIngredientRepository.save(recipeIngredient1) } returns recipeIngredient1
 
     mockMvc.perform(
-      post("/recipeingredient").content(
+      post("/recipeIngredient").content(
         Json.encodeToString(recipeIngredient1.copy(unit = null))
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)

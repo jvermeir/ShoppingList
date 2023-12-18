@@ -9,8 +9,6 @@ import java.util.*
 
 data class ConverterResult(val count: Int)
 
-data class RecipeIngredients(val recipe: Recipe, val ingredients: List<Ingredient>)
-
 @RestController
 class ConverterResource(
   val categoryService: CategoryService,

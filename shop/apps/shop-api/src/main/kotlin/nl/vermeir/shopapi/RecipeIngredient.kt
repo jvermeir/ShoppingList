@@ -15,17 +15,17 @@ class RecipeIngredientResource(
   val recipeIngredientService: RecipeIngredientService,
   val ingredientService: IngredientService
 ) {
-  @GetMapping("/recipeingredients")
+  @GetMapping("/recipeIngredients")
   fun list() = recipeIngredientService.list()
 
-  @GetMapping("/recipeingredient/{id}")
+  @GetMapping("/recipeIngredient/{id}")
   fun findById(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(recipeIngredientService.findById(id))
 
-  @GetMapping("/recipeingredient")
+  @GetMapping("/recipeIngredient")
   fun findByRecipeId(@RequestParam(name = "recipeId") recipeId: UUID) =
     ResponseEntity.ok(recipeIngredientService.findByRecipeId(recipeId))
 
-  @PostMapping("/recipeingredient")
+  @PostMapping("/recipeIngredient")
   fun post(@RequestBody recipeIngredient: RecipeIngredient): ResponseEntity<RecipeIngredient> {
     if (recipeIngredient.unit == null) {
       val ingredient = ingredientService.findById(recipeIngredient.ingredientId)
@@ -52,17 +52,16 @@ class RecipeIngredientService(val db: RecipeIngredientRepository) {
 @Entity(name = "RECIPE_INGREDIENTS")
 @Serializable
 data class RecipeIngredient(
+  @Serializable(with = UUIDSerializer::class)
   @jakarta.persistence.Id @GeneratedValue
-  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
   var id: UUID? = null,
-  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
+  @Serializable(with = UUIDSerializer::class)
   var recipeId: UUID,
-  @kotlinx.serialization.Serializable(with = UUIDSerializer::class)
+  @Serializable(with = UUIDSerializer::class)
   var ingredientId: UUID,
   var amount: Float?,
   var unit: String?
-) {
-}
+)
 
 interface RecipeIngredientRepository : CrudRepository<RecipeIngredient, UUID> {
   fun findByRecipeId(recipeId: UUID): List<RecipeIngredient>
