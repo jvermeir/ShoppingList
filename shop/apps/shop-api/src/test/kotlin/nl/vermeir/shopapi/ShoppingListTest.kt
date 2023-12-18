@@ -1,171 +1,229 @@
 package nl.vermeir.shopapi
 
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
+import kotlinx.serialization.json.Json
+import nl.vermeir.shopapi.data.OutputShoppingList
+import org.hamcrest.Matchers
+import org.hamcrest.text.MatchesPattern
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import java.util.*
+import org.springframework.transaction.annotation.Transactional
 
-@WebMvcTest(
-  value = [
-    ShoppingListResource::class,
-    MenuService::class, MenuItemService::class, RecipeService::class, IngredientService::class, CategoryService::class, RecipeIngredientService::class, ShoppingListService::class
-  ]
-)
-
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@Sql("classpath:/sql/schema.sql")
 class ShoppingListTest {
   @Autowired
   lateinit var mockMvc: MockMvc
 
-  @MockkBean
+  @Autowired
   lateinit var menuRepository: MenuRepository
 
-  @MockkBean
+  @Autowired
   lateinit var menuItemRepository: MenuItemRepository
 
-  @MockkBean
+  @Autowired
   lateinit var categoryRepository: CategoryRepository
 
-  @MockkBean
+  @Autowired
   lateinit var ingredientRepository: IngredientRepository
 
-  @MockkBean
+  @Autowired
   lateinit var recipeRepository: RecipeRepository
 
-  @MockkBean
+  @Autowired
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
-  @MockkBean
-  lateinit var shoppingListRepository: ShoppingListRepository
+  private val objectMap = mutableMapOf<String, Any>()
 
-  @MockkBean
-  lateinit var shoppingListCategoriesRepository: ShoppingListCategoriesRepository
-
-  @MockkBean
-  lateinit var shoppingListIngredientRepository: ShoppingListIngredientRepository
-
-  @MockkBean
-  lateinit var uuidGenerator: UUIDGenerator
+  fun <T> getFromMap(key: String): T {
+    return objectMap[key]!! as T
+  }
 
   @BeforeEach
   fun setup() {
-    every { categoryRepository.findById(c1.id!!) } returns Optional.of(c1)
-    every { categoryRepository.findById(c2.id!!) } returns Optional.of(c2)
+    val cat1 = categoryRepository.save(Category(name = "cat1", shopOrder = 1))
+    objectMap["cat1"] = cat1
+    val cat2 = categoryRepository.save(Category(name = "cat2", shopOrder = 2))
+    objectMap["cat2"] = cat2
 
-    every { ingredientRepository.findById(i1.id!!) } returns Optional.of(i1)
-    every { ingredientRepository.findById(i2.id!!) } returns Optional.of(i2)
+    val ing1 = ingredientRepository.save(Ingredient(name = "ing1", categoryId = cat1.id!!, unit = "kg"))
+    objectMap["ing1"] = ing1
+    val ing2 = ingredientRepository.save(Ingredient(name = "ing2", categoryId = cat2.id!!, unit = "kg"))
+    objectMap["ing2"] = ing2
+    val ing3 = ingredientRepository.save(Ingredient(name = "ing3", categoryId = cat2.id!!, unit = "kg"))
+    objectMap["ing3"] = ing3
 
-    every { recipeIngredientRepository.findByRecipeId(r1.id!!) } returns listOf(r1i1)
-    every { recipeIngredientRepository.findByRecipeId(r2.id!!) } returns listOf(r1i2)
-    every { recipeIngredientRepository.findById(r1i1.id!!) } returns Optional.of(r1i1)
-    every { recipeIngredientRepository.findById(r2i1.id!!) } returns Optional.of(r2i1)
+    val recipe1 = recipeRepository.save(Recipe(name = "recipe1", favorite = true))
+    objectMap["recipe1"] = recipe1
+    val recipe2 = recipeRepository.save(Recipe(name = "recipe2", favorite = true))
+    objectMap["recipe2"] = recipe2
 
-    every { recipeRepository.findById(r1.id!!) } returns Optional.of(r1)
-    every { recipeRepository.findById(r2.id!!) } returns Optional.of(r2)
-
-    every { menuItemRepository.findByMenuId(m.id!!) } returns listOf(mi1, mi2)
-    every { menuItemRepository.findById(mi1.id!!) } returns Optional.of(mi1)
-    every { menuItemRepository.findById(mi2.id!!) } returns Optional.of(mi2)
-    every { menuRepository.findByFirstDay(march10th) } returns m
-
-    every { shoppingListRepository.findById(sl1.id!!) } returns Optional.of(sl1)
-    every { shoppingListRepository.findByFirstDay(sl1.firstDay) } returns sl1
-    every { shoppingListCategoriesRepository.findByShoppingListId(sl1.id!!) } returns listOf(
-      slc1,
-      slc2
+    val recipeIngredient1 = recipeIngredientRepository.save(
+      RecipeIngredient(
+        recipeId = recipe1.id!!,
+        ingredientId = ing1.id!!,
+        amount = 1f,
+        unit = "kg"
+      )
     )
-    every { shoppingListIngredientRepository.findById(i1.id!!) } returns Optional.of(sli1)
-    every { shoppingListIngredientRepository.findById(i2.id!!) } returns Optional.of(sli2)
-    every { shoppingListIngredientRepository.findByShoppingListCategoryId(slc1.id!!) } returns listOf(
-      sli1
+    objectMap["recipeIngredient1"] = recipeIngredient1
+    val recipeIngredient2 = recipeIngredientRepository.save(
+      RecipeIngredient(
+        recipeId = recipe2.id!!,
+        ingredientId = ing2.id!!,
+        amount = 2f,
+        unit = "kg"
+      )
     )
-    every { shoppingListIngredientRepository.findByShoppingListCategoryId(slc2.id!!) } returns listOf(
-      sli2
+    objectMap["recipeIngredient2"] = recipeIngredient2
+    val recipeIngredient3 = recipeIngredientRepository.save(
+      RecipeIngredient(
+        recipeId = recipe1.id!!,
+        ingredientId = ing2.id!!,
+        amount = 3f,
+        unit = "kg"
+      )
     )
-    every { shoppingListIngredientRepository.save(sli1) } returns sli1
-    every { shoppingListIngredientRepository.save(sli1.copy(amount = 10.0f)) } returns sli1.copy(amount = 10.0f)
-    every { shoppingListIngredientRepository.save(sli2) } returns sli2
-    every { shoppingListRepository.save(sl1) } returns sl1
-    every { shoppingListCategoriesRepository.save(slc1) } returns slc1
-    every { shoppingListCategoriesRepository.save(slc2) } returns slc2
+    objectMap["recipeIngredient3"] = recipeIngredient3
+
+    val menu = menuRepository.save(Menu(firstDay = march10th))
+    objectMap["menu"] = menu
+
+    val menuItem1 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe1.id!!, theDay = march10th))
+    objectMap["menuItem1"] = menuItem1
+    val menuItem2 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe2.id!!, theDay = march11th))
+    objectMap["menuItem2"] = menuItem2
   }
 
-  // TODO: enable
+  // TODO: these test are brittle because of the ordering of results
+  @Test
   fun `a shoppinglist should be returned for a menu`() {
-    every { uuidGenerator.generate() } returns sl1.id!!
-    every {
-      shoppingListIngredientRepository.save(
-        sli1.copy(
-          id = sl1.id,
-          shoppingListCategoryId = sl1.id!!
-        )
-      )
-    } returns sli1
-    every {
-      shoppingListIngredientRepository.save(
-        sli2.copy(
-          id = sl1.id,
-          shoppingListCategoryId = sl1.id!!
-        )
-      )
-    } returns sli2
-    every { shoppingListCategoriesRepository.save(slc1.copy(id = sl1.id)) } returns slc1.copy(id = sl1.id)
-    every { shoppingListCategoriesRepository.save(slc2.copy(id = sl1.id)) } returns slc2.copy(id = sl1.id)
+    val menu = getFromMap<Menu>("menu")
+    val cat1 = getFromMap<Category>("cat1")
+    val cat2 = getFromMap<Category>("cat2")
 
     mockMvc.perform(
       MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(sl1.id.toString()))
-      .andExpect(jsonPath("$.firstDay").value(sl1.firstDay.toString()))
+      .andExpect(jsonPath("$.id").value(MatchesPattern.matchesPattern("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\$")))
+      .andExpect(jsonPath("$.firstDay").value(menu.firstDay.toString()))
+      .andExpect(
+        jsonPath(
+          "$.categories.[*].name", Matchers.containsInAnyOrder(
+            cat1.name, cat2.name
+          )
+        )
+      )
+      .andExpect(jsonPath("$.categories.length()").value(2))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
       .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(1f))
-      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(2f))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].name").value("ing2"))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(5f))
   }
 
   @Test
   fun `a shoppinglist should be returned from the shoppinglist table`() {
-    // TODO find a better way to test the result
-    // TODO: why Optional when searching by id and not when searching by firstDay?
+    mockMvc.perform(
+      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andReturn().response.contentAsString
 
     mockMvc.perform(
       MockMvcRequestBuilders.get("/shoppinglist/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(sl1.id.toString()))
-      .andExpect(jsonPath("$.firstDay").value(sl1.firstDay.toString()))
-      .andExpect(jsonPath("$.categories[0].id").value(slc1.id.toString()))
+      .andExpect(jsonPath("$.categories.length()").value(2))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(1f))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].name").value("ing2"))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(5f))
   }
 
-  // TODO: enable
-  fun `an ingredient can be added to the shoppinglist`() {
+  @Test
+  fun `the amount of an ingredient can be updated`() {
+    val shoppingList = mockMvc.perform(
+      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andReturn().response.contentAsString
+
+    val outputShoppingList = Json.decodeFromString<OutputShoppingList>(shoppingList)
+    val category0 = outputShoppingList.categories[0]
+    val ingredient0 = category0.ingredients[0]
 
     mockMvc.perform(
-      MockMvcRequestBuilders.put("/shoppinglist/${sl1.id}/ingredient/${i2.id}/amount/10")
+      MockMvcRequestBuilders.put("/shoppinglist/${outputShoppingList.id}/ingredient/${ingredient0.id}/amount/10")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(sl1.id.toString()))
-      .andExpect(jsonPath("$.firstDay").value(sl1.firstDay.toString()))
-      .andExpect(jsonPath("$.categories[0].id").value(slc1.id.toString()))
-      .andExpect(jsonPath("$.categories[1].id").value(slc2.id.toString()))
+      .andExpect(jsonPath("$.categories.length()").value(2))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(10f))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].name").value("ing2"))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(5f))
+  }
+
+  @Test
+  fun `an ingredient can be removed from the list`() {
+    val shoppingList = mockMvc.perform(
+      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andReturn().response.contentAsString
+
+    val outputShoppingList = Json.decodeFromString<OutputShoppingList>(shoppingList)
+    val category1 = outputShoppingList.categories[1]
+    val ingredient1 = category1.ingredients[0]
+
+    mockMvc.perform(
+      MockMvcRequestBuilders.put("/shoppinglist/${outputShoppingList.id}/ingredient/${ingredient1.id}/amount/0")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
       .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(1f))
-      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(10.0f))
+      .andExpect(jsonPath("$.categories.length()").value(1))
+  }
+
+  @Test
+  fun `an new ingredient can be added to the shoppinglist`() {
+    val shoppingList = mockMvc.perform(
+      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andReturn().response.contentAsString
+
+    val outputShoppingList = Json.decodeFromString<OutputShoppingList>(shoppingList)
+    val ingredient3 = getFromMap<Ingredient>("ing3")
+
+    mockMvc.perform(
+      MockMvcRequestBuilders.put("/shoppinglist/${outputShoppingList.id}/ingredient/${ingredient3.id}/amount/3")
+    ).andExpect(MockMvcResultMatchers.status().isOk)
+      .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.categories.length()").value(2))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].name").value("ing1"))
+      .andExpect(jsonPath("$.categories[0].ingredients[0].amount").value(1f))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].name").value("ing2"))
+      .andExpect(jsonPath("$.categories[1].ingredients[0].amount").value(5f))
+      .andExpect(jsonPath("$.categories[1].ingredients[1].name").value("ing3"))
+      .andExpect(jsonPath("$.categories[1].ingredients[1].amount").value(3f))
   }
 }
 
 /*
 
 done - initial shoppinglist is based on a menu
-extra ingredients may be added to the shoppinglist
-ingredients of the menu may be removed from the shoppinglist
+done - extra ingredients may be added to the shoppinglist
+get unit from ingredient when adding an ingredient to the list
+done - ingredients of the menu may be removed from the shoppinglist
 
 done - add unit and number to ingredient
-add numbers if ingredient is the same
+done - add numbers if ingredient is the same
 add date to perishable ingredient
  */

@@ -79,7 +79,7 @@ class ShoppingListService(
           name = newIngredient.name,
           ingredientId = ingredientId,
           shoppingListCategoryId = shoppingListCategory.id!!,
-          unit = "kg", // TODO get this from ingredient
+          unit = newIngredient.unit,
           amount = amount
         )
         shoppingListIngredientRepository.save(shoppingListIngredient)
