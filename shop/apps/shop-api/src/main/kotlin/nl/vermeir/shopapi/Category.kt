@@ -50,7 +50,7 @@ class CategoryService(val db: CategoryRepository) {
     db.findByName(name).orElseThrow { ResourceNotFoundException("Category '${name}' not found") }
 
   fun save(category: Category): Category {
-    println("category: ${category}")
+    println("category: $category")
     return db.save(category)
   }
 

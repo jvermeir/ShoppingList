@@ -44,7 +44,7 @@ class RecipeService(
 
   fun save(recipe: Recipe): Recipe {
     val res = recipeRepository.save(recipe)
-    println("res: ${res}")
+    println("res: $res")
     return res
   }
 
