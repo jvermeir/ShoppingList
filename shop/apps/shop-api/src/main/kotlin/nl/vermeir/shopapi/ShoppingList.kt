@@ -14,7 +14,7 @@ import java.util.*
 @RestController
 class ShoppingListResource(val shoppingListService: ShoppingListService) {
 
-  @PostMapping("/shoppinglist/frommenu/firstDay/{firstDay}")
+  @PostMapping("/shoppinglist/fromMenu/firstDay/{firstDay}")
   fun fromMenu(@PathVariable(name = "firstDay") firstDay: LocalDate) =
     ResponseEntity.ok(shoppingListService.fromMenu(firstDay))
 
@@ -58,31 +58,10 @@ class ShoppingListService(
     val ingredient = shoppingListIngredientRepository.findById(ingredientId)
     ingredient.ifPresentOrElse(
       { shoppingListIngredient ->
-        if (amount == 0f) {
-          shoppingListIngredientRepository.delete(shoppingListIngredient)
-          shoppingListCategoriesRepository.findById(shoppingListIngredient.shoppingListCategoryId).ifPresent {
-            val ingredients = shoppingListIngredientRepository.findByShoppingListCategoryId(it.id!!)
-            if (ingredients.isEmpty()) {
-              shoppingListCategoriesRepository.delete(it)
-            }
-          }
-        } else {
-          shoppingListIngredient.amount = amount
-          shoppingListIngredientRepository.save(shoppingListIngredient)
-        }
+        updateAmount(amount, shoppingListIngredient)
       },
       {
-        val newIngredient = ingredientRepository.findById(ingredientId).get()
-        val shoppingListCategory = shoppingListCategoriesRepository.findByCategoryId(newIngredient.categoryId).get()
-        val shoppingListIngredient = ShoppingListIngredient(
-          id = newIngredient.id!!,
-          name = newIngredient.name,
-          ingredientId = ingredientId,
-          shoppingListCategoryId = shoppingListCategory.id!!,
-          unit = newIngredient.unit,
-          amount = amount
-        )
-        shoppingListIngredientRepository.save(shoppingListIngredient)
+        createShoppingListIngredient(ingredientId, amount)
       })
 
     val shoppingList = shoppingListRepository.findById(id).get()
@@ -98,7 +77,7 @@ class ShoppingListService(
     val newShoppingList = menuToShoppingList(menu)
     val shoppingList = shoppingListRepository.save(newShoppingList)
     val newCategories = menu.menuItems.map { it.recipe.ingredients }.flatten().let {
-      it.groupBy { it.category }
+      it.groupBy { ingredient -> ingredient.category }
     }
 
     val outputShoppingList = shoppingListToOutputShoppingList(newShoppingList)
@@ -124,16 +103,14 @@ class ShoppingListService(
     category: ShoppingListCategory
   ): List<OutputShoppingListIngredient> {
     val shoppingListIngredients = ingredients.map { ingredient ->
-      val newIngredient = category.id.let {
-        ShoppingListIngredient(
-          id = uuidGenerator.generate(),
-          ingredientId = UUID.fromString(ingredient.id),
-          shoppingListCategoryId = it!!,
-          name = ingredient.name,
-          unit = ingredient.unit,
-          amount = ingredient.amount
-        )
-      }
+      val newIngredient = ShoppingListIngredient(
+        id = uuidGenerator.generate(),
+        ingredientId = UUID.fromString(ingredient.id),
+        shoppingListCategoryId = category.id!!,
+        name = ingredient.name,
+        unit = ingredient.unit,
+        amount = ingredient.amount
+      )
 
       val savedIngredient = shoppingListIngredientRepository.save(newIngredient)
 
@@ -162,11 +139,12 @@ class ShoppingListService(
 
   // TODO: test
   private fun sumIngredients(category: Map.Entry<OutputCategory, List<OutputIngredient>>): List<OutputIngredient> {
-    val ingredientsPerCategory: List<OutputIngredient> = category.value
-    val ingredientsById: Map<String, List<OutputIngredient>> = ingredientsPerCategory.let { it.groupBy { it.id } }
-    val sumAmountByIngredientId = ingredientsById.map { (id, ings) -> id to ings.sumOf { it.amount.toDouble() } }
+    val ingredientsPerCategory = category.value
+    val ingredientsById = ingredientsPerCategory.let { ingredient -> ingredient.groupBy { it.id } }
+    val sumAmountByIngredientId =
+      ingredientsById.map { (id, ingredients) -> id to ingredients.sumOf { it.amount.toDouble() } }
     return sumAmountByIngredientId.map { (id, amount) ->
-      val theIngredient: OutputIngredient = ingredientsPerCategory.first { it.id == id }
+      val theIngredient = ingredientsPerCategory.first { it.id == id }
       theIngredient.copy(amount = amount.toFloat())
     }
   }
@@ -204,6 +182,35 @@ class ShoppingListService(
       id = uuidGenerator.generate(),
       firstDay = menu.firstDay
     )
+  }
+
+  private fun createShoppingListIngredient(ingredientId: UUID, amount: Float) {
+    val newIngredient = ingredientRepository.findById(ingredientId).get()
+    val shoppingListCategory = shoppingListCategoriesRepository.findByCategoryId(newIngredient.categoryId).get()
+    val shoppingListIngredient = ShoppingListIngredient(
+      id = newIngredient.id!!,
+      name = newIngredient.name,
+      ingredientId = ingredientId,
+      shoppingListCategoryId = shoppingListCategory.id!!,
+      unit = newIngredient.unit,
+      amount = amount
+    )
+    shoppingListIngredientRepository.save(shoppingListIngredient)
+  }
+
+  private fun updateAmount(amount: Float, shoppingListIngredient: ShoppingListIngredient) {
+    if (amount == 0f) {
+      shoppingListIngredientRepository.delete(shoppingListIngredient)
+      shoppingListCategoriesRepository.findById(shoppingListIngredient.shoppingListCategoryId).ifPresent {
+        val ingredients = shoppingListIngredientRepository.findByShoppingListCategoryId(it.id!!)
+        if (ingredients.isEmpty()) {
+          shoppingListCategoriesRepository.delete(it)
+        }
+      }
+    } else {
+      shoppingListIngredient.amount = amount
+      shoppingListIngredientRepository.save(shoppingListIngredient)
+    }
   }
 }
 

@@ -113,7 +113,7 @@ class ShoppingListTest {
     val cat2 = getFromMap<Category>("cat2")
 
     mockMvc.perform(
-      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+      MockMvcRequestBuilders.post("/shoppinglist/fromMenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
       .andExpect(jsonPath("$.id").value(MatchesPattern.matchesPattern("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\$")))
@@ -135,7 +135,7 @@ class ShoppingListTest {
   @Test
   fun `a shoppinglist should be returned from the shoppinglist table`() {
     mockMvc.perform(
-      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+      MockMvcRequestBuilders.post("/shoppinglist/fromMenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andReturn().response.contentAsString
 
@@ -153,7 +153,7 @@ class ShoppingListTest {
   @Test
   fun `the amount of an ingredient can be updated`() {
     val shoppingList = mockMvc.perform(
-      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+      MockMvcRequestBuilders.post("/shoppinglist/fromMenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andReturn().response.contentAsString
 
@@ -175,7 +175,7 @@ class ShoppingListTest {
   @Test
   fun `an ingredient can be removed from the list`() {
     val shoppingList = mockMvc.perform(
-      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+      MockMvcRequestBuilders.post("/shoppinglist/fromMenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andReturn().response.contentAsString
 
@@ -195,7 +195,7 @@ class ShoppingListTest {
   @Test
   fun `an new ingredient can be added to the shoppinglist`() {
     val shoppingList = mockMvc.perform(
-      MockMvcRequestBuilders.post("/shoppinglist/frommenu/firstDay/$march10th")
+      MockMvcRequestBuilders.post("/shoppinglist/fromMenu/firstDay/$march10th")
     ).andExpect(MockMvcResultMatchers.status().isOk)
       .andReturn().response.contentAsString
 
