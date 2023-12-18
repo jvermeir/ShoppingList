@@ -3,10 +3,7 @@ package nl.vermeir.shopapi
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import kotlinx.serialization.Serializable
-import nl.vermeir.shopapi.data.OutputMenu
-import nl.vermeir.shopapi.data.OutputShoppingList
-import nl.vermeir.shopapi.data.OutputShoppingListCategory
-import nl.vermeir.shopapi.data.OutputShoppingListIngredient
+import nl.vermeir.shopapi.data.*
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -60,23 +57,34 @@ class ShoppingListService(
   fun updateIngredient(id: UUID, ingredientId: UUID, amount: Float): OutputShoppingList {
     val ingredient = shoppingListIngredientRepository.findById(ingredientId)
     ingredient.ifPresentOrElse(
-      {
-        it.amount = amount
-        shoppingListIngredientRepository.save(it)
+      { shoppingListIngredient ->
+        if (amount == 0f) {
+          shoppingListIngredientRepository.delete(shoppingListIngredient)
+          shoppingListCategoriesRepository.findById(shoppingListIngredient.shoppingListCategoryId).ifPresent {
+            val ingredients = shoppingListIngredientRepository.findByShoppingListCategoryId(it.id!!)
+            if (ingredients.isEmpty()) {
+              shoppingListCategoriesRepository.delete(it)
+            }
+          }
+        } else {
+          shoppingListIngredient.amount = amount
+          shoppingListIngredientRepository.save(shoppingListIngredient)
+        }
       },
       {
         val newIngredient = ingredientRepository.findById(ingredientId).get()
+        val shoppingListCategory = shoppingListCategoriesRepository.findByCategoryId(newIngredient.categoryId).get()
         val shoppingListIngredient = ShoppingListIngredient(
           id = newIngredient.id!!,
           name = newIngredient.name,
           ingredientId = ingredientId,
-          shoppingListCategoryId = newIngredient.categoryId,
+          shoppingListCategoryId = shoppingListCategory.id!!,
           unit = "kg", // TODO get this from ingredient
           amount = amount
         )
         shoppingListIngredientRepository.save(shoppingListIngredient)
       })
-// TODO
+
     val shoppingList = shoppingListRepository.findById(id).get()
     return shoppingListToOutputShoppingList(shoppingList)
   }
@@ -95,36 +103,11 @@ class ShoppingListService(
 
     val outputShoppingList = shoppingListToOutputShoppingList(newShoppingList)
 
-    val cats = newCategories.map { category ->
-      val newCategory = ShoppingListCategory(
-        id = uuidGenerator.generate(),
-        categoryId = UUID.fromString(category.key.id),
-        shoppingListId = shoppingList.id!!,
-        name = category.key.name,
-        shopOrder = category.key.shopOrder
-      )
-      val savedCategory = shoppingListCategoriesRepository.save(newCategory)
-      // TODO: is this savedCategory.id?.let useful?
-      val ingredients = category.value.map { ingredient ->
-        val newIngredient = savedCategory.id?.let {
-          ShoppingListIngredient(
-            id = uuidGenerator.generate(),
-            ingredientId = UUID.fromString(ingredient.id),
-            shoppingListCategoryId = it,
-            name = ingredient.name,
-            unit = ingredient.unit,
-            amount = ingredient.amount
-          )
-        }
-        // TODO: fix !!
-        val savedIngredient = shoppingListIngredientRepository.save(newIngredient!!)
-        OutputShoppingListIngredient(
-          id = savedIngredient.id.toString(),
-          name = savedIngredient.name,
-          amount = savedIngredient.amount,
-          unit = savedIngredient.unit
-        )
-      }
+    val categories = newCategories.map { category ->
+      val savedCategory = shoppingListCategoriesRepository.save(createShoppingListCategory(category, shoppingList))
+      val ingredientsSummed = sumIngredients(category)
+      val ingredients = saveIngredients(ingredientsSummed, savedCategory)
+
       OutputShoppingListCategory(
         id = savedCategory.id.toString(),
         name = savedCategory.name,
@@ -132,8 +115,60 @@ class ShoppingListService(
         ingredients = ingredients
       )
     }
-    outputShoppingList.categories = cats
+    outputShoppingList.categories = categories
     return outputShoppingList
+  }
+
+  private fun saveIngredients(
+    ingredients: List<OutputIngredient>,
+    category: ShoppingListCategory
+  ): List<OutputShoppingListIngredient> {
+    val shoppingListIngredients = ingredients.map { ingredient ->
+      val newIngredient = category.id.let {
+        ShoppingListIngredient(
+          id = uuidGenerator.generate(),
+          ingredientId = UUID.fromString(ingredient.id),
+          shoppingListCategoryId = it!!,
+          name = ingredient.name,
+          unit = ingredient.unit,
+          amount = ingredient.amount
+        )
+      }
+
+      val savedIngredient = shoppingListIngredientRepository.save(newIngredient)
+
+      OutputShoppingListIngredient(
+        id = savedIngredient.id.toString(),
+        name = savedIngredient.name,
+        amount = savedIngredient.amount,
+        unit = savedIngredient.unit
+      )
+    }
+    return shoppingListIngredients
+  }
+
+  private fun createShoppingListCategory(
+    category: Map.Entry<OutputCategory, List<OutputIngredient>>,
+    shoppingList: ShoppingList
+  ): ShoppingListCategory {
+    return ShoppingListCategory(
+      id = uuidGenerator.generate(),
+      categoryId = UUID.fromString(category.key.id),
+      shoppingListId = shoppingList.id!!,
+      name = category.key.name,
+      shopOrder = category.key.shopOrder
+    )
+  }
+
+  // TODO: test
+  private fun sumIngredients(category: Map.Entry<OutputCategory, List<OutputIngredient>>): List<OutputIngredient> {
+    val ingredientsPerCategory: List<OutputIngredient> = category.value
+    val ingredientsById: Map<String, List<OutputIngredient>> = ingredientsPerCategory.let { it.groupBy { it.id } }
+    val sumAmountByIngredientId = ingredientsById.map { (id, ings) -> id to ings.sumOf { it.amount.toDouble() } }
+    return sumAmountByIngredientId.map { (id, amount) ->
+      val theIngredient: OutputIngredient = ingredientsPerCategory.first { it.id == id }
+      theIngredient.copy(amount = amount.toFloat())
+    }
   }
 
   fun shoppingListToOutputShoppingList(shoppingList: ShoppingList): OutputShoppingList {
@@ -170,66 +205,6 @@ class ShoppingListService(
       firstDay = menu.firstDay
     )
   }
-
-
-// TODO
-
-//  fun outputIngredientToShoppingListIngredient(ingredient: OutputIngredient): ShoppingListIngredient {
-//    return ShoppingListIngredient(
-//      id = UUID.fromString(ingredient.id),
-//      name = ingredient.name,
-//      shoppingListCategoryId =  UUID.fromString(ingredient.category.id),
-//      unit = ingredient.unit,
-//      amount = ingredient.amount
-//    )
-//  }
-//
-//  fun outputCategorytoShoppingListCategory(category: OutputCategory, shoppingListId: UUID): ShoppingListCategory {
-//    return ShoppingListCategory(
-//      id = UUID.fromString(category.id),
-//      name = category.name,
-//      shopOrder = category.shopOrder,
-//      shoppingListId = shoppingListId
-//    )
-//  }
-//
-//  fun outputShoppingListToShoppingList(shoppingList: OutputShoppingList): ShoppingList {
-//    return ShoppingList(
-//      id = UUID.fromString(shoppingList.id),
-//      firstDay = shoppingList.firstDay
-//    )
-//  }
-//
-//  fun toShoppingListIngredientList(outputIngredients: List<OutputIngredient>): List<ShoppingListIngredient> {
-//    return outputIngredients.map { outputIngredientToShoppingListIngredient(it) }
-//  }
-//
-//  fun outputCategoryToCategory(category: OutputCategory): Category {
-//    return Category(
-//      id = UUID.fromString(category.id),
-//      name = category.name,
-//      shopOrder = category.shopOrder
-//    )
-//  }
-//
-//  fun createForFirstDay(firstDay: LocalDate): OutputShoppingList {
-//    val menu = menuService.menuDetailsByFirstDay(firstDay)
-//
-//    val outputIngredientsByCategory = menu.menuItems.map { it.recipe.ingredients }.flatten().let {
-//      it.groupBy { outputCategoryToCategory(it.category) }
-//    }
-//
-//    val ingredientsByCategory = outputIngredientsByCategory.map { (category, ingredients) ->
-//      category.id.toString() to toShoppingListIngredientList(ingredients)
-//    }.toMap()
-//
-//    return OutputShoppingList(
-//      id = menu.id,
-//      firstDay = menu.firstDay,
-//      categories = emptyList()
-//    )
-//  }
-
 }
 
 interface ShoppingListRepository : CrudRepository<ShoppingList, UUID> {
@@ -238,6 +213,7 @@ interface ShoppingListRepository : CrudRepository<ShoppingList, UUID> {
 
 interface ShoppingListCategoriesRepository : CrudRepository<ShoppingListCategory, UUID> {
   fun findByShoppingListId(shoppingListId: UUID): List<ShoppingListCategory>
+  fun findByCategoryId(categoryId: UUID): Optional<ShoppingListCategory>
 }
 
 interface ShoppingListIngredientRepository : CrudRepository<ShoppingListIngredient, UUID> {
