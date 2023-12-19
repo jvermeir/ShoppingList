@@ -11,59 +11,42 @@ import {
 } from '@mui/material';
 
 import { Loading } from '../components/loading/loading';
-import { useEffect, useState } from 'react';
-import { Ingredient } from '../components/ingredient/ingredient';
-import { AddIngredient } from '../components/ingredient/add-ingredient';
+import React, { useEffect, useState } from 'react';
 
 import fetch from 'cross-fetch';
-import { CategoryData } from './categories';
 import { Navigation } from '../components/navigation/navigation';
+import {AddRecipe} from "../components/recipe/add-recipe";
+import {Recipe} from "../components/recipe/recipe";
 
-export interface IngredientData {
+export interface RecipeData {
   id: string;
   name: string;
-  categoryId: string;
-  categoryName: string;
-  unit: string;
+  favorite: boolean;
 }
 
-export const IngredientsPage = () => {
-  const [ingredients, setIngredients] = useState<IngredientData[]>([]);
-  const [categories, setCategories] = useState<CategoryData[]>([]);
+export const RecipesPage = () => {
+  const [recipes, setRecipes] = useState<RecipeData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  function getIngredients() {
+  function getRecipes() {
     setLoading(true);
 
-    fetch('/api/ingredientsWithDetails')
+    fetch('/api/recipes')
       .then((_) => _.json())
-      .then((ingredients) => {
-        setIngredients(ingredients);
-      })
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }
-
-  function getCategories() {
-    setLoading(true);
-
-    fetch('/api/categories')
-      .then((_) => _.json())
-      .then((categories) => {
-        setCategories(categories);
+      .then((recipes) => {
+        setRecipes(recipes);
       })
       .catch(setError)
       .finally(() => setLoading(false));
   }
 
   useEffect(() => {
-    getIngredients();
-    getCategories();
+    getRecipes();
   }, []);
 
   function refetch() {
-    getIngredients();
+    getRecipes();
   }
 
   return (
@@ -73,19 +56,19 @@ export const IngredientsPage = () => {
         {!error && loading && <Loading />}
         {error && !loading && (
           <Typography color="textPrimary" mt={3}>
-            Error while loading ingredients.
+            Error while loading recipes.
           </Typography>
         )}
         {!error && !loading && (
           <>
             <Typography color="textPrimary" variant="h2" mt={6} mb={2}>
-              Ingredients
-              <AddIngredient onCompleted={refetch} categories={categories} />
+              Recipes
+              <AddRecipe onCompleted={refetch} />
             </Typography>
-            {(!ingredients || ingredients?.length === 0) && (
-              <Typography color="textPrimary">No ingredients, yet.</Typography>
+            {(!recipes || recipes?.length === 0) && (
+              <Typography color="textPrimary">No recipes, yet.</Typography>
             )}
-            {ingredients && ingredients.length > 0 && (
+            {recipes && recipes.length > 0 && (
               <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                   <TableHead>
@@ -94,27 +77,23 @@ export const IngredientsPage = () => {
                         <b>Name</b>
                       </TableCell>
                       <TableCell>
-                        <b>Category</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Unit</b>
+                        <b>Favorite</b>
                       </TableCell>
                       <TableCell />
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {ingredients
+                    {recipes
                       .sort((a, b) => {
                         if (a?.name === b?.name || !a?.name || !b?.name)
                           return 0;
                         return a.name < b.name ? -1 : 1;
                       })
-                      .filter((ingredient) => !!ingredient)
-                      .map((ingredient) => (
-                        <Ingredient
-                          key={ingredient.id}
-                          ingredient={ingredient}
-                          categories={categories}
+                      .filter((recipe) => !!recipe)
+                      .map((recipe) => (
+                        <Recipe
+                          key={recipe.id}
+                          recipe={recipe}
                           onCompleted={refetch}
                         />
                       ))}
@@ -129,5 +108,4 @@ export const IngredientsPage = () => {
   );
 };
 
-// TODO: why do we need export default in this case and not for AddIngredient?
-export default IngredientsPage;
+export default RecipesPage;

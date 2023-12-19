@@ -24,6 +24,7 @@ export const Ingredient = ({
     <TableRow key={ingredient.id} hover={true}>
       <StyledTableCell>{ingredient.name}</StyledTableCell>
       <StyledTableCell>{ingredient.categoryName}</StyledTableCell>
+      <StyledTableCell>{ingredient.unit}</StyledTableCell>
       <StyledTableCell>
         <EditIngredient
           ingredient={ingredient}

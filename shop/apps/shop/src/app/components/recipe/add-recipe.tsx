@@ -5,43 +5,33 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
+  DialogTitle, FormControlLabel,
   Snackbar,
-  TextField,
+  TextField
 } from '@mui/material';
 import React, { useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
-import CategorySelector from '../category/category-selector';
-import { CategoryData } from '../../pages/categories';
+import Checkbox from "@mui/material/Checkbox";
 
-export interface AddIngredientProps {
-  categories: CategoryData[];
+export interface AddRecipeProps {
   onCompleted: () => void;
 }
 
-export interface AddIngredientRequest {
+export interface AddRecipeRequest {
   name: string;
-  categoryId: string;
-  unit: string;
+  favorite: boolean;
 }
 
-// TODO: why does this form show previous values? unless set to empty/0 explicitly
-
-export const AddIngredient = ({
-  onCompleted,
-  categories,
-}: AddIngredientProps) => {
+export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
   const [name, setName] = useState<string>('');
-  const [categoryId, setCategoryId] = useState<string>('');
-  const [categoryName, setCategoryName] = useState<string>('');
-  const [unit, setUnit] = useState<string>('');
+  const [favorite, setFavorite] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const submitApiRequest = (req: AddIngredientRequest) => {
-    return fetch('/api/ingredient', {
+  const submitApiRequest = (req: AddRecipeRequest) => {
+    return fetch('/api/recipe', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -52,7 +42,7 @@ export const AddIngredient = ({
 
   const handleError = (error: HttpError) =>
     error.code === 409
-      ? setError('Duplicate ingredient name')
+      ? setError('Duplicate recipe name')
       : setError(`${error.code}: ${error.message}`);
 
   const checkResponse = (response: Response) => {
@@ -64,14 +54,14 @@ export const AddIngredient = ({
   const cleanUp = () => {
     setOpen(false);
     setName('');
-    setCategoryId('');
+    setFavorite(false);
   };
 
   const handleSave = () => {
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ name, categoryId, unit })
+    submitApiRequest({ name, favorite: favorite })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -83,15 +73,8 @@ export const AddIngredient = ({
     setName((event.target as HTMLInputElement).value);
   };
 
-  const handleUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUnit((event.target as HTMLInputElement).value);
-  };
-
-  const handleCategoryId = (categoryId: string) => {
-    setCategoryId(categoryId);
-    setCategoryName(
-      categories.filter((category) => category.id === categoryId)[0].id
-    );
+  const handleFavorite = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFavorite(event.target.checked);
   };
 
   const handleCloseAddDialog = () => {
@@ -106,7 +89,7 @@ export const AddIngredient = ({
         onClick={() => setOpen(true)}
         startIcon={<Plus />}
       >
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Add Ingredient</Box>
+        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Add Recipe</Box>
       </Button>
 
       <Dialog
@@ -120,7 +103,7 @@ export const AddIngredient = ({
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Add Ingredient
+          Add recipe {name}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
           <Box sx={{ mb: { xs: 0, md: 1 } }}>
@@ -138,27 +121,15 @@ export const AddIngredient = ({
               value={name}
             />
 
-            <Box>
-              <CategorySelector
-                value={categoryName}
-                options={categories}
-                onChange={handleCategoryId}
-              />
-
-              <TextField
-                margin="dense"
-                id="unit"
-                label="Unit"
-                type="text"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleUnit}
-                value={unit}
-              />
-
-            </Box>
+            <FormControlLabel
+                label="Favorite"
+                control={
+                  <Checkbox
+                      id="favorite"
+                      checked={favorite}
+                      onChange={handleFavorite}
+                  />}
+            />
           </Box>
         </DialogContent>
         <DialogActions>

@@ -22,6 +22,10 @@ export const routes: RouteDefinitions = {
     path: '/categories',
     text: 'categories',
   },
+  recipes: {
+    path: '/recipes',
+    text: 'recipes',
+  },
 };
 
 // TODO: text when we've got enough space?
@@ -110,6 +114,12 @@ export const Navigation = () => {
               onClick={() => handleNavigate('ingredients')}
             >
               Ingredients
+            </MuiMenuItem>
+            <MuiMenuItem
+              selected={false}
+              onClick={() => handleNavigate('recipes')}
+            >
+              Recipes
             </MuiMenuItem>
           </Menu>
         </Toolbar>

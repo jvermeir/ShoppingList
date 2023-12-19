@@ -24,6 +24,12 @@ class RecipeResource(val recipeService: RecipeService) {
 
   @PostMapping("/recipe")
   fun post(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.save(recipe), HttpStatus.CREATED)
+
+  @PutMapping("/recipe")
+  fun put(@RequestBody recipe: Recipe) = ResponseEntity(recipeService.save(recipe), HttpStatus.OK)
+
+  @DeleteMapping("/recipe/{id}")
+  fun delete(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(recipeService.delete(id))
 }
 
 @Service
@@ -49,6 +55,8 @@ class RecipeService(
   }
 
   fun deleteAll() = recipeRepository.deleteAll()
+
+  fun delete(id: UUID) = recipeRepository.deleteById(id)
 
   fun toOutputRecipe(recipe: Recipe): OutputRecipe {
     val recipeIngredients = recipeIngredientService.findByRecipeId(recipe.id!!)

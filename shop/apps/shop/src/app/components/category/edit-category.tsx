@@ -127,6 +127,7 @@ export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
               type="number"
               fullWidth
               onChange={handleShopOrder}
+              value={shopOrder}
             />
           </Box>
         </DialogContent>

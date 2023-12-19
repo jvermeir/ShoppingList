@@ -27,6 +27,7 @@ export interface EditIngredientRequest {
   id: string;
   name: string;
   categoryId: string;
+  unit: string;
 }
 
 export const EditIngredient = ({
@@ -39,7 +40,8 @@ export const EditIngredient = ({
   const [categoryId, setCategoryId] = useState<string>(
     ingredient.categoryId || ''
   );
-  const [categoryName, setCategoryName] = useState<string>('');
+  const [unit, setUnit] = useState<string>(ingredient.unit || '');
+  const [categoryName, setCategoryName] = useState<string>(ingredient.categoryId || '');
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
@@ -72,7 +74,7 @@ export const EditIngredient = ({
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({ id, name, categoryId: categoryId })
+    submitApiRequest({ id, name, categoryId: categoryId, unit: unit })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -82,6 +84,10 @@ export const EditIngredient = ({
 
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName((event.target as HTMLInputElement).value);
+  };
+
+  const handleUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUnit((event.target as HTMLInputElement).value);
   };
 
   const handleCategoryId = (categoryId: string) => {
@@ -137,7 +143,22 @@ export const EditIngredient = ({
                 value={categoryName}
                 options={categories}
                 onChange={handleCategoryId}
+
               />
+
+              <TextField
+                margin="dense"
+                id="unit"
+                label="Unit"
+                type="text"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={handleUnit}
+                value={unit}
+              />
+
             </Box>
           </Box>
         </DialogContent>

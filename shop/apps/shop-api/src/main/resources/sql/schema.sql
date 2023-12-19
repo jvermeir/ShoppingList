@@ -36,9 +36,10 @@ CREATE TABLE IF NOT EXISTS "shopping_list_categories"
 
 CREATE TABLE IF NOT EXISTS "ingredients"
 (
-  "id"          VARCHAR(60) DEFAULT RANDOM_UUID() PRIMARY KEY,
-  "name"        VARCHAR NOT NULL UNIQUE,
-  "category_id" VARCHAR(60)
+  "id"          VARCHAR(60)          DEFAULT RANDOM_UUID() PRIMARY KEY,
+  "name"        VARCHAR     NOT NULL UNIQUE,
+  "category_id" VARCHAR(60),
+  "unit"        VARCHAR(60) NOT NULL DEFAULT 'kg'
 );
 
 CREATE TABLE IF NOT EXISTS "shopping_list_ingredients"

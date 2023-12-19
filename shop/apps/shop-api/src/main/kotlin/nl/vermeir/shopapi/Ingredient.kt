@@ -2,8 +2,10 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Id
 import kotlinx.serialization.Serializable
 import nl.vermeir.shopapi.data.OutputIngredient
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,10 +30,17 @@ class IngredientResource(val ingredientService: IngredientService) {
 
   @PostMapping("/ingredient")
   fun post(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.CREATED)
+
+  @GetMapping("/ingredientsWithDetails")
+  fun allWithCategoryName(): List<IngredientWithDetails> = ingredientService.allWithCategoryName()
 }
 
 @Service
-class IngredientService(val db: IngredientRepository, val categoryService: CategoryService) {
+class IngredientService(
+  val db: IngredientRepository,
+  val categoryService: CategoryService,
+  val ingredientsWithDetailsRepository: IngredientWithDetailsRepository
+) {
   fun list(): List<Ingredient> = db.findAll().toList()
 
   fun findById(id: UUID): Ingredient =
@@ -50,6 +59,8 @@ class IngredientService(val db: IngredientRepository, val categoryService: Categ
     val outputCategory = categoryService.toOutputCategory(categoryService.findById(ingredient.categoryId))
     return OutputIngredient(ingredient.id.toString(), ingredient.name, outputCategory, unit, amount)
   }
+
+  fun allWithCategoryName(): List<IngredientWithDetails> = ingredientsWithDetailsRepository.allWithCategoryName()
 }
 
 @Entity(name = "INGREDIENTS")
@@ -64,6 +75,20 @@ data class Ingredient(
   var unit: String
 )
 
+@Entity(name = "INGREDIENTS_WITH_DETAILS")
+data class IngredientWithDetails(
+  @Id val id: UUID,
+  val name: String,
+  val unit: String,
+  val categoryId: UUID,
+  val categoryName: String
+)
+
 interface IngredientRepository : CrudRepository<Ingredient, UUID> {
   fun findByName(name: String): Optional<Ingredient>
+}
+
+interface IngredientWithDetailsRepository : CrudRepository<IngredientWithDetails, UUID> {
+  @Query("SELECT NEW nl.vermeir.shopapi.IngredientWithDetails (i.id, i.name, i.unit, i.categoryId, c.name) FROM INGREDIENTS i, CATEGORIES c WHERE i.categoryId = c.id")
+  fun allWithCategoryName(): List<IngredientWithDetails>
 }

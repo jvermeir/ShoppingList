@@ -7,7 +7,9 @@
 POST http://localhost:8080/api/menu
 Content-Type: application/json
 
-{"firstDay": "2022-02-02"}
+{
+  "firstDay": "2022-02-02"
+}
 
 ###
 ### Get Menu by id
@@ -30,14 +32,21 @@ GET http://localhost:8080/api/menus
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"name": "w", "shopOrder": "30"}
+{
+  "name": "w",
+  "shopOrder": "30"
+}
 
 ###
 ### Post category, change shopOrder
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"id": "db6665d8-391e-478a-a27e-e24f0e7c7f82", "name": "gebak4", "shopOrder": "40"}
+{
+  "id": "db6665d8-391e-478a-a27e-e24f0e7c7f82",
+  "name": "gebak4",
+  "shopOrder": "40"
+}
 
 
 ###
@@ -49,7 +58,11 @@ DELETE  http://localhost:8080/api/category/9d30c1ff-a41c-49d8-a649-e19e1d6e4efa
 POST http://localhost:8080/api/category
 Content-Type: application/json
 
-{"id": null, "name": "notfound", "shopOrder": "30"}
+{
+  "id": null,
+  "name": "notfound",
+  "shopOrder": "30"
+}
 
 ###
 ###
@@ -107,6 +120,17 @@ Content-Type: application/json
 
 {
   "id": null,
+  "name": "Lasagne2",
+  "favorite": false
+}
+
+###
+### Put recipe
+PUT http://localhost:8080/api/recipe
+Content-Type: application/json
+
+{
+  "id": "0a39ee97-a904-42f5-aad2-0296f56cc078",
   "name": "Lasagne2",
   "favorite": false
 }
