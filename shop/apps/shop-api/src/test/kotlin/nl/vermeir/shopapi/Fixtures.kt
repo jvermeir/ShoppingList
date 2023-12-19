@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.util.*
 
 const val theId = "cb494d70-5c5c-45d4-ac66-9b84fe096fc6"
-val march10th = LocalDate.parse("2022-03-10")
-val march11th = LocalDate.parse("2022-03-11")
+val march10th: LocalDate = LocalDate.parse("2022-03-10")
+val march11th: LocalDate = LocalDate.parse("2022-03-11")
 val menu1 = Menu(id = UUID.fromString(theId), firstDay = march10th)
 val inputMenu1 = Menu(firstDay = march10th)
 val category1 =
