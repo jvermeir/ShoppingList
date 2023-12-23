@@ -176,6 +176,12 @@ class ShoppingListService(
       categories = outputCategories
     )
   }
+  
+  fun deleteAll() {
+    shoppingListIngredientRepository.deleteAll()
+    shoppingListCategoriesRepository.deleteAll()
+    shoppingListRepository.deleteAll()
+  }
 
   private fun menuToShoppingList(menu: OutputMenu): ShoppingList {
     return ShoppingList(

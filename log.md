@@ -2,6 +2,33 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20231223
+
+// TODO
+done - 
+```
+MUI: You have provided an out-of-range value `ing3` for the select component.
+Consider providing a value that matches one of the available options or ''.
+The available values are `3208d0e8-5968-48fc-916d-2e7c9f77e5df`, `8ad0d09a-a694-4a0c-8b3c-62585f631f75`, `219b32ae-3014-4df8-a1e4-cf1530c4a29c`.
+```
+
+done - update unit if ingredient changes
+done - show selected value for ingredient in drop down on edit/add ri pages
+
+done - recipes: shows the list of recipes, this page also loads the list of ingredients because we need those in detail pages where recipes are added or changed
+  based on the recipes table,
+  has add button
+
+done - add-recipe: adds name and favorite status, list of ingredients that can be edited -> recipe-ingredients.tsx
+done - edit-recipe: edits name and favorite status, list of ingredients that can be edited -> recipe-ingredients.tsx
+done - recipe: shows the name and favorite-status of the recipe, has edit/delete buttons, gets list of all ingredients
+done - recipe-ingredients.tsx: shows list of ingredients, gets list of all ingredients
+  based on recipe-ingredients table
+  has add button
+
+done - add-recipe-ingredient: adds ingredient to the list, gets list of all ingredients, modifies recipe-ingredients table
+done - edit-recipe-ingredient: edits ingredient from the list, gets list of all ingredients, modifies recipe-ingredients table
+
 ## 20231218
 
 After struggling for a week with mocking the database in my tests, I decided to just use h2. 

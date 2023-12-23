@@ -5,16 +5,23 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, FormControlLabel,
+  DialogTitle,
+  FormControlLabel,
   Snackbar,
-  TextField
+  TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
-import Checkbox from "@mui/material/Checkbox";
+import Checkbox from '@mui/material/Checkbox';
+import { IngredientData } from '../../pages/ingredients';
 
+/*
+add-recipe: adds name and favorite status, list of ingredients that can be edited -> recipe-ingredients.tsx
+TODO: this page doesn't allow adding recipe ingredients. should it?
+ */
 export interface AddRecipeProps {
+  ingredients: IngredientData[];
   onCompleted: () => void;
 }
 
@@ -23,7 +30,7 @@ export interface AddRecipeRequest {
   favorite: boolean;
 }
 
-export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
+export const AddRecipe = ({ onCompleted, ingredients }: AddRecipeProps) => {
   const [name, setName] = useState<string>('');
   const [favorite, setFavorite] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
@@ -44,6 +51,11 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
     error.code === 409
       ? setError('Duplicate recipe name')
       : setError(`${error.code}: ${error.message}`);
+
+  useEffect(() => {
+    setName('');
+    setFavorite(false);
+  }, []);
 
   const checkResponse = (response: Response) => {
     if (!response.ok) {
@@ -75,10 +87,6 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
 
   const handleFavorite = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFavorite(event.target.checked);
-  };
-
-  const handleCloseAddDialog = () => {
-    setOpen(false);
   };
 
   return (
@@ -122,21 +130,21 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
             />
 
             <FormControlLabel
-                label="Favorite"
-                control={
-                  <Checkbox
-                      id="favorite"
-                      checked={favorite}
-                      onChange={handleFavorite}
-                  />}
+              label="Favorite"
+              control={
+                <Checkbox
+                  id="favorite"
+                  checked={favorite}
+                  onChange={handleFavorite}
+                />
+              }
             />
           </Box>
         </DialogContent>
         <DialogActions>
           <>
-            <Button onClick={handleCloseAddDialog}>Close</Button>
             <Button variant="contained" onClick={handleSave}>
-              Save
+              Close and Save
             </Button>
           </>
         </DialogActions>

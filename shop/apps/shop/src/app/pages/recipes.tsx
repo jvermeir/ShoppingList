@@ -15,8 +15,15 @@ import React, { useEffect, useState } from 'react';
 
 import fetch from 'cross-fetch';
 import { Navigation } from '../components/navigation/navigation';
-import {AddRecipe} from "../components/recipe/add-recipe";
-import {Recipe} from "../components/recipe/recipe";
+import { AddRecipe } from '../components/recipe/add-recipe';
+import { Recipe } from '../components/recipe/recipe';
+import { IngredientData } from './ingredients';
+
+/*
+recipes: shows the list of recipes, this page also loads the list of ingredients because we need those in detail pages where recipes are added or changed
+  based on the recipes table,
+  has add button
+ */
 
 export interface RecipeData {
   id: string;
@@ -28,6 +35,7 @@ export const RecipesPage = () => {
   const [recipes, setRecipes] = useState<RecipeData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  const [ingredients, setIngredients] = useState<IngredientData[]>([]);
 
   function getRecipes() {
     setLoading(true);
@@ -41,8 +49,21 @@ export const RecipesPage = () => {
       .finally(() => setLoading(false));
   }
 
+  function getIngredients() {
+    setLoading(true);
+
+    fetch('/api/ingredients')
+      .then((_) => _.json())
+      .then((ingredients) => {
+        setIngredients(ingredients);
+      })
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }
+
   useEffect(() => {
     getRecipes();
+    getIngredients();
   }, []);
 
   function refetch() {
@@ -55,15 +76,16 @@ export const RecipesPage = () => {
       <Container>
         {!error && loading && <Loading />}
         {error && !loading && (
+          // TODO: show specific error message
           <Typography color="textPrimary" mt={3}>
-            Error while loading recipes.
+            Error while loading data.
           </Typography>
         )}
         {!error && !loading && (
           <>
             <Typography color="textPrimary" variant="h2" mt={6} mb={2}>
               Recipes
-              <AddRecipe onCompleted={refetch} />
+              <AddRecipe ingredients={ingredients} onCompleted={refetch} />
             </Typography>
             {(!recipes || recipes?.length === 0) && (
               <Typography color="textPrimary">No recipes, yet.</Typography>
@@ -94,6 +116,7 @@ export const RecipesPage = () => {
                         <Recipe
                           key={recipe.id}
                           recipe={recipe}
+                          ingredients={ingredients}
                           onCompleted={refetch}
                         />
                       ))}
