@@ -6,7 +6,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
   IconButton,
   Snackbar,
   TextField,
@@ -14,8 +13,6 @@ import {
 import { Edit } from 'react-feather';
 import React, { useState } from 'react';
 import { HttpError } from '../error/error';
-import { RecipeData } from '../../pages/recipes';
-import Checkbox from '@mui/material/Checkbox';
 import { RecipeIngredientData } from '../recipe/recipe-ingredients';
 import RecipeIngredientSelector from './recipe-ingredient-selector';
 import { IngredientData } from '../../pages/ingredients';
@@ -41,8 +38,8 @@ export const EditRecipeIngredient = ({
 }: EditRecipeIngredientProps) => {
   const [id] = useState<string>(recipeIngredientData.id || '');
   const [recipeId] = useState<string>(recipeIngredientData.recipeId || '');
-  const [name, setName] = useState<string>(recipeIngredientData.name || '');
-  const [ingredientName, setIngredientName] = useState<string>(
+  const [name] = useState<string>(recipeIngredientData.name || '');
+  const [_, setIngredientName] = useState<string>(
     recipeIngredientData.name || ''
   );
   const [ingredientId, setIngredientId] = useState<string>(

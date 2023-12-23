@@ -30,7 +30,7 @@ export interface AddRecipeRequest {
   favorite: boolean;
 }
 
-export const AddRecipe = ({ onCompleted, ingredients }: AddRecipeProps) => {
+export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
   const [name, setName] = useState<string>('');
   const [favorite, setFavorite] = useState<boolean>(false);
   const [open, setOpen] = useState(false);

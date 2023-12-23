@@ -1,9 +1,6 @@
 import {
-  Button,
   Container,
-  List,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -17,13 +14,10 @@ import { Loading } from '../loading/loading';
 import React, { useEffect, useState } from 'react';
 
 import fetch from 'cross-fetch';
-import { RecipeProps } from './recipe';
 import { RecipeIngredient } from '../recipe-ingredients/recipe-ingredient';
 import { RecipeData } from '../../pages/recipes';
 import { AddRecipeIngredient } from '../recipe-ingredients/add-recipe-ingredient';
 import { IngredientData } from '../../pages/ingredients';
-import { CircleNotifications } from '@mui/icons-material';
-import { Plus } from 'react-feather';
 
 export interface RecipeIngredientProps {
   recipe: RecipeData;

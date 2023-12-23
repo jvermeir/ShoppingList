@@ -1,10 +1,9 @@
 import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
-import React, { useState } from 'react';
+import React from 'react';
 import { RecipeIngredientData } from '../recipe/recipe-ingredients';
 import { EditRecipeIngredient } from './edit-recipe-ingredient';
-import { AddRecipeIngredient } from './add-recipe-ingredient';
 import { IngredientData } from '../../pages/ingredients';
 import fetch from 'cross-fetch';
 
@@ -19,26 +18,9 @@ export const RecipeIngredient = ({
   ingredients,
   onCompleted,
 }: RecipeProps) => {
-  const [error, setError] = useState<boolean>(false);
-
   const handleDelete = () => {
     fetch(`/api/recipeIngredient/${recipeIngredient.id}`, {
       method: 'DELETE',
-    }).then((_) => onCompleted && onCompleted());
-  };
-
-  // TODO: update recipeIngredient ?
-  const updateRecipe = (event: React.ChangeEvent<HTMLInputElement>) => {
-    fetch(`/api/recipe`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify({
-        id: recipeIngredient.id,
-        name: recipeIngredient.name,
-        favorite: (event.target as HTMLInputElement).checked,
-      }),
     }).then((_) => onCompleted && onCompleted());
   };
 

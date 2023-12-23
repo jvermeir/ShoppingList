@@ -7,8 +7,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import {RecipeData} from "../../pages/recipes";
-import {IngredientData} from "../../pages/ingredients";
+import { IngredientData } from '../../pages/ingredients';
 
 export interface RecipeIngredientSelectorProps {
   name?: string;

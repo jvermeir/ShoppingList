@@ -5,8 +5,7 @@ import { EditRecipe } from './edit-recipe';
 import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
-import ingredients, { IngredientData } from '../../pages/ingredients';
-import Ingredients from '../../pages/ingredients';
+import { IngredientData } from '../../pages/ingredients';
 
 export type RecipeProps = {
   recipe: RecipeData;
