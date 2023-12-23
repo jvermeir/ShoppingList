@@ -99,11 +99,6 @@ export const EditRecipeIngredient = ({
       .finally(() => setShowConfirmation(true));
   };
 
-  // TODO: unit should be readonly
-  const handleUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUnit((event.target as HTMLInputElement).value);
-  };
-
   const handleAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: is there a better way to get a number from the event?
     setAmount((event.target as HTMLInputElement).value as unknown as number);
@@ -159,7 +154,7 @@ export const EditRecipeIngredient = ({
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={handleUnit}
+              onChange={() => {}}
               value={unit}
             />
 
