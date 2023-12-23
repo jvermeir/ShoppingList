@@ -5,7 +5,7 @@ import * as React from 'react';
 
 // TODO: test
 
-export const HelloPage = () => {
+export const HomePage = () => {
   return (
     <>
       <Navigation />
@@ -30,10 +30,18 @@ export const HelloPage = () => {
               image="assets/ingredients.webp"
             />
           </Grid>
+          <Grid item>
+            <BasicCard
+              title="cookbook"
+              text="All recipes"
+              link="/recipes"
+              image="assets/cookbook.webp"
+            />
+          </Grid>
         </Grid>
       </Container>
     </>
   );
 };
 
-export default HelloPage;
+export default HomePage;

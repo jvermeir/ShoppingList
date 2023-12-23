@@ -4,6 +4,8 @@ This file is a history of the experiments I've done and what I learned along the
 
 ## 20231223
 
+todo:
+- draggable: https://m2.material.io/components/cards/android#using-cards
 
 done - 
 ```

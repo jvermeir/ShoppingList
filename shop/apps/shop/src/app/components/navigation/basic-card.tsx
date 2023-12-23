@@ -30,6 +30,7 @@ export default function BasicCard({
               variant: 'subtitle1',
               color: 'text.secondary',
               component: 'div',
+              width: 200,
             }}
           >
             {text}
