@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
-import RecipeIngredientsPage from './recipe-ingredients';
+import RecipeIngredients from './recipe-ingredients';
 import { IngredientData } from '../../pages/ingredients';
 
 export interface EditRecipeProps {
@@ -131,7 +131,7 @@ export const EditRecipe = ({
                 />
               }
             />
-            <RecipeIngredientsPage
+            <RecipeIngredients
               recipe={recipe}
               ingredients={ingredients}
               onCompleted={() => {}}

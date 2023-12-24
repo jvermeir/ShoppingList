@@ -116,69 +116,69 @@ export const AddRecipeIngredient = ({
 
   return (
     <>
-      <Stack direction="row">
-        <Dialog
-          open={open}
-          onClose={onCompleted}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 1 } }}
+      <Dialog
+        open={open}
+        onClose={onCompleted}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 1 } }}
+      >
+        <DialogTitle
+          sx={{ display: { xs: 'none', md: 'block' } }}
+          id="form-dialog-title"
         >
-          <DialogTitle
-            sx={{ display: { xs: 'none', md: 'block' } }}
-            id="form-dialog-title"
-          >
-            Add recipe ingredient{ingredientName}
-          </DialogTitle>
-          <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-            <Box>
-              <RecipeIngredientSelector
-                value={ingredientId}
-                options={ingredients}
-                onChange={handleIngredientId}
-              />
+          Add recipe ingredient{ingredientName}
+        </DialogTitle>
+        <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
+          <Box>
+            <RecipeIngredientSelector
+              value={ingredientId}
+              options={ingredients}
+              onChange={handleIngredientId}
+            />
 
-              <TextField
-                disabled={true}
-                margin="dense"
-                id="unit"
-                label="Unit"
-                type="text"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleUnit}
-                value={unit}
-              />
+            <TextField
+              disabled={true}
+              margin="dense"
+              id="unit"
+              label="Unit"
+              type="text"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleUnit}
+              value={unit}
+            />
 
-              <TextField
-                margin="dense"
-                id="amount"
-                label="Amount"
-                type="number"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleAmount}
-                value={amount}
-              />
-            </Box>
-          </DialogContent>
-          {/*TODO: most changes are saved immediately. can we save them up and only save them when the user clicks "save"?*/}
-          <DialogActions>
-            <>
-              <Button onClick={handleCloseAddDialog}>Close</Button>
-              <Button variant="contained" onClick={handleSave}>
-                Save
-              </Button>
-            </>
-          </DialogActions>
-        </Dialog>
+            <TextField
+              margin="dense"
+              id="amount"
+              label="Amount"
+              type="number"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleAmount}
+              value={amount}
+            />
+          </Box>
+        </DialogContent>
+        {/*TODO: most changes are saved immediately. can we save them up and only save them when the user clicks "save"?*/}
+        <DialogActions>
+          <>
+            <Button onClick={handleCloseAddDialog}>Close</Button>
+            <Button variant="contained" onClick={handleSave}>
+              Save
+            </Button>
+          </>
+        </DialogActions>
+      </Dialog>
+
+      <Stack direction="row" justifyContent="end" mt={-5} mr={-4}>
         <Button
           variant="contained"
-          sx={{ float: 'right' }}
           onClick={() => setOpen(true)}
           startIcon={<Plus />}
         ></Button>

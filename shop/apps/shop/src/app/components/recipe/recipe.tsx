@@ -1,18 +1,10 @@
-import { IconButton, TableRow } from '@mui/material';
+import { Container, IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
 import { EditRecipe } from './edit-recipe';
 import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
-import { IngredientData } from '../../pages/ingredients';
-
-export type RecipeProps = {
-  recipe: RecipeData;
-  ingredients: IngredientData[];
-  onCompleted: () => void;
-};
-
 export const Recipe = ({ recipe, ingredients, onCompleted }: RecipeProps) => {
   const handleDelete = () => {
     fetch(`/api/recipe/${recipe.id}`, {
@@ -52,4 +44,12 @@ export const Recipe = ({ recipe, ingredients, onCompleted }: RecipeProps) => {
       </StyledTableCell>
     </TableRow>
   );
+};
+
+import { IngredientData } from '../../pages/ingredients';
+
+export type RecipeProps = {
+  recipe: RecipeData;
+  ingredients: IngredientData[];
+  onCompleted: () => void;
 };

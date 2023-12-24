@@ -40,6 +40,15 @@ class RecipeIngredientResource(
     return ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.CREATED)
   }
 
+  @PutMapping("/recipeIngredient")
+  fun put(@RequestBody recipeIngredient: RecipeIngredient): ResponseEntity<RecipeIngredient> {
+    if (recipeIngredient.unit == null) {
+      val ingredient = ingredientService.findById(recipeIngredient.ingredientId)
+      recipeIngredient.unit = ingredient.unit
+    }
+    return ResponseEntity(recipeIngredientService.save(recipeIngredient), HttpStatus.OK)
+  }
+
   @DeleteMapping("/recipeIngredient/{id}")
   fun delete(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(recipeIngredientService.delete(id))
 

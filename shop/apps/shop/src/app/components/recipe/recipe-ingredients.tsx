@@ -18,6 +18,7 @@ import { RecipeIngredient } from '../recipe-ingredients/recipe-ingredient';
 import { RecipeData } from '../../pages/recipes';
 import { AddRecipeIngredient } from '../recipe-ingredients/add-recipe-ingredient';
 import { IngredientData } from '../../pages/ingredients';
+import Box from '@mui/material/Box';
 
 export interface RecipeIngredientProps {
   recipe: RecipeData;
@@ -34,7 +35,7 @@ export interface RecipeIngredientData {
   unit: string;
 }
 
-export const RecipeIngredientsPage = ({
+export const RecipeIngredients = ({
   recipe,
   ingredients,
   onCompleted,
@@ -76,7 +77,7 @@ export const RecipeIngredientsPage = ({
         )}
         {!error && !loading && (
           <>
-            <Typography color="textPrimary" variant="h5" mt={6} mb={2}>
+            <Typography color="textPrimary" variant="h5" mt={1} mb={2} ml={-3}>
               Recipe ingredients
               <AddRecipeIngredient
                 recipe={recipe}
@@ -90,41 +91,43 @@ export const RecipeIngredientsPage = ({
               </Typography>
             )}
             {recipeIngredients && recipeIngredients.length > 0 && (
-              <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <b>Name</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Amount</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Unit</b>
-                      </TableCell>
-                      <TableCell />
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {recipeIngredients
-                      .sort((a, b) => {
-                        if (a?.name === b?.name || !a?.name || !b?.name)
-                          return 0;
-                        return a.name < b.name ? -1 : 1;
-                      })
-                      .filter((recipeIngredient) => !!recipeIngredient)
-                      .map((recipeIngredient) => (
-                        <RecipeIngredient
-                          key={recipeIngredient.id}
-                          recipeIngredient={recipeIngredient}
-                          ingredients={ingredients}
-                          onCompleted={refetch}
-                        />
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Box ml={-3} mr={-5}>
+                <TableContainer component={Paper}>
+                  <Table aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <b>Name</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Amount</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Unit</b>
+                        </TableCell>
+                        <TableCell />
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {recipeIngredients
+                        .sort((a, b) => {
+                          if (a?.name === b?.name || !a?.name || !b?.name)
+                            return 0;
+                          return a.name < b.name ? -1 : 1;
+                        })
+                        .filter((recipeIngredient) => !!recipeIngredient)
+                        .map((recipeIngredient) => (
+                          <RecipeIngredient
+                            key={recipeIngredient.id}
+                            recipeIngredient={recipeIngredient}
+                            ingredients={ingredients}
+                            onCompleted={refetch}
+                          />
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
             )}
           </>
         )}
@@ -133,4 +136,4 @@ export const RecipeIngredientsPage = ({
   );
 };
 
-export default RecipeIngredientsPage;
+export default RecipeIngredients;

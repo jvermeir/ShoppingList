@@ -53,10 +53,9 @@ export const EditRecipeIngredient = ({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  // TODO: PUT?
   const submitApiRequest = (req: EditRecipeIngredientRequest) => {
     return fetch('/api/recipeIngredient', {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -110,6 +109,7 @@ export const EditRecipeIngredient = ({
       ingredients.filter((ingredient) => ingredient.id === ingredientId)[0].unit
     );
   };
+
   const handleCloseEditDialog = () => {
     setOpen(false);
   };
