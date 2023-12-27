@@ -19,6 +19,7 @@ import Box from '@mui/material/Box';
 import { MenuData } from '../../pages/menus';
 import { MenuItem } from '../menu-items/menu-item';
 import { AddMenuItem } from '../menu-items/add-menu-item';
+import { OutputMenuItem } from '../../../data/OutputSchema';
 
 export interface MenuItemProps {
   menu: MenuData;
@@ -26,25 +27,12 @@ export interface MenuItemProps {
   onCompleted: () => void;
 }
 
-// TODO: replace with Temp* ?
 export interface MenuItemData {
   id: string;
   menuId: string;
   recipeId: string;
   recipeName: string;
   theDay: string;
-}
-
-interface TempRecipe {
-  id: string;
-  name: string;
-  favorite: boolean;
-}
-
-interface TempMenuItem {
-  id: string;
-  theDay: string;
-  recipe: TempRecipe;
 }
 
 export const MenuItems = ({ menu, recipes }: MenuItemProps) => {
@@ -57,18 +45,18 @@ export const MenuItems = ({ menu, recipes }: MenuItemProps) => {
 
     fetch(`/api/menu/details/firstDay/${menu.firstDay}`)
       .then((_) => _.json())
-      .then((menu) => {
-        console.log({ theMenu: menu });
-        const mis = menu.menuItems.map((menuItem: TempMenuItem) => {
-          return {
-            id: menuItem.id,
-            menuId: menu.id,
-            recipeId: menuItem.recipe.id,
-            recipeName: menuItem.recipe.name,
-            theDay: menuItem.theDay,
-          };
-        });
-        console.log({ mis });
+      .then((menuWithDetails) => {
+        const mis = menuWithDetails.menuItems.map(
+          (menuItem: OutputMenuItem) => {
+            return {
+              id: menuItem.id,
+              menuId: menuWithDetails.id,
+              recipeId: menuItem.recipe.id,
+              recipeName: menuItem.recipe.name,
+              theDay: menuItem.theDay,
+            };
+          }
+        );
         setMenuItems(mis);
       })
       .catch(setError)
