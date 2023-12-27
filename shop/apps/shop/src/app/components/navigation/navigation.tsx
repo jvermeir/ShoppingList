@@ -121,6 +121,12 @@ export const Navigation = () => {
             >
               Recipes
             </MuiMenuItem>
+            <MuiMenuItem
+              selected={false}
+              onClick={() => handleNavigate('menus')}
+            >
+              Menus
+            </MuiMenuItem>
           </Menu>
         </Toolbar>
       </Container>

@@ -6,41 +6,47 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
+  IconButton,
   Snackbar,
   TextField,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Plus } from 'react-feather';
+import { Edit } from 'react-feather';
+import React, { useState } from 'react';
 import { HttpError } from '../error/error';
-import Checkbox from '@mui/material/Checkbox';
-import { IngredientData } from '../../pages/ingredients';
+import RecipeSelector from './recipe-selector';
+import { RecipeData } from '../../pages/recipes';
+import { MenuItemData } from '../menu/menu-items';
 
-/*
-TODO: this page doesn't allow adding new recipe ingredients. should it?
-TODO: when cursor is in ingredient, the text `ingredient` is partly obscured
-TODO: if unit is liter or kilogram, then amount prompt should be 'amount', if not, it should be 'number'?
- */
-export interface AddRecipeProps {
-  ingredients: IngredientData[];
+export interface EditMenuItemProps {
+  menuItem: MenuItemData;
+  recipeId: string;
+  recipes: RecipeData[];
   onCompleted: () => void;
 }
 
-export interface AddRecipeRequest {
-  name: string;
-  favorite: boolean;
+export interface EditMenuItemRequest {
+  id: string;
+  menuId: string;
+  recipeId: string;
+  theDay: string;
 }
 
-export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
-  const [name, setName] = useState<string>('');
-  const [favorite, setFavorite] = useState<boolean>(false);
+export const EditMenuItem = ({
+  menuItem,
+  recipeId,
+  recipes,
+  onCompleted,
+}: EditMenuItemProps) => {
+  const [_, setRecipeName] = useState<string>(menuItem.recipeName || '');
+  const [newRecipeId, setNewRecipeId] = useState<string>(recipeId || '');
+  const [theDay, setTheDay] = useState<string>(menuItem.theDay || '');
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const submitApiRequest = (req: AddRecipeRequest) => {
-    return fetch('/api/recipe', {
-      method: 'POST',
+  const submitApiRequest = (req: EditMenuItemRequest) => {
+    return fetch('/api/menuItem', {
+      method: 'PUT',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -53,11 +59,6 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
       ? setError('Duplicate recipe name')
       : setError(`${error.code}: ${error.message}`);
 
-  useEffect(() => {
-    setName('');
-    setFavorite(false);
-  }, []);
-
   const checkResponse = (response: Response) => {
     if (!response.ok) {
       throw new HttpError(response.status, response.statusText);
@@ -66,15 +67,17 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
 
   const cleanUp = () => {
     setOpen(false);
-    setName('');
-    setFavorite(false);
   };
 
   const handleSave = () => {
-    setShowConfirmation(false);
-    setError('');
+    setOpen(false);
 
-    submitApiRequest({ name, favorite: favorite })
+    submitApiRequest({
+      id: menuItem.id,
+      recipeId: newRecipeId,
+      menuId: menuItem.menuId,
+      theDay,
+    })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -82,24 +85,24 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName((event.target as HTMLInputElement).value);
+  const handleTheDay = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTheDay((event.target as HTMLInputElement).value);
   };
 
-  const handleFavorite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
+  const handleRecipeId = (recipeId: string) => {
+    setNewRecipeId(recipeId);
+    setRecipeName(recipes.filter((recipe) => recipe.id === recipeId)[0].name);
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpen(false);
   };
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        onClick={() => setOpen(true)}
-        startIcon={<Plus />}
-      >
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Add Recipe</Box>
-      </Button>
+      <IconButton aria-label="edit" onClick={() => setOpen(true)}>
+        <Edit size="18" />
+      </IconButton>
 
       <Dialog
         open={open}
@@ -112,40 +115,36 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Add recipe {name}
+          Edit recipe ingredient {theDay}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box sx={{ mb: { xs: 0, md: 1 } }}>
+          <Box>
+            <RecipeSelector
+              value={newRecipeId}
+              options={recipes}
+              onChange={handleRecipeId}
+            />
+
             <TextField
-              autoFocus
               margin="dense"
-              id="name"
-              label="Name"
+              id="theDay"
+              label="Date"
               type="text"
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={handleName}
-              value={name}
-            />
-
-            <FormControlLabel
-              label="Favorite"
-              control={
-                <Checkbox
-                  id="favorite"
-                  checked={favorite}
-                  onChange={handleFavorite}
-                />
-              }
+              onChange={handleTheDay}
+              value={theDay}
             />
           </Box>
         </DialogContent>
+        {/*TODO: most changes are saved immediately. can we save them up and only save them when the user clicks "save"?*/}
         <DialogActions>
           <>
+            <Button onClick={handleCloseEditDialog}>Close</Button>
             <Button variant="contained" onClick={handleSave}>
-              Close and Save
+              Save
             </Button>
           </>
         </DialogActions>

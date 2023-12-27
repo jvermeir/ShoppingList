@@ -34,6 +34,14 @@ class MenuResource(val menuService: MenuService) {
   fun post(@RequestBody menu: Menu): ResponseEntity<Menu> {
     return ResponseEntity(menuService.save(menu), HttpStatus.CREATED)
   }
+
+  @PutMapping("/menu")
+  fun put(@RequestBody menu: Menu): ResponseEntity<Menu> {
+    return ResponseEntity(menuService.save(menu), HttpStatus.OK)
+  }
+
+  @DeleteMapping("/menu/{id}")
+  fun delete(@PathVariable(name = "id") id: UUID) = ResponseEntity.ok(menuService.delete(id))
 }
 
 @Service
@@ -69,6 +77,7 @@ class MenuService(
   fun save(menu: Menu): Menu = menuRepository.save(menu)
 
   fun deleteAll() = menuRepository.deleteAll()
+  fun delete(id: UUID) = menuRepository.deleteById(id)
 }
 
 @Entity(name = "MENUS")

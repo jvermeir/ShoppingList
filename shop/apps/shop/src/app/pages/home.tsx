@@ -3,8 +3,6 @@ import { Navigation } from '../components/navigation/navigation';
 import BasicCard from '../components/navigation/basic-card';
 import * as React from 'react';
 
-// TODO: test
-
 export const HomePage = () => {
   return (
     <>
@@ -36,6 +34,14 @@ export const HomePage = () => {
               text="All recipes"
               link="/recipes"
               image="assets/cookbook.webp"
+            />
+          </Grid>
+          <Grid item>
+            <BasicCard
+              title="menus"
+              text="All menus"
+              link="/menus"
+              image="assets/menu.webp"
             />
           </Grid>
         </Grid>

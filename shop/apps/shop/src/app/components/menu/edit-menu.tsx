@@ -6,41 +6,38 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
+  IconButton,
   Snackbar,
   TextField,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Plus } from 'react-feather';
+import { Edit } from 'react-feather';
+import React, { useState } from 'react';
 import { HttpError } from '../error/error';
-import Checkbox from '@mui/material/Checkbox';
-import { IngredientData } from '../../pages/ingredients';
+import { RecipeData } from '../../pages/recipes';
+import { MenuData } from '../../pages/menus';
+import { MenuItems } from './menu-items';
 
-/*
-TODO: this page doesn't allow adding new recipe ingredients. should it?
-TODO: when cursor is in ingredient, the text `ingredient` is partly obscured
-TODO: if unit is liter or kilogram, then amount prompt should be 'amount', if not, it should be 'number'?
- */
-export interface AddRecipeProps {
-  ingredients: IngredientData[];
+export interface EditMenuProps {
+  menu: MenuData;
+  recipes: RecipeData[];
   onCompleted: () => void;
 }
 
-export interface AddRecipeRequest {
-  name: string;
-  favorite: boolean;
+export interface EditMenuRequest {
+  id: string;
+  firstDay: string;
 }
 
-export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
-  const [name, setName] = useState<string>('');
-  const [favorite, setFavorite] = useState<boolean>(false);
+export const EditMenu = ({ menu, recipes, onCompleted }: EditMenuProps) => {
+  const [id] = useState<string>(menu.id || '');
+  const [firstDay, setFirstDay] = useState<string>(menu.firstDay || '');
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const submitApiRequest = (req: AddRecipeRequest) => {
-    return fetch('/api/recipe', {
-      method: 'POST',
+  const submitApiRequest = (req: EditMenuRequest) => {
+    return fetch('/api/menu', {
+      method: 'PUT',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -53,11 +50,6 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
       ? setError('Duplicate recipe name')
       : setError(`${error.code}: ${error.message}`);
 
-  useEffect(() => {
-    setName('');
-    setFavorite(false);
-  }, []);
-
   const checkResponse = (response: Response) => {
     if (!response.ok) {
       throw new HttpError(response.status, response.statusText);
@@ -66,15 +58,12 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
 
   const cleanUp = () => {
     setOpen(false);
-    setName('');
-    setFavorite(false);
   };
 
   const handleSave = () => {
-    setShowConfirmation(false);
-    setError('');
+    setOpen(false);
 
-    submitApiRequest({ name, favorite: favorite })
+    submitApiRequest({ id, firstDay })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -82,24 +71,15 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName((event.target as HTMLInputElement).value);
-  };
-
-  const handleFavorite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
+  const handleFirstDay = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstDay((event.target as HTMLInputElement).value);
   };
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        onClick={() => setOpen(true)}
-        startIcon={<Plus />}
-      >
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Add Recipe</Box>
-      </Button>
+      <IconButton aria-label="edit" onClick={() => setOpen(true)}>
+        <Edit size="18" />
+      </IconButton>
 
       <Dialog
         open={open}
@@ -112,7 +92,7 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Add recipe {name}
+          Edit menu starting {firstDay}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
           <Box sx={{ mb: { xs: 0, md: 1 } }}>
@@ -120,26 +100,17 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
               autoFocus
               margin="dense"
               id="name"
-              label="Name"
+              label="First Day"
               type="text"
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={handleName}
-              value={name}
+              onChange={handleFirstDay}
+              value={firstDay}
             />
 
-            <FormControlLabel
-              label="Favorite"
-              control={
-                <Checkbox
-                  id="favorite"
-                  checked={favorite}
-                  onChange={handleFavorite}
-                />
-              }
-            />
+            <MenuItems menu={menu} recipes={recipes} onCompleted={() => {}} />
           </Box>
         </DialogContent>
         <DialogActions>

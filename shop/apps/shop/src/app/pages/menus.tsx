@@ -15,21 +15,29 @@ import React, { useEffect, useState } from 'react';
 
 import fetch from 'cross-fetch';
 import { Navigation } from '../components/navigation/navigation';
-import { AddRecipe } from '../components/recipe/add-recipe';
-import { Recipe } from '../components/recipe/recipe';
-import { IngredientData } from './ingredients';
+import { RecipeData } from './recipes';
+import { AddMenu } from '../components/menu/add-menu';
+import { Menu } from '../components/menu/menu';
 
-export interface RecipeData {
+export interface MenuData {
   id: string;
-  name: string;
-  favorite: boolean;
+  firstDay: string;
 }
 
-export const RecipesPage = () => {
-  const [recipes, setRecipes] = useState<RecipeData[]>([]);
+export const MenusPage = () => {
+  const [menus, setMenus] = useState<MenuData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [ingredients, setIngredients] = useState<IngredientData[]>([]);
+  const [recipes, setRecipes] = useState<RecipeData[]>([]);
+
+  useEffect(() => {
+    getMenus();
+    getRecipes();
+  }, []);
+
+  function refetch() {
+    getMenus();
+  }
 
   function getRecipes() {
     setLoading(true);
@@ -43,25 +51,16 @@ export const RecipesPage = () => {
       .finally(() => setLoading(false));
   }
 
-  function getIngredients() {
+  function getMenus() {
     setLoading(true);
 
-    fetch('/api/ingredients')
+    fetch('/api/menus')
       .then((_) => _.json())
-      .then((ingredients) => {
-        setIngredients(ingredients);
+      .then((menus) => {
+        setMenus(menus);
       })
       .catch(setError)
       .finally(() => setLoading(false));
-  }
-
-  useEffect(() => {
-    getRecipes();
-    getIngredients();
-  }, []);
-
-  function refetch() {
-    getRecipes();
   }
 
   return (
@@ -78,39 +77,40 @@ export const RecipesPage = () => {
         {!error && !loading && (
           <>
             <Typography color="textPrimary" variant="h2" mt={6} mb={2}>
-              Recipes
-              <AddRecipe ingredients={ingredients} onCompleted={refetch} />
+              Menus
+              <AddMenu recipes={recipes} onCompleted={refetch} />
             </Typography>
-            {(!recipes || recipes?.length === 0) && (
-              <Typography color="textPrimary">No recipes, yet.</Typography>
+            {(!menus || menus?.length === 0) && (
+              <Typography color="textPrimary">No menus, yet.</Typography>
             )}
-            {recipes && recipes.length > 0 && (
+            {menus && menus.length > 0 && (
               <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
                       <TableCell>
-                        <b>Name</b>
-                      </TableCell>
-                      <TableCell>
-                        <b>Favorite</b>
+                        <b>First Day</b>
                       </TableCell>
                       <TableCell />
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {recipes
+                    {menus
                       .sort((a, b) => {
-                        if (a?.name === b?.name || !a?.name || !b?.name)
+                        if (
+                          a?.firstDay === b?.firstDay ||
+                          !a?.firstDay ||
+                          !b?.firstDay
+                        )
                           return 0;
-                        return a.name < b.name ? -1 : 1;
+                        return a.firstDay < b.firstDay ? -1 : 1;
                       })
-                      .filter((recipe) => !!recipe)
-                      .map((recipe) => (
-                        <Recipe
-                          key={recipe.id}
-                          recipe={recipe}
-                          ingredients={ingredients}
+                      .filter((menu) => !!menu)
+                      .map((menu) => (
+                        <Menu
+                          key={menu.id}
+                          menu={menu}
+                          recipes={recipes}
                           onCompleted={refetch}
                         />
                       ))}
@@ -125,4 +125,4 @@ export const RecipesPage = () => {
   );
 };
 
-export default RecipesPage;
+export default MenusPage;

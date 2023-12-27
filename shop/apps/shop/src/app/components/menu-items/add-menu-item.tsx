@@ -6,40 +6,43 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel,
   Snackbar,
+  Stack,
   TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
-import Checkbox from '@mui/material/Checkbox';
-import { IngredientData } from '../../pages/ingredients';
+import { RecipeData } from '../../pages/recipes';
+import RecipeSelector from './recipe-selector';
+import { MenuData } from '../../pages/menus';
 
-/*
-TODO: this page doesn't allow adding new recipe ingredients. should it?
-TODO: when cursor is in ingredient, the text `ingredient` is partly obscured
-TODO: if unit is liter or kilogram, then amount prompt should be 'amount', if not, it should be 'number'?
- */
-export interface AddRecipeProps {
-  ingredients: IngredientData[];
+export interface AddMenuItemProps {
+  menu: MenuData;
+  recipes: RecipeData[];
   onCompleted: () => void;
 }
 
-export interface AddRecipeRequest {
-  name: string;
-  favorite: boolean;
+export interface AddMenuItemRequest {
+  menuId: string;
+  recipeId: string;
+  theDay: string;
 }
 
-export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
-  const [name, setName] = useState<string>('');
-  const [favorite, setFavorite] = useState<boolean>(false);
+export const AddMenuItem = ({
+  menu,
+  recipes,
+  onCompleted,
+}: AddMenuItemProps) => {
+  const [recipeId, setRecipeId] = useState<string>('');
+  const [_, setRecipeName] = useState<string>('');
+  const [theDay, setTheDay] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const submitApiRequest = (req: AddRecipeRequest) => {
-    return fetch('/api/recipe', {
+  const submitApiRequest = (req: AddMenuItemRequest) => {
+    return fetch('/api/menuItem', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -48,15 +51,16 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
     });
   };
 
+  useEffect(() => {
+    setRecipeName('');
+    setTheDay('');
+  }, []);
+
+  // TODO: check error codes
   const handleError = (error: HttpError) =>
     error.code === 409
       ? setError('Duplicate recipe name')
       : setError(`${error.code}: ${error.message}`);
-
-  useEffect(() => {
-    setName('');
-    setFavorite(false);
-  }, []);
 
   const checkResponse = (response: Response) => {
     if (!response.ok) {
@@ -66,15 +70,15 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
 
   const cleanUp = () => {
     setOpen(false);
-    setName('');
-    setFavorite(false);
+    setRecipeName('');
+    setTheDay('');
   };
 
   const handleSave = () => {
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ name, favorite: favorite })
+    submitApiRequest({ menuId: menu.id, recipeId, theDay })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -82,25 +86,21 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName((event.target as HTMLInputElement).value);
+  const handleTheDay = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTheDay((event.target as HTMLInputElement).value);
   };
 
-  const handleFavorite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFavorite(event.target.checked);
+  const handleRecipeId = (recipeId: string) => {
+    setRecipeId(recipeId);
+    setRecipeName(recipes.filter((recipe) => recipe.id === recipeId)[0].name);
+  };
+
+  const handleCloseAddDialog = () => {
+    setOpen(false);
   };
 
   return (
     <>
-      <Button
-        variant="contained"
-        sx={{ float: 'right' }}
-        onClick={() => setOpen(true)}
-        startIcon={<Plus />}
-      >
-        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>Add Recipe</Box>
-      </Button>
-
       <Dialog
         open={open}
         onClose={onCompleted}
@@ -112,44 +112,48 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Add recipe {name}
+          Add menu item
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box sx={{ mb: { xs: 0, md: 1 } }}>
+          <Box>
+            <RecipeSelector
+              value={recipeId}
+              options={recipes}
+              onChange={handleRecipeId}
+            />
+
             <TextField
-              autoFocus
               margin="dense"
-              id="name"
-              label="Name"
+              id="theDay"
+              label="Date"
               type="text"
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={handleName}
-              value={name}
-            />
-
-            <FormControlLabel
-              label="Favorite"
-              control={
-                <Checkbox
-                  id="favorite"
-                  checked={favorite}
-                  onChange={handleFavorite}
-                />
-              }
+              onChange={handleTheDay}
+              value={theDay}
             />
           </Box>
         </DialogContent>
+        {/*TODO: most changes are saved immediately. can we save them up and only save them when the user clicks "save"?*/}
         <DialogActions>
           <>
+            <Button onClick={handleCloseAddDialog}>Close</Button>
             <Button variant="contained" onClick={handleSave}>
-              Close and Save
+              Save
             </Button>
           </>
         </DialogActions>
       </Dialog>
+
+      <Stack direction="row" justifyContent="end" mt={-5} mr={-4}>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+          startIcon={<Plus />}
+        ></Button>
+      </Stack>
 
       <Snackbar
         open={showConfirmation}

@@ -2,12 +2,35 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20231224
+
+Moved + button to the right side of the edit recipeIngredient dialog using
+
+```
+      <Stack direction="row" justifyContent="end" mt={-5} mr={-4}>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+          startIcon={<Plus />}
+        ></Button>
+      </Stack>
+```
+
+Stack has a `justifyContent` property. To make the button align with the right side of the ingredients table below,
+we need a `mr={-4}`. This was set with trial&error, which doesn't feel right. I basically want to align all components 
+to the right edge of the screen. Is there a better way than negative margins? 
+
+The `Stack` also has a negative top margin, so the + button aligns with the `Recipe ingredients` text. This is necessary
+because the text is part of the RecipeIngredients component, while the button is contained in `AddRecipeIngredient`. 
+That's because `Recipe ingredients` refers to the list of recipe ingredients, while the button adds a single ingredient
+to the list. This also feels clunky.
+
 ## 20231223
 
 todo:
 - draggable: https://m2.material.io/components/cards/android#using-cards
 
-done - 
+done - this was caused by using the name in stead of the id to set the value of a dropdown 
 ```
 MUI: You have provided an out-of-range value `ing3` for the select component.
 Consider providing a value that matches one of the available options or ''.
