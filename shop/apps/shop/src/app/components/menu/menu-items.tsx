@@ -19,7 +19,10 @@ import Box from '@mui/material/Box';
 import { MenuData } from '../../pages/menus';
 import { MenuItem } from '../menu-items/menu-item';
 import { AddMenuItem } from '../menu-items/add-menu-item';
-import { OutputMenuItem } from '../../../data/OutputSchema';
+import { OutputMenuItem } from '../../../schema/output-schema';
+
+// TODO: list of menus is wider than necessary. why?
+// TODO: add days for this menu to each line in the list
 
 export interface MenuItemProps {
   menu: MenuData;

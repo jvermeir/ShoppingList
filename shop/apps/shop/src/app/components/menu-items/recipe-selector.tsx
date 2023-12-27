@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { RecipeData } from '../../pages/recipes';
 
+// TODO: add type-to-search when selecting a recipe
+
 export interface RecipeSelectorProps {
   name?: string;
   value: string;
