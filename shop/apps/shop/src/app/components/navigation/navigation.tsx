@@ -13,6 +13,7 @@ export interface RouteDefinitions {
   [key: string]: RouteDefinition;
 }
 
+// TODO: can we get this from home.tsx? or the other way around?
 export const routes: RouteDefinitions = {
   ingredients: {
     path: '/ingredients',
@@ -25,6 +26,10 @@ export const routes: RouteDefinitions = {
   recipes: {
     path: '/recipes',
     text: 'recipes',
+  },
+  menus: {
+    path: '/menus',
+    text: 'menus',
   },
 };
 
@@ -45,7 +50,7 @@ export const Navigation = () => {
   const handleNavigate = (option: string) => {
     const path = routes[option];
     if (path) {
-      navigate(path.path, { replace: true });
+      navigate(path.path, { replace: true, state: { text: path.text } });
     } else {
       navigate('/', { replace: true });
     }

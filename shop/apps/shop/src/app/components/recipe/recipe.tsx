@@ -1,4 +1,4 @@
-import { Container, IconButton, TableRow } from '@mui/material';
+import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
 import { EditRecipe } from './edit-recipe';
@@ -6,6 +6,8 @@ import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
 import { IngredientData } from '../../pages/ingredients';
+
+// TODO: add amounts for ingredients per id
 
 export type RecipeProps = {
   recipe: RecipeData;
