@@ -25,6 +25,7 @@ import fetch from 'cross-fetch';
 import {
   OutputShoppingList,
   OutputShoppingListCategory,
+  OutputShoppingListIngredient,
 } from '../../../schema/output-schema';
 import RecipeIngredients from '../recipe/recipe-ingredients';
 import { ShoppingListCategory } from './shopping-list-category';
@@ -139,6 +140,7 @@ export const EditShoppingListCategory = ({
                       .filter((ingredient) => !!ingredient)
                       .map((ingredient) => (
                         <ShoppingListIngredient
+                          key={ingredient.id}
                           category={category}
                           ingredient={ingredient}
                           onCompleted={() => {}}

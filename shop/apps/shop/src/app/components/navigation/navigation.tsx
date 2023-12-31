@@ -1,8 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { AppBar, Box, Container, Menu, Toolbar } from '@mui/material';
 import MuiMenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import DehazeIcon from '@mui/icons-material/Dehaze';
+import ShoppingList from '../../pages/shopping-list';
+import Ingredients from '../../pages/ingredients';
+import Categories from '../../pages/categories';
+import { Recipe } from '../recipe/recipe';
+import Recipes from '../../pages/recipes';
+import Menus from '../../pages/menus';
 
 export interface RouteDefinition {
   path: string;
@@ -31,8 +37,18 @@ export const routes: RouteDefinitions = {
     path: '/menus',
     text: 'menus',
   },
+  shoppingList: {
+    path: '/shopping-list',
+    text: 'shopping list',
+  },
 };
 
+/*
+      <Route path="users">
+        <Route path=":userId" element={<ProfilePage />} />
+        <Route path="me" element={...} />
+      </Route>
+ */
 // TODO: text when we've got enough space?
 
 export const Navigation = () => {
@@ -58,6 +74,15 @@ export const Navigation = () => {
 
   return (
     <AppBar position="static">
+      <Routes>
+        <Route path="/ingredients/*" element={<Ingredients />} />
+        <Route path="/categories/*" element={<Categories />} />
+        <Route path="/recipes/*" element={<Recipes />} />
+        <Route path="/menus/*" element={<Menus />} />
+        <Route path="/shopping-list/*">
+          <Route path="shopping-list/:firstDay" element={<ShoppingList />} />
+        </Route>
+      </Routes>
       <Container>
         <Toolbar
           style={{ display: 'flex', justifyContent: 'left', padding: 0 }}

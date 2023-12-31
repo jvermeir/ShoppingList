@@ -188,11 +188,12 @@ export const EditShoppingList = ({
                       })
                       .filter((category) => !!category)
                       .map((category) => (
-                        <ShoppingListCategory
-                          category={category}
-                          ingredients={ingredients}
-                          onCompleted={() => {}}
-                        />
+                        <TextField value={category.name} />
+                        // <ShoppingListCategory
+                        //   category={category}
+                        //   ingredients={ingredients}
+                        //   onCompleted={() => {}}
+                        // />
                       ))}
                   </TableBody>
                 </Table>

@@ -44,14 +44,6 @@ export const HomePage = () => {
               image="assets/menu.webp"
             />
           </Grid>
-          <Grid item>
-            <BasicCard
-              title="shopping list"
-              text="list"
-              link="/shoppinglist/d04aecec-f6ef-486b-9315-8d463cb21522"
-              image="assets/menu.webp"
-            />
-          </Grid>
         </Grid>
       </Container>
     </>

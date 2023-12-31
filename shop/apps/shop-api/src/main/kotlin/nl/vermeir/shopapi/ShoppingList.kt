@@ -50,7 +50,8 @@ class ShoppingListService(
 ) {
 
   fun getShoppingList(firstDay: LocalDate): OutputShoppingList {
-    val shoppingList = shoppingListRepository.findByFirstDay(firstDay)
+    val shoppingList =
+      shoppingListRepository.findByFirstDay(firstDay) ?: emptyShoppingList
     return shoppingListToOutputShoppingList(shoppingList)
   }
 
@@ -73,6 +74,9 @@ class ShoppingListService(
   }
 
   fun fromMenu(firstDay: LocalDate): OutputShoppingList {
+    shoppingListRepository.findByFirstDay(firstDay)?.let {
+      return shoppingListToOutputShoppingList(it)
+    }
     val menu = menuService.menuDetailsByFirstDay(firstDay)
     val newShoppingList = menuToShoppingList(menu)
     val shoppingList = shoppingListRepository.save(newShoppingList)
@@ -176,7 +180,7 @@ class ShoppingListService(
       categories = outputCategories
     )
   }
-  
+
   fun deleteAll() {
     shoppingListIngredientRepository.deleteAll()
     shoppingListCategoriesRepository.deleteAll()
@@ -221,7 +225,7 @@ class ShoppingListService(
 }
 
 interface ShoppingListRepository : CrudRepository<ShoppingList, UUID> {
-  fun findByFirstDay(firstDay: LocalDate): ShoppingList
+  fun findByFirstDay(firstDay: LocalDate): ShoppingList?
 }
 
 interface ShoppingListCategoriesRepository : CrudRepository<ShoppingListCategory, UUID> {
@@ -242,6 +246,9 @@ data class ShoppingList(
   @Serializable(with = LocalDateSerializer::class)
   var firstDay: LocalDate,
 )
+
+object emptyShoppingList :
+  ShoppingList(id = UUID.fromString("11111111-1111-1111-1111-111111111111"), firstDay = LocalDate.MIN)
 
 @Entity(name = "SHOPPING_LIST_CATEGORIES")
 @Serializable
