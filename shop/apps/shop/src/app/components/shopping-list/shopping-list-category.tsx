@@ -18,20 +18,20 @@ export const ShoppingListCategory = ({
   onCompleted,
 }: ShoppingListCategoryProps) => {
   const handleDelete = () => {
-    fetch(`/api/shoppingList/${shoppingListId}/category/${category.id}`, {
+    fetch(`/api/shoppinglist/${shoppingListId}/category/${category.id}`, {
       method: 'DELETE',
     }).then((_) => onCompleted && onCompleted());
   };
 
   return (
     <TableRow key={category.id} hover={true}>
-      <StyledTableCell>
+      <StyledTableCell style={{ width: 10 }}>
         <IconButton aria-label="delete" onClick={handleDelete}>
           <Delete size="18" />
         </IconButton>
         {category.name}
       </StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell style={{ width: 100 }}>
         <EditShoppingListCategory
           shoppingListId={shoppingListId}
           category={category}

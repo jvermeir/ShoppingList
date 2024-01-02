@@ -1,4 +1,4 @@
-import { IconButton, TableRow } from '@mui/material';
+import { IconButton, TableRow, TextField } from '@mui/material';
 import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
 import React from 'react';
@@ -16,16 +16,25 @@ export const ShoppingListIngredient = ({
   onCompleted,
 }: ShoppingListIngredientProps) => {
   const handleDelete = () => {
-    fetch(`/api/shoppingList/${shoppingListId}/ingredient/${ingredient.id}`, {
+    fetch(`/api/shoppinglist/${shoppingListId}/ingredient/${ingredient.id}`, {
       method: 'DELETE',
     }).then((_) => onCompleted && onCompleted());
   };
 
+  const handleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    fetch(
+      `/api/shoppinglist/${shoppingListId}/ingredient/${ingredient.id}/amount/${event.target.value}`,
+      {
+        method: 'PUT',
+      }
+    ).then((_) => onCompleted && onCompleted());
+  };
+
   return (
     <TableRow key={ingredient.id} hover={true}>
-      <StyledTableCell style={{ width: 10 }}>
+      <StyledTableCell style={{ width: 1 }}>
         <IconButton
-          aria-label="edit"
+          aria-label="delete"
           onClick={() => {
             handleDelete();
           }}
@@ -37,20 +46,10 @@ export const ShoppingListIngredient = ({
         {ingredient.name}
       </StyledTableCell>
       <StyledTableCell style={{ width: 100 }}>
-        {ingredient.amount}
+        <TextField onChange={handleUpdate} value={ingredient.amount} />
       </StyledTableCell>
       <StyledTableCell style={{ width: 100 }}>
         {ingredient.unit}
-      </StyledTableCell>
-      <StyledTableCell>
-        {/*<EditRecipeIngredient*/}
-        {/*  recipeIngredientData={recipeIngredient}*/}
-        {/*  ingredients={ingredients}*/}
-        {/*  onCompleted={onCompleted}*/}
-        {/*/>*/}
-        {/*<IconButton aria-label="delete" onClick={handleDelete}>*/}
-        {/*  <Delete size="18" />*/}
-        {/*</IconButton>*/}
       </StyledTableCell>
     </TableRow>
   );

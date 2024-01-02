@@ -17,7 +17,7 @@ import { HttpError } from '../error/error';
 import { IngredientData } from '../../pages/ingredients';
 import IngredientSelector from './ingredient-selector';
 
-export interface AddRecipeIngredientProps {
+export interface AddShoppingListIngredientProps {
   shoppingListId: string;
   ingredients: IngredientData[];
   onCompleted: () => void;
@@ -33,7 +33,7 @@ export const AddShoppingListIngredient = ({
   shoppingListId,
   ingredients,
   onCompleted,
-}: AddRecipeIngredientProps) => {
+}: AddShoppingListIngredientProps) => {
   const [ingredientName, setIngredientName] = useState<string>('');
   const [unit, setUnit] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);

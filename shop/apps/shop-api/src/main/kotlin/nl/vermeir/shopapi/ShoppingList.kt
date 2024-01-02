@@ -51,7 +51,7 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
   ) =
     ResponseEntity.ok(shoppingListService.addMenuItem(id, menuItemId, day))
 
-  @DeleteMapping("/shoppingList/{id}/category/{categoryId}")
+  @DeleteMapping("/shoppinglist/{id}/category/{categoryId}")
   fun deleteCategory(
     @PathVariable(name = "id") shoppingListId: UUID,
     @PathVariable(name = "categoryId") categoryId: UUID,
@@ -60,7 +60,7 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
     return ResponseEntity.ok(shoppingListService.deleteCategory(shoppingListId, categoryId))
   }
 
-  @DeleteMapping("/shoppingList/{id}/ingredient/{ingredientId}")
+  @DeleteMapping("/shoppinglist/{id}/ingredient/{ingredientId}")
   fun deleteIngredient(
     @PathVariable(name = "id") shoppingListId: UUID,
     @PathVariable(name = "ingredientId") ingredientId: UUID,

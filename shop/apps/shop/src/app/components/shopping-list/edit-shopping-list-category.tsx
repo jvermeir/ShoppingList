@@ -31,7 +31,7 @@ export const EditShoppingListCategory = ({
         {category.ingredients && category.ingredients.length > 0 && (
           <Box ml={-3} mr={-5}>
             <TableContainer component={Paper}>
-              <Table aria-label="simple table">
+              <Table aria-label="ingredients per category">
                 <TableBody>
                   {category.ingredients
                     .sort((a, b) => {
