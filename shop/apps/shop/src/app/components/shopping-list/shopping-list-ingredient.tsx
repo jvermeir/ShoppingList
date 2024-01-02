@@ -2,33 +2,46 @@ import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
 import React from 'react';
-import {
-  OutputShoppingListCategory,
-  OutputShoppingListIngredient,
-} from '../../../schema/output-schema';
+import { OutputShoppingListIngredient } from '../../../schema/output-schema';
 
 type ShoppingListIngredientProps = {
-  category: OutputShoppingListCategory;
+  shoppingListId: string;
   ingredient: OutputShoppingListIngredient;
   onCompleted: () => void;
 };
 
 export const ShoppingListIngredient = ({
-  category,
+  shoppingListId,
   ingredient,
   onCompleted,
 }: ShoppingListIngredientProps) => {
-  // const handleDelete = () => {
-  //   fetch(`/api/recipeIngredient/${recipeIngredient.id}`, {
-  //     method: 'DELETE',
-  //   }).then((_) => onCompleted && onCompleted());
-  // };
+  const handleDelete = () => {
+    fetch(`/api/shoppingList/${shoppingListId}/ingredient/${ingredient.id}`, {
+      method: 'DELETE',
+    }).then((_) => onCompleted && onCompleted());
+  };
 
   return (
     <TableRow key={ingredient.id} hover={true}>
-      <StyledTableCell>{ingredient.name}</StyledTableCell>
-      <StyledTableCell>{ingredient.amount}</StyledTableCell>
-      <StyledTableCell>{ingredient.unit}</StyledTableCell>
+      <StyledTableCell style={{ width: 10 }}>
+        <IconButton
+          aria-label="edit"
+          onClick={() => {
+            handleDelete();
+          }}
+        >
+          <Delete size="18" />
+        </IconButton>
+      </StyledTableCell>
+      <StyledTableCell style={{ width: 100 }}>
+        {ingredient.name}
+      </StyledTableCell>
+      <StyledTableCell style={{ width: 100 }}>
+        {ingredient.amount}
+      </StyledTableCell>
+      <StyledTableCell style={{ width: 100 }}>
+        {ingredient.unit}
+      </StyledTableCell>
       <StyledTableCell>
         {/*<EditRecipeIngredient*/}
         {/*  recipeIngredientData={recipeIngredient}*/}

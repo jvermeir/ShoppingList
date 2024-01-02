@@ -2,6 +2,7 @@ package nl.vermeir.shopapi
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import jakarta.transaction.Transactional
 import kotlinx.serialization.Serializable
 import nl.vermeir.shopapi.data.*
 import org.springframework.data.repository.CrudRepository
@@ -18,6 +19,10 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
   fun fromMenu(@PathVariable(name = "firstDay") firstDay: LocalDate) =
     ResponseEntity.ok(shoppingListService.fromMenu(firstDay))
 
+  @PostMapping("/shoppinglist/reloadFromMenu/firstDay/{firstDay}")
+  fun reloadFromMenu(@PathVariable(name = "firstDay") firstDay: LocalDate) =
+    ResponseEntity.ok(shoppingListService.reloadFromMenu(firstDay))
+
   @GetMapping("/shoppinglist/firstDay/{firstDay}")
   fun findByFirstDay(@PathVariable(name = "firstDay") firstDay: LocalDate) =
     ResponseEntity.ok(shoppingListService.getShoppingList(firstDay))
@@ -30,6 +35,14 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
   ) =
     ResponseEntity.ok(shoppingListService.updateIngredient(id, ingredientId, amount))
 
+  @PutMapping("shoppinglist/{id}/add/ingredient/{ingredientId}/amount/{amount}")
+  fun addIngredient(
+    @PathVariable(name = "id") id: UUID,
+    @PathVariable(name = "ingredientId") ingredientId: UUID,
+    @PathVariable(name = "amount") amount: Float
+  ) =
+    ResponseEntity.ok(shoppingListService.addIngredient(id, ingredientId, amount))
+
   @PutMapping("shoppinglist/{id}/menuItem/{menuItemId}/day/{day}")
   fun addMenuItem(
     @PathVariable(name = "id") id: UUID,
@@ -37,6 +50,24 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
     day: LocalDate
   ) =
     ResponseEntity.ok(shoppingListService.addMenuItem(id, menuItemId, day))
+
+  @DeleteMapping("/shoppingList/{id}/category/{categoryId}")
+  fun deleteCategory(
+    @PathVariable(name = "id") shoppingListId: UUID,
+    @PathVariable(name = "categoryId") categoryId: UUID,
+  ):
+    ResponseEntity<ShoppingList> {
+    return ResponseEntity.ok(shoppingListService.deleteCategory(shoppingListId, categoryId))
+  }
+
+  @DeleteMapping("/shoppingList/{id}/ingredient/{ingredientId}")
+  fun deleteIngredient(
+    @PathVariable(name = "id") shoppingListId: UUID,
+    @PathVariable(name = "ingredientId") ingredientId: UUID,
+  ):
+    ResponseEntity<ShoppingList> {
+    return ResponseEntity.ok(shoppingListService.deleteIngredient(shoppingListId, ingredientId))
+  }
 }
 
 @Service
@@ -46,31 +77,55 @@ class ShoppingListService(
   val shoppingListCategoriesRepository: ShoppingListCategoriesRepository,
   val shoppingListIngredientRepository: ShoppingListIngredientRepository,
   val ingredientRepository: IngredientRepository,
+  val categoryRepository: CategoryRepository,
   val uuidGenerator: UUIDGenerator
 ) {
 
   fun getShoppingList(firstDay: LocalDate): OutputShoppingList {
     val shoppingList =
-      shoppingListRepository.findByFirstDay(firstDay) ?: emptyShoppingList
+      shoppingListRepository.findByFirstDay(firstDay) ?: EmptyShoppingList
     return shoppingListToOutputShoppingList(shoppingList)
   }
 
-  fun updateIngredient(id: UUID, ingredientId: UUID, amount: Float): OutputShoppingList {
+  fun updateIngredient(shoppingListId: UUID, ingredientId: UUID, amount: Float): OutputShoppingList {
     val ingredient = shoppingListIngredientRepository.findById(ingredientId)
     ingredient.ifPresentOrElse(
       { shoppingListIngredient ->
         updateAmount(amount, shoppingListIngredient)
       },
       {
-        createShoppingListIngredient(ingredientId, amount)
+        createShoppingListIngredient(shoppingListId, ingredientId, amount)
       })
 
-    val shoppingList = shoppingListRepository.findById(id).get()
+    val shoppingList = shoppingListRepository.findById(shoppingListId).get()
+    return shoppingListToOutputShoppingList(shoppingList)
+  }
+
+  fun addIngredient(shoppingListId: UUID, ingredientId: UUID, amount: Float): OutputShoppingList {
+    val ingredient = shoppingListIngredientRepository.findByIngredientId(ingredientId)
+    ingredient.ifPresentOrElse(
+      { shoppingListIngredient ->
+        updateAmount(amount, shoppingListIngredient)
+      },
+      {
+        createShoppingListIngredient(shoppingListId, ingredientId, amount)
+      })
+
+    val shoppingList = shoppingListRepository.findById(shoppingListId).get()
     return shoppingListToOutputShoppingList(shoppingList)
   }
 
   fun addMenuItem(id: UUID, menuItemId: UUID, day: LocalDate): OutputShoppingList {
     TODO("Not yet implemented")
+  }
+
+  fun reloadFromMenu(firstDay: LocalDate): OutputShoppingList {
+    shoppingListRepository.findByFirstDay(firstDay)?.let {
+      shoppingListCategoriesRepository.findByShoppingListId(it.id!!)
+        .forEach { cat -> deleteCategory(it.id!!, cat.id!!) }
+      shoppingListRepository.deleteById(it.id!!)
+    }
+    return fromMenu(firstDay)
   }
 
   fun fromMenu(firstDay: LocalDate): OutputShoppingList {
@@ -194,9 +249,26 @@ class ShoppingListService(
     )
   }
 
-  private fun createShoppingListIngredient(ingredientId: UUID, amount: Float) {
+  private fun createShoppingListIngredient(
+    shoppingListId: UUID,
+    ingredientId: UUID,
+    amount: Float
+  ): ShoppingListIngredient {
     val newIngredient = ingredientRepository.findById(ingredientId).get()
-    val shoppingListCategory = shoppingListCategoriesRepository.findByCategoryId(newIngredient.categoryId).get()
+    val cat = shoppingListCategoriesRepository.findByCategoryId(newIngredient.categoryId)
+    val shoppingListCategory: ShoppingListCategory = if (cat.isPresent) {
+      cat.get()
+    } else {
+      val category = categoryRepository.findById(newIngredient.categoryId).get()
+      val newCategory = ShoppingListCategory(
+        id = uuidGenerator.generate(),
+        categoryId = newIngredient.categoryId,
+        shoppingListId = shoppingListId,
+        name = category.name,
+        shopOrder = category.shopOrder
+      )
+      shoppingListCategoriesRepository.save(newCategory)
+    }
     val shoppingListIngredient = ShoppingListIngredient(
       id = newIngredient.id!!,
       name = newIngredient.name,
@@ -205,7 +277,7 @@ class ShoppingListService(
       unit = newIngredient.unit,
       amount = amount
     )
-    shoppingListIngredientRepository.save(shoppingListIngredient)
+    return shoppingListIngredientRepository.save(shoppingListIngredient)
   }
 
   private fun updateAmount(amount: Float, shoppingListIngredient: ShoppingListIngredient) {
@@ -222,6 +294,17 @@ class ShoppingListService(
       shoppingListIngredientRepository.save(shoppingListIngredient)
     }
   }
+
+  fun deleteCategory(shoppingListId: UUID, categoryId: UUID): ShoppingList {
+    shoppingListIngredientRepository.deleteByShoppingListCategoryId(categoryId)
+    shoppingListCategoriesRepository.deleteById(categoryId)
+    return shoppingListRepository.findById(shoppingListId).get()
+  }
+
+  fun deleteIngredient(shoppingListId: UUID, ingredientId: UUID): ShoppingList {
+    shoppingListIngredientRepository.deleteById(ingredientId)
+    return shoppingListRepository.findById(shoppingListId).get()
+  }
 }
 
 interface ShoppingListRepository : CrudRepository<ShoppingList, UUID> {
@@ -234,7 +317,10 @@ interface ShoppingListCategoriesRepository : CrudRepository<ShoppingListCategory
 }
 
 interface ShoppingListIngredientRepository : CrudRepository<ShoppingListIngredient, UUID> {
+  @Transactional
+  fun deleteByShoppingListCategoryId(shoppingListCategoryId: UUID)
   fun findByShoppingListCategoryId(categoryId: UUID): List<ShoppingListIngredient>
+  fun findByIngredientId(ingredientId: UUID): Optional<ShoppingListIngredient>
 }
 
 @Entity(name = "SHOPPING_LISTS")
@@ -247,7 +333,7 @@ data class ShoppingList(
   var firstDay: LocalDate,
 )
 
-object emptyShoppingList :
+object EmptyShoppingList :
   ShoppingList(id = UUID.fromString("11111111-1111-1111-1111-111111111111"), firstDay = LocalDate.MIN)
 
 @Entity(name = "SHOPPING_LIST_CATEGORIES")
