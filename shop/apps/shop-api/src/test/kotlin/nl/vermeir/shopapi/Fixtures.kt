@@ -1,5 +1,6 @@
 package nl.vermeir.shopapi
 
+import org.hamcrest.text.MatchesPattern
 import java.time.LocalDate
 import java.util.*
 
@@ -14,12 +15,13 @@ val ingredient1 =
   Ingredient(id = UUID.fromString(theId), name = "ing1", categoryId = category1.id!!, unit = "kg")
 val recipe1 =
   Recipe(id = UUID.fromString(theId), name = "r1", favorite = true)
-val recipeIngredient1 = RecipeIngredient(
-  id = UUID.fromString(theId),
-  recipeId = recipe1.id!!,
-  ingredientId = ingredient1.id!!,
-  amount = 1.0f, unit = "kg"
-)
+
+//val recipeIngredient1 = RecipeIngredient(
+//  id = UUID.fromString(theId),
+//  recipeId = recipe1.id!!,
+//  ingredientId = ingredient1.id!!,
+//  amount = 1.0f, unit = "kg"
+//)
 val menuItem1 =
   MenuItem(
     id = UUID.fromString(theId),
@@ -27,3 +29,14 @@ val menuItem1 =
     recipeId = recipe1.id!!,
     theDay = march10th
   )
+
+val objectMap = mutableMapOf<String, Any>()
+
+fun <T> getFromMap(key: String): T {
+  return objectMap[key]!! as T
+}
+
+val uuidPattern =
+  MatchesPattern.matchesPattern("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\$")
+
+val unknownId = UUID.randomUUID()

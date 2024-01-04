@@ -1,7 +1,5 @@
 package nl.vermeir.shopapi
 
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import nl.vermeir.shopapi.data.OutputCategory
@@ -9,15 +7,21 @@ import nl.vermeir.shopapi.data.OutputIngredient
 import nl.vermeir.shopapi.data.OutputRecipe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
-@WebMvcTest(value = [RecipeResource::class, RecipeService::class, IngredientService::class, RecipeIngredientService::class])
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@Sql("classpath:/sql/schema.sql")
 class RecipeTest {
   @Autowired
   lateinit var mockMvc: MockMvc
@@ -26,47 +30,53 @@ class RecipeTest {
   lateinit var recipeService: RecipeService
 
   @Autowired
-  lateinit var recipeIngredientService: RecipeIngredientService
+  lateinit var categoryRepository: CategoryRepository
 
-  @MockkBean
+  @Autowired
+  lateinit var ingredientRepository: IngredientRepository
+
+  @Autowired
   lateinit var recipeRepository: RecipeRepository
 
-  @MockkBean
+  @Autowired
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
-  @MockkBean
-  lateinit var ingredientService: IngredientService
-
   private val recipe1 = Recipe(id = UUID.randomUUID(), name = "recipe1", favorite = true)
-
+  
   @Test
   fun `a recipe without id and all properties set is saved correctly and can be loaded`() {
-    every { recipeRepository.save(recipe1) } returns recipe1
-
-    mockMvc.perform(
+    val recipe = mockMvc.perform(
       post("/recipe").content(
         Json.encodeToString(recipe1)
       ).contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isCreated)
       .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$.id").value(recipe1.id.toString()))
+      .andExpect(jsonPath("$.id").value(uuidPattern))
       .andExpect(jsonPath("$.name").value(recipe1.name))
       .andExpect(jsonPath("$.favorite").value(recipe1.favorite))
+      .andReturn().response.contentAsString
+
+    val outputRecipe = Json.decodeFromString(Recipe.serializer(), recipe)
+
+    mockMvc.perform(
+      get("/recipe/${outputRecipe.id}")
+    ).andExpect(status().isOk)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.id").value(outputRecipe.id.toString()))
+      .andExpect(jsonPath("$.name").value(outputRecipe.name))
+      .andExpect(jsonPath("$.favorite").value(outputRecipe.favorite))
   }
 
   @Test
   fun `GET recipe should return 404 when recipe not found by id`() {
-    every { recipeRepository.findById(recipe1.id!!) } returns Optional.empty()
-
     mockMvc.perform(
-      get("/recipe/${recipe1.id}")
+      get("/recipe/${unknownId}")
     ).andExpect(status().isNotFound)
   }
 
   @Test
   fun `a list of recipes should be returned`() {
-    every { recipeRepository.findAll() } returns listOf(recipe1)
-
+    recipeRepository.save(recipe1)
     mockMvc.perform(
       get("/recipes").contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk)
@@ -78,11 +88,7 @@ class RecipeTest {
 
   @Test
   fun `a recipe should be returned by findById`() {
-    every {
-      recipeRepository.findById(
-        recipe1.id ?: throw ResourceNotFoundException("Recipe '${recipe1}' not found")
-      )
-    } returns Optional.of(recipe1)
+    recipeRepository.save(recipe1)
 
     mockMvc.perform(
       get("/recipe/${recipe1.id}")
@@ -95,7 +101,7 @@ class RecipeTest {
 
   @Test
   fun `a recipe should be returned by findByName`() {
-    every { recipeRepository.findByName(recipe1.name) } returns Optional.of(recipe1)
+    recipeRepository.save(recipe1)
 
     mockMvc.perform(
       get("/recipe").param("name", recipe1.name)
@@ -108,38 +114,29 @@ class RecipeTest {
 
   @Test
   fun `a recipe object can be transformed to a OutputRecipe object`() {
-    val categoryId = UUID.fromString(theId)
-    val ingredientId = UUID.fromString(theId)
-    val recipeId = UUID.fromString(theId)
-    val recipeIngredientId = UUID.fromString(theId)
-
-    val category = Category(categoryId, "cat1", 1)
-    val ingredient = Ingredient(ingredientId, "ing1", categoryId, "kg")
-    val recipe = Recipe(recipeId, "rec1", true)
-    val recipeIngredient = RecipeIngredient(recipeIngredientId, recipeId, ingredientId, 1.0f, "kg")
+    val category = categoryRepository.save(Category(name = "cat1", shopOrder = 1))
+    val ingredient = ingredientRepository.save(Ingredient(name = "ing1", categoryId = category.id!!, unit = "kg"))
+    val recipe = recipeRepository.save(Recipe(name = "rec1", favorite = true))
+    val recipeIngredient = recipeIngredientRepository.save(
+      RecipeIngredient(
+        recipeId = recipe.id!!,
+        ingredientId = ingredient.id!!,
+        amount = 1.0f,
+        unit = "kg"
+      )
+    )
 
     val outputIngredient = OutputIngredient(
-      ingredientId.toString(),
+      ingredient.id.toString(),
       "ing1",
-      OutputCategory(category.id.toString(), category.name, category.shopOrder),
-      unit = recipeIngredient.unit ?: "kg",
-      amount = recipeIngredient.amount ?: 0.0f
+      OutputCategory(id = category.id.toString(), name = category.name, shopOrder = category.shopOrder),
+      unit = ingredient.unit,
+      amount = recipeIngredient.amount!!
     )
-    every {
-      ingredientService.toOutputIngredient(
-        ingredient,
-        unit = recipeIngredient.unit ?: "kg",
-        amount = recipeIngredient.amount ?: 1.0f
-      )
-    } returns outputIngredient
-    every { ingredientService.findById(ingredientId) } returns ingredient
-    every { recipeIngredientService.findByRecipeId(recipeId) } returns listOf(recipeIngredient)
 
-    val expectedOutputRecipe = OutputRecipe(recipeId.toString(), "rec1", true, listOf(outputIngredient))
+    val expectedOutputRecipe = OutputRecipe(recipe.id.toString(), "rec1", true, listOf(outputIngredient))
 
     val outputRecipe = recipeService.toOutputRecipe(recipe)
     assert(outputRecipe == expectedOutputRecipe)
-
   }
-
 }

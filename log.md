@@ -2,6 +2,19 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+## 20240104
+
+Replaced all MockBeans and MockMvc with SpringBootTest. 
+
+## 20240102
+
+added shoppinglist edit form
+
+todo:
+- refactor api: move logic out of shoppinglist.kt into separate files, improve test coverage
+- refactor front end components: move queries in separate file. check for duplication
+- update frameworks and libraries in front end
+
 ## 20231224
 
 Moved + button to the right side of the edit recipeIngredient dialog using

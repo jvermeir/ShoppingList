@@ -215,15 +215,3 @@ class ShoppingListTest {
       .andExpect(jsonPath("$.categories[1].ingredients[1].amount").value(3f))
   }
 }
-
-/*
-
-done - initial shoppinglist is based on a menu
-done - extra ingredients may be added to the shoppinglist
-get unit from ingredient when adding an ingredient to the list
-done - ingredients of the menu may be removed from the shoppinglist
-
-done - add unit and number to ingredient
-done - add numbers if ingredient is the same
-add date to perishable ingredient
- */

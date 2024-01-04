@@ -1,5 +1,6 @@
 package nl.vermeir.shopapi
 
+import nl.vermeir.shopapi.shoppinglist.ShoppingListService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
