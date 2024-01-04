@@ -45,6 +45,7 @@ class ShoppingListTest {
 
   private val objectMap = mutableMapOf<String, Any>()
 
+  // TOOD: this is a duplicate from the method in Fixtures.kt, using that version causes this test to fail (?)
   fun <T> getFromMap(key: String): T {
     return objectMap[key]!! as T
   }

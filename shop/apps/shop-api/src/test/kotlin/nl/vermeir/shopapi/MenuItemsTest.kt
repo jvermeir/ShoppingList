@@ -23,9 +23,9 @@ class MenuItemTest {
   @Autowired
   lateinit var mockMvc: MockMvc
 
-  private val menu1 = Menu(id = UUID.fromString(theId), firstDay = march10th)
+  private val menu1 = Menu(id = UUID.randomUUID(), firstDay = march10th)
   private val recipe1 =
-    Recipe(id = UUID.fromString(theId), name = "r1", favorite = true)
+    Recipe(id = UUID.randomUUID(), name = "r1", favorite = true)
 
   private val menuItem1 =
     MenuItem(
