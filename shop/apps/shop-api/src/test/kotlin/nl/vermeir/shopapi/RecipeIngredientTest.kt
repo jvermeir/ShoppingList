@@ -151,6 +151,6 @@ class RecipeIngredientTest {
       .andExpect(jsonPath("$.recipeId").value(recipeIngredient1.recipeId.toString()))
       .andExpect(jsonPath("$.ingredientId").value(recipeIngredient1.ingredientId.toString()))
       .andExpect(jsonPath("$.amount").value(recipeIngredient1.amount))
-      .andExpect(jsonPath("$.unit").value(ingredient1.unit))
+      .andExpect(jsonPath("$.unit").value(recipeIngredient1.unit))
   }
 }
