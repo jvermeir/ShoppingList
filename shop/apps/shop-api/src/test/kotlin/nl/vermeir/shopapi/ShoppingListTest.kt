@@ -100,10 +100,10 @@ class ShoppingListTest {
     val menu = menuRepository.save(Menu(firstDay = march10th))
     objectMap["menu"] = menu
 
-    val menuItem1 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe1.id!!, theDay = march10th))
-    objectMap["menuItem1"] = menuItem1
-    val menuItem2 = menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe2.id!!, theDay = march11th))
-    objectMap["menuItem2"] = menuItem2
+    objectMap["menuItem1"] =
+      menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe1.id!!, theDay = march10th))
+    objectMap["menuItem2"] =
+      menuItemRepository.save(MenuItem(menuId = menu.id!!, recipeId = recipe2.id!!, theDay = march11th))
   }
 
   // TODO: these test are brittle because of the ordering of results

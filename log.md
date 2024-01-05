@@ -13,6 +13,7 @@ added shoppinglist edit form
 todo:
 - refactor api: move logic out of shoppinglist.kt into separate files, improve test coverage
 - refactor front end components: move queries in separate file. check for duplication
+- allow typing in dropdown lists
 - update frameworks and libraries in front end
 
 ## 20231224
@@ -43,7 +44,7 @@ to the list. This also feels clunky.
 todo:
 - draggable: https://m2.material.io/components/cards/android#using-cards
 
-done - this was caused by using the name in stead of the id to set the value of a dropdown 
+done - this was caused by using the name instead of the id to set the value of a dropdown 
 ```
 MUI: You have provided an out-of-range value `ing3` for the select component.
 Consider providing a value that matches one of the available options or ''.
