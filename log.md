@@ -2,6 +2,15 @@
 
 This file is a history of the experiments I've done and what I learned along the way.
 
+upgrade no nx 17 by generating a new project and then copying and modifying apps/shop/src/project.json as needed
+automated migration kept failing. 
+
+run frontend with:
+
+```bash
+npx nx run shop:serve --verbose
+```
+
 ## 20240104
 
 Replaced all MockBeans and MockMvc with SpringBootTest. 
@@ -14,7 +23,11 @@ todo:
 - refactor api: move logic out of shoppinglist.kt into separate files, improve test coverage
 - refactor front end components: move queries in separate file. check for duplication
 - allow typing in dropdown lists
+- find out if there's a new verion of the plugin to run gradle builds from nx. 
+- typing in the amount field in an ingredient record on the shoppinglist page sends a rest call after each letter. can this be improved? overall: more compact design?  
+- show 'working only after a short delay'
 - update frameworks and libraries in front end
+  - nx: done
 
 ## 20231224
 
