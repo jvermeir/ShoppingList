@@ -14,3 +14,4 @@ ShoppingList.iml
 *jar
 node_modules
 __pycache__
+.nx
