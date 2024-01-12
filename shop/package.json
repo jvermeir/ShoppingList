@@ -26,6 +26,7 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@jnxplus/nx-gradle": "^0.18.0",
     "@nx/eslint": "17.2.8",
     "@nx/eslint-plugin": "17.2.8",
     "@nx/jest": "17.2.8",
