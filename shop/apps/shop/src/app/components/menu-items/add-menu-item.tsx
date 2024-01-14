@@ -16,17 +16,12 @@ import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
 import RecipeSelector from './recipe-selector';
 import { MenuData } from '../../pages/menus';
+import { postMenuItem } from 'service';
 
 export interface AddMenuItemProps {
   menu: MenuData;
   recipes: RecipeData[];
   onCompleted: () => void;
-}
-
-export interface AddMenuItemRequest {
-  menuId: string;
-  recipeId: string;
-  theDay: string;
 }
 
 export const AddMenuItem = ({
@@ -40,16 +35,6 @@ export const AddMenuItem = ({
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddMenuItemRequest) => {
-    return fetch('/api/menuItem', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   useEffect(() => {
     setRecipeName('');
@@ -78,7 +63,7 @@ export const AddMenuItem = ({
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ menuId: menu.id, recipeId, theDay })
+    postMenuItem({ menuId: menu.id, recipeId, theDay })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

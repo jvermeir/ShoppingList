@@ -17,8 +17,8 @@ import fetch from 'cross-fetch';
 import { RecipeIngredient } from '../recipe-ingredients/recipe-ingredient';
 import { RecipeData } from '../../pages/recipes';
 import { AddRecipeIngredient } from '../recipe-ingredients/add-recipe-ingredient';
-import { IngredientData } from '../../pages/ingredients';
 import Box from '@mui/material/Box';
+import { IngredientData } from 'service';
 
 export interface RecipeIngredientProps {
   recipe: RecipeData;

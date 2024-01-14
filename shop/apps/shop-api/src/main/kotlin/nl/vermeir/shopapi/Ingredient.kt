@@ -31,6 +31,9 @@ class IngredientResource(val ingredientService: IngredientService) {
   @PostMapping("/ingredient")
   fun post(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.CREATED)
 
+  @PutMapping("/ingredient")
+  fun put(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.OK)
+
   @GetMapping("/ingredientsWithDetails")
   fun allWithCategoryName(): List<IngredientWithDetails> = ingredientService.allWithCategoryName()
 }

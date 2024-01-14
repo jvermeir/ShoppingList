@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
 import Checkbox from '@mui/material/Checkbox';
-import { IngredientData } from '../../pages/ingredients';
+import { createRecipe, IngredientData } from 'service';
 
 /*
 TODO: this page doesn't allow adding new recipe ingredients. should it?
@@ -26,27 +26,12 @@ export interface AddRecipeProps {
   onCompleted: () => void;
 }
 
-export interface AddRecipeRequest {
-  name: string;
-  favorite: boolean;
-}
-
 export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
   const [name, setName] = useState<string>('');
   const [favorite, setFavorite] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddRecipeRequest) => {
-    return fetch('/api/recipe', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -74,7 +59,7 @@ export const AddRecipe = ({ onCompleted }: AddRecipeProps) => {
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ name, favorite: favorite })
+    createRecipe({ name, favorite: favorite })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

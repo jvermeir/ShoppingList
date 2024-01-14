@@ -16,16 +16,12 @@ import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
 import { MenuData } from '../../pages/menus';
 import { MenuItems } from './menu-items';
+import { updateMenu } from 'service';
 
 export interface EditMenuProps {
   menu: MenuData;
   recipes: RecipeData[];
   onCompleted: () => void;
-}
-
-export interface EditMenuRequest {
-  id: string;
-  firstDay: string;
 }
 
 export const EditMenu = ({ menu, recipes, onCompleted }: EditMenuProps) => {
@@ -34,16 +30,6 @@ export const EditMenu = ({ menu, recipes, onCompleted }: EditMenuProps) => {
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: EditMenuRequest) => {
-    return fetch('/api/menu', {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -63,7 +49,7 @@ export const EditMenu = ({ menu, recipes, onCompleted }: EditMenuProps) => {
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({ id, firstDay })
+    updateMenu({ id, firstDay })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

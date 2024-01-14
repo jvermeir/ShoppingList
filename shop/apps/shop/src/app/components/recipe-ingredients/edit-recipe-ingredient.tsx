@@ -15,20 +15,12 @@ import React, { useState } from 'react';
 import { HttpError } from '../error/error';
 import { RecipeIngredientData } from '../recipe/recipe-ingredients';
 import RecipeIngredientSelector from './recipe-ingredient-selector';
-import { IngredientData } from '../../pages/ingredients';
+import { IngredientData, updateRecipeIngredient } from 'service';
 
 export interface EditRecipeIngredientProps {
   recipeIngredientData: RecipeIngredientData;
   ingredients: IngredientData[];
   onCompleted: () => void;
-}
-
-export interface EditRecipeIngredientRequest {
-  id: string;
-  recipeId: string;
-  ingredientId: string;
-  amount: number;
-  unit: string;
 }
 
 export const EditRecipeIngredient = ({
@@ -53,16 +45,6 @@ export const EditRecipeIngredient = ({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
-  const submitApiRequest = (req: EditRecipeIngredientRequest) => {
-    return fetch('/api/recipeIngredient', {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
-
   const handleError = (error: HttpError) =>
     error.code === 409
       ? setError('Duplicate recipe name')
@@ -81,7 +63,7 @@ export const EditRecipeIngredient = ({
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({
+    updateRecipeIngredient({
       id,
       recipeId,
       ingredientId,

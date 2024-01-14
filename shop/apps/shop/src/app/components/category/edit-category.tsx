@@ -11,21 +11,15 @@ import {
   TextField,
 } from '@mui/material';
 import { Edit } from 'react-feather';
-import { CategoryData } from '../../pages/categories';
 import React, { useState } from 'react';
 import { HttpError } from '../error/error';
+import { CategoryData, createCategory, updateCategory } from 'service';
 
 // TODO: fix aria thingies
 
 export interface EditCategoryProps {
   category: CategoryData;
   onCompleted: () => void;
-}
-
-export interface EditCategoryRequest {
-  id: string;
-  name: string;
-  shopOrder: number;
 }
 
 export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
@@ -35,16 +29,6 @@ export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: EditCategoryRequest) => {
-    return fetch('/api/category', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -64,7 +48,7 @@ export const EditCategory = ({ category, onCompleted }: EditCategoryProps) => {
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({ id, name, shopOrder })
+    updateCategory({ id, name, shopOrder })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

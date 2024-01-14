@@ -4,8 +4,8 @@ import StyledTableCell from '../styled-components/StyledTableCell';
 import React from 'react';
 import { RecipeIngredientData } from '../recipe/recipe-ingredients';
 import { EditRecipeIngredient } from './edit-recipe-ingredient';
-import { IngredientData } from '../../pages/ingredients';
 import fetch from 'cross-fetch';
+import { IngredientData } from 'service';
 
 type RecipeProps = {
   recipeIngredient: RecipeIngredientData;

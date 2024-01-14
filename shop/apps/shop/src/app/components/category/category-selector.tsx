@@ -7,7 +7,7 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { CategoryData } from '../../pages/categories';
+import { CategoryData } from 'service';
 
 export interface CategorySelectorProps {
   name?: string;

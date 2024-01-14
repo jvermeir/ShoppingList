@@ -14,20 +14,13 @@ import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
-import { IngredientData } from '../../pages/ingredients';
 import RecipeIngredientSelector from './recipe-ingredient-selector';
+import { createRecipeIngredient, IngredientData } from 'service';
 
 export interface AddRecipeIngredientProps {
   recipe: RecipeData;
   ingredients: IngredientData[];
   onCompleted: () => void;
-}
-
-export interface AddRecipeIngredientRequest {
-  ingredientId: string;
-  recipeId: string;
-  amount: number;
-  unit: string;
 }
 
 export const AddRecipeIngredient = ({
@@ -42,16 +35,6 @@ export const AddRecipeIngredient = ({
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddRecipeIngredientRequest) => {
-    return fetch('/api/recipeIngredient', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   useEffect(() => {
     setIngredientName('');
@@ -83,7 +66,7 @@ export const AddRecipeIngredient = ({
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ recipeId: recipe.id, ingredientId, amount, unit })
+    createRecipeIngredient({ recipeId: recipe.id, ingredientId, amount, unit })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

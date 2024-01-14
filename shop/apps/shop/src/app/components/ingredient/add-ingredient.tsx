@@ -13,17 +13,11 @@ import React, { useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
 import CategorySelector from '../category/category-selector';
-import { CategoryData } from '../../pages/categories';
+import { CategoryData, createIngredient } from 'service';
 
 export interface AddIngredientProps {
   categories: CategoryData[];
   onCompleted: () => void;
-}
-
-export interface AddIngredientRequest {
-  name: string;
-  categoryId: string;
-  unit: string;
 }
 
 // TODO: why does this form show previous values? unless set to empty/0 explicitly
@@ -39,16 +33,6 @@ export const AddIngredient = ({
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddIngredientRequest) => {
-    return fetch('/api/ingredient', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -71,7 +55,7 @@ export const AddIngredient = ({
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ name, categoryId, unit })
+    createIngredient({ name, categoryId, unit })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -157,7 +141,6 @@ export const AddIngredient = ({
                 onChange={handleUnit}
                 value={unit}
               />
-
             </Box>
           </Box>
         </DialogContent>

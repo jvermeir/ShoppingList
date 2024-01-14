@@ -3,6 +3,7 @@ import { Delete } from 'react-feather';
 import StyledTableCell from '../styled-components/StyledTableCell';
 import React from 'react';
 import { OutputShoppingListIngredient } from '../../../schema/output-schema';
+import { updateShoppingListIngredient } from 'service';
 
 type ShoppingListIngredientProps = {
   shoppingListId: string;
@@ -22,12 +23,13 @@ export const ShoppingListIngredient = ({
   };
 
   const handleUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    fetch(
-      `/api/shoppinglist/${shoppingListId}/ingredient/${ingredient.id}/amount/${event.target.value}`,
-      {
-        method: 'PUT',
-      }
-    ).then((_) => onCompleted && onCompleted());
+    const ingredientId = ingredient.id;
+    const amount = Number(event.target.value);
+    updateShoppingListIngredient({
+      shoppingListId,
+      ingredientId,
+      amount,
+    }).then((_) => onCompleted && onCompleted());
   };
 
   return (

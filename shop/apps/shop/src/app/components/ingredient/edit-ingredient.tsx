@@ -11,23 +11,15 @@ import {
   TextField,
 } from '@mui/material';
 import { Edit } from 'react-feather';
-import { IngredientData } from '../../pages/ingredients';
 import CategorySelector from '../category/category-selector';
-import { CategoryData } from '../../pages/categories';
 import React, { useState } from 'react';
 import { HttpError } from '../error/error';
+import { CategoryData, IngredientData, updateIngredient } from 'service';
 
 export interface EditIngredientProps {
   ingredient: IngredientData;
   categories: CategoryData[];
   onCompleted: () => void;
-}
-
-export interface EditIngredientRequest {
-  id: string;
-  name: string;
-  categoryId: string;
-  unit: string;
 }
 
 export const EditIngredient = ({
@@ -41,20 +33,12 @@ export const EditIngredient = ({
     ingredient.categoryId || ''
   );
   const [unit, setUnit] = useState<string>(ingredient.unit || '');
-  const [categoryName, setCategoryName] = useState<string>(ingredient.categoryId || '');
+  const [categoryName, setCategoryName] = useState<string>(
+    ingredient.categoryId || ''
+  );
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: EditIngredientRequest) => {
-    return fetch('/api/ingredient', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -74,7 +58,7 @@ export const EditIngredient = ({
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({ id, name, categoryId: categoryId, unit: unit })
+    updateIngredient({ id, name, categoryId: categoryId, unit: unit })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -143,7 +127,6 @@ export const EditIngredient = ({
                 value={categoryName}
                 options={categories}
                 onChange={handleCategoryId}
-
               />
 
               <TextField
@@ -158,7 +141,6 @@ export const EditIngredient = ({
                 onChange={handleUnit}
                 value={unit}
               />
-
             </Box>
           </Box>
         </DialogContent>

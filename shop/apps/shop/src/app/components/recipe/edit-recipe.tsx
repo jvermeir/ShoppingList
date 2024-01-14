@@ -17,18 +17,12 @@ import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
 import RecipeIngredients from './recipe-ingredients';
-import { IngredientData } from '../../pages/ingredients';
+import { IngredientData, updateRecipe } from 'service';
 
 export interface EditRecipeProps {
   recipe: RecipeData;
   ingredients: IngredientData[];
   onCompleted: () => void;
-}
-
-export interface EditRecipeRequest {
-  id: string;
-  name: string;
-  favorite: boolean;
 }
 
 export const EditRecipe = ({
@@ -42,16 +36,6 @@ export const EditRecipe = ({
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: EditRecipeRequest) => {
-    return fetch('/api/recipe', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -71,7 +55,7 @@ export const EditRecipe = ({
   const handleSave = () => {
     setOpen(false);
 
-    submitApiRequest({ id, name, favorite })
+    updateRecipe({ id, name, favorite })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
