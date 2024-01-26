@@ -3,8 +3,8 @@ package nl.vermeir.shopapi
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import kotlinx.serialization.Serializable
-import nl.vermeir.shopapi.data.OutputMenu
-import nl.vermeir.shopapi.data.OutputMenuItem
+import nl.vermeir.shopapi.outputmodel.OutputMenu
+import nl.vermeir.shopapi.outputmodel.OutputMenuItem
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.http.HttpStatus

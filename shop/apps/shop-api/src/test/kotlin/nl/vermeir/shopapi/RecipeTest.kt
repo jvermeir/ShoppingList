@@ -2,9 +2,9 @@ package nl.vermeir.shopapi
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import nl.vermeir.shopapi.data.OutputCategory
-import nl.vermeir.shopapi.data.OutputIngredient
-import nl.vermeir.shopapi.data.OutputRecipe
+import nl.vermeir.shopapi.outputmodel.OutputCategory
+import nl.vermeir.shopapi.outputmodel.OutputIngredient
+import nl.vermeir.shopapi.outputmodel.OutputRecipe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -42,7 +42,7 @@ class RecipeTest {
   lateinit var recipeIngredientRepository: RecipeIngredientRepository
 
   private val recipe1 = Recipe(id = UUID.randomUUID(), name = "recipe1", favorite = true)
-  
+
   @Test
   fun `a recipe without id and all properties set is saved correctly and can be loaded`() {
     val recipe = mockMvc.perform(

@@ -149,6 +149,10 @@ export const createIngredient = (req: AddIngredientRequest) => {
   });
 };
 
+/*
+TODO: should result processing be part of the method to get the data (like in getIngredients)?
+or should we just return the data and let the caller handle the result (as in updateIngredient)?
+ */
 export function getIngredients(
   setIngredients: (value: IngredientData[]) => void,
   setLoading?: (value: boolean) => void,

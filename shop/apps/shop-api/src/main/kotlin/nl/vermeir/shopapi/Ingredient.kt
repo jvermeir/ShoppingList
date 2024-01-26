@@ -4,7 +4,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import kotlinx.serialization.Serializable
-import nl.vermeir.shopapi.data.OutputIngredient
+import nl.vermeir.shopapi.outputmodel.OutputIngredient
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus

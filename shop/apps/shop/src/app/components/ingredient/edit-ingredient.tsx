@@ -56,6 +56,7 @@ export const EditIngredient = ({
   };
 
   const handleSave = () => {
+    console.log('handleSave', categoryId);
     setOpen(false);
 
     updateIngredient({ id, name, categoryId: categoryId, unit: unit })
