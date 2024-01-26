@@ -4,9 +4,6 @@ import {
   Autocomplete,
   FormControl,
   InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import { RecipeData } from '../../pages/recipes';
@@ -14,19 +11,17 @@ import { RecipeData } from '../../pages/recipes';
 // TODO: add type-to-search when selecting a recipe
 
 export interface RecipeSelectorProps {
-  name?: string;
   value: string;
   options: RecipeData[];
   onChange: (recipeId: string) => void;
 }
 
 export const RecipeSelector = ({
-  name,
   value,
   options,
   onChange,
 }: RecipeSelectorProps) => {
-  const [localValue, setLocalValue] = useState(value ?? '');
+  const [_, setLocalValue] = useState(value ?? '');
   useEffect(() => setLocalValue(value ?? ''), [value]);
 
   const handleChange = (option: string) => {
@@ -43,6 +38,10 @@ export const RecipeSelector = ({
     };
   });
 
+  const getSelectedValue = (id: string) => {
+    return listOptions.find((o) => o.id === id);
+  };
+
   return (
     <FormControl fullWidth>
       <InputLabel />
@@ -56,6 +55,7 @@ export const RecipeSelector = ({
           v && handleChange(v.id);
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
+        defaultValue={getSelectedValue(value)}
       />
     </FormControl>
   );

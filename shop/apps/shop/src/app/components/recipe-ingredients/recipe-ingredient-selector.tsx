@@ -4,27 +4,22 @@ import {
   Autocomplete,
   FormControl,
   InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   TextField,
 } from '@mui/material';
 import { IngredientData } from 'service';
 
 export interface RecipeIngredientSelectorProps {
-  name?: string;
   value: string;
   options: IngredientData[];
   onChange: (ingredientId: string) => void;
 }
 
 export const RecipeIngredientSelector = ({
-  name,
   value,
   options,
   onChange,
 }: RecipeIngredientSelectorProps) => {
-  const [localValue, setLocalValue] = useState(value ?? '');
+  const [_, setLocalValue] = useState(value ?? '');
   useEffect(() => setLocalValue(value ?? ''), [value]);
 
   const handleChange = (option: string) => {
@@ -41,6 +36,10 @@ export const RecipeIngredientSelector = ({
     };
   });
 
+  const getSelectedValue = (id: string) => {
+    return listOptions.find((o) => o.id === id);
+  };
+
   return (
     <FormControl fullWidth>
       <InputLabel />
@@ -55,6 +54,7 @@ export const RecipeIngredientSelector = ({
           v && handleChange(v.id);
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
+        defaultValue={getSelectedValue(value)}
       />
     </FormControl>
   );

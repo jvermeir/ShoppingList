@@ -3,6 +3,45 @@
 This file is a history of the experiments I've done and what I learned along the way.
 
 
+add-ingredient
+```
+  const handleCategoryId = (categoryId: string) => {
+    console.log('handleCategoryId', categoryId);
+    console.log('categories', categories);
+    setCategoryId(categoryId);
+    setCategoryName(
+      categories.filter((category) => category.id === categoryId)[0].id
+    );
+  };
+  
+    const handleCategoryId = (categoryId: string) => {
+    console.log('handleCategoryId', categoryId);
+    setCategoryId(categoryId);
+    setCategoryName(
+      categories.filter(
+        (category: CategoryData) => category.id === categoryId
+      )[0].id
+    );
+  };
+
+```
+
+## 20240118
+
+```
+event 
+click { target: null, buttons: 0, clientX: 391, clientY: 436, layerX: 0, layerY: 0 }
+
+handleCategoryId 18fb8240-01cc-4c98-9bcb-a27376d3e325 edit-ingredient.tsx:79:12
+handleSave 18fb8240-01cc-4c98-9bcb-a27376d3e325 edit-ingredient.tsx:59:12
+```
+
+```
+option 59492265-9fe6-4c35-bcea-715f531f9146 category-selector.tsx:38:12
+handleCategoryId 18fb8240-01cc-4c98-9bcb-a27376d3e325 edit-ingredient.tsx:79:12
+handleSave 18fb8240-01cc-4c98-9bcb-a27376d3e325
+```
+
 ## 20240107
 
 upgrade no nx 17 by generating a new project and then copying and modifying apps/shop/src/project.json as needed

@@ -9,32 +9,27 @@ import {
 import { CategoryData } from 'service';
 
 export interface CategorySelectorProps {
-  name?: string;
   value: string;
   options: CategoryData[];
   onChange: (categoryId: string) => void;
 }
 
-type ListOption = {
-  label: string;
-  shopOrder: number;
-  id: string;
-  name: string;
-};
-
 export const CategorySelector = ({
-  name,
   value,
   options,
   onChange,
 }: CategorySelectorProps) => {
-  const [localValue, setLocalValue] = useState(value ?? '');
+  const [_, setLocalValue] = useState(value ?? '');
   useEffect(() => setLocalValue(value ?? ''), [value]);
 
   const handleChange = (option: string) => {
     if (onChange) {
       onChange(option);
     }
+  };
+
+  const getSelectedValue = (id: string) => {
+    return listOptions.find((o) => o.id === id);
   };
 
   const listOptions = options.map((option) => {
@@ -60,6 +55,7 @@ export const CategorySelector = ({
           v && handleChange(v.id);
         }}
         isOptionEqualToValue={(option, value) => option.id === value.id}
+        defaultValue={getSelectedValue(value)}
       />
     </FormControl>
   );
