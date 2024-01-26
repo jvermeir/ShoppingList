@@ -13,11 +13,10 @@ import { useParams } from 'react-router';
 import fetch from 'cross-fetch';
 import { OutputShoppingList } from '../../schema/output-schema';
 import { ShoppingListCategory } from '../components/shopping-list/shopping-list-category';
-import { IngredientData } from './ingredients';
-import { CategoryData } from './categories';
 import { Loading } from '../components/loading/loading';
 import { RefreshCcw } from 'react-feather';
 import { AddShoppingListIngredient } from '../components/shopping-list/add-shopping-list-ingredient';
+import { CategoryData, IngredientData } from 'service';
 
 export const ShoppingListPage = () => {
   let { firstDay } = useParams();

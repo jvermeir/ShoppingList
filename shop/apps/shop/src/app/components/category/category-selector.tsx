@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import {
+  Autocomplete,
   FormControl,
   InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
+  TextField,
 } from '@mui/material';
-import { CategoryData } from '../../pages/categories';
+import { CategoryData } from 'service';
 
 export interface CategorySelectorProps {
   name?: string;
@@ -15,6 +14,13 @@ export interface CategorySelectorProps {
   options: CategoryData[];
   onChange: (categoryId: string) => void;
 }
+
+type ListOption = {
+  label: string;
+  shopOrder: number;
+  id: string;
+  name: string;
+};
 
 export const CategorySelector = ({
   name,
@@ -25,30 +31,36 @@ export const CategorySelector = ({
   const [localValue, setLocalValue] = useState(value ?? '');
   useEffect(() => setLocalValue(value ?? ''), [value]);
 
-  const handleChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value;
+  const handleChange = (option: string) => {
     if (onChange) {
-      onChange(value);
+      onChange(option);
     }
   };
 
+  const listOptions = options.map((option) => {
+    return {
+      label: option.name,
+      shopOrder: option.shopOrder,
+      id: option.id,
+      name: option.name,
+    };
+  });
+
   return (
     <FormControl fullWidth>
-      <InputLabel>Category</InputLabel>
-      <Select
-        name={name}
-        value={localValue}
-        label="Category"
-        onChange={handleChange}
-      >
-        {options?.map((option) => {
-          return (
-            <MenuItem key={option.id} value={option.id}>
-              {option.name}
-            </MenuItem>
-          );
-        })}
-      </Select>
+      <InputLabel />
+
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={listOptions}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Category" />}
+        onChange={(e, v) => {
+          v && handleChange(v.id);
+        }}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+      />
     </FormControl>
   );
 };

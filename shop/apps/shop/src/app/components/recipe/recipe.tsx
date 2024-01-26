@@ -5,7 +5,7 @@ import { EditRecipe } from './edit-recipe';
 import { RecipeData } from '../../pages/recipes';
 import Checkbox from '@mui/material/Checkbox';
 import React from 'react';
-import { IngredientData } from '../../pages/ingredients';
+import { IngredientData } from 'service';
 
 // TODO: add amounts for ingredients per id
 

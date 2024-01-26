@@ -1,8 +1,8 @@
 import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
-import { CategoryData } from '../../pages/categories';
 import { EditCategory } from './edit-category';
 import StyledTableCell from '../styled-components/StyledTableCell';
+import { CategoryData } from 'service';
 
 export const Category = ({
   category,

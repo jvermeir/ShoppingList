@@ -12,14 +12,10 @@ import {
 import React, { useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
+import { createCategory } from 'service';
 
 export interface AddCategoryProps {
   onCompleted: () => void;
-}
-
-export interface AddCategoryRequest {
-  name: string;
-  shopOrder: number;
 }
 
 // TODO: why does this form show previous values? unless set to empty/0 explicitly
@@ -30,16 +26,6 @@ export const AddCategory = ({ onCompleted }: AddCategoryProps) => {
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddCategoryRequest) => {
-    return fetch('/api/category', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -62,7 +48,7 @@ export const AddCategory = ({ onCompleted }: AddCategoryProps) => {
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ name, shopOrder })
+    createCategory({ name, shopOrder })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

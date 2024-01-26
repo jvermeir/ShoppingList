@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
+import { createMenu } from 'service';
 
 /*
 TODO: this page doesn't allow adding new recipe ingredients. should it?
@@ -24,25 +25,11 @@ export interface AddMenuProps {
   onCompleted: () => void;
 }
 
-export interface AddMenuRequest {
-  firstDay: string;
-}
-
 export const AddMenu = ({ onCompleted }: AddMenuProps) => {
   const [firstDay, setFirstDay] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddMenuRequest) => {
-    return fetch('/api/menu', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(req),
-    });
-  };
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -68,7 +55,7 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ firstDay })
+    createMenu({ firstDay })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

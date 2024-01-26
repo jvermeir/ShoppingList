@@ -1,7 +1,7 @@
 package nl.vermeir.shopapi
 
 import kotlinx.serialization.json.Json
-import nl.vermeir.shopapi.data.OutputShoppingList
+import nl.vermeir.shopapi.outputmodel.OutputShoppingList
 import org.hamcrest.Matchers
 import org.hamcrest.text.MatchesPattern
 import org.junit.jupiter.api.BeforeEach

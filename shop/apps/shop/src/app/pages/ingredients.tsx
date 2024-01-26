@@ -9,23 +9,17 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-
 import { Loading } from '../components/loading/loading';
 import { useEffect, useState } from 'react';
 import { Ingredient } from '../components/ingredient/ingredient';
 import { AddIngredient } from '../components/ingredient/add-ingredient';
-
-import fetch from 'cross-fetch';
-import { CategoryData } from './categories';
 import { Navigation } from '../components/navigation/navigation';
-
-export interface IngredientData {
-  id: string;
-  name: string;
-  categoryId: string;
-  categoryName: string;
-  unit: string;
-}
+import {
+  CategoryData,
+  getCategories,
+  getIngredients,
+  IngredientData,
+} from 'service';
 
 export const IngredientsPage = () => {
   const [ingredients, setIngredients] = useState<IngredientData[]>([]);
@@ -33,37 +27,13 @@ export const IngredientsPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  function getIngredients() {
-    setLoading(true);
-
-    fetch('/api/ingredientsWithDetails')
-      .then((_) => _.json())
-      .then((ingredients) => {
-        setIngredients(ingredients);
-      })
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }
-
-  function getCategories() {
-    setLoading(true);
-
-    fetch('/api/categories')
-      .then((_) => _.json())
-      .then((categories) => {
-        setCategories(categories);
-      })
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }
-
   useEffect(() => {
-    getIngredients();
-    getCategories();
+    getIngredients(setIngredients, setLoading, setError);
+    getCategories(setCategories, setLoading, setError);
   }, []);
 
   function refetch() {
-    getIngredients();
+    getIngredients(setIngredients, setLoading, setError);
   }
 
   return (

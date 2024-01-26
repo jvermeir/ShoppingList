@@ -30,7 +30,7 @@ class ShoppingListResource(val shoppingListService: ShoppingListService) {
   ) =
     ResponseEntity.ok(shoppingListService.updateIngredient(id, ingredientId, amount))
 
-  @PutMapping("shoppinglist/{id}/add/ingredient/{ingredientId}/amount/{amount}")
+  @PostMapping("shoppinglist/{id}/add/ingredient/{ingredientId}/amount/{amount}")
   fun addIngredient(
     @PathVariable(name = "id") id: UUID,
     @PathVariable(name = "ingredientId") ingredientId: UUID,

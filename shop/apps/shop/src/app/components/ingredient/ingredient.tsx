@@ -1,9 +1,8 @@
 import { IconButton, TableRow } from '@mui/material';
 import { Delete } from 'react-feather';
-import { IngredientData } from '../../pages/ingredients';
 import { EditIngredient } from './edit-ingredient';
-import { CategoryData } from '../../pages/categories';
 import StyledTableCell from '../styled-components/StyledTableCell';
+import { CategoryData, IngredientData } from 'service';
 
 export const Ingredient = ({
   ingredient,

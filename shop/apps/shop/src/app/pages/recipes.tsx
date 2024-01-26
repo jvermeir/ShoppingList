@@ -17,7 +17,7 @@ import fetch from 'cross-fetch';
 import { Navigation } from '../components/navigation/navigation';
 import { AddRecipe } from '../components/recipe/add-recipe';
 import { Recipe } from '../components/recipe/recipe';
-import { IngredientData } from './ingredients';
+import { IngredientData } from 'service';
 
 export interface RecipeData {
   id: string;

@@ -9,47 +9,24 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-
 import { Loading } from '../components/loading/loading';
 import { useEffect, useState } from 'react';
 import { Category } from '../components/category/category';
 import { AddCategory } from '../components/category/add-category';
-
-// TODO????
-import fetch from 'cross-fetch';
 import { Navigation } from '../components/navigation/navigation';
-
-// TODO: test
-
-export interface CategoryData {
-  id: string;
-  name: string;
-  shopOrder: number;
-}
+import { CategoryData, getCategories } from 'service';
 
 export const CategoriesPage = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
 
-  function getCategories() {
-    setLoading(true);
-
-    fetch('/api/categories')
-      .then((_) => _.json())
-      .then((categories) => {
-        setCategories(categories);
-      })
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }
-
   useEffect(() => {
-    getCategories();
+    getCategories(setCategories, setLoading, setError);
   }, []);
 
   function refetch() {
-    getCategories();
+    getCategories(setCategories, setLoading, setError);
   }
 
   return (

@@ -14,19 +14,13 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
-import { IngredientData } from '../../pages/ingredients';
 import IngredientSelector from './ingredient-selector';
+import { addShoppingListIngredient, IngredientData } from 'service';
 
 export interface AddShoppingListIngredientProps {
   shoppingListId: string;
   ingredients: IngredientData[];
   onCompleted: () => void;
-}
-
-export interface AddShoppingListIngredientRequest {
-  ingredientId: string;
-  amount: number;
-  unit: string;
 }
 
 export const AddShoppingListIngredient = ({
@@ -41,19 +35,6 @@ export const AddShoppingListIngredient = ({
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
-
-  const submitApiRequest = (req: AddShoppingListIngredientRequest) => {
-    return fetch(
-      `api/shoppinglist/${shoppingListId}/add/ingredient/${req.ingredientId}/amount/${req.amount}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({}),
-      }
-    );
-  };
 
   useEffect(() => {
     setIngredientName('');
@@ -85,7 +66,7 @@ export const AddShoppingListIngredient = ({
     setShowConfirmation(false);
     setError('');
 
-    submitApiRequest({ ingredientId, amount, unit })
+    addShoppingListIngredient({ shoppingListId, ingredientId, amount, unit })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())

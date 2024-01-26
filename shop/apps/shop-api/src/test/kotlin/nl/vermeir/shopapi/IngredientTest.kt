@@ -2,8 +2,8 @@ package nl.vermeir.shopapi
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import nl.vermeir.shopapi.data.OutputCategory
-import nl.vermeir.shopapi.data.OutputIngredient
+import nl.vermeir.shopapi.outputmodel.OutputCategory
+import nl.vermeir.shopapi.outputmodel.OutputIngredient
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

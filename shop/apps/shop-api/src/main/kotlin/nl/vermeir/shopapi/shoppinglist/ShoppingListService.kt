@@ -4,7 +4,7 @@ import nl.vermeir.shopapi.CategoryRepository
 import nl.vermeir.shopapi.IngredientRepository
 import nl.vermeir.shopapi.MenuService
 import nl.vermeir.shopapi.UUIDGenerator
-import nl.vermeir.shopapi.data.*
+import nl.vermeir.shopapi.outputmodel.*
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.util.*

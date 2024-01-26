@@ -4,7 +4,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import kotlinx.serialization.Serializable
-import nl.vermeir.shopapi.data.OutputIngredient
+import nl.vermeir.shopapi.outputmodel.OutputIngredient
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.http.HttpStatus
@@ -30,6 +30,9 @@ class IngredientResource(val ingredientService: IngredientService) {
 
   @PostMapping("/ingredient")
   fun post(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.CREATED)
+
+  @PutMapping("/ingredient")
+  fun put(@RequestBody ingredient: Ingredient) = ResponseEntity(ingredientService.save(ingredient), HttpStatus.OK)
 
   @GetMapping("/ingredientsWithDetails")
   fun allWithCategoryName(): List<IngredientWithDetails> = ingredientService.allWithCategoryName()

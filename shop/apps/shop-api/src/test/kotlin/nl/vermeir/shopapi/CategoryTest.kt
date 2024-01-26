@@ -2,7 +2,7 @@ package nl.vermeir.shopapi
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import nl.vermeir.shopapi.data.OutputCategory
+import nl.vermeir.shopapi.outputmodel.OutputCategory
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.text.MatchesPattern.matchesPattern
 import org.junit.jupiter.api.Test
