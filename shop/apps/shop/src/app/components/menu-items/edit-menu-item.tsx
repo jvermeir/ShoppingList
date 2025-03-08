@@ -17,6 +17,10 @@ import RecipeSelector from './recipe-selector';
 import { RecipeData } from '../../pages/recipes';
 import { MenuItemData } from '../menu/menu-items';
 import { updateMenuItem } from 'service';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { nl } from 'date-fns/locale/nl';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 export interface EditMenuItemProps {
   menuItem: MenuItemData;
@@ -33,7 +37,9 @@ export const EditMenuItem = ({
 }: EditMenuItemProps) => {
   const [_, setRecipeName] = useState<string>(menuItem.recipeName || '');
   const [newRecipeId, setNewRecipeId] = useState<string>(recipeId || '');
-  const [theDay, setTheDay] = useState<string>(menuItem.theDay || '');
+  const [theDay, setTheDay] = useState<Date>(
+    new Date(menuItem.theDay + 'T00:00:00') || new Date()
+  );
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
@@ -55,12 +61,12 @@ export const EditMenuItem = ({
 
   const handleSave = () => {
     setOpen(false);
-
+    console.log(`handleSave: ${theDay.toISOString().split('T')[0]}`);
     updateMenuItem({
       id: menuItem.id,
       recipeId: newRecipeId,
       menuId: menuItem.menuId,
-      theDay,
+      theDay: theDay.toISOString().split('T')[0],
     })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
@@ -69,8 +75,9 @@ export const EditMenuItem = ({
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleTheDay = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTheDay((event.target as HTMLInputElement).value);
+  const handleTheDay = (date: Date) => {
+    console.log(`date: ${date}`);
+    setTheDay(date);
   };
 
   const handleRecipeId = (recipeId: string) => {
@@ -83,7 +90,7 @@ export const EditMenuItem = ({
   };
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={nl}>
       <IconButton aria-label="edit" onClick={() => setOpen(true)}>
         <Edit size="18" />
       </IconButton>
@@ -99,7 +106,7 @@ export const EditMenuItem = ({
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Edit recipe ingredient {theDay}
+          Edit recipe ingredient {theDay.toISOString().split('T')[0]}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
           <Box>
@@ -109,17 +116,10 @@ export const EditMenuItem = ({
               onChange={handleRecipeId}
             />
 
-            <TextField
-              margin="dense"
-              id="theDay"
-              label="Date"
-              type="text"
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleTheDay}
+            <DatePicker
+              label="Controlled picker"
               value={theDay}
+              onChange={(value) => handleTheDay(value || new Date())}
             />
           </Box>
         </DialogContent>
@@ -143,6 +143,6 @@ export const EditMenuItem = ({
           {error ? error : 'Done'}
         </Alert>
       </Snackbar>
-    </>
+    </LocalizationProvider>
   );
 };

@@ -42,7 +42,7 @@ done
 {
   echo ""
   echo "extra"
-  echo "boter:melk"
+  echo "suiker:havermelk"
   echo "koffie:koffiebonen"
   echo "groenteman:fruit"
   echo "kwark:toetje"

@@ -22,6 +22,6 @@ fi
 
 DATA=${BIN}/../../ShoppingListData/
 
-${BIN}/runShop.sh ${DATA}/cookbook_v2.txt ${DATA}/menus/$1.txt ${DATA}/categoryDatabase_v2.csv >$1.txt && open $1.txt
+${BIN}/runShop.sh ${DATA}/cookbook_v2.txt ${DATA}/menus/$1.txt ${DATA}/categoryDatabase_v2.txt >$1.txt && open $1.txt
 
 cp $1.txt ~/Library/CloudStorage/Dropbox-Personal/1menu

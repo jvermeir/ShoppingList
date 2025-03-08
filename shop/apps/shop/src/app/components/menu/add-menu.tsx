@@ -9,11 +9,15 @@ import {
   Snackbar,
   TextField,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
 import { RecipeData } from '../../pages/recipes';
 import { createMenu } from 'service';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { nl } from 'date-fns/locale/nl';
 
 /*
 TODO: this page doesn't allow adding new recipe ingredients. should it?
@@ -26,10 +30,11 @@ export interface AddMenuProps {
 }
 
 export const AddMenu = ({ onCompleted }: AddMenuProps) => {
-  const [firstDay, setFirstDay] = useState<string>('');
+  const [firstDay, setFirstDay] = useState<Date>(new Date());
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
+  const [value, setValue] = React.useState(new Date());
 
   const handleError = (error: HttpError) =>
     error.code === 409
@@ -37,7 +42,7 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
       : setError(`${error.code}: ${error.message}`);
 
   useEffect(() => {
-    setFirstDay('');
+    setFirstDay(new Date());
   }, []);
 
   const checkResponse = (response: Response) => {
@@ -48,14 +53,14 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
 
   const cleanUp = () => {
     setOpen(false);
-    setFirstDay('');
+    setFirstDay(new Date());
   };
 
   const handleSave = () => {
     setShowConfirmation(false);
     setError('');
 
-    createMenu({ firstDay })
+    createMenu({ firstDay: firstDay.toISOString().split('T')[0] })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -63,12 +68,17 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleFirstDay = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstDay((event.target as HTMLInputElement).value);
+  const handleFirstDay = (date: Date) => {
+    setFirstDay(date);
+  };
+
+  const handleDateChange = (date: Date) => {
+    console.log(date);
+    setValue(date);
   };
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={nl}>
       <Button
         variant="contained"
         sx={{ float: 'right' }}
@@ -89,22 +99,15 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
           sx={{ display: { xs: 'none', md: 'block' } }}
           id="form-dialog-title"
         >
-          Add menu starting on {firstDay}
+          Add menu starting on {firstDay.toDateString()}
         </DialogTitle>
+
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
           <Box sx={{ mb: { xs: 0, md: 1 } }}>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="firstDay"
-              label="First Day"
-              type="text"
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleFirstDay}
+            <DatePicker
+              label="Controlled picker"
               value={firstDay}
+              onChange={(value) => handleFirstDay(value || new Date())}
             />
           </Box>
         </DialogContent>
@@ -126,6 +129,6 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
           {error ? error : 'Done'}
         </Alert>
       </Snackbar>
-    </>
+    </LocalizationProvider>
   );
 };

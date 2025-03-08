@@ -50,7 +50,7 @@ export const RecipeSelector = ({
         id="combo-box-demo"
         options={listOptions}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Ingredient" />}
+        renderInput={(params) => <TextField {...params} label="Recipe" />}
         onChange={(e, v) => {
           v && handleChange(v.id);
         }}
