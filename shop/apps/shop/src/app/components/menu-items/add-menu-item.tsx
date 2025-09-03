@@ -8,8 +8,11 @@ import {
   DialogTitle,
   Snackbar,
   Stack,
-  TextField,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { nl } from 'date-fns/locale/nl';
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'react-feather';
 import { HttpError } from '../error/error';
@@ -30,15 +33,13 @@ export const AddMenuItem = ({
   onCompleted,
 }: AddMenuItemProps) => {
   const [recipeId, setRecipeId] = useState<string>('');
-  const [_, setRecipeName] = useState<string>('');
-  const [theDay, setTheDay] = useState<string>('');
+  const [theDay, setTheDay] = useState<Date>(new Date());
   const [open, setOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    setRecipeName('');
-    setTheDay('');
+    setTheDay(new Date());
   }, []);
 
   // TODO: check error codes
@@ -55,15 +56,14 @@ export const AddMenuItem = ({
 
   const cleanUp = () => {
     setOpen(false);
-    setRecipeName('');
-    setTheDay('');
+    setTheDay(new Date());
   };
 
   const handleSave = () => {
     setShowConfirmation(false);
     setError('');
 
-    postMenuItem({ menuId: menu.id, recipeId, theDay })
+    postMenuItem({ menuId: menu.id, recipeId, theDay: theDay.toISOString().split('T')[0] })
       .then((response) => checkResponse(response))
       .then(() => cleanUp())
       .then(() => onCompleted())
@@ -71,13 +71,12 @@ export const AddMenuItem = ({
       .finally(() => setShowConfirmation(true));
   };
 
-  const handleTheDay = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTheDay((event.target as HTMLInputElement).value);
+  const handleTheDay = (date: Date) => {
+    setTheDay(date);
   };
 
   const handleRecipeId = (recipeId: string) => {
     setRecipeId(recipeId);
-    setRecipeName(recipes.filter((recipe) => recipe.id === recipeId)[0].name);
   };
 
   const handleCloseAddDialog = () => {
@@ -85,7 +84,7 @@ export const AddMenuItem = ({
   };
 
   return (
-    <>
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={nl}>
       <Dialog
         open={open}
         onClose={onCompleted}
@@ -107,17 +106,10 @@ export const AddMenuItem = ({
               onChange={handleRecipeId}
             />
 
-            <TextField
-              margin="dense"
-              id="theDay"
+            <DatePicker
               label="Date"
-              type="text"
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              onChange={handleTheDay}
               value={theDay}
+              onChange={(value) => handleTheDay(value || new Date())}
             />
           </Box>
         </DialogContent>
@@ -149,6 +141,6 @@ export const AddMenuItem = ({
           {error ? error : 'Done'}
         </Alert>
       </Snackbar>
-    </>
+    </LocalizationProvider>
   );
 };

@@ -18,7 +18,7 @@ import { RecipeData } from '../../pages/recipes';
 import { MenuItemData } from '../menu/menu-items';
 import { updateMenuItem } from 'service';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { nl } from 'date-fns/locale/nl';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
