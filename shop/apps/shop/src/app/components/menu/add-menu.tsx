@@ -93,25 +93,26 @@ export const AddMenu = ({ onCompleted }: AddMenuProps) => {
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 1 } }}
+        maxWidth="sm"
+        fullWidth
       >
         <DialogTitle
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          sx={{ display: { xs: 'none', md: 'block' }, px: { xs: 2, md: 3 }, pt: { xs: 1, md: 2 } }}
           id="form-dialog-title"
         >
           Add menu starting on {firstDay.toDateString()}
         </DialogTitle>
 
-        <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box sx={{ mb: { xs: 0, md: 1 } }}>
+        <DialogContent sx={{ pb: { xs: 2, md: 3 }, pt: { xs: 2, md: 3 }, px: { xs: 2, md: 3 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 320, mt: 1 }}>
             <DatePicker
-              label="Controlled picker"
+              label="Start Date"
               value={firstDay}
               onChange={(value) => handleFirstDay(value || new Date())}
             />
           </Box>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ px: { xs: 2, md: 3 }, pb: { xs: 1, md: 2 } }}>
           <>
             <Button variant="contained" onClick={handleSave}>
               Close and Save

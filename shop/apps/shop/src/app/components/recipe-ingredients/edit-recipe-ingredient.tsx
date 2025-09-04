@@ -116,16 +116,14 @@ export const EditRecipeIngredient = ({
           Edit recipe ingredient {name}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 320, pt: 1 }}>
             <RecipeIngredientSelector
               value={ingredientId}
               options={ingredients}
               onChange={handleIngredientId}
             />
-
             <TextField
               disabled={true}
-              margin="dense"
               id="unit"
               label="Unit"
               type="text"
@@ -136,9 +134,7 @@ export const EditRecipeIngredient = ({
               onChange={() => {}}
               value={unit}
             />
-
             <TextField
-              margin="dense"
               id="amount"
               label="Amount"
               type="number"

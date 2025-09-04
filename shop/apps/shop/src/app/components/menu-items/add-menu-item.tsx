@@ -90,22 +90,22 @@ export const AddMenuItem = ({
         onClose={onCompleted}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 1 } }}
+        maxWidth="sm"
+        fullWidth
       >
         <DialogTitle
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          sx={{ display: { xs: 'none', md: 'block' }, px: { xs: 2, md: 3 }, pt: { xs: 1, md: 2 } }}
           id="form-dialog-title"
         >
           Add menu item
         </DialogTitle>
-        <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box>
+        <DialogContent sx={{ pb: { xs: 1, md: 2 }, pt: { xs: 1, md: 2 }, px: { xs: 2, md: 3 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 320 }}>
             <RecipeSelector
               value={recipeId}
               options={recipes}
               onChange={handleRecipeId}
             />
-
             <DatePicker
               label="Date"
               value={theDay}
@@ -114,7 +114,7 @@ export const AddMenuItem = ({
           </Box>
         </DialogContent>
         {/*TODO: most changes are saved immediately. can we save them up and only save them when the user clicks "save"?*/}
-        <DialogActions>
+        <DialogActions sx={{ px: { xs: 2, md: 3 }, pb: { xs: 1, md: 2 } }}>
           <>
             <Button onClick={handleCloseAddDialog}>Close</Button>
             <Button variant="contained" onClick={handleSave}>

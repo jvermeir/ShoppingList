@@ -109,13 +109,12 @@ export const EditMenuItem = ({
           Edit recipe ingredient {theDay.toISOString().split('T')[0]}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 320, pt: 1 }}>
             <RecipeSelector
               value={newRecipeId}
               options={recipes}
               onChange={handleRecipeId}
             />
-
             <DatePicker
               label="Controlled picker"
               value={theDay}

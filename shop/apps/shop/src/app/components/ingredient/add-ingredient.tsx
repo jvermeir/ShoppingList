@@ -107,10 +107,9 @@ export const AddIngredient = ({
           Add Ingredient
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box sx={{ mb: { xs: 0, md: 1 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 320, pt: 1 }}>
             <TextField
               autoFocus
-              margin="dense"
               id="name"
               label="Name"
               type="text"
@@ -121,27 +120,22 @@ export const AddIngredient = ({
               onChange={handleName}
               value={name}
             />
-
-            <Box>
-              <CategorySelector
-                value={categoryName}
-                options={categories}
-                onChange={handleCategoryId}
-              />
-
-              <TextField
-                margin="dense"
-                id="unit"
-                label="Unit"
-                type="text"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={handleUnit}
-                value={unit}
-              />
-            </Box>
+            <CategorySelector
+              value={categoryName}
+              options={categories}
+              onChange={handleCategoryId}
+            />
+            <TextField
+              id="unit"
+              label="Unit"
+              type="text"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={handleUnit}
+              value={unit}
+            />
           </Box>
         </DialogContent>
         <DialogActions>

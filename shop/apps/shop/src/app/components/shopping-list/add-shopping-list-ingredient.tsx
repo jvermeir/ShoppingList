@@ -118,16 +118,14 @@ export const AddShoppingListIngredient = ({
           Add recipe ingredient{ingredientName}
         </DialogTitle>
         <DialogContent sx={{ mb: { xs: -3, md: 1 }, mt: { xs: 0 } }}>
-          <Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 320, pt: 1 }}>
             <IngredientSelector
               value={ingredientId}
               options={ingredients}
               onChange={handleIngredientId}
             />
-
             <TextField
               disabled={true}
-              margin="dense"
               id="unit"
               label="Unit"
               type="text"
@@ -138,9 +136,7 @@ export const AddShoppingListIngredient = ({
               onChange={handleUnit}
               value={unit}
             />
-
             <TextField
-              margin="dense"
               id="amount"
               label="Amount"
               type="number"

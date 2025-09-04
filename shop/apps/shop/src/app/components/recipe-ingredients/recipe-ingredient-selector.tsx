@@ -41,15 +41,37 @@ export const RecipeIngredientSelector = ({
   };
 
   return (
-    <FormControl fullWidth>
-      <InputLabel />
-
+    <FormControl fullWidth sx={{ minHeight: 56 }}>
       <Autocomplete
         disablePortal
         id="combo-box-demo"
         options={listOptions}
-        sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Ingredient" />}
+        fullWidth
+        renderInput={(params) => (
+          <TextField 
+            {...params} 
+            label="Ingredient" 
+            variant="outlined"
+            sx={{ 
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.23)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.87)',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'primary.main',
+                },
+              },
+              '& .MuiInputLabel-root': {
+                '&.Mui-focused': {
+                  transform: 'translate(14px, -9px) scale(0.75)',
+                },
+              },
+            }}
+          />
+        )}
         onChange={(e, v) => {
           v && handleChange(v.id);
         }}
