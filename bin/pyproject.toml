@@ -1,7 +1,7 @@
 [project]
 name = "utils"
 version = "0.1.0"
-description = "Add your description here"
+description = "scripts and utilities for the shoppinglist program"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
