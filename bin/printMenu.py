@@ -61,7 +61,7 @@ def main():
     c = canvas.Canvas(tmp_pdf, pagesize=A4)
     width, height = A4
     font_name = "Courier"
-    font_size = 6
+    font_size = 8
     margin_left = 1*cm
     margin_right = 1*cm
     margin_top = 1*cm
@@ -83,11 +83,12 @@ def main():
             if y < margin_bottom:
                 break  # Stop printing when first page is full
             c.drawString(margin_left, y, wline)
-            y -= 0.4*cm  # Reduced line spacing
+            y -= 0.3*cm  # Reduced line spacing
         if y < margin_bottom:
             break  # Stop printing when first page is full
     c.save()
-    subprocess.run(['open', tmp_pdf])
+    # Print the PDF to the default printer
+    subprocess.run(['lp', tmp_pdf])
 
 if __name__ == '__main__':
     main()

@@ -27,3 +27,8 @@ ln -s ${BIN}/publish.sh /usr/local/bin/publish
 echo linking to ${BIN}/toPdf.sh
 rm -f /usr/local/bin/toPdf
 ln -s ${BIN}/toPdf.sh /usr/local/bin/toPdf
+
+echo linking to ${BIN}/printMenu.py
+rm -f /usr/local/bin/printMenu
+ln -s ${BIN}/printMenu.sh /usr/local/bin/printMenu
+
